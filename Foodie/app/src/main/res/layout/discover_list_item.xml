@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp"
+    >
+
+    <ImageView
+        android:id="@+id/dishImg"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/login_pic"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/dish_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Spicy Fish Tikka"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_medium"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_marginTop="8dp"
+         />
+
+    <TextView
+        android:id="@+id/category_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="51 options"
+        android:textAllCaps="true"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/text_small"
+        android:textColor="@color/colorSecondaryText"
+        android:layout_marginTop="8dp"
+        />
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="profile_settings">
+        <item>"Manage Address"</item>
+        <item>"Favorites"</item>
+        <item>"Payment"</item>
+        <item>"Orders"</item>
+        <item>"Change Password"</item>
+    </string-array>
+    <integer-array name="profile_settings_icon">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_home</item>
+    </integer-array>
+</resources>

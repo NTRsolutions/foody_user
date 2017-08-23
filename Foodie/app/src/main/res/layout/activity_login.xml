@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context="com.foodie.app.activities.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/login"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_pic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+
+            android:layout_margin="@dimen/text_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/login"
+                android:textColor="@color/colorPrimaryText"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_large" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp">
+
+                    <TextView
+                        android:id="@+id/label_mobile_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mobile_number"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_medium"
+                         />
+
+                    <EditText
+                        android:id="@+id/mobile_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textSize="@dimen/text_medium"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/label_mobile_number" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp">
+
+                    <TextView
+                        android:id="@+id/label_password"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/password"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_medium"
+                         />
+
+                    <EditText
+                        android:id="@+id/password_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:textSize="@dimen/text_medium"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/label_password" />
+
+                    <TextView
+                        android:id="@+id/forgotTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/forgot"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_medium"
+                        android:textColor="@color/colorAccent"
+                        app:layout_constraintBottom_toBottomOf="@+id/password_edittext"
+                        app:layout_constraintRight_toRightOf="@+id/password_edittext"
+                        app:layout_constraintTop_toTopOf="@+id/password_edittext" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/loginBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/colorWhite"
+                    android:text="@string/login"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorSecondaryText"
+                        android:text="@string/register_this_account"
+                        android:layout_marginEnd="4dp" />
+                    <TextView
+                        android:id="@+id/signUpTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sign_up"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_medium"
+                        android:clickable="true"
+                        android:textColor="@color/colorAccent" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+
