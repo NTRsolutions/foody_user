@@ -10,16 +10,13 @@ import android.os.Bundle;
 
 import android.view.MenuItem;
 
-import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.activities.LoginActivity;
-
-import com.foodie.app.activities.ProfileActivity;
+import com.foodie.app.activities.EditAccountActivity;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -32,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        startActivity(new Intent(HomeActivity.this, HotelViewActivity.class));
+        //startActivity(new Intent(HomeActivity.this, EditAccountActivity.class));
 
         fragmentManager = getSupportFragmentManager();
         fragment = new HomeFragment();

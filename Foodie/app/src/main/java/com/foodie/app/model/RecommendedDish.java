@@ -5,14 +5,15 @@ package com.foodie.app.model;
  */
 
 public class RecommendedDish {
-    String name, category, price, imgUrl;
+    String name, category, price, imgUrl, description;
     Boolean isVeg;
-    public RecommendedDish(String name, String category, String price, Boolean isVeg, String url) {
+    public RecommendedDish(String name, String category, String price, Boolean isVeg, String url, String description) {
         this.name = name;
         this.category = category;
         this.price = price;
         this.isVeg = isVeg;
         this.imgUrl = url;
+        this.description = description;
     }
 
     public String getName() {
@@ -47,9 +48,15 @@ public class RecommendedDish {
     public String getImgUrl() {
         return imgUrl;
     }
-
     public void setImgUrl(String image) {
         this.imgUrl = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

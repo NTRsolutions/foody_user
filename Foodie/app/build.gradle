@@ -31,6 +31,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.1'
+    compile 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

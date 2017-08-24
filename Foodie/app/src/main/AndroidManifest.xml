@@ -24,20 +24,29 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SignUpActivity"
-            android:label="Hello"
-            android:parentActivityName=".activities.LoginActivity"
-            android:theme="@style/MyTheme" />
+            android:label=" "
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:label="@string/forgot_password"
             android:parentActivityName=".activities.LoginActivity"
-            android:theme="@style/MyTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.HotelViewActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:label="Change Password"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.FavouritesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.RecommendedListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.EditAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

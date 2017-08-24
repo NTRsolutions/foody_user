@@ -37,10 +37,10 @@ public class HotelViewActivity extends AppCompatActivity {
 
 
         final ArrayList<RecommendedDish> list = new ArrayList<>();
-        list.add(new RecommendedDish("Non", "Starter", "$20", true, "url"));
-        list.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url"));
-        list.add(new RecommendedDish("Biriyani", "Lunch", "$25", false, "url"));
-        list.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url"));
+        list.add(new RecommendedDish("Non", "Starter", "$20", true, "url", "description"));
+        list.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "description"));
+        list.add(new RecommendedDish("Biriyani", "Lunch", "$25", false, "url", "description"));
+        list.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "description"));
         RecyclerView rv = (RecyclerView) findViewById(R.id.recommended_dishes_rv);
         RecommendedDishesAdapter adapter = new RecommendedDishesAdapter(list, this);
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -49,10 +49,10 @@ public class HotelViewActivity extends AppCompatActivity {
 
 
         final ArrayList<RecommendedDish> accompanimentList = new ArrayList<>();
-        accompanimentList.add(new RecommendedDish("Raita", "Complement", "$20", true, "url"));
-        accompanimentList.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url"));
-        accompanimentList.add(new RecommendedDish("Sauce", "Side Dish, Complement", "$25", false, "url"));
-        accompanimentList.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url"));
+        accompanimentList.add(new RecommendedDish("Raita", "Complement", "$20", true, "url", "description"));
+        accompanimentList.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "description"));
+        accompanimentList.add(new RecommendedDish("Sauce", "Side Dish, Complement", "$25", false, "url", "description"));
+        accompanimentList.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "description"));
         RecyclerView rvAccompaniment = (RecyclerView) findViewById(R.id.accompaniment_dishes_rv);
         AccompanimentDishesAdapter adapterAccompaniment = new AccompanimentDishesAdapter(accompanimentList, this);
         rvAccompaniment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
