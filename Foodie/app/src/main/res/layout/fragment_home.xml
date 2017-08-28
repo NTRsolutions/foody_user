@@ -1,64 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    tools:context="com.foodie.app.HomeActivity"
+    android:orientation="vertical"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorWhite"
+        app:theme="@style/ToolBarStyle"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="4dp" >
+
+            <LinearLayout
+                android:id="@+id/location_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/address_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="Home"
+                    android:textAllCaps="true"
+                    android:gravity="center_vertical"
+                    android:drawableEnd="@drawable/ic_down"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_medium" />
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="Washington, DC, Green town west"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_small" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/filterTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_filter"
+                    android:gravity="center"
+                    android:text="@string/filter"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.foodie.app.HomeActivity">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp">
-
-                <TextView
-                    android:id="@+id/addressLabelTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home"
-                    android:gravity="center_vertical"
-                    android:drawableEnd="@drawable/ic_down"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_medium"
-                    android:maxLines="1"
-                    android:textAllCaps="true"
-                    card_view:layout_constraintLeft_toLeftOf="parent"
-                    card_view:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/addressTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Prestiege Palladium, Greems Road, Chennai"
-                    android:textColor="@color/colorSecondaryText"
-                    android:maxLines="1"
-                    card_view:layout_constraintTop_toBottomOf="@+id/addressLabelTxt"
-                    card_view:layout_constraintLeft_toLeftOf="parent" />
-
-                <TextView
-                    android:id="@+id/filterTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_filter"
-                    android:gravity="center_vertical"
-                    android:text="@string/filter"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimaryText"
-                    card_view:layout_constraintBottom_toBottomOf="@+id/addressTxt"
-                    card_view:layout_constraintRight_toRightOf="parent"
-                    card_view:layout_constraintTop_toTopOf="parent" />
-
-            </android.support.constraint.ConstraintLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -215,4 +249,4 @@
     </ScrollView>
 
 
-</FrameLayout>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FavouritesActivity extends AppCompatActivity {
 
@@ -46,5 +48,10 @@ public class FavouritesActivity extends AppCompatActivity {
         FavouriteDishAdapter adbPerson = new FavouriteDishAdapter(FavouritesActivity.this, list);
         favoritesLv.setAdapter(adbPerson);
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

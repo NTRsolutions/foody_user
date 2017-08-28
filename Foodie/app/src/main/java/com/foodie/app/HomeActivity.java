@@ -1,5 +1,6 @@
 package com.foodie.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.foodie.app.activities.EditAccountActivity;
+import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -29,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //startActivity(new Intent(HomeActivity.this, EditAccountActivity.class));
+        startActivity(new Intent(HomeActivity.this, SetDeliveryLocationActivity.class));
 
         fragmentManager = getSupportFragmentManager();
         fragment = new HomeFragment();
@@ -94,5 +98,10 @@ public class HomeActivity extends AppCompatActivity {
         });*/
 
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

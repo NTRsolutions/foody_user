@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RecommendedListActivity extends AppCompatActivity {
 
@@ -66,5 +68,10 @@ public class RecommendedListActivity extends AppCompatActivity {
     @OnClick(R.id.open_cart)
     public void onViewClicked() {
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

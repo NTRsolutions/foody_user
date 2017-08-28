@@ -4,28 +4,27 @@
     <item
         android:id="@+id/action_home"
         android:enabled="true"
-        android:icon="@drawable/home"
+        android:icon="@drawable/ic_home"
         android:title="home"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_search"
         android:enabled="true"
-        android:icon="@drawable/search"
+        android:icon="@drawable/ic_search"
         android:title="search"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_cart"
         android:enabled="true"
-        android:icon="@drawable/cart"
+        android:icon="@drawable/ic_cart"
         android:title="cart"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
         android:title="profile"
-        android:icon="@drawable/user"
+        android:icon="@drawable/ic_user"
         app:showAsAction="ifRoom" />
-
 
 
 </menu>

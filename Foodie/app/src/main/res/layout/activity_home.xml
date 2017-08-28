@@ -22,8 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/white"
-        app:itemIconTint="@color/colorPrimary"
-        android:padding="8dp"
+        android:padding="4dp"
         app:itemTextColor="@android:color/white"
         app:menu="@menu/bottom_navigation_main" />
 
