@@ -17,6 +17,7 @@ import com.foodie.app.activities.ChangePasswordActivity;
 import com.foodie.app.activities.EditAccountActivity;
 import com.foodie.app.activities.FavouritesActivity;
 import com.foodie.app.activities.LoginActivity;
+import com.foodie.app.activities.ManageAddressActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
 
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class ProfileFragment extends Fragment {
     private void openSettingPage(int position) {
         switch (position) {
             case 0:
-                //startActivity(new Intent(context, ProfileActivity.class));
+                startActivity(new Intent(context, ManageAddressActivity.class));
                 break;
             case 1:
                 startActivity(new Intent(context, FavouritesActivity.class));

@@ -10,14 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.view.MenuItem;
+import android.view.WindowManager;
 
-import com.foodie.app.activities.EditAccountActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 
+import com.foodie.app.utils.ConnectionHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -27,12 +28,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
-
+    ConnectionHelper connectionHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        connectionHelper = new ConnectionHelper(this);
         startActivity(new Intent(HomeActivity.this, SetDeliveryLocationActivity.class));
 
         fragmentManager = getSupportFragmentManager();
@@ -98,6 +100,12 @@ public class HomeActivity extends AppCompatActivity {
         });*/
 
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        connectionHelper.isConnectingToInternet();
     }
 
     @Override

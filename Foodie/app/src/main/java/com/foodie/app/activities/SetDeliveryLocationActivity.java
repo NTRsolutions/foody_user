@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,10 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.adapter.DeliveryLocationAdapter;
 import com.foodie.app.model.Location;
@@ -28,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SetDeliveryLocationActivity extends AppCompatActivity {
     public String TAG = "DeliveryLocationActi";
@@ -45,6 +47,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_delivery_location);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -105,13 +108,15 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("Search for area, street name...");
 
-        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("IN").setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS).build();
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("IN").build();
         autocompleteFragment.setFilter(typeFilter);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName());
+                Intent intent = new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class);
+                intent.putExtra("place_id", place.getId());
+                startActivity(intent);
             }
 
             @Override
@@ -125,6 +130,10 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     @OnClick(R.id.current_location_ll)
     public void onViewClicked() {
         startActivity(new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class));
+    }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

@@ -5,10 +5,9 @@
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="200dp"
+    app:behavior_peekHeight="150dp"
     android:id="@+id/bottom_sheet"
     android:background="@color/colorWhite"
     >
@@ -71,7 +70,43 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+             >
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_home"
+                android:text="@string/home"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_work"
+                android:text="@string/work"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_pin_locator_1"
+                android:text="@string/other"/>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:layout_margin="@dimen/text_margin"
+            android:background="@color/colorAccent"
+            android:text="@string/save_and_proceed"/>
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.foodie.app">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -22,7 +25,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".activities.LoginActivity"
@@ -56,8 +59,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SetDeliveryLocationActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.SaveDeliveryLocationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SaveDeliveryLocationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ManageAddressActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

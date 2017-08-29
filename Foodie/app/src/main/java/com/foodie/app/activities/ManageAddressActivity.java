@@ -3,35 +3,28 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.FavouriteDishAdapter;
-import com.foodie.app.model.FavouriteDish;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class FavouritesActivity extends AppCompatActivity {
+public class ManageAddressActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.message)
-    TextView message;
-    @BindView(R.id.favorites_lv)
-    ListView favoritesLv;
+    @BindView(R.id.manage_address_rv)
+    RecyclerView manageAddressRv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourites);
+        setContentView(R.layout.activity_manage_address);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
@@ -43,12 +36,6 @@ public class FavouritesActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-        ArrayList<FavouriteDish> list = new ArrayList<FavouriteDish>();
-        list.add(new FavouriteDish("Pancake", "Cake", ""));
-        list.add(new FavouriteDish("Bunny burgs", "Burgers", ""));
-        FavouriteDishAdapter adbPerson = new FavouriteDishAdapter(FavouritesActivity.this, list);
-        favoritesLv.setAdapter(adbPerson);
 
     }
 
