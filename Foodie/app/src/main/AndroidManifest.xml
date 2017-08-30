@@ -63,8 +63,12 @@
         <activity
             android:name=".activities.SaveDeliveryLocationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ManageAddressActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.ManageAddressActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.AccountPaymentActivity" />
+        <activity android:name=".activities.OrdersActivity" />
+        <activity android:name=".activities.FilterActivity"></activity>
     </application>
 
 </manifest>

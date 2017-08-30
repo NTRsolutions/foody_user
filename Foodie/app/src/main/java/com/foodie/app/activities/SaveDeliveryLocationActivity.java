@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +15,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.List;
 import java.util.Locale;
@@ -125,6 +128,18 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        try {
+            boolean success = googleMap.setMapStyle( MapStyleOptions.loadRawResourceStyle( this, R.raw.style_json));
+            if (!success) {
+                Log.i("Map:Style", "Style parsing failed.");
+            } else {
+                Log.i("Map:Style", "Style Applied.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.i("Map:Style", "Can't find style. Error: ");
+        }
+
         mMap = googleMap;
 
         if (mMap != null) {

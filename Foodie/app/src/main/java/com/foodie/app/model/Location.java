@@ -11,7 +11,6 @@ public class Location {
         this.name = name;
         this.address = address;
         this.icon_id = icon_id;
-
     }
 }
 

@@ -26,9 +26,13 @@
     <string name="filter">Filter</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="manage_address">Manage Address</string>
+    <string name="payment">Payment</string>
+    <string name="add_new_card">Add New Card</string>
     <string name="set_delivery_location">Set Delivery Location</string>
     <string name="change_password">"Change Password"</string>
     <string name="favourites">"Favourites"</string>
+    <string name="filters">"Filters"</string>
+    <string name="reset">"Reset"</string>
     <string name="edit_account">"Edit Account"</string>
     <string name="address">"Address"</string>
     <string name="connection_unavailable">"Connection Unavailable"</string>
@@ -40,6 +44,8 @@
     <string name="save_and_proceed">"Save and Proceed"</string>
     <string name="edit">"Edit"</string>
     <string name="delete">"Delete"</string>
+    <string name="orders">"Orders"</string>
+    <string name="apply_filter">"Apply Filter"</string>
 
     <string name="large_text">
         "Material is the metaphor.\n\n"

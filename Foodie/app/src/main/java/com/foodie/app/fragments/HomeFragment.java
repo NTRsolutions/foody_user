@@ -1,6 +1,5 @@
 package com.foodie.app.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +12,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -55,13 +55,6 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
 
-        locationLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, SetDeliveryLocationActivity.class));
-            }
-        });
-
         return view;
 
     }
@@ -82,4 +75,20 @@ public class HomeFragment extends Fragment {
         this.context = context;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @OnClick({R.id.location_ll, R.id.filterTxt})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.location_ll:
+                startActivity(new Intent(context, SetDeliveryLocationActivity.class));
+                break;
+            case R.id.filterTxt:
+                startActivity(new Intent(context, FilterActivity.class));
+                break;
+        }
+    }
 }

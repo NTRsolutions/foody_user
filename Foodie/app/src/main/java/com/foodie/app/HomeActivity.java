@@ -3,6 +3,7 @@ package com.foodie.app;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -35,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         connectionHelper = new ConnectionHelper(this);
-        startActivity(new Intent(HomeActivity.this, SetDeliveryLocationActivity.class));
+        //startActivity(new Intent(HomeActivity.this, SetDeliveryLocationActivity.class));
 
         fragmentManager = getSupportFragmentManager();
         fragment = new HomeFragment();

@@ -13,11 +13,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.AccountPaymentActivity;
 import com.foodie.app.activities.ChangePasswordActivity;
 import com.foodie.app.activities.EditAccountActivity;
 import com.foodie.app.activities.FavouritesActivity;
 import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.activities.ManageAddressActivity;
+import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
 
 import java.util.ArrayList;
@@ -124,10 +126,10 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(context, FavouritesActivity.class));
                 break;
             case 2:
-                //startActivity(new Intent(context, ProfileActivity.class));
+                startActivity(new Intent(context, AccountPaymentActivity.class));
                 break;
             case 3:
-                //startActivity(new Intent(context, ProfileActivity.class));
+                startActivity(new Intent(context, OrdersActivity.class));
                 break;
             case 4:
                 startActivity(new Intent(context, ChangePasswordActivity.class));

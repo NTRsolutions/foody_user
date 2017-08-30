@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.foodie.app.activities.ManageAddressActivity">
+    tools:context="com.foodie.app.activities.AccountPaymentActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,13 +16,32 @@
         android:background="@color/colorWhite"
         app:theme="@style/ToolBarStyle" >
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimaryText"
-            android:text="@string/manage_address" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryText"
+                android:text="@string/payment" />
+
+            <TextView
+                android:id="@+id/add_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_small"
+                android:gravity="center_vertical|end"
+                android:textAllCaps="true"
+                android:drawablePadding="8dp"
+                android:drawableEnd="@drawable/ic_add_card"
+                android:textColor="@color/colorAccent"
+                android:text="@string/add_new_card" />
+        </LinearLayout>
+
 
     </android.support.v7.widget.Toolbar>
     <View
@@ -40,18 +60,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Saved Address"
-                android:textAllCaps="true"
+                android:text="Select the payment method"
                 android:background="#eee"
                 android:textColor="@color/colorSecondaryText"
                 android:padding="16dp"
-                android:textSize="@dimen/text_large"/>
+                android:textSize="@dimen/text_medium"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/manage_address_rv"
+            <ListView
+                android:id="@+id/payment_method_lv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

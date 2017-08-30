@@ -3,12 +3,21 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.foodie.app.R;
+import com.foodie.app.adapter.ManageAddressAdapter;
+import com.foodie.app.adapter.RecommendedListAdapter;
+import com.foodie.app.model.Location;
+import com.foodie.app.model.RecommendedDish;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +45,15 @@ public class ManageAddressActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        List<Location> locations = new ArrayList<>();
+        locations.add(new Location("Home", "Madhavaram, Chennai", 1));
+        locations.add(new Location("Work", "Greems Road, Chennai", 2));
+        locations.add(new Location("Other", "Reteri, Anna salai, Chennai", 0));
+        ManageAddressAdapter adapter = new ManageAddressAdapter(locations, ManageAddressActivity.this);
+        manageAddressRv.setLayoutManager(new LinearLayoutManager(this));
+        manageAddressRv.setItemAnimator(new DefaultItemAnimator());
+        manageAddressRv.setAdapter(adapter);
 
     }
 

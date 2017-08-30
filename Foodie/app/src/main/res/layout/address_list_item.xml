@@ -1,76 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:id="@+id/item_layout"
     android:background="?android:attr/selectableItemBackground"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center|top">
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_pin_locator_1"/>
-
-    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?android:attr/selectableItemBackground"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:gravity="center_vertical">
-            <TextView
-                android:id="@+id/address_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_medium"
-                android:text="Home"
-                android:maxLines="1"
-                android:textColor="@color/colorPrimaryText"
-                android:layout_marginBottom="4sp"
-                />
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_small"
-                android:text="Greems Road, Chennai"
-                android:maxLines="1"
-                android:textColor="@color/colorSecondaryText"
-                android:layout_marginBottom="4sp"
-                />
+            android:gravity="center|top">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_pin_locator_1"/>
+
+        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/edit"
-                    android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/address_label"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit"
-                    android:gravity="left|center_vertical"
-                    android:textColor="@color/colorSecondaryText"
-                    android:background="@android:color/transparent"/>
-                <Button
-                    android:id="@+id/delete"
-                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/text_medium"
+                    android:text="Home"
+                    android:maxLines="1"
+                    android:textColor="@color/colorPrimaryText"
+                    android:layout_marginBottom="4sp"
+                    />
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/delete"
-                    android:gravity="left|center_vertical"
+                    android:textSize="@dimen/text_small"
+                    android:text="Greems Road, Chennai"
+                    android:maxLines="1"
                     android:textColor="@color/colorSecondaryText"
-                    android:background="@android:color/transparent"/>
+                    android:layout_marginBottom="4sp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@color/colorSecondaryText"
+                        android:background="@android:color/transparent"/>
+                    <Button
+                        android:id="@+id/delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delete"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@color/colorSecondaryText"
+                        android:background="@android:color/transparent"/>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
-
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eee" />
 </LinearLayout>
