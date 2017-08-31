@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorWhite"
         app:theme="@style/ToolBarStyle"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -69,6 +68,7 @@
                     android:layout_height="match_parent"
                     android:drawableEnd="@drawable/ic_filter"
                     android:gravity="center"
+                    android:padding="8dp"
                     android:text="@string/filter"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
@@ -115,9 +115,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/let_impress_you"
-
+                        android:padding="8dp"
                         android:textColor="@color/colorPrimaryText"
-                        android:layout_marginBottom="16dp"
                         android:maxLines="1"
                         />
 
@@ -146,25 +145,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
+                        >
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:text="@string/hundred_restaurant"
                             android:textColor="@color/colorSecondaryText"
                             android:maxLines="1"
                             android:textAllCaps="true"
+                            android:padding="8dp"
+                            android:gravity="center_vertical"
+                            android:layout_weight="1"
                             />
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:text="@string/relevance"
                             android:textColor="@color/colorSecondaryText"
                             android:textAllCaps="true"
                             android:drawableEnd="@drawable/ic_down"
-                            android:gravity="end|center"
+                            android:gravity="end|center_vertical"
                             android:maxLines="1"
-                            />
+                            android:padding="8dp"
+                            android:layout_weight="1" />
                     </LinearLayout>
 
                     <android.support.v7.widget.RecyclerView
@@ -198,7 +201,7 @@
                         android:text="@string/discover"
                         android:textColor="@color/colorPrimaryText"
                         android:maxLines="1"
-                        android:layout_marginBottom="16dp"
+                        android:padding="8dp"
                         />
 
                     <android.support.v7.widget.RecyclerView
@@ -232,7 +235,7 @@
                         android:text="@string/offers_near_you"
                         android:textColor="@color/colorPrimaryText"
                         android:maxLines="1"
-                        android:layout_marginBottom="16dp"
+                        android:padding="8dp"
                         />
 
                     <android.support.v7.widget.RecyclerView

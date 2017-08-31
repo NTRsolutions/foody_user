@@ -6,9 +6,11 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp"
+    android:background="@color/colorWhite">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/login_pic"
@@ -23,28 +25,31 @@
         android:textColor="@color/colorPrimaryText"/>
 
     <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="match_parent"
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         android:numStars="5" />
 
     <EditText
+        android:id="@+id/comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="LEAVE COMMENT"
-        android:lines="5"
-        android:gravity="center"
+        android:lines="3"
+        android:gravity="center|top"
         android:scrollHorizontally="false"
         android:background="#eee"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
+        android:padding="8dp"
         />
 
     <Button
+        android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorWhite"
         android:text="submit"
-        android:backgroundTint="@color/colorAccent"/>
+        android:background="@color/colorAccent"/>
 
 </LinearLayout>

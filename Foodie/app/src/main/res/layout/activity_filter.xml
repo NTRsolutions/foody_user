@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorWhite"
         app:theme="@style/ToolBarStyle" >
 
         <LinearLayout
@@ -21,18 +20,21 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:textAllCaps="true"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:textColor="@color/colorPrimaryText"
                 android:text="@string/filters" />
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textSize="@dimen/text_small"
                 android:textAllCaps="true"
-                android:padding="8dp"
+                android:clickable="true"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackground"
                 android:textColor="@color/colorAccent"
                 android:text="@string/reset" />
         </LinearLayout>
@@ -48,7 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/apply_filter">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/filter_rv"

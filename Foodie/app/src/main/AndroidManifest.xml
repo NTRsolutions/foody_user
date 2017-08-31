@@ -68,7 +68,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.AccountPaymentActivity" />
         <activity android:name=".activities.OrdersActivity" />
-        <activity android:name=".activities.FilterActivity"></activity>
+        <activity android:name=".activities.FilterActivity" />
+        <activity android:name=".activities.SplashActivity"></activity>
     </application>
 
 </manifest>

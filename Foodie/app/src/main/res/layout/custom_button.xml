@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView android:layout_width="125dp"
+    android:layout_height="50dp"
+    android:gravity="center"
+    android:text="menu"
+    android:textSize="8sp"
+    android:paddingLeft="40dp"
+    android:textColor="@color/colorPrimaryText"
+    android:textAllCaps="true"
+    android:background="@drawable/cutlery"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

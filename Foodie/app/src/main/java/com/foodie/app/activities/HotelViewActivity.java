@@ -1,32 +1,47 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.AccompanimentDishesAdapter;
-import com.foodie.app.adapter.ImpressiveDishesAdapter;
 import com.foodie.app.adapter.RecommendedDishesAdapter;
-import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.RecommendedDish;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HotelViewActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar_top)
+    Toolbar toolbar;
+    @BindView(R.id.recommended_dishes_rv)
+    RecyclerView recommendedDishesRv;
+    @BindView(R.id.accompaniment_dishes_rv)
+    RecyclerView accompanimentDishesRv;
+    @BindView(R.id.menu)
+    LinearLayout menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotel_view);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_top);
         setSupportActionBar(toolbar);
@@ -44,11 +59,10 @@ public class HotelViewActivity extends AppCompatActivity {
         list.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "description"));
         list.add(new RecommendedDish("Biriyani", "Lunch", "$25", false, "url", "description"));
         list.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "description"));
-        RecyclerView rv = (RecyclerView) findViewById(R.id.recommended_dishes_rv);
         RecommendedDishesAdapter adapter = new RecommendedDishesAdapter(list, this);
-        rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(adapter);
+        recommendedDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recommendedDishesRv.setItemAnimator(new DefaultItemAnimator());
+        recommendedDishesRv.setAdapter(adapter);
 
 
         final ArrayList<RecommendedDish> accompanimentList = new ArrayList<>();
@@ -56,11 +70,10 @@ public class HotelViewActivity extends AppCompatActivity {
         accompanimentList.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "description"));
         accompanimentList.add(new RecommendedDish("Sauce", "Side Dish, Complement", "$25", false, "url", "description"));
         accompanimentList.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "description"));
-        RecyclerView rvAccompaniment = (RecyclerView) findViewById(R.id.accompaniment_dishes_rv);
         AccompanimentDishesAdapter adapterAccompaniment = new AccompanimentDishesAdapter(accompanimentList, this);
-        rvAccompaniment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        rvAccompaniment.setItemAnimator(new DefaultItemAnimator());
-        rvAccompaniment.setAdapter(adapterAccompaniment);
+        accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
+        accompanimentDishesRv.setAdapter(adapterAccompaniment);
 
     }
 
@@ -75,4 +88,8 @@ public class HotelViewActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @OnClick(R.id.menu)
+    public void onViewClicked() {
+
+    }
 }

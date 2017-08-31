@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
+import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
@@ -36,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         connectionHelper = new ConnectionHelper(this);
-        //startActivity(new Intent(HomeActivity.this, SetDeliveryLocationActivity.class));
+        //startActivity(new Intent(HomeActivity.this, HotelViewActivity.class));
 
         fragmentManager = getSupportFragmentManager();
         fragment = new HomeFragment();

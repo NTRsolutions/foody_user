@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="4dp"
-                android:paddingLeft="4dp"
+                android:paddingLeft="8dp"
                 android:paddingRight="4dp"
                 android:gravity="center_vertical">
                 <TextView
@@ -40,9 +40,9 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_medium"
                     android:text="Home"
+                    android:textAllCaps="true"
                     android:maxLines="1"
                     android:textColor="@color/colorPrimaryText"
-                    android:layout_marginBottom="4sp"
                     />
                 <TextView
                     android:id="@+id/address"
@@ -52,7 +52,6 @@
                     android:text="Greems Road, Chennai"
                     android:maxLines="1"
                     android:textColor="@color/colorSecondaryText"
-                    android:layout_marginBottom="4sp"
                     />
 
                 <LinearLayout
@@ -65,6 +64,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/edit"
                         android:gravity="left|center_vertical"
+                        android:minHeight="0dp"
+                                                android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
                         android:textColor="@color/colorSecondaryText"
                         android:background="@android:color/transparent"/>
                     <Button
@@ -73,6 +75,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/delete"
                         android:gravity="left|center_vertical"
+                        android:minHeight="0dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
                         android:textColor="@color/colorSecondaryText"
                         android:background="@android:color/transparent"/>
                 </LinearLayout>

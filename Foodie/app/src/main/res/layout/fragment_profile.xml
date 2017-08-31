@@ -28,6 +28,7 @@
                 android:paddingLeft="8dp"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_medium"
+                android:layout_marginTop="8dp"
                 android:maxLines="1"
                 />
             <TextView
@@ -55,15 +56,13 @@
                 <ListView
                     android:id="@+id/profile_setting_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="400dp"
                     android:divider="@null"
                     />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_below="@id/profile_setting_lv"
                     android:background="#eee" />
             </RelativeLayout>
@@ -72,10 +71,11 @@
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:drawableEnd="@drawable/ic_logout"
                 android:drawablePadding="8dp"
                 android:padding="8dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
                 android:textColor="@color/colorSecondaryText"
                 android:gravity="start|center"
                 android:text="@string/logout"/>
