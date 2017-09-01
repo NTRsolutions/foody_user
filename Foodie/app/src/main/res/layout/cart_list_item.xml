@@ -1,86 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/re"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp" >
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/login_pic"
-        android:id="@+id/dish_img" />
-    <TextView
-        android:id="@+id/dish_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bunny Burgs"
-        android:maxLines="1"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="@dimen/text_medium"
-        android:textColor="@color/colorPrimaryText"
-        android:layout_toEndOf="@+id/dish_img" />
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/dish_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Burgur"
-        android:layout_marginStart="16dp"
-        android:maxLines="1"
-        android:textSize="@dimen/text_small"
-        android:textColor="@color/colorSecondaryText"
-        android:layout_below="@+id/dish_name"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/dish_img" />
+        <ImageView
+            android:id="@+id/dish_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/login_pic" />
+
+        <TextView
+            android:id="@+id/dish_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/dish_img"
+            android:maxLines="1"
+            android:text="Bunny Burgs"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/text_medium" />
+
+        <TextView
+            android:id="@+id/dish_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/dish_name"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/dish_img"
+            android:maxLines="1"
+            android:text="Burgur"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
     </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@id/re"
-        android:id="@+id/linearLayout2">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_medium"
-            android:text="Spicy Prawn Tika"
-            android:maxLines="1"
             android:drawableStart="@drawable/ic_veg"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="Spicy Prawn Tika"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/text_medium" />
+
         <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
             android:id="@+id/number_button"
             android:layout_width="match_parent"
-            app:backGroundColor="#eee"
-            app:textSize="5sp"
-            app:textColor="@color/colorPrimaryText"
+            android:layout_height="match_parent"
             android:layout_weight="2"
-            android:layout_height="match_parent" />
+            app:backGroundColor="#eee"
+            app:textColor="@color/colorPrimaryText"
+            app:textSize="5sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="@dimen/text_medium"
-            android:text="$220"
+            android:gravity="center"
             android:maxLines="1"
+            android:text="$220"
+            android:textColor="@color/colorSecondaryText"
 
-            android:gravity="center"/>
+            android:textSize="@dimen/text_medium" />
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

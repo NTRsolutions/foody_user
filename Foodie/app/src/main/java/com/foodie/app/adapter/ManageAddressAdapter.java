@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.model.Location;
+
 import java.util.List;
 
 /**
@@ -28,7 +29,44 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
         this.context = con;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.address_list_item, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        Location location = list.get(position);
+
+        holder.addressLabelTxt.setText(location.name);
+        holder.addressTxt.setText(location.address);
+        setIcon(holder.iconImg, location.icon_id);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public void setIcon(ImageView imgView, Integer id) {
+        switch (id) {
+            case 1:
+                imgView.setImageResource(R.drawable.ic_home);
+                break;
+            case 2:
+                imgView.setImageResource(R.drawable.ic_work);
+                break;
+            default:
+                imgView.setImageResource(R.drawable.ic_map_marker);
+                break;
+        }
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView addressLabelTxt, addressTxt;
         private Button editBtn, deleteBtn;
         private ImageView iconImg;
@@ -50,49 +88,11 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
             int position = getAdapterPosition();
             if (v.getId() == editBtn.getId()) {
                 Toast.makeText(v.getContext(), "editBtn PRESSED = " + list.get(position).name + list.get(position).address, Toast.LENGTH_SHORT).show();
-            }else if (v.getId() == deleteBtn.getId()) {
+            } else if (v.getId() == deleteBtn.getId()) {
                 Toast.makeText(v.getContext(), "deleteBtn PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }
         }
 
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.address_list_item, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        Location location = list.get(position);
-
-        holder.addressLabelTxt.setText(location.name);
-        holder.addressTxt.setText(location.address);
-        setIcon(holder.iconImg, location.icon_id);
-
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    public void setIcon(ImageView imgView, Integer id) {
-        switch (id) {
-            case 1:
-                imgView.setImageResource(R.drawable.ic_home);
-                break;
-            case 2:
-                imgView.setImageResource(R.drawable.ic_work);
-                break;
-            default:
-                imgView.setImageResource(R.drawable.ic_map_marker);
-                break;
-        }
     }
 
 }

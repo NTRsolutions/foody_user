@@ -23,9 +23,9 @@ import java.util.List;
 
 public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<DeliveryLocationAdapter.ViewHolder> {
 
+    List<LocationModel> list = new ArrayList<>();
     private Context context;
     private LayoutInflater inflater;
-    List<LocationModel> list = new ArrayList<>();
 
     public DeliveryLocationAdapter(Context context, List<LocationModel> list) {
         this.context = context;
@@ -106,7 +106,7 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView path;
         TextView addressLabel;
         TextView address;
@@ -125,8 +125,6 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
             }
 
         }
-
-
 
 
     }

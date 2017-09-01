@@ -9,34 +9,36 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ToolBarStyle" >
+        app:theme="@style/ToolBarStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="18sp"
-                android:textAllCaps="true"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
+                android:text="@string/filters"
+                android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
-                android:text="@string/filters" />
+                android:textSize="18sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/text_small"
-                android:textAllCaps="true"
-                android:clickable="true"
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="@string/reset"
+                android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
-                android:text="@string/reset" />
+                android:textSize="@dimen/text_small" />
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -49,15 +51,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_above="@+id/apply_filter"
         android:layout_below="@id/toolbar"
-        android:layout_above="@+id/apply_filter">
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/filter_rv"
-            android:background="#eee"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#eee"
             android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
@@ -66,9 +68,8 @@
         android:id="@+id/apply_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"
         android:text="@string/apply_filter"
-        android:textColor="@color/colorWhite"
-        android:layout_alignParentBottom="true"
-        />
+        android:textColor="@color/colorWhite" />
 </RelativeLayout>

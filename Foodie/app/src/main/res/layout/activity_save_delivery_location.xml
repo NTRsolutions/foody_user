@@ -1,67 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:id="@+id/coordinatorLayout"
     tools:context="com.foodie.app.activities.SaveDeliveryLocationActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/lnrMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:orientation="vertical">
 
                 <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/backArrow"
-                android:layout_width="20dp"
-                android:src="@drawable/ic_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:contentDescription="@string/app_name"
-                android:layout_height="20dp" />
+                android:src="@drawable/ic_back" />
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_pin_locator"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_height="wrap_content" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_pin_locator" />
 
             <ImageView
                 android:id="@+id/current_loc_img"
                 android:layout_width="40dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_map_marker"
+                android:layout_height="10dp"
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
-                android:layout_height="10dp" />
-
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_map_marker" />
 
         </RelativeLayout>
+    </ScrollView>
 
-
-
-    <include  layout="@layout/bottom_sheet_save_delivery_location" />
-
-
+    <include layout="@layout/bottom_sheet_save_delivery_location" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -4,25 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@color/colorWhite">
+    android:padding="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/login_pic"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/login_pic" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rate your experience"
-        android:gravity="center"
         android:layout_marginBottom="8dp"
-        android:textSize="@dimen/text_medium"
-        android:textColor="@color/colorPrimaryText"/>
+        android:gravity="center"
+        android:text="Rate your experience"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/text_medium" />
 
     <RatingBar
         android:id="@+id/rating_bar"
@@ -35,21 +36,20 @@
         android:id="@+id/comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#eee"
+        android:gravity="center|top"
         android:hint="LEAVE COMMENT"
         android:lines="3"
-        android:gravity="center|top"
-        android:scrollHorizontally="false"
-        android:background="#eee"
-        android:layout_margin="8dp"
         android:padding="8dp"
-        />
+        android:scrollHorizontally="false" />
 
     <Button
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorWhite"
+        android:background="@color/colorAccent"
         android:text="submit"
-        android:background="@color/colorAccent"/>
+        android:textColor="@color/colorWhite" />
 
 </LinearLayout>

@@ -25,9 +25,9 @@ import java.util.List;
 
 public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.ViewHolder> {
 
+    List<FilterModel> list = new ArrayList<>();
     private Context context;
     private LayoutInflater inflater;
-    List<FilterModel> list = new ArrayList<>();
 
     public FilterAdapter(Context context, List<FilterModel> list) {
         this.context = context;
@@ -79,7 +79,7 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
         holder.filterNameTxt.setText(item);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
         TextView filterNameTxt;
         CheckBox chkSelected;

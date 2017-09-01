@@ -7,6 +7,7 @@ package com.foodie.app.model;
 public class RecommendedDish {
     String name, category, price, imgUrl, description;
     Boolean isVeg;
+
     public RecommendedDish(String name, String category, String price, Boolean isVeg, String url, String description) {
         this.name = name;
         this.category = category;
@@ -24,30 +25,34 @@ public class RecommendedDish {
         this.name = name;
     }
 
-    public String getCategory(){
+    public String getCategory() {
         return category;
     }
-    public void setCategory(String category){
+
+    public void setCategory(String category) {
         this.category = category;
     }
 
-    public String getPrice(){
+    public String getPrice() {
         return price;
     }
-    public void setPrice(String price){
+
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public Boolean getIsVeg(){
+    public Boolean getIsVeg() {
         return isVeg;
     }
-    public void setIsVeg(Boolean isVeg){
+
+    public void setIsVeg(Boolean isVeg) {
         this.isVeg = isVeg;
     }
 
     public String getImgUrl() {
         return imgUrl;
     }
+
     public void setImgUrl(String image) {
         this.imgUrl = image;
     }
@@ -55,6 +60,7 @@ public class RecommendedDish {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }

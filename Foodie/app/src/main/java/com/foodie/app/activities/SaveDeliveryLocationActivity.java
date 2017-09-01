@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.foodie.app.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -43,6 +45,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SaveDeliveryLocationActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -67,6 +70,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     int value = 0;
     Double crtLat, crtLng;
     Double srcLat, srcLng;
+    @BindView(R.id.backArrow)
+    ImageView backArrow;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +82,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
             } else {
@@ -130,7 +137,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     public void onMapReady(GoogleMap googleMap) {
 
         try {
-            boolean success = googleMap.setMapStyle( MapStyleOptions.loadRawResourceStyle( this, R.raw.style_json));
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
             if (!success) {
                 Log.i("Map:Style", "Style parsing failed.");
             } else {
@@ -183,11 +190,11 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         crtLat = location.getLatitude();
         crtLng = location.getLongitude();
 
-        System.out.println(TAG+crtLat);
+        System.out.println(TAG + crtLat);
     }
 
     public void getAddress(double latitude, double longitude) {
-        System.out.println("GetAddress "+latitude+" | "+longitude);
+        System.out.println("GetAddress " + latitude + " | " + longitude);
         try {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -213,8 +220,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     public void onCameraIdle() {
         try {
             CameraPosition cameraPosition = mMap.getCameraPosition();
-            srcLat=cameraPosition.target.latitude;
-            srcLng=cameraPosition.target.longitude;
+            srcLat = cameraPosition.target.latitude;
+            srcLng = cameraPosition.target.longitude;
             getAddress(srcLat, srcLng);
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,4 +261,16 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
+
+    @OnClick(R.id.backArrow)
+    public void onViewClicked() {
+        onBackPressed();
+    }
 }

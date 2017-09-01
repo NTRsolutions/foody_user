@@ -9,45 +9,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_profile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="4dp"
-                android:src="@drawable/login_pic"
-                />
+                android:src="@drawable/login_pic" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="4dp">
 
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Brito"
                 android:maxLines="1"
-                android:textSize="@dimen/text_medium"
+                android:text="Brito"
                 android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryText"/>
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/text_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,8 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-
-                    android:text="9934334311" />
+                    android:text="9934334311 . " />
 
                 <TextView
                     android:id="@+id/email"
@@ -76,23 +73,18 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="2">
+
             <TextView
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAllCaps="true"
-                android:gravity="center"
-                android:clickable="true"
                 android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="Edit"
+                android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_small"
-                android:text="Edit"/>
+                android:textSize="@dimen/text_small" />
         </LinearLayout>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/colorPrimaryText" />
 </LinearLayout>

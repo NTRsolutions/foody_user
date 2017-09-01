@@ -1,5 +1,6 @@
 package com.foodie.app.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,16 +15,53 @@ import com.foodie.app.R;
  */
 
 public class SearchFragment extends Fragment {
+    Context context;
+    ViewGroup toolbar;
+    View toolbarLayout;
 
-    public SearchFragment() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.context = getContext();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-
         return view;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (toolbar != null) {
+            toolbar.removeView(toolbarLayout);
+        }
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+        System.out.println("SearchFragment");
+        toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_search, toolbar, false);
+        toolbar.addView(toolbarLayout);
     }
 
 }

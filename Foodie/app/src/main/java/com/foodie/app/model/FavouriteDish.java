@@ -6,6 +6,7 @@ package com.foodie.app.model;
 
 public class FavouriteDish {
     String name, category, imgUrl;
+
     public FavouriteDish(String name, String category, String url) {
         this.name = name;
         this.category = category;
@@ -15,20 +16,23 @@ public class FavouriteDish {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getCategory(){
+    public String getCategory() {
         return category;
     }
-    public void setCategory(String category){
+
+    public void setCategory(String category) {
         this.category = category;
     }
 
     public String getImgUrl() {
         return imgUrl;
     }
+
     public void setImgUrl(String image) {
         this.imgUrl = image;
     }

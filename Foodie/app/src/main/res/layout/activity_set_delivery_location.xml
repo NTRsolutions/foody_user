@@ -9,32 +9,41 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        app:theme="@style/ToolBarStyle" >
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ToolBarStyle">
 
         <LinearLayout
+            android:id="@+id/find_place_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_small"
-                android:textColor="@color/colorAccent"
                 android:paddingTop="4dp"
-                android:text="@string/set_delivery_location" />
+                android:text="@string/set_delivery_location"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_small" />
 
-            <fragment
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/searc_place"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/text_small" />
+
+            <!--<fragment
                 android:id="@+id/place_autocomplete_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:iconifiedByDefault="false"
                 android:layout_marginStart="-16dp"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-                />
+                />-->
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -45,18 +54,16 @@
         android:background="#eee" />
 
 
-
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <include layout="@layout/current_location_header"/>
+            <include layout="@layout/current_location_header" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/delivery_location_rv"

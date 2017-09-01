@@ -23,49 +23,47 @@ import static java.security.AccessController.getContext;
 
 public class ProfileSettingsAdapter extends BaseAdapter {
 
-
     private static final String LOG_TAG = ProfileSettingsAdapter.class.getSimpleName();
-
+    List<Integer> listIcon;
     private Context context_;
     private List<String> items;
-    List<Integer> listIcon;
 
     public ProfileSettingsAdapter(Context context, List<String> items, List<Integer> listIcon) {
-            this.context_ = context;
-            this.items = items;
-            this.listIcon = listIcon;
+        this.context_ = context;
+        this.items = items;
+        this.listIcon = listIcon;
+    }
+
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            LayoutInflater mInflater = (LayoutInflater)
+                    context_.getSystemService(context_.LAYOUT_INFLATER_SERVICE);
+
+            convertView = mInflater.inflate(R.layout.profile_settings_list_item, null);
         }
 
-        @Override
-        public int getCount() {
-            return items.size();
-        }
+        ImageView setting_icon = (ImageView) convertView.findViewById(R.id.setting_icon);
+        TextView tv = (TextView) convertView.findViewById(R.id.setting_label);
 
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
+        setting_icon.setImageResource(listIcon.get(position));
+        tv.setText(items.get(position));
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater mInflater = (LayoutInflater)
-                        context_.getSystemService(context_.LAYOUT_INFLATER_SERVICE);
-
-                convertView = mInflater.inflate(R.layout.profile_settings_list_item, null);
-            }
-
-            ImageView setting_icon = (ImageView) convertView.findViewById(R.id.setting_icon);
-            TextView tv = (TextView) convertView.findViewById(R.id.setting_label);
-
-            setting_icon.setImageResource(listIcon.get(position));
-            tv.setText(items.get(position));
-
-            return convertView;
-        }
+        return convertView;
+    }
 }

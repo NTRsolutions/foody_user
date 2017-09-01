@@ -25,37 +25,13 @@ public class ImpressiveDishesAdapter extends RecyclerView.Adapter<ImpressiveDish
     private List<ImpressiveDish> moviesList;
     private Context context;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public ImageView dishImg;
-
-
-        public MyViewHolder(View view) {
-            super(view);
-            itemView.setOnClickListener( this);
-            dishImg = (ImageView) view.findViewById(R.id.dishImg);
-
-        }
-
-        public void onClick(View v) {
-            clickListener.onItemClick(getAdapterPosition(), v);
-        }
-
-
+    public ImpressiveDishesAdapter(List<ImpressiveDish> moviesList, Context con) {
+        this.moviesList = moviesList;
+        this.context = con;
     }
 
     public void setOnItemClickListener(ClickListener clickListener) {
         ImpressiveDishesAdapter.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-
-    }
-
-
-    public ImpressiveDishesAdapter(List<ImpressiveDish> moviesList, Context con) {
-        this.moviesList = moviesList;
-        this.context = con;
     }
 
     @Override
@@ -73,13 +49,33 @@ public class ImpressiveDishesAdapter extends RecyclerView.Adapter<ImpressiveDish
 
     }
 
-
-
     @Override
     public int getItemCount() {
         return moviesList.size();
     }
 
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public ImageView dishImg;
+
+
+        public MyViewHolder(View view) {
+            super(view);
+            itemView.setOnClickListener(this);
+            dishImg = (ImageView) view.findViewById(R.id.dishImg);
+
+        }
+
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+
+
+    }
 
 
 }

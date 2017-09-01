@@ -65,17 +65,6 @@ public class AccountPaymentAdapter extends BaseAdapter {
         return convertView;
     }
 
-    static class ViewHolder {
-        @BindView(R.id.icon)
-        ImageView icon;
-        @BindView(R.id.payment_label)
-        TextView paymentLabel;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
-
     public void setIcon(ImageView imgView, Integer id) {
         switch (id) {
             case 0:
@@ -87,6 +76,17 @@ public class AccountPaymentAdapter extends BaseAdapter {
             default:
                 imgView.setImageResource(R.drawable.ic_cash);
                 break;
+        }
+    }
+
+    static class ViewHolder {
+        @BindView(R.id.icon)
+        ImageView icon;
+        @BindView(R.id.payment_label)
+        TextView paymentLabel;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -7,6 +7,7 @@ package com.foodie.app.model;
 public class Location {
     public String name, address;
     public Integer icon_id;
+
     public Location(String name, String address, Integer icon_id) {
         this.name = name;
         this.address = address;

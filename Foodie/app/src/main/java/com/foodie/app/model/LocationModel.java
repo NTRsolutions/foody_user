@@ -14,6 +14,7 @@ public class LocationModel {
     public String getHeader() {
         return header;
     }
+
     public void setHeader(String header) {
         this.header = header;
     }
@@ -21,6 +22,7 @@ public class LocationModel {
     public List<Location> getLocations() {
         return locations;
     }
+
     public void setLocations(List<Location> persons) {
         this.locations = persons;
     }

@@ -20,8 +20,8 @@ import com.foodie.app.R;
 
 public class CartFragment extends Fragment {
     Context context;
-    public CartFragment() {
-    }
+    ViewGroup toolbar;
+    View toolbarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        FeedbackDialog();
+
         return view;
 
     }
@@ -56,10 +56,13 @@ public class CartFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (toolbar != null) {
+            toolbar.removeView(toolbarLayout);
+        }
     }
 
 
-    public void FeedbackDialog(){
+    public void FeedbackDialog() {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.feedback);
@@ -74,6 +77,14 @@ public class CartFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        System.out.println("CartFragment");
+        toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_cart, toolbar, false);
+        toolbar.addView(toolbarLayout);
     }
 
 }

@@ -14,6 +14,7 @@ public class OrderModel {
     public String getHeader() {
         return header;
     }
+
     public void setHeader(String header) {
         this.header = header;
     }
@@ -21,6 +22,7 @@ public class OrderModel {
     public List<Order> getOrders() {
         return orders;
     }
+
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }

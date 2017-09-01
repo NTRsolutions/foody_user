@@ -3,37 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp" >
+    android:padding="8dp">
 
     <ImageView
+        android:id="@+id/dish_img"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_pic"
-        android:id="@+id/dish_img" />
+        android:src="@drawable/login_pic" />
+
     <TextView
         android:id="@+id/dish_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bunny Burgs"
-        android:maxLines="1"
-        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        android:textSize="@dimen/text_medium"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/dish_img"
+        android:maxLines="1"
+        android:text="Bunny Burgs"
         android:textColor="@color/colorPrimaryText"
-        android:layout_toEndOf="@+id/dish_img" />
+        android:textSize="@dimen/text_medium" />
 
     <TextView
         android:id="@+id/dish_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Burgur"
-        android:layout_marginStart="16dp"
-        android:maxLines="1"
-        android:textSize="@dimen/text_small"
-        android:textColor="@color/colorSecondaryText"
-        android:layout_below="@+id/dish_name"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/dish_img" />
+        android:layout_below="@+id/dish_name"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/dish_img"
+        android:maxLines="1"
+        android:text="Burgur"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="@dimen/text_small" />
 
 </RelativeLayout>

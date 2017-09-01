@@ -7,58 +7,50 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:tools="http://schemas.android.com/tools"
         android:fillViewport="true"
         android:scrollbars="none"
-        tools:context="com.foodie.app.activities.ProfileActivity"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        tools:context="com.foodie.app.activities.ProfileActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-
-            <include layout="@layout/user_header"/>
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:maxLines="1"
+                android:paddingLeft="8dp"
                 android:text="My Account"
-                android:paddingLeft="8dp"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/text_medium"
-                android:layout_marginTop="8dp"
-                android:maxLines="1"
-                />
+                android:textSize="@dimen/text_medium" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Manage Address, Favorites, Payment, Orders, Change Password"
-                android:paddingLeft="8dp"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_small"
                 android:maxLines="1"
-                />
+                android:paddingLeft="8dp"
+                android:text="Manage Address, Favorites, Payment, Orders, Change Password"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_small" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_margin="8dp"
                 android:background="#eee" />
 
             <RelativeLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <ListView
                     android:id="@+id/profile_setting_lv"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
-                    android:divider="@null"
-                    />
+                    android:divider="@null" />
 
                 <View
                     android:layout_width="match_parent"
@@ -71,14 +63,15 @@
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
                 android:drawableEnd="@drawable/ic_logout"
                 android:drawablePadding="8dp"
-                android:padding="8dp"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackground"
-                android:textColor="@color/colorSecondaryText"
                 android:gravity="start|center"
-                android:text="@string/logout"/>
+                android:padding="8dp"
+                android:text="@string/logout"
+                android:textColor="@color/colorSecondaryText" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -88,8 +81,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:orientation="vertical"
-                />
+                android:orientation="vertical" />
 
 
         </LinearLayout>

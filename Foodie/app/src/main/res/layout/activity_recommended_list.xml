@@ -9,20 +9,20 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
+        android:minHeight="?attr/actionBarSize"
         app:theme="@style/ToolBarStyle">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:gravity="center"
+            android:text="Recommended 1/5"
             android:textColor="@color/colorSecondaryText"
-            android:text="Recommended 1/5" />
+            android:textSize="16sp" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -40,17 +40,11 @@
             android:id="@+id/recommended_dishes_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@null"/>
+            android:divider="@null" />
 
         <include layout="@layout/cart_banner" />
 
     </RelativeLayout>
 
-
-
-
-
-
-    
 
 </LinearLayout>

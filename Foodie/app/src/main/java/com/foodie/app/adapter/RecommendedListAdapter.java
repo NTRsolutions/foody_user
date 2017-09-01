@@ -69,8 +69,8 @@ public class RecommendedListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 System.out.println(obj.getName());
-                if(context instanceof RecommendedListActivity){
-                    ((RecommendedListActivity)context).addItemToCart();
+                if (context instanceof RecommendedListActivity) {
+                    ((RecommendedListActivity) context).addItemToCart();
                 }
             }
         });

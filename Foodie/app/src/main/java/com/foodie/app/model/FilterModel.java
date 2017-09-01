@@ -14,6 +14,7 @@ public class FilterModel {
     public String getHeader() {
         return header;
     }
+
     public void setHeader(String header) {
         this.header = header;
     }
@@ -21,6 +22,7 @@ public class FilterModel {
     public List<String> getFilters() {
         return filters;
     }
+
     public void setFilters(List<String> filters) {
         this.filters = filters;
     }

@@ -29,6 +29,7 @@
     <string name="payment">Payment</string>
     <string name="add_new_card">Add New Card</string>
     <string name="set_delivery_location">Set Delivery Location</string>
+    <string name="searc_place">"Search for area, street name..."</string>
     <string name="change_password">"Change Password"</string>
     <string name="favourites">"Favourites"</string>
     <string name="filters">"Filters"</string>

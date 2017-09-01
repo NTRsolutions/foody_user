@@ -25,9 +25,9 @@ import java.util.List;
 
 public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.ViewHolder> {
 
+    List<OrderModel> list = new ArrayList<>();
     private Context context;
     private LayoutInflater inflater;
-    List<OrderModel> list = new ArrayList<>();
 
     public OrdersAdapter(Context context, List<OrderModel> list) {
         this.context = context;
@@ -91,7 +91,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
 
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
         TextView restaurantNameTxt, restaurantAddressTxt, dishNameTxt, dateTimeTxt;
         Button reorderBtn;

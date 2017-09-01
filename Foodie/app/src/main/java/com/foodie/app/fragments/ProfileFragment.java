@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,7 +30,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -40,21 +40,11 @@ public class ProfileFragment extends Fragment {
     Activity activity;
     Context context;
 
-    @BindView(R.id.user_profile)
-    CircleImageView userProfileImg;
-    @BindView(R.id.user_name)
-    TextView userNameTxt;
-    @BindView(R.id.phone)
-    TextView phoneTxt;
-    @BindView(R.id.email)
-    TextView emailTxt;
-    @BindView(R.id.edit)
-    TextView editTxt;
     @BindView(R.id.profile_setting_lv)
     ListView profileSettingLv;
 
-    public ProfileFragment() {
-    }
+    ViewGroup toolbar;
+    View toolbarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,12 +78,9 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.edit, R.id.logout})
+    @OnClick({R.id.logout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.edit:
-                startActivity(new Intent(context, EditAccountActivity.class));
-                break;
             case R.id.logout:
                 startActivity(new Intent(context, LoginActivity.class));
                 break;
@@ -114,6 +101,14 @@ public class ProfileFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (toolbar != null) {
+            toolbar.removeView(toolbarLayout);
+        }
     }
 
 
@@ -139,6 +134,23 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+        System.out.println("ProfileFragment");
+
+        toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
+
+        Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, EditAccountActivity.class));
+            }
+        });
+        toolbar.addView(toolbarLayout);
+    }
 
 
 }

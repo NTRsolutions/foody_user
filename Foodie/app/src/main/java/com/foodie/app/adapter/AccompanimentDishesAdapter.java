@@ -29,7 +29,34 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
         this.context = con;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.accompainment_list_item, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        RecommendedDish dish = list.get(position);
+
+        holder.dishNameTxt.setText(dish.getName());
+        holder.priceTxt.setText(dish.getPrice());
+        if (dish.getIsVeg()) {
+            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_veg, 0, 0, 0);
+        } else {
+            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_non_veg, 0, 0, 0);
+        }
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView dishImg;
         private TextView dishNameTxt, priceTxt;
         private Button addBtn;
@@ -46,44 +73,15 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == addBtn.getId()){
-                int position  = getAdapterPosition();
-                Toast.makeText(v.getContext(), "ITEM PRESSED = " + list.get(position).getName()+list.get(position).getPrice(), Toast.LENGTH_SHORT).show();
+            if (v.getId() == addBtn.getId()) {
+                int position = getAdapterPosition();
+                Toast.makeText(v.getContext(), "ITEM PRESSED = " + list.get(position).getName() + list.get(position).getPrice(), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }
         }
 
     }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.accompainment_list_item, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        RecommendedDish dish = list.get(position);
-
-        holder.dishNameTxt.setText(dish.getName());
-        holder.priceTxt.setText(dish.getPrice());
-        if(dish.getIsVeg()){
-            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_veg, 0, 0, 0);
-        }else{
-            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_non_veg, 0, 0, 0);
-        }
-
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
 
 
 }

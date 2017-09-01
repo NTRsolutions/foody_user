@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/current_location_ll"
-    android:paddingTop="8dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:clickable="true"
+    android:id="@+id/current_location_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:layout_width="match_parent"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp" >
+        android:padding="4dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -19,36 +21,36 @@
             android:orientation="vertical">
 
             <ImageView
-                android:padding="8dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_locator"/>
+                android:padding="8dp"
+                android:src="@drawable/ic_locator" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_medium"
+                android:layout_marginBottom="4sp"
+                android:maxLines="1"
                 android:text="Current Location"
-                android:maxLines="1"
                 android:textColor="@color/colorPrimaryText"
-                android:layout_marginBottom="4sp"
-                />
+                android:textSize="@dimen/text_medium" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_small"
-                android:text="Enable Location Services"
-                android:maxLines="1"
-                android:textColor="@color/colorSecondaryText"
                 android:layout_marginBottom="4sp"
-                />
+                android:maxLines="1"
+                android:text="Enable Location Services"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_small" />
 
 
         </LinearLayout>

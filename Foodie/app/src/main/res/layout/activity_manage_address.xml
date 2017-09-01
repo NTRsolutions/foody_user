@@ -9,27 +9,29 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        app:theme="@style/ToolBarStyle" >
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ToolBarStyle">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:text="@string/manage_address"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryText"
-            android:text="@string/manage_address" />
+            android:textSize="18sp" />
 
     </android.support.v7.widget.Toolbar>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eee" />
 
-    <ScrollView android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
@@ -37,15 +39,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#eee"
+                android:padding="16dp"
                 android:text="Saved Address"
                 android:textAllCaps="true"
-                android:background="#eee"
                 android:textColor="@color/colorSecondaryText"
-                android:padding="16dp"
-                android:textSize="@dimen/text_large"/>
+                android:textSize="@dimen/text_large" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/manage_address_rv"
