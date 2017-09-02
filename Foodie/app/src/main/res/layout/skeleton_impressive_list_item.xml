@@ -7,11 +7,12 @@
     android:padding="8dp"
     tools:ignore="UseCompoundDrawables">
 
-    <ImageView
+    <View
         android:id="@+id/dishImg"
         android:layout_width="200dp"
         android:layout_height="180dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_pic" />
+        android:background="@color/light_transparent"
+        />
 
 </RelativeLayout>

@@ -71,5 +71,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"
         android:text="@string/apply_filter"
+
         android:textColor="@color/colorWhite" />
 </RelativeLayout>

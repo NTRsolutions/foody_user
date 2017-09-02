@@ -61,6 +61,9 @@ public class OrdersActivity extends AppCompatActivity {
 
         List<Order> orders = new ArrayList<>();
         orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
+        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
+        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
+        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
         OrderModel model = new OrderModel();
         model.setHeader("Current Orders");
         model.setOrders(orders);

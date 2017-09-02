@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_home"
+                android:drawableTop="@drawable/home"
                 android:gravity="center"
                 android:text="@string/home"
                 android:textColor="@color/colorPrimaryText" />

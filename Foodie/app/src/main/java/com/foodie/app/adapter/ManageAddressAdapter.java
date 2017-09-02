@@ -55,7 +55,7 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
     public void setIcon(ImageView imgView, Integer id) {
         switch (id) {
             case 1:
-                imgView.setImageResource(R.drawable.ic_home);
+                imgView.setImageResource(R.drawable.home);
                 break;
             case 2:
                 imgView.setImageResource(R.drawable.ic_work);

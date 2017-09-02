@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,14 +29,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HotelViewActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar_top)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.recommended_dishes_rv)
     RecyclerView recommendedDishesRv;
     @BindView(R.id.accompaniment_dishes_rv)
     RecyclerView accompanimentDishesRv;
-    @BindView(R.id.menu)
-    LinearLayout menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,6 @@ public class HotelViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hotel_view);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_top);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -55,12 +53,17 @@ public class HotelViewActivity extends AppCompatActivity {
 
 
         final ArrayList<RecommendedDish> list = new ArrayList<>();
-        list.add(new RecommendedDish("Non", "Starter", "$20", true, "url", "description"));
-        list.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "description"));
-        list.add(new RecommendedDish("Biriyani", "Lunch", "$25", false, "url", "description"));
-        list.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "description"));
+        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "$2", true, "url", "description"));
+        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "$3", true, "url", "description"));
+        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "$4", false, "url", "description"));
+        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "$2", true, "url", "description"));
+        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "$3", true, "url", "description"));
+        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "$4", false, "url", "description"));
+        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "$2", true, "url", "description"));
+        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "$3", true, "url", "description"));
         RecommendedDishesAdapter adapter = new RecommendedDishesAdapter(list, this);
-        recommendedDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recommendedDishesRv.setLayoutManager(new GridLayoutManager(this, 2));
+        //recommendedDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recommendedDishesRv.setItemAnimator(new DefaultItemAnimator());
         recommendedDishesRv.setAdapter(adapter);
 
@@ -88,8 +91,4 @@ public class HotelViewActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @OnClick(R.id.menu)
-    public void onViewClicked() {
-
-    }
 }

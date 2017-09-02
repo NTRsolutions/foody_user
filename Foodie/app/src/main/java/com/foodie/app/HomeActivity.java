@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
@@ -31,6 +32,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final int TIME_DELAY = 2000;
+    private static long back_pressed;
+    BottomBar bottomBar;
     ConnectionHelper connectionHelper;
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -47,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.main_container, fragment).commit();
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_navigation);
+        bottomBar = (BottomBar) findViewById(R.id.bottom_navigation);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -134,6 +138,16 @@ public class HomeActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         connectionHelper.isConnectingToInternet();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (back_pressed + TIME_DELAY > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
+        }
+        back_pressed = System.currentTimeMillis();
     }
 
     @Override

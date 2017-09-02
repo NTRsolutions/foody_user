@@ -14,7 +14,6 @@
         android:background="@color/colorWhite"
         android:elevation="1dp"
         android:minHeight="?attr/actionBarSize"
-        android:paddingBottom="4dp"
         android:theme="@style/ToolBarStyle"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"

@@ -16,7 +16,7 @@ import com.foodie.app.model.RecommendedDish;
 import java.util.List;
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class RecommendedDishesAdapter extends RecyclerView.Adapter<RecommendedDishesAdapter.MyViewHolder> {
@@ -74,11 +74,11 @@ public class RecommendedDishesAdapter extends RecyclerView.Adapter<RecommendedDi
 
         @Override
         public void onClick(View v) {
+            int position = getAdapterPosition();
             if (v.getId() == addBtn.getId()) {
-                int position = getAdapterPosition();
                 Toast.makeText(v.getContext(), "ITEM PRESSED = " + list.get(position).getName() + list.get(position).getPrice(), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "ROW PRESSED = " + list.get(position).getName() + list.get(position).getPrice(), Toast.LENGTH_SHORT).show();
             }
         }
 

@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
@@ -60,11 +59,11 @@ public class ProfileFragment extends Fragment {
 
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
         List<Integer> listIcons = new ArrayList<>();
-        listIcons.add(R.drawable.ic_home);
-        listIcons.add(R.drawable.ic_heart);
-        listIcons.add(R.drawable.ic_payment);
-        listIcons.add(R.drawable.ic_orders);
-        listIcons.add(R.drawable.ic_padlock);
+        listIcons.add(R.drawable.home);
+        listIcons.add(R.drawable.heart);
+        listIcons.add(R.drawable.payment);
+        listIcons.add(R.drawable.orders);
+        listIcons.add(R.drawable.padlock);
         ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
         profileSettingLv.setAdapter(adbPerson);
         profileSettingLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

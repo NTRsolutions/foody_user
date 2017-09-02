@@ -32,19 +32,25 @@
         android:layout_marginTop="4dp"
         android:background="#eee" />
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context="com.foodie.app.HomeActivity">
 
-        <ListView
-            android:id="@+id/recommended_dishes_lv"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null" />
+            android:layout_height="wrap_content">
 
-        <include layout="@layout/cart_banner" />
+            <ListView
+                android:id="@+id/recommended_dishes_lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
 
-    </RelativeLayout>
+            <include layout="@layout/cart_banner" />
 
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

@@ -74,9 +74,20 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int section, int relativePosition, int absolutePosition) {
+    public void onBindViewHolder(final ViewHolder holder, int section, int relativePosition, int absolutePosition) {
         final String item = list.get(section).getFilters().get(relativePosition);
         holder.filterNameTxt.setText(item);
+        holder.filterNameTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.chkSelected.isChecked()){
+                    holder.chkSelected.setChecked(false);
+                }else {
+                    holder.chkSelected.setChecked(true);
+                }
+            }
+        });
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

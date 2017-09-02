@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +15,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
+import com.foodie.app.adapter.DiscoverAdapter;
+import com.foodie.app.adapter.ImpressiveDishesAdapter;
+import com.foodie.app.adapter.RestaurantsAdapter;
+import com.foodie.app.model.Discover;
+import com.foodie.app.model.ImpressiveDish;
+import com.foodie.app.model.Restaurant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,28 +40,21 @@ import butterknife.ButterKnife;
 
 public class HomeFragment extends Fragment {
     Context context;
-
+    SkeletonScreen skeletonScreen;
     TextView addressLabel;
     TextView address;
     LinearLayout locationLl;
     Button filterBtn;
 
-    /*@BindView(R.id.address_label)
-    TextView addressLabel;
-    @BindView(R.id.address)
-    TextView address;
-    @BindView(R.id.location_ll)
-    LinearLayout locationLl;
-    @BindView(R.id.filterTxt)
-    TextView filterTxt;*/
     @BindView(R.id.impressive_dishes_rv)
     RecyclerView impressiveDishesRv;
+    @BindView(R.id.restaurants_rv)
+    RecyclerView restaurantsRv;
+    @BindView(R.id.discover_rv)
+    RecyclerView discoverRv;
 
     ViewGroup toolbar;
     View toolbarLayout;
-
-    public HomeFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,8 +68,77 @@ public class HomeFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        final ArrayList<ImpressiveDish> list = new ArrayList<>();
+        list.add(new ImpressiveDish("Santhosh1", "Hello"));
+        list.add(new ImpressiveDish("Santhosh2", "Hello"));
+        list.add(new ImpressiveDish("Santhosh3", "Hello"));
+        list.add(new ImpressiveDish("Santhosh4", "Hello"));
+        list.add(new ImpressiveDish("Santhosh5", "Hello"));
+        list.add(new ImpressiveDish("Santhosh6", "Hello"));
+        list.add(new ImpressiveDish("Santhosh7", "Hello"));
+        list.add(new ImpressiveDish("Santhosh8", "Hello"));
+        list.add(new ImpressiveDish("Santhosh9", "Hello"));
+        list.add(new ImpressiveDish("Santhosh10", "Hello"));
+
+        ImpressiveDishesAdapter adapter = new ImpressiveDishesAdapter(list, context);
+        impressiveDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        impressiveDishesRv.setItemAnimator(new DefaultItemAnimator());
+        impressiveDishesRv.setAdapter(adapter);
+        adapter.setOnItemClickListener(new ImpressiveDishesAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                ImpressiveDish dish = list.get(position);
+                Log.d("Hello", "onItemClick position: " + dish.getName());
+            }
+        });
+
+
+        restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        restaurantsRv.setItemAnimator(new DefaultItemAnimator());
+        restaurantsRv.setHasFixedSize(true);
+        final ArrayList<Restaurant> restaurantList = new ArrayList<>();
+        restaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20"));
+        restaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50"));
+        restaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "4.3", "36 Mins", "$5"));
+        RestaurantsAdapter adapterRestaurant = new RestaurantsAdapter(restaurantList, context);
+        skeletonScreen = Skeleton.bind(restaurantsRv)
+                .adapter(adapterRestaurant)
+                .load(R.layout.skeleton_restaurant_list_item)
+                .count(2)
+                .show();
+
+
+        // Discover
+        final List<Discover> discoverList = new ArrayList<>();
+        discoverList.add(new Discover("Trending now ", "22 options", "1"));
+        discoverList.add(new Discover("Offers near you", "51 options", "1"));
+        discoverList.add(new Discover("Whats special", "7 options", "1"));
+        discoverList.add(new Discover("Pocket Friendly", "44 options", "1"));
+
+        DiscoverAdapter adapterDiscover = new DiscoverAdapter(discoverList, context);
+        discoverRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        discoverRv.setItemAnimator(new DefaultItemAnimator());
+        discoverRv.setAdapter(adapterDiscover);
+        adapterDiscover.setOnItemClickListener(new DiscoverAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Discover obj = discoverList.get(position);
+            }
+        });
+
         return view;
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        restaurantsRv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                skeletonScreen.hide();
+            }
+        }, 5000);
     }
 
     @Override
