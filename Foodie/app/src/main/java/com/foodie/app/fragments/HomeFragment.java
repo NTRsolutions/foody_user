@@ -35,16 +35,16 @@ import butterknife.ButterKnife;
 
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class HomeFragment extends Fragment {
-    Context context;
-    SkeletonScreen skeletonScreen;
-    TextView addressLabel;
-    TextView address;
-    LinearLayout locationLl;
-    Button filterBtn;
+    private Context context;
+    private SkeletonScreen skeletonScreen;
+    private TextView addressLabel;
+    private TextView address;
+    private LinearLayout locationLl;
+    private Button filterBtn;
 
     @BindView(R.id.impressive_dishes_rv)
     RecyclerView impressiveDishesRv;
@@ -53,8 +53,8 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.discover_rv)
     RecyclerView discoverRv;
 
-    ViewGroup toolbar;
-    View toolbarLayout;
+    private ViewGroup toolbar;
+    private View toolbarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,7 @@ public class HomeFragment extends Fragment {
             public void run() {
                 skeletonScreen.hide();
             }
-        }, 5000);
+        }, 3000);
     }
 
     @Override

@@ -23,12 +23,11 @@ import java.util.List;
 
 public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<DeliveryLocationAdapter.ViewHolder> {
 
-    List<LocationModel> list = new ArrayList<>();
-    private Context context;
+    private List<LocationModel> list = new ArrayList<>();
     private LayoutInflater inflater;
 
     public DeliveryLocationAdapter(Context context, List<LocationModel> list) {
-        this.context = context;
+        Context context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
 
@@ -91,7 +90,7 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
     }
 
 
-    public void setIcon(ImageView imgView, Integer id) {
+    private void setIcon(ImageView imgView, Integer id) {
         switch (id) {
             case 1:
                 imgView.setImageResource(R.drawable.home);

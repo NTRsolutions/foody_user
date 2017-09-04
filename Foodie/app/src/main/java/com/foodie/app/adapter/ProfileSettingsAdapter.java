@@ -4,27 +4,22 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.foodie.app.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.security.AccessController.getContext;
-
 /**
- * Created by CSS22 on 23-08-2017.
+ * Created by santhosh@appoets.com on 23-08-2017.
  */
 
 public class ProfileSettingsAdapter extends BaseAdapter {
 
     private static final String LOG_TAG = ProfileSettingsAdapter.class.getSimpleName();
-    List<Integer> listIcon;
+    private List<Integer> listIcon;
     private Context context_;
     private List<String> items;
 
@@ -53,7 +48,7 @@ public class ProfileSettingsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
-                    context_.getSystemService(context_.LAYOUT_INFLATER_SERVICE);
+                    context_.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = mInflater.inflate(R.layout.profile_settings_list_item, null);
         }

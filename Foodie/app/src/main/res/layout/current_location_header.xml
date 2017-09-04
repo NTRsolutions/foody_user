@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/current_location_ll"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,6 +23,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="8dp"
+                android:contentDescription="@string/current_location"
                 android:src="@drawable/ic_locator" />
 
         </LinearLayout>

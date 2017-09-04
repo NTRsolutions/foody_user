@@ -12,9 +12,7 @@ import android.view.WindowManager;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
-import com.foodie.app.adapter.RecommendedListAdapter;
 import com.foodie.app.model.Location;
-import com.foodie.app.model.RecommendedDish;
 
 import java.util.ArrayList;
 import java.util.List;

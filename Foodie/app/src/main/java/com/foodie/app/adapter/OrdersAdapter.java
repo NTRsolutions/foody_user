@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
@@ -25,12 +23,11 @@ import java.util.List;
 
 public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.ViewHolder> {
 
-    List<OrderModel> list = new ArrayList<>();
-    private Context context;
+    private List<OrderModel> list = new ArrayList<>();
     private LayoutInflater inflater;
 
     public OrdersAdapter(Context context, List<OrderModel> list) {
-        this.context = context;
+        Context context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
     }

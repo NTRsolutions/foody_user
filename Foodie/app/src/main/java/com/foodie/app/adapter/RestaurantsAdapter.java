@@ -6,25 +6,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.model.Restaurant;
 
 import java.util.List;
+
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.MyViewHolder> {
-    public List<Restaurant> list;
-    public Context context;
+    private List<Restaurant> list;
+    private Context context;
 
     public RestaurantsAdapter(List<Restaurant> list, Context con) {
         this.list = list;
@@ -38,6 +36,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
         return new MyViewHolder(itemView);
     }
+
     public void add(Restaurant item, int position) {
         list.add(position, item);
         notifyItemInserted(position);

@@ -60,6 +60,7 @@
                     android:id="@+id/edit_user_profile"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:contentDescription="@string/edit"
                     android:layout_alignBottom="@+id/user_profile"
                     android:layout_alignEnd="@+id/user_profile"
                     android:src="@drawable/edit" />
@@ -115,7 +116,7 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1">
 
                 <Button

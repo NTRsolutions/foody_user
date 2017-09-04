@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.foodie.app.R;
@@ -19,7 +18,6 @@ import com.foodie.app.model.LocationModel;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
@@ -32,20 +30,19 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SetDeliveryLocationActivity extends AppCompatActivity {
-    public String TAG = "DeliveryLocationActi";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    LinearLayoutManager manager;
-    DeliveryLocationAdapter adapter;
-    List<LocationModel> modelListReference = new ArrayList<>();
     @BindView(R.id.delivery_location_rv)
     RecyclerView deliveryLocationRv;
     @BindView(R.id.current_location_ll)
     LinearLayout currentLocationLl;
-
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    LinearLayoutManager manager;
+    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     @BindView(R.id.find_place_ll)
     LinearLayout findPlaceLl;
+    private String TAG = "DeliveryLocationActi";
+    private DeliveryLocationAdapter adapter;
+    private List<LocationModel> modelListReference = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,35 +114,6 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*private void SetPlaceAutocomplete() {
-
-        ((View) findViewById(R.id.place_autocomplete_search_button)).setVisibility(View.GONE);
-        EditText search = ((EditText) findViewById(R.id.place_autocomplete_search_input));
-        search.setHintTextColor(getResources().getColor(R.color.colorSecondaryText));
-        search.setTextSize(14);
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setHint("Search for area, street name...");
-
-        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("IN").build();
-        autocompleteFragment.setFilter(typeFilter);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                Intent intent = new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class);
-                intent.putExtra("place_id", place.getId());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onError(Status status) {
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
-    }*/
 
     @OnClick({R.id.find_place_ll, R.id.current_location_ll})
     public void onViewClicked(View view) {

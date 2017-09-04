@@ -16,13 +16,13 @@ import com.foodie.app.model.RecommendedDish;
 import java.util.List;
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class AccompanimentDishesAdapter extends RecyclerView.Adapter<AccompanimentDishesAdapter.MyViewHolder> {
 
-    public List<RecommendedDish> list;
-    public Context context;
+    private List<RecommendedDish> list;
+    private Context context;
 
     public AccompanimentDishesAdapter(List<RecommendedDish> list, Context con) {
         this.list = list;

@@ -16,13 +16,13 @@ import com.foodie.app.model.Location;
 import java.util.List;
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdapter.MyViewHolder> {
 
-    public List<Location> list;
-    public Context context;
+    private List<Location> list;
+    private Context context;
 
     public ManageAddressAdapter(List<Location> list, Context con) {
         this.list = list;
@@ -52,7 +52,7 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
         return list.size();
     }
 
-    public void setIcon(ImageView imgView, Integer id) {
+    private void setIcon(ImageView imgView, Integer id) {
         switch (id) {
             case 1:
                 imgView.setImageResource(R.drawable.home);

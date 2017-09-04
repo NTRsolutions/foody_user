@@ -29,13 +29,16 @@
     <string name="payment">Payment</string>
     <string name="add_new_card">Add New Card</string>
     <string name="set_delivery_location">Set Delivery Location</string>
-    <string name="searc_place">"Search for area, street name..."</string>
+    <string name="search_place">"Search for area, street name…"</string>
     <string name="change_password">"Change Password"</string>
     <string name="favourites">"Favourites"</string>
     <string name="filters">"Filters"</string>
     <string name="reset">"Reset"</string>
     <string name="edit_account">"Edit Account"</string>
     <string name="address">"Address"</string>
+    <string name="restaurant">"Restaurant"</string>
+    <string name="current_location">"Current Location"</string>
+    <string name="dish">"Dish"</string>
     <string name="connection_unavailable">"Connection Unavailable"</string>
     <string name="check_your_internet_connection">"Uh oh! Check your internet connection and restart the app"</string>
     <string name="open_settings">"Open Settings"</string>

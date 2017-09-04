@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 

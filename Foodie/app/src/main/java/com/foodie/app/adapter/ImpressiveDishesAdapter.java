@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.model.ImpressiveDish;
@@ -17,17 +16,16 @@ import com.foodie.app.model.ImpressiveDish;
 import java.util.List;
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class ImpressiveDishesAdapter extends RecyclerView.Adapter<ImpressiveDishesAdapter.MyViewHolder> {
     private static ClickListener clickListener;
     private List<ImpressiveDish> list;
-    private Context context;
 
     public ImpressiveDishesAdapter(List<ImpressiveDish> list, Context con) {
         this.list = list;
-        this.context = con;
+        Context context = con;
     }
 
     public void setOnItemClickListener(ClickListener clickListener) {

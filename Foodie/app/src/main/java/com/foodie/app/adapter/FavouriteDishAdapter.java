@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by CSS22 on 24-08-2017.
+ * Created by santhosh@appoets.com on 24-08-2017.
  */
 
 public class FavouriteDishAdapter extends BaseAdapter {
@@ -53,7 +53,7 @@ public class FavouriteDishAdapter extends BaseAdapter {
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
         } else {
-            LayoutInflater mInflater = (LayoutInflater) context_.getSystemService(context_.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater mInflater = (LayoutInflater) context_.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.favorite_list_item, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);

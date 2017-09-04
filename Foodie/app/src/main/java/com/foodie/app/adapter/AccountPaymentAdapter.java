@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by CSS22 on 30-08-2017.
+ * Created by santhosh@appoets.com on 30-08-2017.
  */
 
 public class AccountPaymentAdapter extends BaseAdapter {
@@ -53,7 +53,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
         } else {
-            LayoutInflater mInflater = (LayoutInflater) context_.getSystemService(context_.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater mInflater = (LayoutInflater) context_.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.payment_method_list_item, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
@@ -65,7 +65,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setIcon(ImageView imgView, Integer id) {
+    private void setIcon(ImageView imgView, Integer id) {
         switch (id) {
             case 0:
                 imgView.setImageResource(R.drawable.ic_debit_card);

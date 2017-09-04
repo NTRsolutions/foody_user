@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:maxLines="1"
-                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="My Account"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_medium" />
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:text="Manage Address, Favorites, Payment, Orders, Change Password"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_small" />
@@ -75,7 +75,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/profile_setting_lv"
                 android:background="#eee" />
 
             <LinearLayout

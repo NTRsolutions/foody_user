@@ -2,8 +2,6 @@ package com.foodie.app;
 
 import android.app.Application;
 import android.content.res.Configuration;
-import android.os.Build;
-import android.view.WindowManager;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 

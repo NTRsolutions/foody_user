@@ -7,21 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.FilterAdapter;
-import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.model.FilterModel;
-import com.foodie.app.model.Order;
-import com.foodie.app.model.OrderModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class FilterActivity extends AppCompatActivity {
 
@@ -31,8 +26,8 @@ public class FilterActivity extends AppCompatActivity {
     RecyclerView filterRv;
 
 
-    FilterAdapter adapter;
-    List<FilterModel> modelListReference = new ArrayList<>();
+    private FilterAdapter adapter;
+    private List<FilterModel> modelListReference = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

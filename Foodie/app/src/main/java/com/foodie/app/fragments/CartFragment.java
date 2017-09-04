@@ -15,13 +15,13 @@ import com.foodie.app.R;
 
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class CartFragment extends Fragment {
-    Context context;
-    ViewGroup toolbar;
-    View toolbarLayout;
+    private Context context;
+    private ViewGroup toolbar;
+    private View toolbarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

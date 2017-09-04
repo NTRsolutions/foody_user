@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,7 +42,7 @@ public class FavouritesActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<FavouriteDish> list = new ArrayList<FavouriteDish>();
+        ArrayList<FavouriteDish> list = new ArrayList<>();
         list.add(new FavouriteDish("Pancake", "Cake", ""));
         list.add(new FavouriteDish("Bunny burgs", "Burgers", ""));
         FavouriteDishAdapter adbPerson = new FavouriteDishAdapter(FavouritesActivity.this, list);

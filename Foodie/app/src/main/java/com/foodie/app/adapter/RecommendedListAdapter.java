@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by CSS22 on 24-08-2017.
+ * Created by santhosh@appoets.com on 24-08-2017.
  */
 
 public class RecommendedListAdapter extends BaseAdapter {
@@ -55,7 +55,7 @@ public class RecommendedListAdapter extends BaseAdapter {
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
         } else {
-            LayoutInflater mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.recommended_list_item_2, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);

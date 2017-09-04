@@ -62,14 +62,17 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     @BindView(R.id.landmark)
     EditText landmark;
 
-    String TAG = "SaveDelivery";
-    BottomSheetBehavior behavior;
-    GoogleMap mMap;
-    GoogleApiClient mGoogleApiClient;
-    LocationRequest mLocationRequest;
-    int value = 0;
-    Double crtLat, crtLng;
-    Double srcLat, srcLng;
+    private String TAG = "SaveDelivery";
+    private BottomSheetBehavior behavior;
+    private GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private int value = 0;
+    private Double crtLat;
+    private Double crtLng;
+    private Double srcLat;
+    private Double srcLng;
+
     @BindView(R.id.backArrow)
     ImageView backArrow;
     @BindView(R.id.coordinatorLayout)
@@ -193,7 +196,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         System.out.println(TAG + crtLat);
     }
 
-    public void getAddress(double latitude, double longitude) {
+    private void getAddress(double latitude, double longitude) {
         System.out.println("GetAddress " + latitude + " | " + longitude);
         try {
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());

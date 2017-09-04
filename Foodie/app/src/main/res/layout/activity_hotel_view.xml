@@ -158,7 +158,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:text="Non Veg"
                     android:textAllCaps="true"
                     android:textColor="@color/colorSecondaryText"
@@ -206,7 +205,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:drawableStart="@drawable/ic_recommended"
                     android:gravity="center_vertical"
                     android:text="Accompaniment"

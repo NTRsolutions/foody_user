@@ -32,18 +32,18 @@ import butterknife.OnClick;
 
 
 /**
- * Created by CSS22 on 22-08-2017.
+ * Created by santhosh@appoets.com on 22-08-2017.
  */
 
 public class ProfileFragment extends Fragment {
-    Activity activity;
-    Context context;
+    private Activity activity;
+    private Context context;
 
     @BindView(R.id.profile_setting_lv)
     ListView profileSettingLv;
 
-    ViewGroup toolbar;
-    View toolbarLayout;
+    private ViewGroup toolbar;
+    private View toolbarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

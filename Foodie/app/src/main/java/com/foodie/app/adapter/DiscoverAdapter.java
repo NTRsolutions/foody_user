@@ -20,11 +20,10 @@ import java.util.List;
 public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.MyViewHolder> {
     private static ClickListener clickListener;
     private List<Discover> list;
-    private Context context;
 
     public DiscoverAdapter(List<Discover> list, Context con) {
         this.list = list;
-        this.context = con;
+        Context context = con;
     }
 
     public void setOnItemClickListener(ClickListener clickListener) {

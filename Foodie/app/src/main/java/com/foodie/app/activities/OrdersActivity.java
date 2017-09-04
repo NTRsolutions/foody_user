@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.DeliveryLocationAdapter;
 import com.foodie.app.adapter.OrdersAdapter;
-import com.foodie.app.model.Location;
-import com.foodie.app.model.LocationModel;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 
@@ -29,8 +26,8 @@ public class OrdersActivity extends AppCompatActivity {
     @BindView(R.id.orders_rv)
     RecyclerView ordersRv;
 
-    OrdersAdapter adapter;
-    List<OrderModel> modelListReference = new ArrayList<>();
+    private OrdersAdapter adapter;
+    private List<OrderModel> modelListReference = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -15,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/dish"
         android:scaleType="fitCenter"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -25,7 +25,6 @@
         android:id="@+id/dish_name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:drawableStart="@drawable/ic_veg"
@@ -48,7 +47,7 @@
         android:textSize="@dimen/text_small"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dish_name_text"
-        android:layout_marginLeft="0dp" />
+        />
 
     <TextView
         android:id="@+id/price_text"
@@ -61,7 +60,7 @@
         android:textSize="@dimen/text_small"
         app:layout_constraintLeft_toLeftOf="@+id/dish_name_text"
         app:layout_constraintTop_toBottomOf="@+id/category_text"
-        android:layout_marginLeft="0dp" />
+        />
 
     <Button
         android:id="@+id/add_btn"
@@ -77,5 +76,5 @@
         android:textColor="@color/colorAccent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/category_text"
-        android:layout_marginRight="0dp" />
+        />
 </android.support.constraint.ConstraintLayout>

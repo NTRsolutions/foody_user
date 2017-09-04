@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,8 +12,6 @@ import android.widget.TextView;
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.model.FilterModel;
-import com.foodie.app.model.Order;
-import com.foodie.app.model.OrderModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +22,11 @@ import java.util.List;
 
 public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.ViewHolder> {
 
-    List<FilterModel> list = new ArrayList<>();
-    private Context context;
+    private List<FilterModel> list = new ArrayList<>();
     private LayoutInflater inflater;
 
     public FilterAdapter(Context context, List<FilterModel> list) {
-        this.context = context;
+        Context context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
     }
