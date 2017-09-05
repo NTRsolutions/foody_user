@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f1f1f1"
+    android:background="#f6f6f6"
     tools:context="com.foodie.app.activities.WelcomeScreenActivity">
 
     <RelativeLayout
@@ -41,6 +41,7 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/sign_in_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
@@ -52,6 +53,7 @@
             android:textColor="@color/colorTextWhite" />
 
         <Button
+            android:id="@+id/sign_up_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
@@ -59,7 +61,7 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:background="@android:color/white"
-            android:text="@string/sign_up" />
+            android:text="@string/signup" />
 
     </LinearLayout>
 

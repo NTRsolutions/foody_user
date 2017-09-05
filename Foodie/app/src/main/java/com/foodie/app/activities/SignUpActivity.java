@@ -1,6 +1,7 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
@@ -19,8 +21,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar_top)
-    Toolbar toolbarTop;
     @BindView(R.id.mobile)
     EditText mobileEdit;
     @BindView(R.id.email)
@@ -40,15 +40,15 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-
-        setSupportActionBar(toolbarTop);
-        toolbarTop.setNavigationIcon(R.drawable.ic_back);
-        toolbarTop.setNavigationOnClickListener(new View.OnClickListener() {
+        LinearLayout signInLayout=(LinearLayout)findViewById(R.id.sigin_layout);
+        signInLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                startActivity(new Intent(SignUpActivity.this,LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
             }
         });
+
 
     }
 

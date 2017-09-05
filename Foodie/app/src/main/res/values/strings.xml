@@ -12,7 +12,7 @@
     <string name="update">Update</string>
     <string name="reenter_new_password">Re-Enter New Password</string>
     <string name="password">Password</string>
-    <string name="register_this_account">"Register this account if doesn't exit."</string>
+    <string name="register_this_account">"Don't have an account"</string>
     <string name="create_an_account">"Create an account with the new mobile number"</string>
     <string name="by_creating_an_account">"By creating an account, I accept the "</string>
     <string name="terms_and_conditions">"Terms and Conditions"</string>
@@ -21,7 +21,7 @@
     <string name="discover">"Discover"</string>
     <string name="relevance">"Relevance"</string>
     <string name="offers_near_you">"Offers Near You"</string>
-    <string name="sign_up">Sign up</string>
+    <string name="sign_up">Register here</string>
     <string name="forgot">Forgot</string>
     <string name="filter">Filter</string>
     <string name="forgot_password">Forgot Password</string>
@@ -84,9 +84,14 @@
     <string name="fresh_description">Discover new dishes everyday and hold your favourite restaurant</string>
     <string name="signin">Sign in</string>
     <string name="sign_in">Sign in</string>
+    <string name="signup">Sign up</string>
     <string name="search">Search</string>
     <string name="search_description">View menus, photos and reviews for restaurants aroud you</string>
     <string name="bookmark">Bookmark</string>
     <string name="bookmark_description">Add places you want to visit in the future to your bookmark</string>
+    <string name="mob_no">Mobile Number</string>
+    <string name="login_password">Password</string>
+    <string name="already_you_have_account">Already you have an account?</string>
+    <string name="signin_here">Sign in here</string>
 
 </resources>
