@@ -80,5 +80,13 @@
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
     <string name="getting_address">"getting address"</string>
+    <string name="fresh">Fresh</string>
+    <string name="fresh_description">Discover new dishes everyday and hold your favourite restaurant</string>
+    <string name="signin">Sign in</string>
+    <string name="sign_in">Sign in</string>
+    <string name="search">Search</string>
+    <string name="search_description">View menus, photos and reviews for restaurants aroud you</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="bookmark_description">Add places you want to visit in the future to your bookmark</string>
 
 </resources>
