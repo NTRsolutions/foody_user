@@ -18,9 +18,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
 
-    @BindView(R.id.mobile_number)
+    @BindView(R.id.ed_mobile_number)
     EditText mobileNumberEdit;
-    @BindView(R.id.password)
+    @BindView(R.id.ed_password)
     EditText passwordEdit;
 
     @Override
@@ -32,12 +32,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.forgot, R.id.login, R.id.sign_up})
+    @OnClick({R.id.login, R.id.sign_up})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.forgot:
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-                break;
             case R.id.login:
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 finish();
