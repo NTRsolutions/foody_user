@@ -1,0 +1,22 @@
+<tabs>
+    <tab
+        id="@+id/action_home"
+        icon="@drawable/home"
+        activeColor="@color/colorAccent"
+        />
+    <tab
+        id="@+id/action_search"
+        icon="@drawable/search"
+        activeColor="@color/colorAccent"
+        />
+    <tab
+        id="@+id/action_cart"
+        icon="@drawable/cart"
+        activeColor="@color/colorAccent"
+        />
+    <tab
+        id="@+id/action_profile"
+        icon="@drawable/user"
+        activeColor="@color/colorAccent"
+        />
+</tabs>

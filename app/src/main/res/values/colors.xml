@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFF</color>
+    <color name="colorPrimaryDark">#FFF</color>
+    <color name="colorAccent">#ff6d00</color>
+
+    <color name="colorPrimaryText">#000</color>
+    <color name="colorSecondaryText">#4f4f4f</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorTextWhite">#FFF</color>
+    <color name="colorTextBlack">#212121</color>
+
+
+    <color name="theme">#ff6d00</color>
+    <color name="grey">#a3a3a3</color>
+    <color name="light_grey">#dcdcdc</color>
+
+
+    <array name="array_dot_active">
+        <item>@color/grey</item>
+        <item>@color/grey</item>
+        <item>@color/grey</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/light_grey</item>
+        <item>@color/light_grey</item>
+        <item>@color/light_grey</item>
+    </array>
+</resources>
