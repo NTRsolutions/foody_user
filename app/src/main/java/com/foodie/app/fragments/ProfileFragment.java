@@ -21,6 +21,7 @@ import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.activities.ManageAddressActivity;
 import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
+import com.foodie.app.utils.ListViewSizeHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +67,7 @@ public class ProfileFragment extends Fragment {
         listIcons.add(R.drawable.padlock);
         ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
         profileSettingLv.setAdapter(adbPerson);
+        ListViewSizeHelper.getListViewSize(profileSettingLv);
         profileSettingLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

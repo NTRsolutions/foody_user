@@ -22,6 +22,7 @@ import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.DiscoverAdapter;
 import com.foodie.app.adapter.ImpressiveDishesAdapter;
+import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
@@ -39,13 +40,16 @@ import butterknife.ButterKnife;
  */
 
 public class HomeFragment extends Fragment {
+
     private Context context;
-    private SkeletonScreen skeletonScreen;
+    private SkeletonScreen skeletonScreen, skeletonScreen2;
     private TextView addressLabel;
     private TextView address;
     private LinearLayout locationLl;
     private Button filterBtn;
 
+    @BindView(R.id.restaurants_offer_rv)
+    RecyclerView restaurantsOfferRv;
     @BindView(R.id.impressive_dishes_rv)
     RecyclerView impressiveDishesRv;
     @BindView(R.id.restaurants_rv)
@@ -93,6 +97,7 @@ public class HomeFragment extends Fragment {
         });
 
 
+        //Restaurant Adapter
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
@@ -106,6 +111,13 @@ public class HomeFragment extends Fragment {
                 .load(R.layout.skeleton_restaurant_list_item)
                 .count(2)
                 .show();
+
+        //Offer Restaurant Adapter
+        restaurantsOfferRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        restaurantsOfferRv.setItemAnimator(new DefaultItemAnimator());
+        restaurantsOfferRv.setHasFixedSize(true);
+        OfferRestaurantAdapter offerAdapter = new OfferRestaurantAdapter(restaurantList, context);
+        restaurantsOfferRv.setAdapter(offerAdapter);
 
 
         // Discover
@@ -187,6 +199,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, FilterActivity.class));
+                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.anim_nothing);
             }
         });
         toolbar.addView(toolbarLayout);

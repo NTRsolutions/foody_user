@@ -8,12 +8,12 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         android:padding="8dp"
         android:text="Recent Searches"
         android:textAllCaps="true"
         android:textColor="@color/colorSecondaryText"
-        android:textSize="@dimen/text_medium" />
+        android:textSize="13sp" />
 
 </LinearLayout>

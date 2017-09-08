@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.FilterAdapter;
@@ -24,6 +26,9 @@ public class FilterActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.filter_rv)
     RecyclerView filterRv;
+    public static Button applyFilterBtn;
+    public static TextView resetTxt;
+
 
 
     private FilterAdapter adapter;
@@ -36,12 +41,15 @@ public class FilterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        applyFilterBtn=(Button)findViewById(R.id.apply_filter);
+        resetTxt=(TextView)findViewById(R.id.reset_txt);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.anim_nothing, R.anim.slide_down);
             }
         });
 

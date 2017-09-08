@@ -35,16 +35,16 @@
         android:orientation="vertical">
 
         <TextView
+            android:layout_marginTop="16dp"
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#eee"
             android:maxLines="1"
             android:padding="8dp"
             android:text="Currently unavailable"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_medium" />
+            android:textSize="15sp" />
 
         <ListView
             android:id="@+id/favorites_lv"

@@ -1,6 +1,7 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ManageAddressActivity extends AppCompatActivity {
@@ -27,6 +30,8 @@ public class ManageAddressActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.manage_address_rv)
     RecyclerView manageAddressRv;
+    @BindView(R.id.add_new_address)
+    Button addNewAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +50,9 @@ public class ManageAddressActivity extends AppCompatActivity {
         });
 
         List<Location> locations = new ArrayList<>();
-        locations.add(new Location("Home", "Madhavaram, Chennai", 1));
-        locations.add(new Location("Work", "Greems Road, Chennai", 2));
-        locations.add(new Location("Other", "Reteri, Anna salai, Chennai", 0));
+        locations.add(new Location("Home", "1/12-D flat no-5, Madhavaram, Chennai, Tamilnadu", 1));
+        locations.add(new Location("Work", "8/13-D flat no-6, Greems Road, Chennai, Tamilnadu", 2));
+        locations.add(new Location("Other", "Reteri, Anna salai, Chennai, Tamilnadu", 0));
         ManageAddressAdapter adapter = new ManageAddressAdapter(locations, ManageAddressActivity.this);
         manageAddressRv.setLayoutManager(new LinearLayoutManager(this));
         manageAddressRv.setItemAnimator(new DefaultItemAnimator());
@@ -58,5 +63,10 @@ public class ManageAddressActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @OnClick(R.id.add_new_address)
+    public void onViewClicked() {
+        startActivity(new Intent(ManageAddressActivity.this, SaveDeliveryLocationActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

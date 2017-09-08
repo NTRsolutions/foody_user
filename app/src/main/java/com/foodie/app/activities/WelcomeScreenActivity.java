@@ -20,7 +20,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+
+import butterknife.OnClick;
 
 public class WelcomeScreenActivity extends AppCompatActivity {
 
@@ -29,8 +32,8 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
-    Button loginButton,signUpButton;
-
+    Button loginButton, signUpButton;
+    TextView skipBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,9 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome_screen);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        loginButton=(Button)findViewById(R.id.sign_in_btn);
-        signUpButton=(Button)findViewById(R.id.sign_up_btn);
+        loginButton = (Button) findViewById(R.id.sign_in_btn);
+        skipBtn = (TextView) findViewById(R.id.skip);
+        signUpButton = (Button) findViewById(R.id.sign_up_btn);
         // layouts of all welcome sliders
         // add few more layouts if you want
         layouts = new int[]{
@@ -53,14 +57,19 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WelcomeScreenActivity.this,LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
+                startActivity(new Intent(WelcomeScreenActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WelcomeScreenActivity.this,SignUpActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(WelcomeScreenActivity.this, SignUpActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });
+        skipBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WelcomeScreenActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
         });

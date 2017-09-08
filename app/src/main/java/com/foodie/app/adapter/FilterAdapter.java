@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
+import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.model.FilterModel;
 
 import java.util.ArrayList;
@@ -80,6 +81,8 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
                     holder.chkSelected.setChecked(false);
                 }else {
                     holder.chkSelected.setChecked(true);
+                    FilterActivity.applyFilterBtn.setAlpha(1);
+                    FilterActivity.resetTxt.setAlpha(1);
                 }
             }
         });

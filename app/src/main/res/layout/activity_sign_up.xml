@@ -156,12 +156,12 @@
                     android:textColor="@color/colorSecondaryText" />
 
                 <TextView
+                    android:layout_marginLeft="5dp"
                     android:id="@+id/terms_and_conditions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
                     android:text="@string/signin_here"
-                    android:textAllCaps="true"
                     android:textColor="@color/colorTextBlack" />
             </LinearLayout>
         </LinearLayout>

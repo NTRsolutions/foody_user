@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         transaction.add(R.id.main_container, fragment).commit();
 
         bottomBar = (BottomBar) findViewById(R.id.bottom_navigation);
+        bottomBar.setTabTitleTextAppearance(2);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
