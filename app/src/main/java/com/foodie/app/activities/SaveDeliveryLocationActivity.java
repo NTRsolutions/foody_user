@@ -270,6 +270,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
     @OnClick(R.id.backArrow)

@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+      >
 
         <View
             android:id="@+id/dish_img"
@@ -25,25 +26,53 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:layout_weight="1"
             android:background="@color/light_transparent"
             android:layout_margin="8dp"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="12dp"
             android:layout_weight="1"
             android:background="@color/light_transparent"
             android:layout_margin="8dp"/>
 
-        <View
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
             android:layout_weight="1"
-            android:layout_height="20dp"
-            android:background="@color/light_transparent"
-            android:layout_margin="8dp"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="10dp"
+                android:background="@color/light_transparent"
+                android:layout_margin="8dp"
+                />
+            <View
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="10dp"
+                android:background="@color/light_transparent"
+                android:layout_margin="8dp"
+                />
+            <View
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="10dp"
+                android:background="@color/light_transparent"
+                android:layout_margin="8dp"
+                />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

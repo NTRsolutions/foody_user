@@ -71,8 +71,9 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_weight="1"
                 android:id="@+id/rating"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/star"
                 android:gravity="start|center_vertical"
@@ -84,8 +85,9 @@
                 android:textSize="@dimen/text_small" />
 
             <TextView
+                android:layout_weight="1"
                 android:id="@+id/distance_time"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="32 mins    ~"
@@ -96,6 +98,7 @@
                 android:textSize="@dimen/text_small" />
 
             <TextView
+                android:layout_weight="1"
                 android:id="@+id/price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

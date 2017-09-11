@@ -123,6 +123,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
                 break;
             case R.id.current_location_ll:
                 startActivity(new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 break;
         }
     }
@@ -141,5 +142,12 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 }

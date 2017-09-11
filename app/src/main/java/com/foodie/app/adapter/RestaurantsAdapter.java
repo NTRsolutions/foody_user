@@ -1,5 +1,6 @@
 package com.foodie.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
+import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.model.Restaurant;
 
 import java.util.List;
@@ -23,10 +25,12 @@ import java.util.List;
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.MyViewHolder> {
     private List<Restaurant> list;
     private Context context;
+    private Activity activity;
 
-    public RestaurantsAdapter(List<Restaurant> list, Context con) {
+    public RestaurantsAdapter(List<Restaurant> list, Context con,Activity act) {
         this.list = list;
         this.context = con;
+        this.activity = act;
     }
 
     @Override
@@ -89,6 +93,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
                 context.startActivity(new Intent(context, HotelViewActivity.class));
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 //Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }
         }

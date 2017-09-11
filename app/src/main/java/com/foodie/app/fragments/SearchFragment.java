@@ -60,6 +60,7 @@ public class SearchFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         System.out.println("SearchFragment");
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_search, toolbar, false);
         toolbar.addView(toolbarLayout);
     }

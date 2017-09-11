@@ -141,6 +141,7 @@ public class ProfileFragment extends Fragment {
         System.out.println("ProfileFragment");
 
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
 
         Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
