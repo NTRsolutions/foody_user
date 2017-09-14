@@ -5,7 +5,8 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="text_large">18sp</dimen>
-    <dimen name="text_medium">16sp</dimen>
-    <dimen name="text_small">14sp</dimen>
-    <dimen name="text_tiny">12sp</dimen>
+    <dimen name="text_medium">14sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_small_large">13sp</dimen>
+    <dimen name="text_tiny">10sp</dimen>
 </resources>

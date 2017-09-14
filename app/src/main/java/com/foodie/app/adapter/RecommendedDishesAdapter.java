@@ -41,12 +41,13 @@ public class RecommendedDishesAdapter extends RecyclerView.Adapter<RecommendedDi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RecommendedDish dish = list.get(position);
 
-        holder.dishNameTxt.setText(dish.getName());
+        holder.dishNameTxt.setText("     "+dish.getName());
         holder.priceTxt.setText(dish.getPrice());
         if (dish.getIsVeg()) {
-            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_veg, 0, 0, 0);
+//            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_veg, 0, 0, 0);
+            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
         } else {
-            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_non_veg, 0, 0, 0);
+            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
         }
 
 
@@ -58,13 +59,15 @@ public class RecommendedDishesAdapter extends RecyclerView.Adapter<RecommendedDi
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView dishImg;
+        private ImageView dishImg,foodImageType;
         private TextView dishNameTxt, priceTxt;
+
         private Button addBtn;
 
         private MyViewHolder(View view) {
             super(view);
             dishImg = (ImageView) view.findViewById(R.id.dishImg);
+            foodImageType = (ImageView) view.findViewById(R.id.food_type_image);
             dishNameTxt = (TextView) view.findViewById(R.id.dish_name_text);
             priceTxt = (TextView) view.findViewById(R.id.price_text);
             addBtn = (Button) view.findViewById(R.id.add_btn);

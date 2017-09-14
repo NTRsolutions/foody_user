@@ -28,7 +28,7 @@
                 <set>
                     <!--Used to make line segment traverse from start to end-->
                     <objectAnimator
-                        android:duration="800"
+                        android:duration="1600"
                         android:interpolator="@android:interpolator/fast_out_slow_in"
                         android:propertyName="trimPathOffset"
                         android:repeatCount="0"
@@ -39,7 +39,7 @@
                     <!--Make longer in half the time, make shorter again in half-->
                     <set android:ordering="sequentially">
                         <objectAnimator
-                            android:duration="400"
+                            android:duration="800"
                             android:interpolator="@android:interpolator/fast_out_slow_in"
                             android:propertyName="trimPathEnd"
                             android:repeatCount="0"
@@ -47,7 +47,7 @@
                             android:valueTo="0.2" />
 
                         <objectAnimator
-                            android:duration="400"
+                            android:duration="800"
                             android:interpolator="@android:interpolator/fast_out_slow_in"
                             android:propertyName="trimPathStart"
                             android:repeatCount="0"

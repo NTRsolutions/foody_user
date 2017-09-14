@@ -7,8 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.foodie.app.HomeActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,31 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:elevation="1dp"
             android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ToolBarStyle"
-          >
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:theme="@style/ToolBarStyle">
 
         </android.support.v7.widget.Toolbar>
 
-        <android.support.v4.widget.NestedScrollView
+        <FrameLayout
+            android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <FrameLayout
-                android:id="@+id/main_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        </android.support.v4.widget.NestedScrollView>
+            android:layout_below="@+id/toolbar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <com.roughike.bottombar.BottomBar

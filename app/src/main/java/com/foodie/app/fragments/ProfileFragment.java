@@ -8,9 +8,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
@@ -37,6 +45,18 @@ import butterknife.OnClick;
  */
 
 public class ProfileFragment extends Fragment {
+    @BindView(R.id.text_line)
+    TextView textLine;
+    @BindView(R.id.view_line)
+    View viewLine;
+    @BindView(R.id.logout)
+    Button logout;
+    @BindView(R.id.arrow_image)
+    ImageView arrowImage;
+    @BindView(R.id.list_layout)
+    RelativeLayout listLayout;
+    @BindView(R.id.myaccount_layout)
+    LinearLayout myaccountLayout;
     private Activity activity;
     private Context context;
 
@@ -57,6 +77,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
+        arrowImage.setTag(true);
 
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
         List<Integer> listIcons = new ArrayList<>();
@@ -75,18 +96,11 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
         return view;
 
     }
 
-    @OnClick({R.id.logout})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.logout:
-                startActivity(new Intent(context, LoginActivity.class));
-                break;
-        }
-    }
 
     @Override
     public void onResume() {
@@ -110,8 +124,10 @@ public class ProfileFragment extends Fragment {
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
-    }
 
+
+
+    }
 
     private void openSettingPage(int position) {
         switch (position) {
@@ -152,6 +168,85 @@ public class ProfileFragment extends Fragment {
             }
         });
         toolbar.addView(toolbarLayout);
+    }
+
+
+    @OnClick({R.id.arrow_image, R.id.logout,R.id.myaccount_layout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.myaccount_layout:
+                if (arrowImage.getTag().equals(true)) {
+                    //rotate arrow image
+                    arrowImage.animate().setDuration(500).rotation(180).start();
+                    arrowImage.setTag(false);
+                    //collapse animation
+                    collapse(listLayout);
+                    viewLine.setVisibility(View.VISIBLE);
+                    textLine.setVisibility(View.GONE);
+                } else {
+                    //rotate arrow image
+                    arrowImage.animate().setDuration(500).rotation(360).start();
+                    arrowImage.setTag(true);
+                    viewLine.setVisibility(View.GONE);
+                    textLine.setVisibility(View.VISIBLE);
+                    //expand animation
+                    expand(listLayout);
+
+                }
+                break;
+            case R.id.logout:
+                startActivity(new Intent(context, LoginActivity.class));
+                break;
+        }
+    }
+
+    public static void expand(final View v) {
+        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final int targtetHeight = v.getMeasuredHeight();
+
+        v.getLayoutParams().height = 0;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int) (targtetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+
+    public static void collapse(final View v) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if (interpolatedTime == 1) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
     }
 
 

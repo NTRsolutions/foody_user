@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,9 +27,11 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
 
     private List<OrderModel> list = new ArrayList<>();
     private LayoutInflater inflater;
+    Context context1;
+    int lastPosition=-1;
 
     public OrdersAdapter(Context context, List<OrderModel> list) {
-        Context context1 = context;
+        this.context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
     }
@@ -106,6 +110,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
                 dateTimeTxt = (TextView) itemView.findViewById(R.id.date_time);
                 reorderBtn = (Button) itemView.findViewById(R.id.reorder);
             }
+
 
         }
 

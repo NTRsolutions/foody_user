@@ -17,7 +17,7 @@
     <string name="by_creating_an_account">"By creating an account, I accept the "</string>
     <string name="terms_and_conditions">"Terms and Conditions"</string>
     <string name="let_impress_you">"Let's impress you with our dishes"</string>
-    <string name="hundred_restaurant">"100 Restaurant"</string>
+    <string name="hundred_restaurant">"100 Restaurants"</string>
     <string name="discover">"Discover"</string>
     <string name="relevance">"Relevance"</string>
     <string name="offers_near_you">"Offers Near You"</string>
@@ -80,18 +80,19 @@
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
     <string name="getting_address">"getting address"</string>
-    <string name="fresh">Fresh</string>
+    <string name="fresh">F r e s h</string>
     <string name="fresh_description">Discover new dishes everyday and hold your favourite restaurant</string>
     <string name="signin">Sign in</string>
     <string name="sign_in">Sign in</string>
     <string name="signup">Sign up</string>
-    <string name="search">Search</string>
+    <string name="search">S e a r c h</string>
     <string name="search_description">View menus, photos and reviews for restaurants aroud you</string>
-    <string name="bookmark">Bookmark</string>
+    <string name="bookmark">B o o k m a r k</string>
     <string name="bookmark_description">Add places you want to visit in the future to your bookmark</string>
     <string name="mob_no">Mobile Number</string>
     <string name="login_password">Password</string>
     <string name="already_you_have_account">Already you have an account?</string>
     <string name="signin_here">SIGN IN here</string>
+    <string name="dot_line">.............................................................................................................................................................................................................................................................................................</string>
 
 </resources>

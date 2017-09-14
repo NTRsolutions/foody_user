@@ -16,77 +16,182 @@
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/ToolBarStyle">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Funkies"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/text_medium" />
+                android:alpha="0"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-            <TextView
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/restaurant_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Funkies"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_small" />
+
+                <TextView
+                    android:id="@+id/restaurant_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="30 mins"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_tiny" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Indian"
-                android:textAllCaps="false"
-                android:textColor="@color/colorSecondaryText" />
-        </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.sackcentury.shinebuttonlib.ShineButton
+                    android:id="@+id/heart_btn"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="35dp"
+                    app:btn_color="@android:color/darker_gray"
+                    app:btn_fill_color="#f26d7d"
+                    app:siShape="@raw/heart" />
+
+                <ImageView
+
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_search_icon" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
 
     </android.support.v7.widget.Toolbar>
 
 
-    <android.support.v4.widget.NestedScrollView
+    <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="1dp"
+        android:alpha="0"
+        android:background="#EEE" />
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/restaurant_title2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Funkies"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_large" />
+
+                <TextView
+                    android:id="@+id/restaurant_subtitle2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Indian"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="@dimen/text_medium" />
+
+
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:background="#EEE" />
+                android:layout_height="4dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line"
+                android:layerType="software"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center"
-                        android:text="4.2"
-                        android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textSize="@dimen/text_small" />
+                        android:layout_gravity="start"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:maxLines="1"
-                        android:text="1555 Ratings"
-                        android:textColor="@color/colorSecondaryText" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="18dp"
+                                android:drawableStart="@drawable/star"
+                                android:gravity="center_horizontal"
+                                android:text="4.2"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="@dimen/text_small_large" />
+                        </RelativeLayout>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:text="1555 Ratings"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_tiny" />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,8 +202,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
+                        android:layout_height="18dp"
                         android:gravity="center_horizontal"
                         android:text="32 Mins"
                         android:textAllCaps="true"
@@ -111,7 +215,8 @@
                         android:gravity="center_horizontal"
                         android:maxLines="1"
                         android:text="Delivery Time"
-                        android:textColor="@color/colorSecondaryText" />
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_tiny" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,40 +225,53 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:gravity="center_horizontal"
-                        android:text="$200"
-                        android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textSize="@dimen/text_small" />
+                        android:layout_gravity="end"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:maxLines="1"
-                        android:text="For two"
-                        android:textColor="@color/colorSecondaryText" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="18dp"
+                            android:gravity="center"
+                            android:text="$200"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textSize="@dimen/text_small" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:text="For two"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_tiny" />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>
 
             <View
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="8dp"
-                android:background="#EEE" />
-
+                android:layout_height="4dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line"
+                android:layerType="software" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical">
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -168,9 +286,10 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/colorPrimaryText" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/light_grey" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -178,20 +297,39 @@
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_recommended"
-                    android:gravity="center_vertical"
-                    android:text="Recommended"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorSecondaryText"
-                    android:textSize="@dimen/text_small" />
+                    android:layout_height="16dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:padding="1dp"
+                        android:src="@drawable/ic_polygon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:text="Recommended "
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_small" />
+
+
+                </LinearLayout>
+
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recommended_dishes_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal" />
 
             </LinearLayout>
@@ -202,20 +340,38 @@
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_recommended"
-                    android:gravity="center_vertical"
-                    android:text="Accompaniment"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorSecondaryText"
-                    android:textSize="@dimen/text_small" />
+                    android:layout_height="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:padding="1dp"
+                        android:src="@drawable/ic_polygon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:text="Accompaniment"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_small" />
+
+
+                </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/accompaniment_dishes_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal" />
 
             </LinearLayout>
