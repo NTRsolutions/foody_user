@@ -20,6 +20,7 @@
             android:orientation="vertical">
 
             <TextView
+                fontPath="fonts/Nunito-Bold.ttf"
                 android:id="@+id/address_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,6 +46,7 @@
         </LinearLayout>
 
         <Button
+            fontPath="fonts/Nunito-Bold.ttf"
             android:id="@+id/filter"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

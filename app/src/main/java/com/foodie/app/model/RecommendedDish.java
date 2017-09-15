@@ -5,18 +5,26 @@ package com.foodie.app.model;
  */
 
 public class RecommendedDish {
-    String name, category, price, imgUrl, description;
+    String name, category, price, imgUrl, description,avaialable;
     Boolean isVeg;
 
-    public RecommendedDish(String name, String category, String price, Boolean isVeg, String url, String description) {
+    public RecommendedDish(String name, String category, String price, Boolean isVeg, String url, String description, String available) {
         this.name = name;
         this.category = category;
         this.price = price;
         this.isVeg = isVeg;
         this.imgUrl = url;
         this.description = description;
+        this.avaialable = available;
     }
 
+    public String getAvaialable() {
+        return avaialable;
+    }
+
+    public void setAvaialable(String avaialable) {
+        this.avaialable = avaialable;
+    }
     public String getName() {
         return name;
     }

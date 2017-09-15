@@ -58,7 +58,21 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
         holder.restaurantName.setText(restaurant.name);
         holder.category.setText(restaurant.category);
-        holder.offer.setText(restaurant.offer);
+        if(restaurant.offer.equalsIgnoreCase("")){
+            holder.offer.setVisibility(View.GONE);
+        }else {
+            holder.offer.setVisibility(View.VISIBLE);
+            holder.offer.setText(restaurant.offer);
+        }
+        if(restaurant.restaurantInfo.equalsIgnoreCase("")){
+            holder.offer.setVisibility(View.GONE);
+            holder.restaurantInfo.setVisibility(View.GONE);
+
+        }else {
+            holder.restaurantInfo.setVisibility(View.VISIBLE);
+            holder.restaurantInfo.setText(restaurant.restaurantInfo);
+        }
+
         holder.rating.setText(restaurant.rating);
         holder.distanceTime.setText(restaurant.distance);
         holder.price.setText(restaurant.price);
@@ -74,7 +88,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout itemView;
         private ImageView dishImg;
-        private TextView restaurantName, category, offer, rating, distanceTime, price;
+        private TextView restaurantName, category, offer, rating, restaurantInfo, price,distanceTime;
+
 
         private MyViewHolder(View view) {
             super(view);
@@ -85,6 +100,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
             category = (TextView) view.findViewById(R.id.category);
             offer = (TextView) view.findViewById(R.id.offer);
             rating = (TextView) view.findViewById(R.id.rating);
+            restaurantInfo = (TextView) view.findViewById(R.id.restaurant_info);
             distanceTime = (TextView) view.findViewById(R.id.distance_time);
             price = (TextView) view.findViewById(R.id.price);
             itemView.setOnClickListener(this);

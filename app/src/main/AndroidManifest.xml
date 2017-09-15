@@ -16,11 +16,10 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.WelcomeScreenActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -29,11 +28,11 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label=" "
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SignUpActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:label="@string/forgot_password"
@@ -77,6 +76,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ViewCartActivity"></activity>
     </application>
 
 </manifest>

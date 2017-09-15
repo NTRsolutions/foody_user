@@ -1,22 +1,22 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.AccompanimentDishesAdapter;
-import com.foodie.app.adapter.RecommendedDishesAdapter;
 import com.foodie.app.model.RecommendedDish;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HotelViewActivity extends AppCompatActivity {
@@ -50,6 +51,9 @@ public class HotelViewActivity extends AppCompatActivity {
     TextView restaurantSubtitle2;
     @BindView(R.id.scroll_view)
     NestedScrollView scrollView;
+    public static TextView itemText;
+    public static TextView viewCart;
+    public static RelativeLayout viewCartLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,27 +70,36 @@ public class HotelViewActivity extends AppCompatActivity {
             }
         });
 
+        itemText=(TextView)findViewById(R.id.item_text);
+        viewCart=(TextView)findViewById(R.id.view_cart);
+        viewCartLayout=(RelativeLayout) findViewById(R.id.view_cart_layout);
+        viewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HotelViewActivity.this,ViewCartActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+            }
+        });
+
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                Log.e("scrollX",""+scrollX);
-                Log.e("scrollY",""+scrollY);
-                Log.e("oldScrollX",""+oldScrollX);
-                Log.e("oldScrollY",""+oldScrollY);
+                Log.e("scrollX", "" + scrollX);
+                Log.e("scrollY", "" + scrollY);
+                Log.e("oldScrollX", "" + oldScrollX);
+                Log.e("oldScrollY", "" + oldScrollY);
 
-                if (scrollY>= 50 && scrollY<=280){
-                    int staticData=280;
-                    float alphaValue=(float)scrollY/staticData;
-                    heartBtn.setAlpha(1-alphaValue);
+                if (scrollY >= 50 && scrollY <= 280) {
+                    int staticData = 280;
+                    float alphaValue = (float) scrollY / staticData;
+                    heartBtn.setAlpha(1 - alphaValue);
                     titleLayout.setAlpha(alphaValue);
                     viewLine.setAlpha(alphaValue);
-                }
-                else if (scrollY>=280){
+                } else if (scrollY >= 280) {
                     heartBtn.setAlpha(0);
                     viewLine.setAlpha(1.0f);
                     titleLayout.setAlpha(1.0f);
-                }
-                else if(scrollY<= 50){
+                } else if (scrollY <= 50) {
                     viewLine.setAlpha(0);
                     titleLayout.setAlpha(0);
                     heartBtn.setAlpha(1.0f);
@@ -103,7 +116,7 @@ public class HotelViewActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(View view, boolean checked) {
                 Log.e("HeartButton", "click " + checked);
-                if(checked){
+                if (checked) {
                     heartBtn.setImageDrawable(getResources().getDrawable(R.drawable.icc_heart));
                 }
             }
@@ -111,38 +124,22 @@ public class HotelViewActivity extends AppCompatActivity {
 
 
         final ArrayList<RecommendedDish> list = new ArrayList<>();
-        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "$2", true, "url", "description"));
-        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "$3", true, "url", "description"));
-        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "$4", false, "url", "description"));
-        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "$2", true, "url", "description"));
-        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "$3", true, "url", "description"));
-        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "$4", false, "url", "description"));
-        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "$2", true, "url", "description"));
-        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "$3", true, "url", "description"));
-        RecommendedDishesAdapter adapter = new RecommendedDishesAdapter(list, this);
-        recommendedDishesRv.setLayoutManager(new GridLayoutManager(this, 2));
-        //recommendedDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recommendedDishesRv.setItemAnimator(new DefaultItemAnimator());
-        recommendedDishesRv.setAdapter(adapter);
-
-
-        final ArrayList<RecommendedDish> accompanimentList = new ArrayList<>();
-        accompanimentList.add(new RecommendedDish("Raita", "Complement", "$20", true, "url", "description"));
-        accompanimentList.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "description"));
-        accompanimentList.add(new RecommendedDish("Sauce", "Side Dish, Complement", "$25", false, "url", "description"));
-        accompanimentList.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "description"));
-        AccompanimentDishesAdapter adapterAccompaniment = new AccompanimentDishesAdapter(accompanimentList, this);
-        accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "20", true, "url", "description", "available"));
+        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "30", true, "url", "description", "out of stock"));
+        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "50", false, "url", "description", "available"));
+        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "20", true, "url", "description", "available"));
+        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "300", true, "url", "description", "available"));
+        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "200", false, "url", "description", "Next Available at 12.30pm tommorrow"));
+        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "90", true, "url", "description", "available"));
+        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "50", true, "url", "description", "out of stock"));
+        AccompanimentDishesAdapter adapterAccompaniment = new AccompanimentDishesAdapter(list, this);
+        accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
         accompanimentDishesRv.setAdapter(adapterAccompaniment);
 
+
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_hotel_view, menu);
-//        return true;
-//    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -155,4 +152,6 @@ public class HotelViewActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
+
+
 }

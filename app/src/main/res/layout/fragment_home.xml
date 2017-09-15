@@ -27,6 +27,8 @@
             android:layout_marginRight="10dp"
             android:orientation="vertical">
 
+            <!--    Imprssive Dish-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
                 android:orientation="vertical">
 
                 <TextView
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -53,6 +56,7 @@
 
             </LinearLayout>
 
+            <!--Restaurant Layout-->
 
             <LinearLayout
                 android:id="@+id/title"
@@ -63,9 +67,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:textScaleX="1.1"
-                    android:typeface="sans"
-                    android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -73,10 +74,12 @@
                     android:maxLines="1"
                     android:text="@string/hundred_restaurant"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:textColor="@color/colorSecondaryText"
+                    android:textScaleX="1.1"
+                    android:textSize="12sp"
+                    android:typeface="sans" />
 
                 <TextView
-                    android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -85,80 +88,95 @@
                     android:maxLines="1"
                     android:text="@string/relevance"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="12sp" />
             </LinearLayout>
 
 
             <android.support.v7.widget.RecyclerView
+                android:layout_marginBottom="30dp"
                 android:id="@+id/restaurants_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+               android:paddingTop="10dp"
                 android:orientation="horizontal" />
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="10dp"
-                android:background="#878787" />
+            <!--   Extra Features-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fillViewport="true"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#878787"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:maxLines="1"
-                    android:text="@string/discover"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="16sp" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/discover_rv"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:orientation="horizontal" />
+                    android:fillViewport="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-            </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
-                android:background="#878787" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:maxLines="1"
+                        android:text="@string/discover"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fillViewport="true"
-                android:orientation="vertical">
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/discover_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:maxLines="1"
-                    android:text="@string/offers_near_you"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="16sp" />
+                </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/restaurants_offer_rv"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="4dp"
                     android:layout_marginTop="16dp"
-                    android:orientation="horizontal" />
+                    android:background="#878787"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fillViewport="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:maxLines="1"
+                        android:text="@string/offers_near_you"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/restaurants_offer_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 

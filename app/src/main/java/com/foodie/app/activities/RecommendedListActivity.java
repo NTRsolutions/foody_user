@@ -52,13 +52,13 @@ public class RecommendedListActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<RecommendedDish> list = new ArrayList<>();
-        list.add(new RecommendedDish("Non", "Starter", "$20", true, "url", "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
-        list.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "Amet lorem ipsum dolor sit amet, consectetur adipiscing elit"));
-        list.add(new RecommendedDish("Biriyani", "Lunch", "$25", false, "url", "Consectetur iorem ipsum dolor sit amet, consectetur adipiscing elit"));
-        list.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "Dolor lorem ipsum dolor sit amet, adipiscing elit"));
-        RecommendedListAdapter adbPerson = new RecommendedListAdapter(RecommendedListActivity.this, list);
-        recommendedDishesLv.setAdapter(adbPerson);
+//        ArrayList<RecommendedDish> list = new ArrayList<>();
+//        list.add(new RecommendedDish("Non", "Starter", "$20", true, "url", "Lorem ipsum dolor sit amet, consectetur adipiscing elit"));
+//        list.add(new RecommendedDish("Dosa", "Breakfast", "$10", true, "url", "Amet lorem ipsum dolor sit amet, consectetur adipiscing elit"));
+//        list.add(new RecommendedDish("Biriyani", "Lunch", "$25", false, "url", "Consectetur iorem ipsum dolor sit amet, consectetur adipiscing elit"));
+//        list.add(new RecommendedDish("Icecream", "Desert", "$10", true, "url", "Dolor lorem ipsum dolor sit amet, adipiscing elit"));
+//        RecommendedListAdapter adbPerson = new RecommendedListAdapter(RecommendedListActivity.this, list);
+//        recommendedDishesLv.setAdapter(adbPerson);
 
     }
 

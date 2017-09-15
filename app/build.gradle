@@ -30,7 +30,6 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:24.2.0'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.cepheuen.elegant-number-button:lib:1.0.2'
     compile 'de.hdodenhof:circleimageview:2.1.0'
@@ -48,8 +47,8 @@ dependencies {
     compile 'com.github.amarjain07:StickyScrollView:1.0.2'
     compile 'com.sackcentury:shinebutton:0.1.9'
     compile 'se.emilsjolander:StickyScrollViewItems:1.1.0'
-    testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.roughike:bottom-bar:2.3.1'
     compile 'com.ethanhua:skeleton:0.2.2'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

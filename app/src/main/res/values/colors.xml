@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#FFF</color>
     <color name="colorAccent">#ff6d00</color>
 
-    <color name="colorPrimaryText">#000</color>
-    <color name="colorSecondaryText">#969595</color>
+    <color name="colorPrimaryText">#000000</color>
+    <color name="colorSecondaryText">#4f4f4f </color>
+    <color name="colorGreen">#00a551</color>
+    <color name="colorRed">#b31101</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorTextWhite">#FFF</color>
     <color name="colorTextBlack">#212121</color>

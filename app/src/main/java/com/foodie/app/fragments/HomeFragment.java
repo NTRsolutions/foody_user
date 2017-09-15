@@ -117,9 +117,14 @@ public class HomeFragment extends Fragment {
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
         final ArrayList<Restaurant> restaurantList = new ArrayList<>();
-        restaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20"));
-        restaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50"));
-        restaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "4.3", "36 Mins", "$5"));
+        restaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20",""));
+        restaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50",""));
+        restaurantList.add(new Restaurant("SubWay", "American fast food", "Flat 20% offer on all orders", "4.3", "30 Mins", "$5","Close soon"));
+        restaurantList.add(new Restaurant("Dominoz Pizza", "Pizza shop", "", "4.5", "25 Mins", "$5",""));
+        restaurantList.add(new Restaurant("Pizza hut", "Cafe, Bakery", "", "4.1", "45 Mins", "$5","Close soon"));
+        restaurantList.add(new Restaurant("McDonlad's", "Pizza Food, burger", "Flat 20% offer on all orders", "4.6", "20 Mins", "$5",""));
+        restaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "3.3", "36 Mins", "$5",""));
+        restaurantList.add(new Restaurant("sea sell", "Fish, Chicken, mutton", "Flat 30% offer on all orders", "4.3", "20 Mins", "$5","Close soon"));
         RestaurantsAdapter adapterRestaurant = new RestaurantsAdapter(restaurantList, context,getActivity());
         skeletonScreen = Skeleton.bind(restaurantsRv)
                 .adapter(adapterRestaurant)

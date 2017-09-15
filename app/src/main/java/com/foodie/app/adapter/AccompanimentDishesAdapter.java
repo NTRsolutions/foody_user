@@ -1,16 +1,19 @@
 package com.foodie.app.adapter;
 
 import android.content.Context;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.model.RecommendedDish;
 
 import java.util.List;
@@ -23,6 +26,9 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
 
     private List<RecommendedDish> list;
     private Context context;
+    AnimatedVectorDrawableCompat avdProgress;
+    int priceAmount = 0;
+    int itemCount = 0;
 
     public AccompanimentDishesAdapter(List<RecommendedDish> list, Context con) {
         this.list = list;
@@ -42,9 +48,26 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
         RecommendedDish dish = list.get(position);
 
         holder.dishNameTxt.setText(dish.getName());
-        holder.priceTxt.setText(dish.getPrice());
+        holder.priceTxt.setText("$"+dish.getPrice());
+
+       /* check Availablity*/
+        if (dish.getAvaialable().equalsIgnoreCase("available")) {
+            holder.cardAddTextLayout.setVisibility(View.VISIBLE);
+            holder.cardInfoLayout.setVisibility(View.GONE);
+        } else if (dish.getAvaialable().equalsIgnoreCase("out of stock")) {
+            holder.cardAddTextLayout.setVisibility(View.GONE);
+            holder.cardInfoLayout.setVisibility(View.VISIBLE);
+            holder.cardAddInfoText.setVisibility(View.GONE);
+            holder.cardAddOutOfStock.setVisibility(View.VISIBLE);
+        } else {
+            holder.cardAddTextLayout.setVisibility(View.GONE);
+            holder.cardInfoLayout.setVisibility(View.VISIBLE);
+            holder.cardAddInfoText.setVisibility(View.VISIBLE);
+            holder.cardAddOutOfStock.setVisibility(View.GONE);
+            holder.cardAddInfoText.setText(dish.getAvaialable());
+        }
+
         if (dish.getIsVeg()) {
-//            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_veg, 0, 0, 0);
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
         } else {
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
@@ -58,30 +81,77 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageView dishImg,foodImageType;
-        private TextView dishNameTxt, priceTxt;
-        private Button addBtn;
+        private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
+        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
+
 
         private MyViewHolder(View view) {
             super(view);
             dishImg = (ImageView) view.findViewById(R.id.dishImg);
             foodImageType = (ImageView) view.findViewById(R.id.food_type_image);
+            animationLineCartAdd = (ImageView) view.findViewById(R.id.animation_line_cart_add);
             dishNameTxt = (TextView) view.findViewById(R.id.dish_name_text);
             priceTxt = (TextView) view.findViewById(R.id.price_text);
-            addBtn = (Button) view.findViewById(R.id.add_btn);
+
+             /*    Add card Button Layout*/
+            cardAddDetailLayout = (RelativeLayout) view.findViewById(R.id.add_card_layout);
+            cardAddTextLayout = (RelativeLayout) view.findViewById(R.id.add_card_text_layout);
+            cardInfoLayout = (RelativeLayout) view.findViewById(R.id.add_card_info_layout);
+            cardAddInfoText = (TextView) view.findViewById(R.id.avialablity_time);
+            cardAddOutOfStock = (TextView) view.findViewById(R.id.out_of_stock);
+            cardAddBtn = (ImageView) view.findViewById(R.id.card_add_btn);
+            cardMinusBtn = (ImageView) view.findViewById(R.id.card_minus_btn);
+            cardTextValue = (TextView) view.findViewById(R.id.card_value);
+
             //itemView.setOnClickListener( this);
-            addBtn.setOnClickListener(this);
+
+
+            /*  Click Events*/
+            cardAddTextLayout.setOnClickListener(this);
+            cardAddBtn.setOnClickListener(this);
+            cardMinusBtn.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (v.getId() == addBtn.getId()) {
-                int position = getAdapterPosition();
-                Toast.makeText(v.getContext(), "ITEM PRESSED = " + list.get(position).getName() + list.get(position).getPrice(), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            switch (v.getId()) {
+                case R.id.add_card_text_layout:
+                    /** Press Add Card Text Layout */
+                    cardAddDetailLayout.setVisibility(View.VISIBLE);
+                    HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+                    itemCount = itemCount + 1;
+                    priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
+                    HotelViewActivity.itemText.setText("" + itemCount + " Item | $" + "" + priceAmount);
+                    cardAddTextLayout.setVisibility(View.GONE);
+                    break;
+
+                case R.id.card_add_btn:
+                    /** Press Add Card Add button */
+                    int countValue = Integer.parseInt(cardTextValue.getText().toString()) + 1;
+                    itemCount = itemCount + 1;
+                    priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
+                    HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
+                    cardTextValue.setText("" + countValue);
+                    break;
+                case R.id.card_minus_btn:
+                    /** Press Add Card Minus button */
+                    if (cardTextValue.getText().toString().equalsIgnoreCase("1")) {
+                        cardAddDetailLayout.setVisibility(View.GONE);
+                        HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
+                        cardAddTextLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        int countMinusValue = Integer.parseInt(cardTextValue.getText().toString()) - 1;
+                        itemCount = itemCount - 1;
+                        priceAmount = priceAmount - Integer.parseInt(list.get(getAdapterPosition()).getPrice());
+                        HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
+                        cardTextValue.setText("" + countMinusValue);
+                    }
+                    break;
             }
+
         }
+
 
     }
 
