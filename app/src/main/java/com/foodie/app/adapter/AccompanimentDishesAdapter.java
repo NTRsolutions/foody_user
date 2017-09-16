@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.model.RecommendedDish;
+import com.robinhood.ticker.TickerUtils;
+import com.robinhood.ticker.TickerView;
 
 import java.util.List;
 
@@ -29,6 +31,8 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
     AnimatedVectorDrawableCompat avdProgress;
     int priceAmount = 0;
     int itemCount = 0;
+    //Animation number
+    private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
     public AccompanimentDishesAdapter(List<RecommendedDish> list, Context con) {
         this.list = list;
@@ -46,13 +50,14 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RecommendedDish dish = list.get(position);
-
+        holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(dish.getName());
         holder.priceTxt.setText("$"+dish.getPrice());
 
        /* check Availablity*/
         if (dish.getAvaialable().equalsIgnoreCase("available")) {
             holder.cardAddTextLayout.setVisibility(View.VISIBLE);
+            holder.cardTextValueTicker.setText(String.valueOf(1));
             holder.cardInfoLayout.setVisibility(View.GONE);
         } else if (dish.getAvaialable().equalsIgnoreCase("out of stock")) {
             holder.cardAddTextLayout.setVisibility(View.GONE);
@@ -82,7 +87,8 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
-        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock;
+        private TextView dishNameTxt, priceTxt,cardTextValue , cardAddInfoText, cardAddOutOfStock;
+        TickerView cardTextValueTicker;
         RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
 
 
@@ -103,6 +109,7 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
             cardAddBtn = (ImageView) view.findViewById(R.id.card_add_btn);
             cardMinusBtn = (ImageView) view.findViewById(R.id.card_minus_btn);
             cardTextValue = (TextView) view.findViewById(R.id.card_value);
+            cardTextValueTicker = (TickerView) view.findViewById(R.id.card_value_ticker);
 
             //itemView.setOnClickListener( this);
 
@@ -133,6 +140,7 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
                     priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
                     HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
                     cardTextValue.setText("" + countValue);
+                    cardTextValueTicker.setText("" + countValue);
                     break;
                 case R.id.card_minus_btn:
                     /** Press Add Card Minus button */
@@ -146,6 +154,8 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
                         priceAmount = priceAmount - Integer.parseInt(list.get(getAdapterPosition()).getPrice());
                         HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
                         cardTextValue.setText("" + countMinusValue);
+                        cardTextValueTicker.setText("" + countMinusValue);
+
                     }
                     break;
             }

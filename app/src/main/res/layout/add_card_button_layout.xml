@@ -22,7 +22,18 @@
             android:src="@drawable/ic_minus_btn" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/card_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="1"
+            android:textColor="@color/colorGreen"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <com.robinhood.ticker.TickerView
+            android:id="@+id/card_value_ticker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -40,7 +51,6 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_add_btn" />
-
         <ImageView
             android:id="@+id/animation_line_cart_add"
             android:layout_width="match_parent"
@@ -48,7 +58,6 @@
             android:layout_alignParentBottom="true"
             android:paddingLeft="2dp"
             android:paddingRight="2dp" />
-
 
     </RelativeLayout>
 

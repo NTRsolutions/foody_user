@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -57,10 +58,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     EditText addressEdit;
     @BindView(R.id.flat_no)
     EditText flatNoEdit;
-    @BindView(R.id.bottom_sheet)
-    NestedScrollView bottomSheet;
     @BindView(R.id.landmark)
     EditText landmark;
+    @BindView(R.id.dummy_image_view)
+    ImageView dummyImageView;
+    @BindView(R.id.animation_line_cart_add)
+    ImageView animationLineCartAdd;
 
     private String TAG = "SaveDelivery";
     private BottomSheetBehavior behavior;
@@ -72,6 +75,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     private Double crtLng;
     private Double srcLat;
     private Double srcLng;
+    AnimatedVectorDrawableCompat avdProgress;
 
     @BindView(R.id.backArrow)
     ImageView backArrow;
@@ -84,6 +88,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         setContentView(R.layout.activity_save_delivery_location);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+
+        //Intialize Animation line
+        initializeAvd();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -99,16 +106,33 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
         View bottomSheet = findViewById(R.id.bottom_sheet);
         behavior = BottomSheetBehavior.from(bottomSheet);
+
+        //set state is expanded
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        dummyImageView.setVisibility(View.VISIBLE);
+
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 // React to state change
+                // to collapse to show
+                if (BottomSheetBehavior.STATE_DRAGGING == newState) {
+                    dummyImageView.setVisibility(View.GONE);
+
+                } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                    dummyImageView.setVisibility(View.GONE);
+                } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
+                    dummyImageView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // React to dragging events
+
+
             }
+
         });
 
         Bundle extras = getIntent().getExtras();
@@ -134,6 +158,27 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
         }
 
+    }
+
+    Runnable action = new Runnable() {
+        @Override
+        public void run() {
+            avdProgress.stop();
+            if (animationLineCartAdd != null)
+                animationLineCartAdd.setVisibility(View.INVISIBLE);
+        }
+    };
+
+    private void initializeAvd() {
+        avdProgress = AnimatedVectorDrawableCompat.create(getApplicationContext(), R.drawable.avd_line);
+        animationLineCartAdd.setBackground(avdProgress);
+        repeatAnimation();
+    }
+
+    private void repeatAnimation() {
+        animationLineCartAdd.setVisibility(View.VISIBLE);
+        avdProgress.start();
+        animationLineCartAdd.postDelayed(action, 1500); // Will repeat animation in every 1 second
     }
 
     @Override
@@ -225,7 +270,11 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             CameraPosition cameraPosition = mMap.getCameraPosition();
             srcLat = cameraPosition.target.latitude;
             srcLng = cameraPosition.target.longitude;
+
+            //Intialize animation line
+            initializeAvd();
             getAddress(srcLat, srcLng);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -233,7 +282,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
     @Override
     public void onCameraMove() {
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        dummyImageView.setVisibility(View.GONE);
         addressEdit.setText(this.getResources().getString(R.string.getting_address));
+        animationLineCartAdd.setVisibility(View.VISIBLE);
     }
 
     @Override

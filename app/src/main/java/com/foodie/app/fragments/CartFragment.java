@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.foodie.app.R;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
+import com.robinhood.ticker.TickerUtils;
+import com.robinhood.ticker.TickerView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,12 +60,16 @@ public class CartFragment extends Fragment {
     Button addAddressBtn;
     @BindView(R.id.dummy_image_view)
     ImageView dummyImageView;
+    @BindView(R.id.card_value_ticker)
+    TickerView cardValueTicker;
 
 
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
     AnimatedVectorDrawableCompat avdProgress;
+    //Animation number
+    private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,8 @@ public class CartFragment extends Fragment {
 
         unbinder = ButterKnife.bind(this, view);
         addCardLayout.setVisibility(View.VISIBLE);
+        cardValueTicker.setCharacterList(NUMBER_LIST);
+        cardValueTicker.setText(String.valueOf(1));
         addCardTextLayout.setVisibility(View.GONE);
         animationLineCartAdd.setVisibility(View.INVISIBLE);
         numberButton.setOnClickListener(new ElegantNumberButton.OnClickListener() {
@@ -93,7 +101,7 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), SetDeliveryLocationActivity.class));
-                getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.anim_nothing);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
         });
 
@@ -175,10 +183,10 @@ public class CartFragment extends Fragment {
         if (toolbar != null) {
             toolbar.setVisibility(View.GONE);
             dummyImageView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             dummyImageView.setVisibility(View.GONE);
         }
+        cardValueTicker.setCharacterList(NUMBER_LIST);
 
     }
 
@@ -186,7 +194,6 @@ public class CartFragment extends Fragment {
     public void onViewClicked() {
 
     }
-
 
     @OnClick({R.id.card_minus_btn, R.id.card_value, R.id.card_add_btn})
     public void onViewClicked(View view) {
@@ -204,6 +211,7 @@ public class CartFragment extends Fragment {
                     initializeAvd();
                     int countMinusValue = Integer.parseInt(cardValue.getText().toString()) - 1;
                     cardValue.setText("" + countMinusValue);
+                    cardValueTicker.setText("" + countMinusValue);
                 }
                 break;
             case R.id.card_value:
@@ -217,6 +225,7 @@ public class CartFragment extends Fragment {
                 initializeAvd();
                 int countValue = Integer.parseInt(cardValue.getText().toString()) + 1;
                 cardValue.setText("" + countValue);
+                cardValueTicker.setText("" + countValue);
 
                 break;
         }
