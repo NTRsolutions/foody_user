@@ -4,7 +4,19 @@
         <item>"Manage Address"</item>
         <item>"Favorites"</item>
         <item>"Payment"</item>
-        <item>"Orders"</item>
+        <item>"My Orders"</item>
+        <item>"Notifications"</item>
+        <item>"Promotion Details"</item>
         <item>"Change Password"</item>
     </string-array>
+
+    <string-array name="help_array">
+        <item>"Items delayed from restaurant"</item>
+        <item>"Item delayed from packing"</item>
+        <item>"item updations late"</item>
+        <item>"others"</item>
+        <item>"others"</item>
+    </string-array>
+
+
 </resources>

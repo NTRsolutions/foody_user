@@ -12,14 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.amar.library.ui.StickyScrollView;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.R;
@@ -44,12 +46,18 @@ import butterknife.ButterKnife;
  * Created by santhosh@appoets.com on 22-08-2017.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
 
     @BindView(R.id.animation_line_image)
     ImageView animationLineImage;
     Context context;
+    @BindView(R.id.catagoery_spinner)
+    Spinner catagoerySpinner;
+    @BindView(R.id.title)
+    LinearLayout title;
+    @BindView(R.id.scrollView)
+    StickyScrollView scrollView;
     private SkeletonScreen skeletonScreen, skeletonScreen2;
     private TextView addressLabel;
     private TextView address;
@@ -69,6 +77,8 @@ public class HomeFragment extends Fragment {
     private View toolbarLayout;
     AnimatedVectorDrawableCompat avdProgress;
 
+    String[] catagoery = { "Relevance", "Cost for Two", "Delivery Time", "Rating"  };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +86,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, view);
@@ -111,21 +121,29 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //Spinner
+        //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter aa = new ArrayAdapter(context,R.layout.spinner_layout,catagoery);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        catagoerySpinner.setAdapter(aa);
+        catagoerySpinner.setOnItemSelectedListener(this);
+
 
         //Restaurant Adapter
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
         final ArrayList<Restaurant> restaurantList = new ArrayList<>();
-        restaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20",""));
-        restaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50",""));
-        restaurantList.add(new Restaurant("SubWay", "American fast food", "Flat 20% offer on all orders", "4.3", "30 Mins", "$5","Close soon"));
-        restaurantList.add(new Restaurant("Dominoz Pizza", "Pizza shop", "", "4.5", "25 Mins", "$5",""));
-        restaurantList.add(new Restaurant("Pizza hut", "Cafe, Bakery", "", "4.1", "45 Mins", "$5","Close soon"));
-        restaurantList.add(new Restaurant("McDonlad's", "Pizza Food, burger", "Flat 20% offer on all orders", "4.6", "20 Mins", "$5",""));
-        restaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "3.3", "36 Mins", "$5",""));
-        restaurantList.add(new Restaurant("sea sell", "Fish, Chicken, mutton", "Flat 30% offer on all orders", "4.3", "20 Mins", "$5","Close soon"));
-        RestaurantsAdapter adapterRestaurant = new RestaurantsAdapter(restaurantList, context,getActivity());
+        restaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20", ""));
+        restaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50", ""));
+        restaurantList.add(new Restaurant("SubWay", "American fast food", "Flat 20% offer on all orders", "4.3", "30 Mins", "$5", "Close soon"));
+        restaurantList.add(new Restaurant("Dominoz Pizza", "Pizza shop", "", "4.5", "25 Mins", "$5", ""));
+        restaurantList.add(new Restaurant("Pizza hut", "Cafe, Bakery", "", "4.1", "45 Mins", "$5", "Close soon"));
+        restaurantList.add(new Restaurant("McDonlad's", "Pizza Food, burger", "Flat 20% offer on all orders", "4.6", "20 Mins", "$5", ""));
+        restaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "3.3", "36 Mins", "$5", ""));
+        restaurantList.add(new Restaurant("sea sell", "Fish, Chicken, mutton", "Flat 30% offer on all orders", "4.3", "20 Mins", "$5", "Close soon"));
+        RestaurantsAdapter adapterRestaurant = new RestaurantsAdapter(restaurantList, context, getActivity());
         skeletonScreen = Skeleton.bind(restaurantsRv)
                 .adapter(adapterRestaurant)
                 .load(R.layout.skeleton_restaurant_list_item)
@@ -166,8 +184,8 @@ public class HomeFragment extends Fragment {
         @Override
         public void run() {
             avdProgress.stop();
-            if(animationLineImage!=null)
-            animationLineImage.setVisibility(View.INVISIBLE);
+            if (animationLineImage != null)
+                animationLineImage.setVisibility(View.INVISIBLE);
         }
     };
 
@@ -251,4 +269,13 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(context,catagoery[position] ,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

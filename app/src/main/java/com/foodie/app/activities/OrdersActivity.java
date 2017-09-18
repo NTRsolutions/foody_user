@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +28,7 @@ public class OrdersActivity extends AppCompatActivity {
     RecyclerView ordersRv;
 
     private OrdersAdapter adapter;
+    Activity activity=OrdersActivity.this;
     private List<OrderModel> modelListReference = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         ordersRv.setLayoutManager(manager);
-        adapter = new OrdersAdapter(this, modelListReference);
+        adapter = new OrdersAdapter(this,activity, modelListReference);
         ordersRv.setAdapter(adapter);
     }
 

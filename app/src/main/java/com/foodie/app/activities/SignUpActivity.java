@@ -41,15 +41,6 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-//        LinearLayout signInLayout=(LinearLayout)findViewById(R.id.sigin_layout);
-//        signInLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
-
     }
 
     @OnClick({R.id.terms_and_conditions, R.id.sign_up})

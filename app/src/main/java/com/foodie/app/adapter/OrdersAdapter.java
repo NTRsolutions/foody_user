@@ -1,6 +1,8 @@
 package com.foodie.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
+import com.foodie.app.activities.OrderDetailActivity;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 
@@ -28,14 +31,15 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
     private List<OrderModel> list = new ArrayList<>();
     private LayoutInflater inflater;
     Context context1;
+    Activity activity;
     int lastPosition=-1;
 
-    public OrdersAdapter(Context context, List<OrderModel> list) {
+    public OrdersAdapter(Context context,Activity activity,  List<OrderModel> list) {
         this.context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
+        this.activity = activity;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -86,6 +90,13 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             @Override
             public void onClick(View v) {
                 System.out.println(object.dishName);
+            }
+        });
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context1.startActivity(new Intent(context1, OrderDetailActivity.class));
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
         });
 

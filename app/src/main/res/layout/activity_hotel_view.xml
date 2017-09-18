@@ -145,7 +145,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/dotted_line"
+                    android:background="@drawable/horizantal_dotted_line"
                     android:layerType="software" />
 
                 <LinearLayout
@@ -273,7 +273,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/dotted_line"
+                    android:background="@drawable/horizantal_dotted_line"
                     android:layerType="software" />
 
                 <LinearLayout
