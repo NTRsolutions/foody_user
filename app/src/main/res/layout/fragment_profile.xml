@@ -36,9 +36,9 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:gravity="center_vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
                             android:maxLines="1"
                             android:paddingStart="8dp"
                             android:text="My Account"
@@ -70,29 +70,28 @@
 
 
                 </LinearLayout>
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/horizantal_dotted_line"
                         android:id="@+id/text_line"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:maxLines="1"
                         android:singleLine="true"
-                        />
+                        android:text="..........................................................................................................................................................................." />
 
 
                     <View
-                        android:visibility="gone"
                         android:id="@+id/view_line"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:background="@color/light_transparent"
-                       />
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -101,10 +100,10 @@
 
 
             <RelativeLayout
-                android:layout_margin="10dp"
                 android:id="@+id/list_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:orientation="vertical">
 
 
@@ -113,7 +112,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:divider="@null"
-                    android:scrollbars="none" />
+                    android:scrollbars="none"
+                    />
 
                 <View
                     android:layout_width="match_parent"
@@ -132,7 +132,6 @@
                 android:background="#eee" />
 
             <Button
-                android:layout_marginBottom="80dp"
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,6 +151,14 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="20dp"
                 android:background="#eee" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="80dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="App version 1.0" />
 
         </LinearLayout>
 

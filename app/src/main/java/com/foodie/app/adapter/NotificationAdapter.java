@@ -10,8 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.model.OrderItem;
-import com.foodie.app.model.OrderItem;
+import com.foodie.app.model.NotificationItem;
 import com.foodie.app.model.Restaurant;
 
 import java.util.List;
@@ -20,11 +19,11 @@ import java.util.List;
  * Created by santhosh@appoets.com on 22-08-2017.
  */
 
-public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.MyViewHolder> {
-    private List<OrderItem> list;
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.MyViewHolder> {
+    private List<NotificationItem> list;
     private Context context;
 
-    public OrderDetailAdapter(List<OrderItem> list, Context con) {
+    public NotificationAdapter(List<NotificationItem> list, Context con) {
         this.list = list;
         this.context = con;
     }
@@ -32,12 +31,12 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.order_detail_list_item, parent, false);
+                .inflate(R.layout.notification_detail_item, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
-    public void add(OrderItem item, int position) {
+    public void add(NotificationItem item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
@@ -50,9 +49,10 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        OrderItem orderItem = list.get(position);
-        holder.dishName.setText(orderItem.name);
-        holder.price.setText(orderItem.price);
+        NotificationItem NotificationItem = list.get(position);
+        holder.validity.setText(NotificationItem.validity);
+        holder.offerDescription.setText(NotificationItem.offerDescription);
+        holder.offerCode.setText(NotificationItem.offerCode);
 
     }
 
@@ -63,20 +63,20 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private LinearLayout itemView;
-        private ImageView dishImg;
-        private TextView dishName, price;
+        private LinearLayout notificatioLayout;
+        private TextView validity, offerCode,offerDescription;
 
         private MyViewHolder(View view) {
             super(view);
-            itemView = (LinearLayout) view.findViewById(R.id.item_view);
-            dishName = (TextView) view.findViewById(R.id.restaurant_name);
-            price = (TextView) view.findViewById(R.id.price);
-            itemView.setOnClickListener(this);
+            notificatioLayout = (LinearLayout) view.findViewById(R.id.notification_layout);
+            validity = (TextView) view.findViewById(R.id.validity_date);
+            offerDescription = (TextView) view.findViewById(R.id.offer_description);
+            offerCode = (TextView) view.findViewById(R.id.offer_code);
+//            notificatioLayout.setOnClickListener(this);
         }
 
         public void onClick(View v) {
-            if (v.getId() == itemView.getId()) {
+            if (v.getId() == notificatioLayout.getId()) {
 //                context.startActivity(new Intent(context, HotelViewActivity.class));
                 //Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }

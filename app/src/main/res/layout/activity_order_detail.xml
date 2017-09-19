@@ -15,8 +15,14 @@
         android:background="@color/colorWhite"
         android:elevation="1dp"
         android:minHeight="?attr/actionBarSize"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
+        android:contentInsetStart="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp"
         android:theme="@style/ToolBarStyle">
 
         <LinearLayout

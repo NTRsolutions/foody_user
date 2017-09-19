@@ -1,33 +1,32 @@
 package com.foodie.app.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.EditText;
+import android.widget.Button;
 
 import com.foodie.app.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import butterknife.OnClick;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class OtherHelpActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.email)
-    EditText email;
+    @BindView(R.id.chat_us)
+    Button chatUs;
+    @BindView(R.id.call_us)
+    Button callUs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgot_password);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_other_help);
         ButterKnife.bind(this);
-
+        //Toolbar
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -39,9 +38,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    @OnClick({R.id.chat_us, R.id.call_us})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.chat_us:
+                break;
+            case R.id.call_us:
+                break;
+        }
     }
 
     @Override

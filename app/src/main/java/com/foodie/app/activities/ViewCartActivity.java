@@ -25,4 +25,11 @@ public class ViewCartActivity extends AppCompatActivity {
         transaction.add(R.id.view_cart_container, fragment).commit();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
 }

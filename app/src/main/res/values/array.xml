@@ -13,9 +13,8 @@
     <string-array name="help_array">
         <item>"Items delayed from restaurant"</item>
         <item>"Item delayed from packing"</item>
-        <item>"item updations late"</item>
-        <item>"others"</item>
-        <item>"others"</item>
+        <item>"Item updations late"</item>
+        <item>"Others"</item>
     </string-array>
 
 

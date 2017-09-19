@@ -57,6 +57,12 @@ public class AccountPaymentActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
     @OnClick(R.id.add_card)
     public void onViewClicked() {
     }

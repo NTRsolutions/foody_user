@@ -45,6 +45,8 @@ public class OrdersActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        toolbar.setPadding(0,0,0,0);//for tab otherwise give space in tab
+        toolbar.setContentInsetsAbsolute(0,0);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         ordersRv.setLayoutManager(manager);
@@ -81,6 +83,12 @@ public class OrdersActivity extends AppCompatActivity {
         modelListReference.addAll(modelList);
         adapter.notifyDataSetChanged();
 
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
 }

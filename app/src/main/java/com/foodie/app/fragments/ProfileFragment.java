@@ -27,7 +27,9 @@ import com.foodie.app.activities.EditAccountActivity;
 import com.foodie.app.activities.FavouritesActivity;
 import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.activities.ManageAddressActivity;
+import com.foodie.app.activities.NotificationActivity;
 import com.foodie.app.activities.OrdersActivity;
+import com.foodie.app.activities.PromotionActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
 import com.foodie.app.utils.ListViewSizeHelper;
 
@@ -146,11 +148,19 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(context, OrdersActivity.class));
                 break;
             case 4:
+                startActivity(new Intent(context, NotificationActivity.class));
+                break;
+            case 5:
+                startActivity(new Intent(context, PromotionActivity.class));
+                break;
+            case 6:
                 startActivity(new Intent(context, ChangePasswordActivity.class));
                 break;
+
             default:
 
         }
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {

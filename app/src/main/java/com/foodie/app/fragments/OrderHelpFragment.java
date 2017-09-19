@@ -18,6 +18,7 @@ import com.foodie.app.activities.ChangePasswordActivity;
 import com.foodie.app.activities.FavouritesActivity;
 import com.foodie.app.activities.ManageAddressActivity;
 import com.foodie.app.activities.OrdersActivity;
+import com.foodie.app.activities.OtherHelpActivity;
 import com.foodie.app.adapter.HelpListAdapter;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
 import com.foodie.app.utils.ListViewSizeHelper;
@@ -62,7 +63,7 @@ public class OrderHelpFragment extends Fragment {
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.help_array));
         HelpListAdapter adbPerson = new HelpListAdapter(context, list);
         helpListItem.setAdapter(adbPerson);
-        ListViewSizeHelper.getListViewSize(helpListItem);
+//        ListViewSizeHelper.getListViewSize(helpListItem);
         helpListItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -90,7 +91,7 @@ public class OrderHelpFragment extends Fragment {
 //                startActivity(new Intent(context, OrdersActivity.class));
 //                break;
             case 3:
-                startActivity(new Intent(context, ChangePasswordActivity.class));
+                startActivity(new Intent(context, OtherHelpActivity.class));
                 break;
             default:
 

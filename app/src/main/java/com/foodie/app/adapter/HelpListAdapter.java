@@ -59,10 +59,10 @@ public class HelpListAdapter extends BaseAdapter {
 //        setting_icon.setImageResource(listIcon.get(position));
         tv.setText(items.get(position));
 
-        //Load the animation from the xml file and set it to the row
-        Animation animation = AnimationUtils.loadAnimation(context_, R.anim.anim_push_left_in);
-        animation.setDuration(500);
-        convertView.startAnimation(animation);
+//        //Load the animation from the xml file and set it to the row
+//        Animation animation = AnimationUtils.loadAnimation(context_, R.anim.anim_push_left_in);
+//        animation.setDuration(500);
+//        convertView.startAnimation(animation);
 
         return convertView;
     }

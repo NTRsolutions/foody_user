@@ -162,10 +162,10 @@
         android:layout_below="@+id/order_status_layout">
 
         <View
+            android:visibility="gone"
             android:id="@+id/view_line3"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-
             android:background="@color/colorSecondaryText" />
 
         <!-- our tablayout to display tabs  -->
