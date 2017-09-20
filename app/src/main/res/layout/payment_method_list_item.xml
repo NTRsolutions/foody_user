@@ -5,22 +5,23 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="10dp">
 
     <ImageView
+        android:layout_marginRight="10dp"
         android:id="@+id/icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:contentDescription="@string/payment"
-        android:padding="8dp" />
+       />
 
     <TextView
+        android:layout_gravity="center"
         android:id="@+id/payment_label"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:padding="8dp"
         android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/text_medium" />
 

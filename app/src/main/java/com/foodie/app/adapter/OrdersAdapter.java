@@ -7,15 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
-import com.foodie.app.activities.OrderDetailActivity;
+import com.foodie.app.activities.CurrentOrderDetailActivity;
+import com.foodie.app.activities.PastOrderDetailActivity;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 
@@ -79,7 +78,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int section, int relativePosition, int absolutePosition) {
+    public void onBindViewHolder(ViewHolder holder, final int section, int relativePosition, int absolutePosition) {
         final Order object = list.get(section).getOrders().get(relativePosition);
         holder.restaurantNameTxt.setText(object.restaurantName);
         holder.restaurantAddressTxt.setText(object.restaurantAddress);
@@ -95,7 +94,11 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context1.startActivity(new Intent(context1, OrderDetailActivity.class));
+
+                if (section==0)
+                context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class));
+                else
+                    context1.startActivity(new Intent(context1, PastOrderDetailActivity.class));
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
         });

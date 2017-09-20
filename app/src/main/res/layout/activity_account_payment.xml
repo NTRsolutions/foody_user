@@ -9,12 +9,12 @@
     tools:context="com.foodie.app.activities.AccountPaymentActivity">
 
     <android.support.v7.widget.Toolbar
-        android:paddingRight="10dp"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:minHeight="?attr/actionBarSize"
+        android:paddingRight="10dp"
         app:theme="@style/ToolBarStyle">
 
         <LinearLayout
@@ -23,6 +23,7 @@
             android:orientation="horizontal">
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment"
@@ -30,18 +31,7 @@
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/add_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableEnd="@drawable/ic_add_card"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical|end"
-                android:text="@string/add_new_card"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/text_small" />
+
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -56,24 +46,141 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
+
         <LinearLayout
-            android:background="#f2f2f2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#f2f2f2"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Select the payment method"
+                android:text="Wallet"
+                android:textAllCaps="true"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_medium" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="WalletAmount"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_medium" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="$150"
+                    android:textColor="@color/theme"
+                    android:textSize="@dimen/text_medium" />
+
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Card"
+                android:textAllCaps="true"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_medium" />
+
 
             <ListView
                 android:id="@+id/payment_method_lv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:visibility="visible" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@color/colorSecondaryText" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/add_card_img"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_add_card" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/add_card_img"
+                        android:text="@string/add_new_card"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/text_medium" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+            <!--    Cash Payment-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Pay on Delivery"
+                android:textAllCaps="true"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_medium" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/cash_img"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_cash" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/cash_img"
+                    android:text="By Cash"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_medium" />
+
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 

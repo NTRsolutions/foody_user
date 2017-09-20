@@ -86,9 +86,9 @@ public class ProfileFragment extends Fragment {
         listIcons.add(R.drawable.home);
         listIcons.add(R.drawable.heart);
         listIcons.add(R.drawable.payment);
-        listIcons.add(R.drawable.orders);
-        listIcons.add(R.drawable.orders);
-        listIcons.add(R.drawable.orders);
+        listIcons.add(R.drawable.ic_myorders);
+        listIcons.add(R.drawable.ic_notifications);
+        listIcons.add(R.drawable.ic_promotion_details);
         listIcons.add(R.drawable.padlock);
         ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
         profileSettingLv.setAdapter(adbPerson);

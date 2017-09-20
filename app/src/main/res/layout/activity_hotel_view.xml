@@ -33,21 +33,63 @@
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
-                android:contentInsetStart="0dp"
-                app:contentInsetStart="0dp"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:contentInsetStart="0dp"
+                app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
 
-
-                <include
-                    android:id="@+id/toolbar_header_view"
-                    layout="@layout/header_view"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/header_view_end_margin_right"
-                    android:visibility="gone" />
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginRight="10dp">
+
+                   <!-- Heart and Search Button Layout -->
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+
+                        <com.sackcentury.shinebuttonlib.ShineButton
+                            android:id="@+id/heart_btn"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="35dp"
+                            app:btn_color="#e7e8e9"
+                            app:btn_fill_color="#f26d7d"
+                            app:siShape="@raw/heart" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_search_icon"
+                            android:tint="#e7e8e9" />
+                    </LinearLayout>
+
+                <!--    Header Toolbar Layout-->
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                        <include
+                            android:id="@+id/toolbar_header_view"
+                            layout="@layout/header_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="invisible" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
 
             </android.support.v7.widget.Toolbar>
 
@@ -55,40 +97,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <com.sackcentury.shinebuttonlib.ShineButton
-                android:id="@+id/heart_btn"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="35dp"
-                app:btn_color="@android:color/darker_gray"
-                app:btn_fill_color="#f26d7d"
-                app:siShape="@raw/heart" />
-
-            <ImageView
-
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_search_icon" />
-        </LinearLayout>
-
-
-    </RelativeLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"
@@ -123,6 +131,8 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
@@ -130,8 +140,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
                             android:orientation="vertical"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
@@ -425,23 +433,22 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:visibility="gone"
-                android:layout_marginBottom="20dp"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/shadow_view"
-                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/shadow_view"
+                android:visibility="gone">
 
                 <Spinner
-                    android:background="@null"
                     android:layout_width="150dp"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:background="@null">
 
                 </Spinner>
 
             </RelativeLayout>
-
 
 
             <!-- View cart Layout-->

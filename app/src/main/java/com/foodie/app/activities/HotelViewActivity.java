@@ -133,13 +133,31 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         if (heartBtn != null)
             heartBtn.init(this);
         heartBtn.setShineDistanceMultiple(1.8f);
+        heartBtn.setTag(0);
+        heartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(heartBtn.getTag().equals(0)){
+                    heartBtn.setTag(1);
+                    heartBtn.setShapeResource(R.raw.heart);
+                }else {
+                    heartBtn.setTag(0);
+                    heartBtn.setShapeResource(R.raw.icc_heart);
+                }
+
+            }
+        });
         heartBtn.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(View view, boolean checked) {
                 Log.e("HeartButton", "click " + checked);
-                if (checked) {
-                    heartBtn.setImageDrawable(getResources().getDrawable(R.drawable.icc_heart));
-                }
+//                if (checked) {
+//                    heartBtn.setShapeResource(R.raw.heart);
+//                }
+//                else{
+//                    heartBtn.setShapeResource(R.raw.icc_heart);
+//                }
+
             }
         });
 

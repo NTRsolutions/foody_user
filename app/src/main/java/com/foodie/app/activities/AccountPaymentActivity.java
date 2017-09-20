@@ -26,8 +26,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.payment_method_lv)
     ListView paymentMethodLv;
-    @BindView(R.id.add_card)
-    TextView addCardTxt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +45,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
         });
 
         ArrayList<PaymentMethod> list = new ArrayList<>();
-        list.add(new PaymentMethod("Debit Card", 0));
-        list.add(new PaymentMethod("By Cash", 1));
+        list.add(new PaymentMethod("5431-XXXX-XXXX-4242", 0));
         AccountPaymentAdapter adbPerson = new AccountPaymentAdapter(AccountPaymentActivity.this, list);
         paymentMethodLv.setAdapter(adbPerson);
     }
@@ -63,7 +61,5 @@ public class AccountPaymentActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
-    @OnClick(R.id.add_card)
-    public void onViewClicked() {
-    }
+
 }

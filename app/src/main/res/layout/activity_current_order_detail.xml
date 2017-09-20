@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.foodie.app.activities.CurrentOrderDetailActivity">
+
+    <!--  Toolbar   -->
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:contentInsetEnd="0dp"
+        android:contentInsetLeft="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetStart="0dp"
+        android:elevation="1dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ToolBarStyle"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/order_id_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Order #1001"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/order_item_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="1item, $250"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--  Map Fragment-->
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+            <!-- Order Placed Layout-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/order_placed_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="0dp"
+                    android:src="@drawable/ic_order_placed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/order_placed_img"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Order Placed"
+
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/text_medium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="We have recieved your order"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_tiny" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="22dp"
+                android:background="#5b5b5b"
+                android:verticalSpacing="2dp" />
+
+            <!--Order Confirmed Layout-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+
+                    android:id="@+id/order_confirmed_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="0dp"
+                    android:src="@drawable/ic_order_confirmed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/order_confirmed_img"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Order Confirmed"
+                        android:textColor="@color/colorPrimaryText"
+
+                        android:textSize="@dimen/text_medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Your order has been confirmed"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_tiny" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="22dp"
+                android:background="#5b5b5b"
+                android:verticalSpacing="2dp" />
+
+            <!--Order Processed Layout-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+                    android:id="@+id/order_processed_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="0dp"
+                    android:src="@drawable/ic_order_processed" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/order_processed_img"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Order Processed"
+
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_medium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="We are preparing your order"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_tiny" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="22dp"
+                android:background="#5b5b5b"
+                android:verticalSpacing="2dp" />
+
+            <!--Order Pickedup Layout-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+                    android:id="@+id/order_pickedup_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="0dp"
+                    android:src="@drawable/ic_order_picked_up" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/order_pickedup_img"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Order Pickedup"
+
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_medium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Your order is ready to pickup"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_tiny" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="22dp"
+                android:background="#5b5b5b"
+                android:verticalSpacing="2dp" />
+
+            <!--Order Delivered Layout-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+                    android:id="@+id/order_delivered_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="0dp"
+                    android:src="@drawable/ic_order_delivered" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/order_delivered_img"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Order Delivered"
+
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_medium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Your order is ready to pickup"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_tiny" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorSecondaryText"
+                android:layerType="software" />
+
+            <!--   Order Status Layout-->
+
+            <RelativeLayout
+                android:id="@+id/order_status_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view_line2"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp">
+
+
+                <ImageView
+                    android:id="@+id/order_succeess_image"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_circle_tick" />
+
+                <TextView
+                    android:id="@+id/order_status_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/order_succeess_image"
+                    android:text="Order Delivered Successfully "
+                    android:textColor="@color/colorGreen"
+                    android:textSize="@dimen/text_medium" />
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorSecondaryText"
+                android:layerType="software" />
+
+
+            <!--   Delivery id and Time info Layout-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#8888"
+                    android:textColor="@color/theme"
+                    android:textSize="@dimen/text_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="8:30PM"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_medium" />
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorSecondaryText"
+                android:layerType="software" />
+
+            <!-- Order Detail Fragment-->
+
+            <FrameLayout
+                android:id="@+id/order_detail_fargment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"></FrameLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

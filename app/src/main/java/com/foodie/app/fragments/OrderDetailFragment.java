@@ -10,15 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.OrderDetailAdapter;
-import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.model.OrderItem;
-import com.foodie.app.model.Restaurant;
 
 import java.util.ArrayList;
 
@@ -34,6 +30,9 @@ public class OrderDetailFragment extends Fragment {
 
     @BindView(R.id.order_recycler_view)
     RecyclerView orderRecyclerView;
+    Unbinder unbinder;
+
+    Context context = getActivity();
     @BindView(R.id.item_total_amount)
     TextView itemTotalAmount;
     @BindView(R.id.service_tax)
@@ -42,11 +41,6 @@ public class OrderDetailFragment extends Fragment {
     TextView deliveryCharges;
     @BindView(R.id.total_amount)
     TextView totalAmount;
-    @BindView(R.id.order_detail_layout)
-    LinearLayout orderDetailLayout;
-    Unbinder unbinder;
-
-    Context context = getActivity();
 
     public OrderDetailFragment() {
         // Required empty public constructor

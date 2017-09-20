@@ -63,7 +63,6 @@ public class OrderHelpFragment extends Fragment {
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.help_array));
         HelpListAdapter adbPerson = new HelpListAdapter(context, list);
         helpListItem.setAdapter(adbPerson);
-//        ListViewSizeHelper.getListViewSize(helpListItem);
         helpListItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

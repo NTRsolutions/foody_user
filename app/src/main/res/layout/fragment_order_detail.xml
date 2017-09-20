@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.foodie.app.fragments.OrderDetailFragment">
@@ -9,128 +9,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-       >
+        android:orientation="vertical">
 
         <!--   Order Recycler View-->
-
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="20dp"
             android:id="@+id/order_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="10dp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/horizantal_dotted_line"
             android:layerType="software" />
 
-        <!--    Order Layout-->
+        <!-- Order Payment Detail Layout -->
 
-        <LinearLayout
-            android:id="@+id/order_detail_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Item Total"
-                    android:textColor="@color/colorSecondaryText" />
-
-                <TextView
-                    android:id="@+id/item_total_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="$220"
-                    android:textColor="@color/colorSecondaryText" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Service Tax"
-                    android:textColor="@color/colorSecondaryText" />
-
-                <TextView
-                    android:id="@+id/service_tax"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="$30"
-                    android:textColor="@color/colorSecondaryText" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Delivery Charges"
-                    android:textColor="@color/colorSecondaryText" />
-
-                <TextView
-                    android:id="@+id/delivery_charges"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="$20"
-                    android:textColor="@color/colorSecondaryText" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="26dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="Total"
-                    android:textColor="@color/colorTextBlack" />
-
-                <TextView
-                    android:id="@+id/total_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:gravity="end"
-                    android:text="$250"
-                    android:textColor="@color/colorTextBlack" />
-            </LinearLayout>
-
-
-        </LinearLayout>
+        <include layout="@layout/order_payment_detail_item" />
 
     </LinearLayout>
 
