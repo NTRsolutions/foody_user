@@ -24,6 +24,7 @@ import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 
 import butterknife.OnClick;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class WelcomeScreenActivity extends AppCompatActivity {
 
@@ -65,7 +66,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WelcomeScreenActivity.this, SignUpActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(WelcomeScreenActivity.this, MobileNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
         skipBtn.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +136,11 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         }
     };
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 
     /**
      * Making notification bar transparent

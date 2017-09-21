@@ -20,11 +20,7 @@
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
@@ -34,6 +30,14 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label=" "
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.OtpActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.MobileNumberActivity"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SignUpActivity"
@@ -75,7 +79,13 @@
         <activity android:name=".activities.FilterActivity" />
         <activity
             android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.ViewCartActivity" />
         <activity
             android:name=".activities.PastOrderDetailActivity"
@@ -84,6 +94,7 @@
         <activity
             android:name=".activities.OtherHelpActivity"
             android:label=" "
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.NotificationActivity"
@@ -93,7 +104,8 @@
             android:name=".activities.PromotionActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.CurrentOrderDetailActivity"
+        <activity
+            android:name=".activities.CurrentOrderDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

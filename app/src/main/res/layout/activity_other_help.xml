@@ -19,6 +19,7 @@
        >
 
         <TextView
+            android:id="@+id/title"
             android:textColor="@color/colorPrimaryText"
             android:textSize="16sp"
             android:textAllCaps="true"
@@ -28,6 +29,9 @@
 
 
     </android.support.v7.widget.Toolbar>
+
+
+
     <LinearLayout
         android:layout_below="@+id/toolbar"
         android:padding="10dp"
@@ -80,6 +84,16 @@
 
 
     </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/chat_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </FrameLayout>
 
 
 

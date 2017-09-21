@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.WelcomeScreenActivity">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/otp_image"
+        android:src="@drawable/otp_bg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/otp_image"
+        android:text="@string/verification_code_txt"
+        android:id="@+id/verification_code_txt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/verification_code_txt"
+        android:text="Please type the verification code"
+        android:id="@+id/veri_txt1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/veri_txt1"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/rel_verificatin_code"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sent to your"
+            android:layout_marginTop="5dp"
+            android:id="@+id/veri_txt2"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" +91 9876543211"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorAccent"
+            android:layout_toRightOf="@+id/veri_txt2"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rel_verificatin_code"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        >
+
+        <me.philio.pinentry.PinEntryView
+            android:id="@+id/otp_value1"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:accentType="character"
+            app:digitBackground="@drawable/otp_square"
+            app:digitTextSize="11sp"
+            app:mask=""
+            app:pinInputType="number" />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/otp_continue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/continue_txt"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/colorWhite" />
+
+</RelativeLayout>
