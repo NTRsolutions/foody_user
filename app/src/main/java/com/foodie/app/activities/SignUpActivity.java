@@ -15,13 +15,13 @@ import android.widget.TextView;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
-import com.foodie.app.api.ApiClient;
-import com.foodie.app.api.ApiInterface;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.utils.TextUtils;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,12 +71,6 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
 
-//        initValues();
-
-
-
-
-
     }
 
     @OnClick({R.id.terms_and_conditions, R.id.sign_up})
@@ -87,28 +81,38 @@ public class SignUpActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.sign_up:
-                startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
+                initValues();
+
                 break;
         }
     }
 
 
     public  void signup(HashMap<String,String> map){
-        Call<Restaurant> call = apiInterface.getSignup(map);
-        call.enqueue(new Callback<Restaurant>() {
+        Call<RegisterModel> call = apiInterface.postRegister(map);
+        call.enqueue(new Callback<RegisterModel>() {
             @Override
-            public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
+            public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
+                if(response.body()!=null){
+                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+                else if(response.errorBody()!=null){
+
+
+                }
 
             }
 
             @Override
-            public void onFailure(Call<Restaurant> call, Throwable t) {
+            public void onFailure(Call<RegisterModel> call, Throwable t) {
 
             }
         });
 
     }
+
+
     public  void  initValues(){
         name=nameEdit.getText().toString();
         mobile=mobileEdit.getText().toString();
@@ -120,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
         else if(TextUtils.isEmpty(email)){
             layoutEmail.setError("Please enter your mail");
         }
-        else if(TextUtils.isValidEmail(email)){
+        else if(!TextUtils.isValidEmail(email)){
             layoutEmail.setError("Please enter valid mail address");
 
         }
@@ -134,8 +138,9 @@ public class SignUpActivity extends AppCompatActivity {
             HashMap<String,String> map= new HashMap<>();
             map.put("name",name);
             map.put("email",email);
-            map.put("mobile",mobile);
+            map.put("phone","+91"+mobile);
             map.put("password",password);
+            map.put("password_confirmation",password);
             signup(map);
         }
 

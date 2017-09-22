@@ -72,11 +72,15 @@
 
         <me.philio.pinentry.PinEntryView
             android:id="@+id/otp_value1"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:accentType="character"
             app:digitBackground="@drawable/otp_square"
             app:digitTextSize="11sp"
+            app:digitWidth="40dp"
+            app:digitHeight="40dp"
+            app:digitSpacing="10dp"
+            app:numDigits="6"
             app:mask=""
             app:pinInputType="number" />
 

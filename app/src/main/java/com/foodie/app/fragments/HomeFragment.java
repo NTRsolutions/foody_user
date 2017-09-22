@@ -2,12 +2,18 @@ package com.foodie.app.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +30,8 @@ import android.widget.Toast;
 import com.amar.library.ui.StickyScrollView;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
+import com.foodie.app.LocationUtil.LocationHelper;
+import com.foodie.app.LocationUtil.PermissionUtils;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
@@ -34,6 +42,8 @@ import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +56,8 @@ import butterknife.ButterKnife;
  * Created by santhosh@appoets.com on 22-08-2017.
  */
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     @BindView(R.id.animation_line_image)
@@ -60,7 +71,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     StickyScrollView scrollView;
     private SkeletonScreen skeletonScreen, skeletonScreen2;
     private TextView addressLabel;
-    private TextView address;
+    private TextView addressTxt;
     private LinearLayout locationLl;
     private Button filterBtn;
 
@@ -77,7 +88,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private View toolbarLayout;
     AnimatedVectorDrawableCompat avdProgress;
 
-    String[] catagoery = { "Relevance", "Cost for Two", "Delivery Time", "Rating"  };
+    String[] catagoery = {"Relevance", "Cost for Two", "Delivery Time", "Rating"};
+
+
+    private Location mLastLocation;
+
+    double latitude;
+    double longitude;
+    LocationHelper locationHelper;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +109,38 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, view);
+
+        locationHelper = new LocationHelper(getActivity());
+        locationHelper.checkpermission();
+
+        // check availability of play services
+        if (locationHelper.checkPlayServices()) {
+
+            // Building the GoogleApi client
+            locationHelper.buildGoogleApiClient();
+        }
+
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 5000ms
+                if (locationHelper.isPermissionGranted) {
+                    mLastLocation = locationHelper.getLocation();
+                    if (mLastLocation != null) {
+                        latitude = mLastLocation.getLatitude();
+                        longitude = mLastLocation.getLongitude();
+                        getAddress();
+
+                    } else {
+
+                        showToast("Couldn't get the location. Make sure location is enabled on the device");
+                    }
+                }
+            }
+        }, 5000);
+
 
         final ArrayList<ImpressiveDish> list = new ArrayList<>();
         list.add(new ImpressiveDish("Santhosh1", "Hello"));
@@ -123,7 +174,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         //Spinner
         //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter aa = new ArrayAdapter(context,R.layout.spinner_layout,catagoery);
+        ArrayAdapter aa = new ArrayAdapter(context, R.layout.spinner_layout, catagoery);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         catagoerySpinner.setAdapter(aa);
@@ -215,6 +266,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
+        locationHelper.checkPlayServices();
     }
 
     @Override
@@ -237,6 +289,58 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     }
 
+
+    public void getAddress() {
+        Address locationAddress;
+
+        locationAddress = locationHelper.getAddress(latitude, longitude);
+
+        if (locationAddress != null) {
+
+            String address = locationAddress.getAddressLine(0);
+            String address1 = locationAddress.getAddressLine(1);
+            String city = locationAddress.getLocality();
+            String state = locationAddress.getAdminArea();
+            String country = locationAddress.getCountryName();
+            String postalCode = locationAddress.getPostalCode();
+
+
+            String currentLocation;
+
+            if (!TextUtils.isEmpty(address)) {
+                currentLocation = address;
+
+                if (!TextUtils.isEmpty(address1))
+                    currentLocation += "\n" + address1;
+
+                if (!TextUtils.isEmpty(city)) {
+                    currentLocation += "\n" + city;
+
+                    if (!TextUtils.isEmpty(postalCode))
+                        currentLocation += " - " + postalCode;
+                } else {
+                    if (!TextUtils.isEmpty(postalCode))
+                        currentLocation += "\n" + postalCode;
+                }
+
+                if (!TextUtils.isEmpty(state))
+                    currentLocation += "\n" + state;
+
+                if (!TextUtils.isEmpty(country))
+                    currentLocation += "\n" + country;
+
+                Log.e("Current_location", currentLocation);
+
+                addressLabel.setText(address);
+                addressTxt.setText(currentLocation);
+                addressTxt.setVisibility(View.VISIBLE);
+
+            }
+
+        } else
+            showToast("Something went wrong");
+    }
+
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
@@ -246,7 +350,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_home, toolbar, false);
         addressLabel = (TextView) toolbarLayout.findViewById(R.id.address_label);
-        address = (TextView) toolbarLayout.findViewById(R.id.address);
+        addressTxt = (TextView) toolbarLayout.findViewById(R.id.address);
+
         locationLl = (LinearLayout) toolbarLayout.findViewById(R.id.location_ll);
         locationLl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,11 +376,53 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(context,catagoery[position] ,Toast.LENGTH_LONG).show();
+        Toast.makeText(context, catagoery[position], Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    public void showToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        locationHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Google api callback methods
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i("Connection failed:", " ConnectionResult.getErrorCode() = "
+                + result.getErrorCode());
+    }
+
+    @Override
+    public void onConnected(Bundle arg0) {
+
+        // Once connected with google api, get the location
+        mLastLocation = locationHelper.getLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        locationHelper.connectApiClient();
+    }
+
+
+    // Permission check functions
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // redirects to utils
+        locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
+
+
 }

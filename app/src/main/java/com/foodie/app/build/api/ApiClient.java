@@ -1,4 +1,6 @@
-package com.foodie.app.api;
+package com.foodie.app.build.api;
+
+import com.foodie.app.build.configure.BuildConfigure;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -12,19 +14,18 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by santhosh@appoets.com on 30-08-2017.
+ * Created by tamil@appoets.com on 30-08-2017.
  */
 
 public class ApiClient {
 
-    private static final String BASE_URL = "http://base-url.com/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getRetrofit() {
         OkHttpClient client = getClient();
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(BuildConfigure.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();
