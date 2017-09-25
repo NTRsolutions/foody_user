@@ -12,13 +12,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.build.configure.BuildConfigure;
+import com.foodie.app.model.GetProfileModel;
+import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.Restaurant;
+import com.foodie.app.utils.CommonClass;
 import com.foodie.app.utils.TextUtils;
 
 import java.util.HashMap;
@@ -48,20 +53,13 @@ public class SignUpActivity extends AppCompatActivity {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     @BindView(R.id.app_logo)
     ImageView appLogo;
-    @BindView(R.id.layout_mobile_number)
-    TextInputLayout layoutMobileNumber;
-    @BindView(R.id.layout_email)
-    TextInputLayout layoutEmail;
-    @BindView(R.id.layout_name)
-    TextInputLayout layoutName;
-    @BindView(R.id.layout_password)
-    TextInputLayout layoutPassword;
     @BindView(R.id.sigin_layout)
     LinearLayout siginLayout;
     @BindView(R.id.linearLayout)
     LinearLayout linearLayout;
 
-    String name,email,mobile,password;
+    String name, email, mobile, password;
+    String GRANT_TYPE = "password";
 
 
     @Override
@@ -88,16 +86,21 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    public  void signup(HashMap<String,String> map){
+    public void signup(HashMap<String, String> map) {
         Call<RegisterModel> call = apiInterface.postRegister(map);
         call.enqueue(new Callback<RegisterModel>() {
             @Override
             public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
-                if(response.body()!=null){
-                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
-                }
-                else if(response.errorBody()!=null){
+                if (response.body() != null) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("username", "+91" + mobile);
+                    map.put("password", password);
+                    map.put("grant_type", GRANT_TYPE);
+                    map.put("client_id", BuildConfigure.CLIENT_ID);
+                    map.put("client_secret", BuildConfigure.CLIENT_SECRET);
+
+                    login(map);
+                } else if (response.errorBody() != null) {
 
 
                 }
@@ -112,38 +115,69 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    private void login(HashMap<String, String> map) {
+        Call<LoginModel> call = apiInterface.postLogin(map);
+        call.enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+                if (response.body() != null) {
+                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
+                    //Get Profile data
+                    getProfile();
 
-    public  void  initValues(){
-        name=nameEdit.getText().toString();
-        mobile=mobileEdit.getText().toString();
-        email=emailEdit.getText().toString();
-        password=passwordEdit.getText().toString();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public void initValues() {
+        name = nameEdit.getText().toString();
+        mobile = mobileEdit.getText().toString();
+        email = emailEdit.getText().toString();
+        password = passwordEdit.getText().toString();
         if (TextUtils.isEmpty(name)) {
-            layoutName.setError("Please enter your name");
-        }
-        else if(TextUtils.isEmpty(email)){
-            layoutEmail.setError("Please enter your mail");
-        }
-        else if(!TextUtils.isValidEmail(email)){
-            layoutEmail.setError("Please enter valid mail address");
-
-        }
-        else if(TextUtils.isEmpty(mobile)){
-            layoutMobileNumber.setError("Please enter your mail");
-        }
-        else if(TextUtils.isEmpty(password)){
-            layoutPassword.setError("Please enter your mail");
-        }
-        else {
-            HashMap<String,String> map= new HashMap<>();
-            map.put("name",name);
-            map.put("email",email);
-            map.put("phone","+91"+mobile);
-            map.put("password",password);
-            map.put("password_confirmation",password);
+            Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Please enter your mail", Toast.LENGTH_SHORT).show();
+        } else if (!TextUtils.isValidEmail(email)) {
+            Toast.makeText(this, "Please enter valid mail", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(mobile)) {
+            Toast.makeText(this, "Please enter mobile number", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+        } else {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", name);
+            map.put("email", email);
+            map.put("phone", "+91" + mobile);
+            map.put("password", password);
+            map.put("password_confirmation", password);
             signup(map);
         }
 
+    }
+
+    private void getProfile() {
+        Call<GetProfileModel> getprofile = apiInterface.getProfile();
+        getprofile.enqueue(new Callback<GetProfileModel>() {
+            @Override
+            public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
+                startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModel> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

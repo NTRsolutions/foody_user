@@ -35,15 +35,9 @@
                 android:contentDescription="@string/login"
                 android:src="@drawable/logo_signin" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/layout_mobile_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="10dp"
-                tools:ignore="RtlHardcoded">
-
                 <EditText
+                    android:inputType="number"
+                    android:layout_marginTop="16dp"
                     android:id="@+id/mobile"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -55,17 +49,11 @@
                     android:paddingLeft="10dp"
                     android:singleLine="true"
                     app:theme="@style/MyEditTextTheme" />
-            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/layout_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="10dp"
-                tools:ignore="RtlHardcoded">
+
 
                 <EditText
+                    android:layout_marginTop="16dp"
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -78,17 +66,12 @@
                     android:paddingLeft="10dp"
                     android:singleLine="true"
                     app:theme="@style/MyEditTextTheme" />
-            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/layout_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="10dp"
-                tools:ignore="RtlHardcoded">
+
+
 
                 <EditText
+                    android:layout_marginTop="16dp"
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -100,18 +83,11 @@
                     android:paddingLeft="10dp"
                     android:singleLine="true"
                     app:theme="@style/MyEditTextTheme" />
-            </android.support.design.widget.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/layout_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="10dp"
-                tools:ignore="RtlHardcoded">
 
                 <EditText
+                    android:layout_marginTop="16dp"
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -124,7 +100,6 @@
                     android:paddingLeft="10dp"
                     android:singleLine="true"
                     app:theme="@style/MyEditTextTheme" />
-            </android.support.design.widget.TextInputLayout>
 
 
             <Button

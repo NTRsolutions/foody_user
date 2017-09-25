@@ -1,6 +1,7 @@
 package com.foodie.app.build.api;
 
 import com.foodie.app.build.configure.BuildConfigure;
+import com.foodie.app.utils.CommonClass;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +55,7 @@ public class ApiClient {
 
             Request.Builder builder = chain.request().newBuilder();
             builder.addHeader("X-Requested-With", "XMLHttpRequest");
+            builder.addHeader("Authorization", ""+ CommonClass.getInstance().accessToken);
 
             return chain.proceed(builder.build());
         }

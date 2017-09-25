@@ -153,8 +153,8 @@ public class LocationHelper implements PermissionUtils.PermissionResultCallback{
 
     public void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) current_activity)
-                .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) current_activity)
+                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) context)
+                .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) context)
                 .addApi(LocationServices.API).build();
 
         mGoogleApiClient.connect();

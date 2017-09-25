@@ -12,6 +12,8 @@ public class CommonClass {
 
     public static int otpValue=0;
 
+    public static String accessToken="";
+
     private static final CommonClass ourInstance = new CommonClass();
 
     public static CommonClass getInstance() {
