@@ -2,18 +2,12 @@ package com.foodie.app.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,15 +31,22 @@ import com.foodie.app.adapter.DiscoverAdapter;
 import com.foodie.app.adapter.ImpressiveDishesAdapter;
 import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
+import com.foodie.app.model.ShopsModel;
+import com.foodie.app.utils.CommonClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -64,6 +65,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     LinearLayout title;
     @BindView(R.id.scrollView)
     StickyScrollView scrollView;
+    @BindView(R.id.restaurant_count_txt)
+    TextView restaurantCountTxt;
     private SkeletonScreen skeletonScreen, skeletonScreen2;
     private TextView addressLabel;
     private TextView addressTxt;
@@ -85,6 +88,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     String[] catagoery = {"Relevance", "Cost for Two", "Delivery Time", "Rating"};
 
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    List<ShopsModel> restaurantList;
+    RestaurantsAdapter adapterRestaurant;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +103,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, view);
-
 
         final ArrayList<ImpressiveDish> list = new ArrayList<>();
         list.add(new ImpressiveDish("Santhosh1", "Hello"));
@@ -142,27 +147,29 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
-        final ArrayList<Restaurant> restaurantList = new ArrayList<>();
-        restaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20", ""));
-        restaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50", ""));
-        restaurantList.add(new Restaurant("SubWay", "American fast food", "Flat 20% offer on all orders", "4.3", "30 Mins", "$5", "Close soon"));
-        restaurantList.add(new Restaurant("Dominoz Pizza", "Pizza shop", "", "4.5", "25 Mins", "$5", ""));
-        restaurantList.add(new Restaurant("Pizza hut", "Cafe, Bakery", "", "4.1", "45 Mins", "$5", "Close soon"));
-        restaurantList.add(new Restaurant("McDonlad's", "Pizza Food, burger", "Flat 20% offer on all orders", "4.6", "20 Mins", "$5", ""));
-        restaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "3.3", "36 Mins", "$5", ""));
-        restaurantList.add(new Restaurant("sea sell", "Fish, Chicken, mutton", "Flat 30% offer on all orders", "4.3", "20 Mins", "$5", "Close soon"));
-        RestaurantsAdapter adapterRestaurant = new RestaurantsAdapter(restaurantList, context, getActivity());
+        restaurantList = new ArrayList<>();
+        adapterRestaurant = new RestaurantsAdapter(restaurantList, context, getActivity());
         skeletonScreen = Skeleton.bind(restaurantsRv)
                 .adapter(adapterRestaurant)
                 .load(R.layout.skeleton_restaurant_list_item)
                 .count(2)
                 .show();
+        getRestaurant();
 
+        final ArrayList<Restaurant> offerRestaurantList = new ArrayList<>();
+        offerRestaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20", ""));
+        offerRestaurantList.add(new Restaurant("Behrouz Biryani", "Biriyani", "", "3.7", "52 Mins", "$50", ""));
+        offerRestaurantList.add(new Restaurant("SubWay", "American fast food", "Flat 20% offer on all orders", "4.3", "30 Mins", "$5", "Close soon"));
+        offerRestaurantList.add(new Restaurant("Dominoz Pizza", "Pizza shop", "", "4.5", "25 Mins", "$5", ""));
+        offerRestaurantList.add(new Restaurant("Pizza hut", "Cafe, Bakery", "", "4.1", "45 Mins", "$5", "Close soon"));
+        offerRestaurantList.add(new Restaurant("McDonlad's", "Pizza Food, burger", "Flat 20% offer on all orders", "4.6", "20 Mins", "$5", ""));
+        offerRestaurantList.add(new Restaurant("Chai Kings", "Cafe, Bakery", "", "3.3", "36 Mins", "$5", ""));
+        offerRestaurantList.add(new Restaurant("sea sell", "Fish, Chicken, mutton", "Flat 30% offer on all orders", "4.3", "20 Mins", "$5", "Close soon"));
         //Offer Restaurant Adapter
         restaurantsOfferRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         restaurantsOfferRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsOfferRv.setHasFixedSize(true);
-        OfferRestaurantAdapter offerAdapter = new OfferRestaurantAdapter(restaurantList, context);
+        OfferRestaurantAdapter offerAdapter = new OfferRestaurantAdapter(offerRestaurantList, context);
         restaurantsOfferRv.setAdapter(offerAdapter);
 
 
@@ -186,6 +193,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         return view;
 
+    }
+
+    private void getRestaurant() {
+        Call<List<ShopsModel>> getres = apiInterface.getshops(CommonClass.getInstance().latitude, CommonClass.getInstance().longitude);
+        getres.enqueue(new Callback<List<ShopsModel>>() {
+            @Override
+            public void onResponse(Call<List<ShopsModel>> call, Response<List<ShopsModel>> response) {
+                CommonClass.getInstance().list = response.body();
+//                List<Cuisine> listCuisine = list.get(0).getCuisines();
+                restaurantList.clear();
+                restaurantList.addAll(CommonClass.getInstance().list);
+                restaurantCountTxt.setText(""+restaurantList.size()+" Restaurants");
+                adapterRestaurant.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<ShopsModel>> call, Throwable t) {
+
+            }
+        });
     }
 
     Runnable action = new Runnable() {

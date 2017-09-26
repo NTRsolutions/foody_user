@@ -1,0 +1,109 @@
+
+package com.foodie.app.model;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class Product {
+
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("shop_id")
+    @Expose
+    private Integer shopId;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("description")
+    @Expose
+    private String description;
+    @SerializedName("position")
+    @Expose
+    private Integer position;
+    @SerializedName("veg")
+    @Expose
+    private String veg;
+    @SerializedName("avalability")
+    @Expose
+    private Integer avalability;
+    @SerializedName("max_quantity")
+    @Expose
+    private Integer maxQuantity;
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public String getVeg() {
+        return veg;
+    }
+
+    public void setVeg(String veg) {
+        this.veg = veg;
+    }
+
+    public Integer getAvalability() {
+        return avalability;
+    }
+
+    public void setAvalability(Integer avalability) {
+        this.avalability = avalability;
+    }
+
+    public Integer getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(Integer maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+}

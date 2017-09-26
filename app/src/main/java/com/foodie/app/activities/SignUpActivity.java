@@ -19,6 +19,7 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.GetProfileModel;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.RegisterModel;
@@ -60,6 +61,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     String name, email, mobile, password;
     String GRANT_TYPE = "password";
+    Context context;
 
 
     @Override
@@ -68,6 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+        context=SignUpActivity.this;
 
     }
 
@@ -169,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
         getprofile.enqueue(new Callback<GetProfileModel>() {
             @Override
             public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
+                SharedHelper.putKey(context,"logged","true");
                 startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

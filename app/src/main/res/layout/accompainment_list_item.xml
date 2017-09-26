@@ -5,11 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="20dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="20dp">
-
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
 
     <ImageView
         android:id="@+id/food_type_image"
@@ -21,8 +18,8 @@
 
 
     <TextView
-        fontPath="fonts/Nunito-Bold.ttf"
         android:id="@+id/dish_name_text"
+        fontPath="fonts/Nunito-Bold.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/food_type_image"
@@ -65,8 +62,8 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
         android:layout_alignParentEnd="true">
 
         <include layout="@layout/add_card_button_layout" />

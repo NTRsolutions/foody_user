@@ -24,9 +24,9 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/restaurant_image"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="200dp"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/item2"
@@ -45,7 +45,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:layout_marginRight="10dp">
 
-                   <!-- Heart and Search Button Layout -->
+                    <!-- Heart and Search Button Layout -->
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
                             android:tint="#e7e8e9" />
                     </LinearLayout>
 
-                <!--    Header Toolbar Layout-->
+                    <!--    Header Toolbar Layout-->
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -131,10 +131,10 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -182,8 +182,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:orientation="horizontal"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp">
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/activity_horizontal_margin">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -299,9 +299,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="10dp"
                             android:background="@drawable/horizantal_dotted_line"
                             android:layerType="software" />
 
@@ -377,46 +375,32 @@
 
                         </LinearLayout>
 
+                        <TextView
+                            android:id="@+id/offer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_offers"
+                            android:drawablePadding="10dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/activity_horizontal_margin"
+                            android:paddingTop="@dimen/activity_horizontal_margin"
+                            android:text="Flat 20% offer on all orders"
+                            android:textColor="@color/colorRed"
+                            android:textSize="@dimen/text_medium"
+                            android:visibility="gone" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
                             android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="16dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:layout_gravity="center"
-                                    android:padding="1dp"
-                                    android:src="@drawable/ic_polygon" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="5dp"
-                                    android:text="Cookies, Deserts &amp; Chips"
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/colorSecondaryText"
-                                    android:textSize="@dimen/text_small" />
-
-
-                            </LinearLayout>
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/accompaniment_dishes_rv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:orientation="horizontal" />
+                                android:orientation="horizontal"
+                                android:padding="@dimen/activity_horizontal_margin" />
 
                         </LinearLayout>
 
@@ -451,42 +435,6 @@
             </RelativeLayout>
 
 
-            <!-- View cart Layout-->
-
-            <RelativeLayout
-                android:id="@+id/view_cart_layout"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/theme"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/item_text"
-                    fontPath="fonts/Nunito-Bold.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1 item | $ 220"
-                    android:textColor="@color/colorTextWhite"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/view_cart"
-                    fontPath="fonts/Nunito-Bold.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:drawableEnd="@drawable/ic_cart_bag"
-                    android:drawablePadding="10dp"
-                    android:text="View Cart"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorTextWhite"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
         </RelativeLayout>
 
 
@@ -499,6 +447,44 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/header_view_end_margin_right"
         app:layout_behavior="com.foodie.app.ViewBehavior" />
+
+
+    <!-- View cart Layout-->
+
+    <RelativeLayout
+        android:id="@+id/view_cart_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/theme"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <TextView
+            android:id="@+id/item_text"
+            fontPath="fonts/Nunito-Bold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 item | $ 220"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/view_cart"
+            fontPath="fonts/Nunito-Bold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:drawableEnd="@drawable/ic_cart_bag"
+            android:drawablePadding="10dp"
+            android:text="View Cart"
+            android:textAllCaps="true"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

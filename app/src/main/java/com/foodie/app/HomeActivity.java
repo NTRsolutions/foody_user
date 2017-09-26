@@ -73,8 +73,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
 
-    double latitude;
-    double longitude;
+    public  static double latitude;
+    public  static double longitude;
 
     // list of permissions
     ArrayList<String> permissions=new ArrayList<>();

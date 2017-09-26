@@ -20,6 +20,8 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
+import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.GetProfileModel;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.Restaurant;
@@ -61,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
     String mobile, password;
     String GRANT_TYPE = "password";
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    Context context;
+    CustomDialog customDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+
+        context=LoginActivity.this;
+
 
     }
 
@@ -118,6 +125,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void login(HashMap<String, String> map) {
+        customDialog=new CustomDialog(context);
+        customDialog.setCancelable(false);
+        customDialog.show();
         Call<LoginModel> call = apiInterface.postLogin(map);
         call.enqueue(new Callback<LoginModel>() {
             @Override
@@ -132,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
-
+            customDialog.dismiss();
             }
         });
 
@@ -143,12 +153,15 @@ public class LoginActivity extends AppCompatActivity {
         getprofile.enqueue(new Callback<GetProfileModel>() {
             @Override
             public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
+                customDialog.dismiss();
+                SharedHelper.putKey(context,"logged","true");
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
 
             @Override
             public void onFailure(Call<GetProfileModel> call, Throwable t) {
+                customDialog.dismiss();
 
             }
         });

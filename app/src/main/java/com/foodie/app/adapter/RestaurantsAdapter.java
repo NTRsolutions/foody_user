@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.model.Restaurant;
+import com.foodie.app.model.ShopsModel;
 
 import java.util.List;
 
@@ -23,11 +25,11 @@ import java.util.List;
  */
 
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.MyViewHolder> {
-    private List<Restaurant> list;
+    private List<ShopsModel> list;
     private Context context;
     private Activity activity;
 
-    public RestaurantsAdapter(List<Restaurant> list, Context con,Activity act) {
+    public RestaurantsAdapter(List<ShopsModel> list, Context con,Activity act) {
         this.list = list;
         this.context = con;
         this.activity = act;
@@ -41,12 +43,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         return new MyViewHolder(itemView);
     }
 
-    public void add(Restaurant item, int position) {
+    public void add(ShopsModel item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Restaurant item) {
+    public void remove(ShopsModel item) {
         int position = list.indexOf(item);
         list.remove(position);
         notifyItemRemoved(position);
@@ -54,28 +56,30 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Restaurant restaurant = list.get(position);
+        ShopsModel shops = list.get(position);
 
-        holder.restaurantName.setText(restaurant.name);
-        holder.category.setText(restaurant.category);
-        if(restaurant.offer.equalsIgnoreCase("")){
+        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
+                .error(R.drawable.item1).into(holder.dishImg);
+        holder.restaurantName.setText(shops.getName());
+        holder.category.setText(shops.getEmail());
+        if(shops.getOfferPercent()==null){
             holder.offer.setVisibility(View.GONE);
         }else {
             holder.offer.setVisibility(View.VISIBLE);
-            holder.offer.setText(restaurant.offer);
+            holder.offer.setText("Flat "+shops.getOfferPercent().toString()+"% offer on all Orders");
         }
-        if(restaurant.restaurantInfo.equalsIgnoreCase("")){
+        if(shops.getAvailability().equalsIgnoreCase("")){
             holder.offer.setVisibility(View.GONE);
             holder.restaurantInfo.setVisibility(View.GONE);
 
         }else {
             holder.restaurantInfo.setVisibility(View.VISIBLE);
-            holder.restaurantInfo.setText(restaurant.restaurantInfo);
+            holder.restaurantInfo.setText(shops.getAvailability());
         }
 
-        holder.rating.setText(restaurant.rating);
-        holder.distanceTime.setText(restaurant.distance);
-        holder.price.setText(restaurant.price);
+//        holder.rating.setText(shops.rating);
+        holder.distanceTime.setText(shops.getEstimatedDeliveryTime().toString()+" Mins");
+//        holder.price.setText(shops.price);
 
     }
 
@@ -94,8 +98,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         private MyViewHolder(View view) {
             super(view);
             itemView = (LinearLayout) view.findViewById(R.id.item_view);
-            dishImg = (ImageView) view.findViewById(R.id.dishImg);
-            dishImg = (ImageView) view.findViewById(R.id.dishImg);
+            dishImg = (ImageView) view.findViewById(R.id.dish_img);
             restaurantName = (TextView) view.findViewById(R.id.restaurant_name);
             category = (TextView) view.findViewById(R.id.category);
             offer = (TextView) view.findViewById(R.id.offer);
@@ -108,9 +111,10 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
-                context.startActivity(new Intent(context, HotelViewActivity.class));
+                context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position",getAdapterPosition()));
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                //Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                list.get(getAdapterPosition()).getCuisines();
+
             }
         }
 
