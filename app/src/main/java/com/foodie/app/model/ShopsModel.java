@@ -22,6 +22,9 @@ public class ShopsModel {
     @SerializedName("avatar")
     @Expose
     private String avatar;
+    @SerializedName("description")
+    @Expose
+    private String description;
     @SerializedName("offer_min_amount")
     @Expose
     private String offerMinAmount;
@@ -46,9 +49,6 @@ public class ShopsModel {
     @SerializedName("pure_veg")
     @Expose
     private Integer pureVeg;
-    @SerializedName("availability")
-    @Expose
-    private String availability;
     @SerializedName("status")
     @Expose
     private String status;
@@ -63,13 +63,16 @@ public class ShopsModel {
     private Object deletedAt;
     @SerializedName("distance")
     @Expose
-    private Double distance;
+    private Integer distance;
     @SerializedName("cuisines")
     @Expose
     private List<Cuisine> cuisines = null;
     @SerializedName("timings")
     @Expose
     private List<Timing> timings = null;
+    @SerializedName("ratings")
+    @Expose
+    private Ratings ratings;
     @SerializedName("categories")
     @Expose
     private List<Category> categories = null;
@@ -112,6 +115,14 @@ public class ShopsModel {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getOfferMinAmount() {
@@ -178,14 +189,6 @@ public class ShopsModel {
         this.pureVeg = pureVeg;
     }
 
-    public String getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(String availability) {
-        this.availability = availability;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -218,11 +221,11 @@ public class ShopsModel {
         this.deletedAt = deletedAt;
     }
 
-    public Double getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(Double distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 
@@ -240,6 +243,14 @@ public class ShopsModel {
 
     public void setTimings(List<Timing> timings) {
         this.timings = timings;
+    }
+
+    public Ratings getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Ratings ratings) {
+        this.ratings = ratings;
     }
 
     public List<Category> getCategories() {

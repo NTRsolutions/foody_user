@@ -3,7 +3,6 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,8 +22,7 @@ import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.GetProfileModel;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.RegisterModel;
-import com.foodie.app.model.Restaurant;
-import com.foodie.app.utils.CommonClass;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.utils.TextUtils;
 
 import java.util.HashMap;
@@ -39,8 +37,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    @BindView(R.id.mobile)
-    EditText mobileEdit;
     @BindView(R.id.email)
     EditText emailEdit;
     @BindView(R.id.name)
@@ -59,9 +55,11 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.linearLayout)
     LinearLayout linearLayout;
 
-    String name, email, mobile, password;
+    String name, email, password, strConfirmPassword;
     String GRANT_TYPE = "password";
     Context context;
+    @BindView(R.id.confirm_password)
+    EditText confirmPassword;
 
 
     @Override
@@ -70,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-        context=SignUpActivity.this;
+        context = SignUpActivity.this;
 
     }
 
@@ -96,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
                 if (response.body() != null) {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("username", "+91" + mobile);
+                    map.put("username", CommonClass.getInstance().mobile);
                     map.put("password", password);
                     map.put("grant_type", GRANT_TYPE);
                     map.put("client_id", BuildConfigure.CLIENT_ID);
@@ -142,7 +140,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void initValues() {
         name = nameEdit.getText().toString();
-        mobile = mobileEdit.getText().toString();
+        strConfirmPassword = confirmPassword.getText().toString();
         email = emailEdit.getText().toString();
         password = passwordEdit.getText().toString();
         if (TextUtils.isEmpty(name)) {
@@ -151,17 +149,19 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter your mail", Toast.LENGTH_SHORT).show();
         } else if (!TextUtils.isValidEmail(email)) {
             Toast.makeText(this, "Please enter valid mail", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(mobile)) {
-            Toast.makeText(this, "Please enter mobile number", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(strConfirmPassword)) {
+            Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
+        } else if (!strConfirmPassword.equalsIgnoreCase(password)) {
+            Toast.makeText(this, "Password and confirm password doesn't match", Toast.LENGTH_SHORT).show();
         } else {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", name);
             map.put("email", email);
-            map.put("phone", "+91" + mobile);
+            map.put("phone", CommonClass.getInstance().mobile);
             map.put("password", password);
-            map.put("password_confirmation", password);
+            map.put("password_confirmation", strConfirmPassword);
             signup(map);
         }
 
@@ -172,7 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
         getprofile.enqueue(new Callback<GetProfileModel>() {
             @Override
             public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
-                SharedHelper.putKey(context,"logged","true");
+                SharedHelper.putKey(context, "logged", "true");
                 startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

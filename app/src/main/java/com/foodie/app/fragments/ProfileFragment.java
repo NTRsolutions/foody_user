@@ -31,6 +31,7 @@ import com.foodie.app.activities.NotificationActivity;
 import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.activities.PromotionActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.utils.ListViewSizeHelper;
 
 import java.util.ArrayList;
@@ -207,7 +208,9 @@ public class ProfileFragment extends Fragment {
                 }
                 break;
             case R.id.logout:
+                SharedHelper.putKey(context,"logged","false");
                 startActivity(new Intent(context, LoginActivity.class));
+                getActivity().finish();
                 break;
         }
     }

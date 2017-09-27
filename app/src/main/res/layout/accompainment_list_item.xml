@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:paddingBottom="@dimen/_7sdp"
+    android:paddingTop="@dimen/_7sdp">
 
     <ImageView
         android:id="@+id/food_type_image"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="@dimen/_12sdp"
+        android:layout_height="@dimen/_12sdp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="3dp"
         android:src="@drawable/ic_veg" />
@@ -29,7 +29,7 @@
         android:maxLines="1"
         android:text="Chicken Ke"
         android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/text_medium" />
+        android:textSize="@dimen/text_small" />
 
     <TextView
         android:id="@+id/price_text"
@@ -40,7 +40,7 @@
         android:layout_toRightOf="@+id/food_type_image"
         android:text="$100"
         android:textColor="@color/colorTextBlack"
-        android:textSize="@dimen/text_medium"
+        android:textSize="@dimen/text_small"
         android:textStyle="bold" />
 
     <TextView
@@ -62,8 +62,8 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="80dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_25sdp"
         android:layout_alignParentEnd="true">
 
         <include layout="@layout/add_card_button_layout" />

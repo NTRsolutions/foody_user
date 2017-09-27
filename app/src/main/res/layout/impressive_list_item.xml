@@ -4,15 +4,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingRight="10dp"
+    android:padding="@dimen/_16sdp"
     tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:id="@+id/dishImg"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
         android:scaleType="centerCrop"
         android:contentDescription="@string/dish"
-        android:src="@drawable/banner_image" />
+        android:src="@drawable/item2" />
 
 </RelativeLayout>

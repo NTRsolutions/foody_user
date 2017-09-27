@@ -2,9 +2,7 @@ package com.foodie.app.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,21 +12,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.foodie.app.BuildConfig;
+import com.foodie.app.CountryPicker.Country;
+import com.foodie.app.CountryPicker.CountryPicker;
+import com.foodie.app.CountryPicker.CountryPickerListener;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.GetProfileModel;
 import com.foodie.app.model.LoginModel;
-import com.foodie.app.model.Restaurant;
-import com.foodie.app.utils.CommonClass;
 import com.foodie.app.utils.TextUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,8 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     Button loginBtn;
     @BindView(R.id.donnot_have_account)
     TextView donnotHaveAccount;
-    @BindView(R.id.sign_up)
-    TextView signUp;
     @BindView(R.id.connect_with)
     TextView connectWith;
     @BindView(R.id.facebook_login)
@@ -65,6 +65,15 @@ public class LoginActivity extends AppCompatActivity {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Context context;
     CustomDialog customDialog;
+    @BindView(R.id.forgot_password)
+    TextView forgotPassword;
+    @BindView(R.id.countryImage)
+    ImageView countryImage;
+    @BindView(R.id.countryNumber)
+    TextView countryNumber;
+    TextView mCountryDialCodeTextView;
+    private CountryPicker mCountryPicker;
+    String country_code="+91";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,23 +81,77 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+        context = LoginActivity.this;
 
-        context=LoginActivity.this;
 
+        mCountryPicker = CountryPicker.newInstance("Select Country");
+
+        // You can limit the displayed countries
+        ArrayList<Country> nc = new ArrayList<>();
+        for (Country c : Country.getAllCountries()) {
+//            if (c.getDialCode().endsWith("0")) {
+            nc.add(c);
+//            }
+        }
+        // and decide, in which order they will be displayed
+        Collections.reverse(nc);
+        mCountryPicker.setCountriesList(nc);
+        setListener();
 
     }
 
-    @OnClick({R.id.login_btn, R.id.sign_up})
+    @OnClick({R.id.login_btn, R.id.forgot_password, R.id.donnot_have_account})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.login_btn:
                 initValues();
                 break;
-            case R.id.sign_up:
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            case R.id.forgot_password:
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+                break;
+            case R.id.donnot_have_account:
+                startActivity(new Intent(LoginActivity.this, MobileNumberActivity.class));
                 break;
         }
     }
+
+    private void setListener() {
+        mCountryPicker.setListener(new CountryPickerListener() {
+            @Override
+            public void onSelectCountry(String name, String code, String dialCode,
+                                        int flagDrawableResID) {
+                mCountryDialCodeTextView.setText(dialCode);
+                countryImage.setImageResource(flagDrawableResID);
+                mCountryPicker.dismiss();
+            }
+        });
+        countryImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
+            }
+        });
+        countryNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
+            }
+        });
+        getUserCountryInfo();
+    }
+
+    private void getUserCountryInfo() {
+        Locale current = getResources().getConfiguration().locale;
+        Country country = Country.getCountryFromSIM(LoginActivity.this);
+        if (country != null) {
+            countryImage.setImageResource(country.getFlag());
+            mCountryDialCodeTextView.setText(country.getDialCode());
+            country_code = country.getDialCode();
+        } else {
+            Toast.makeText(LoginActivity.this, "Required Sim", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -113,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
 
         } else {
             HashMap<String, String> map = new HashMap<>();
-            map.put("username", "+91" + mobile);
+            map.put("username", country_code + mobile);
             map.put("password", password);
             map.put("grant_type", GRANT_TYPE);
             map.put("client_id", BuildConfigure.CLIENT_ID);
@@ -125,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void login(HashMap<String, String> map) {
-        customDialog=new CustomDialog(context);
+        customDialog = new CustomDialog(context);
         customDialog.setCancelable(false);
         customDialog.show();
         Call<LoginModel> call = apiInterface.postLogin(map);
@@ -142,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
-            customDialog.dismiss();
+                customDialog.dismiss();
             }
         });
 
@@ -154,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
                 customDialog.dismiss();
-                SharedHelper.putKey(context,"logged","true");
+                SharedHelper.putKey(context, "logged", "true");
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

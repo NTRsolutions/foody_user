@@ -20,7 +20,6 @@ import android.os.Bundle;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.foodie.app.LocationUtil.PermissionUtils;
@@ -29,6 +28,7 @@ import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.utils.ConnectionHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -53,7 +53,7 @@ import java.util.Locale;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,ActivityCompat.OnRequestPermissionsResultCallback,
+        GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback,
         PermissionUtils.PermissionResultCallback {
 
     private static final int TIME_DELAY = 2000;
@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private FragmentManager fragmentManager;
 
     // LogCat tag
-    private static final String TAG ="HomeActivity";
+    private static final String TAG = "HomeActivity";
     private final static int PLAY_SERVICES_REQUEST = 1000;
     private final static int REQUEST_CHECK_SETTINGS = 2000;
 
@@ -73,11 +73,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
 
-    public  static double latitude;
-    public  static double longitude;
+    public static double latitude;
+    public static double longitude;
 
     // list of permissions
-    ArrayList<String> permissions=new ArrayList<>();
+    ArrayList<String> permissions = new ArrayList<>();
     PermissionUtils permissionUtils;
     boolean isPermissionGranted;
 
@@ -90,13 +90,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         //startActivity(new Intent(HomeActivity.this, HotelViewActivity.class));
 
 
-
-        permissionUtils=new PermissionUtils(HomeActivity.this);
+        permissionUtils = new PermissionUtils(HomeActivity.this);
 
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        permissionUtils.check_permission(permissions,"Need GPS permission for getting your location",1);
+        permissionUtils.check_permission(permissions, "Need GPS permission for getting your location", 1);
 
 
         // check availability of play services
@@ -119,23 +118,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                     longitude = mLastLocation.getLongitude();
                     getAddress();
 
-                }
-                else {
+                } else {
                     showToast("Couldn't get the location. Make sure location is enabled on the device");
                 }
 
             }
-        }, 5000);
-
-
-
-
-
-
-
-
-
-
+        }, 2000);
 
         fragmentManager = getSupportFragmentManager();
         fragment = new HomeFragment();
@@ -171,19 +159,16 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     /**
      * Method to display the location on UI
-     * */
+     */
 
     private void getLocation() {
 
         if (isPermissionGranted) {
 
-            try
-            {
+            try {
                 mLastLocation = LocationServices.FusedLocationApi
                         .getLastLocation(mGoogleApiClient);
-            }
-            catch (SecurityException e)
-            {
+            } catch (SecurityException e) {
                 e.printStackTrace();
             }
 
@@ -191,14 +176,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
-    public Address getAddress(double latitude, double longitude)
-    {
+    public Address getAddress(double latitude, double longitude) {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addresses = geocoder.getFromLocation(latitude,longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             return addresses.get(0);
 
         } catch (IOException e) {
@@ -210,13 +194,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-    public void getAddress()
-    {
+    public void getAddress() {
 
-        Address locationAddress=getAddress(latitude,longitude);
+        Address locationAddress = getAddress(latitude, longitude);
 
-        if(locationAddress!=null)
-        {
+        if (locationAddress != null) {
             String address = locationAddress.getAddressLine(0);
             String address1 = locationAddress.getAddressLine(1);
             String city = locationAddress.getLocality();
@@ -226,34 +208,31 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
             String currentLocation;
 
-            if(!TextUtils.isEmpty(address))
-            {
-                currentLocation=address;
+            if (!TextUtils.isEmpty(address)) {
+                currentLocation = address;
+                CommonClass.getInstance().addressHeader = address;
 
                 if (!TextUtils.isEmpty(address1))
-                    currentLocation+="\n"+address1;
+                    currentLocation += "\n" + address1;
 
-                if (!TextUtils.isEmpty(city))
-                {
-                    currentLocation+="\n"+city;
+                if (!TextUtils.isEmpty(city)) {
+                    currentLocation += "\n" + city;
 
                     if (!TextUtils.isEmpty(postalCode))
-                        currentLocation+=" - "+postalCode;
-                }
-                else
-                {
+                        currentLocation += " - " + postalCode;
+                } else {
                     if (!TextUtils.isEmpty(postalCode))
-                        currentLocation+="\n"+postalCode;
+                        currentLocation += "\n" + postalCode;
                 }
 
                 if (!TextUtils.isEmpty(state))
-                    currentLocation+="\n"+state;
+                    currentLocation += "\n" + state;
 
                 if (!TextUtils.isEmpty(country))
-                    currentLocation+="\n"+country;
+                    currentLocation += "\n" + country;
 
+                CommonClass.getInstance().address = currentLocation;
                 Log.e("Current_location", currentLocation);
-
 
 
             }
@@ -264,7 +243,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     /**
      * Creating google api client object
-     * */
+     */
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -316,11 +295,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-
-
     /**
      * Method to verify google play services on the device
-     * */
+     */
 
     private boolean checkPlayServices() {
 
@@ -330,7 +307,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (resultCode != ConnectionResult.SUCCESS) {
             if (googleApiAvailability.isUserResolvableError(resultCode)) {
-                googleApiAvailability.getErrorDialog(this,resultCode,
+                googleApiAvailability.getErrorDialog(this, resultCode,
                         PLAY_SERVICES_REQUEST).show();
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -414,37 +391,34 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         // redirects to utils
-        permissionUtils.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        permissionUtils.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
-
-
 
 
     @Override
     public void PermissionGranted(int request_code) {
-        Log.i("PERMISSION","GRANTED");
-        isPermissionGranted=true;
+        Log.i("PERMISSION", "GRANTED");
+        isPermissionGranted = true;
     }
 
     @Override
     public void PartialPermissionGranted(int request_code, ArrayList<String> granted_permissions) {
-        Log.i("PERMISSION PARTIALLY","GRANTED");
+        Log.i("PERMISSION PARTIALLY", "GRANTED");
     }
 
     @Override
     public void PermissionDenied(int request_code) {
-        Log.i("PERMISSION","DENIED");
+        Log.i("PERMISSION", "DENIED");
     }
 
     @Override
     public void NeverAskAgain(int request_code) {
-        Log.i("PERMISSION","NEVER ASK AGAIN");
+        Log.i("PERMISSION", "NEVER ASK AGAIN");
     }
 
-    public void showToast(String message)
-    {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    public void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 

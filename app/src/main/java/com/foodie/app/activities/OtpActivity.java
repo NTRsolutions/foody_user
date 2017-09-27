@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
-import com.foodie.app.utils.CommonClass;
+import com.foodie.app.helper.CommonClass;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

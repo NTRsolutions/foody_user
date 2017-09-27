@@ -100,5 +100,6 @@
     <string name="next">Next</string>
     <string name="verification_code_txt">Verification Code</string>
     <string name="continue_txt">Continue</string>
+    <string name="confirm_password">Confirm Password</string>
 
 </resources>

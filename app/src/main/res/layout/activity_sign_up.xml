@@ -12,7 +12,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f6f6f6"
+        android:background="#f5f5f5"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
@@ -21,85 +21,80 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:orientation="vertical"
             tools:layout_editor_absoluteY="25dp">
 
             <ImageView
-                android:layout_marginTop="40dp"
                 android:id="@+id/app_logo"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_30sdp"
                 android:contentDescription="@string/login"
                 android:src="@drawable/logo_signin" />
 
-                <EditText
-                    android:inputType="number"
-                    android:layout_marginTop="16dp"
-                    android:id="@+id/mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/ic_phone"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/mobile_number"
-                    android:imeOptions="actionNext"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    app:theme="@style/MyEditTextTheme" />
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_size"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/shadow_view"
+                android:drawableLeft="@drawable/login_left"
+                android:drawablePadding="@dimen/_10sdp"
+                android:hint="@string/name"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/_10sdp"
+                android:singleLine="true"
+                app:theme="@style/MyEditTextTheme" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_size"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/shadow_view"
+                android:drawableLeft="@drawable/ic_mail"
+                android:drawablePadding="@dimen/_10sdp"
+                android:hint="@string/email_address"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="@dimen/_10sdp"
+                android:singleLine="true"
+                app:theme="@style/MyEditTextTheme" />
 
 
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_size"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/shadow_view"
+                android:drawableLeft="@drawable/password_left"
+                android:drawablePadding="@dimen/_10sdp"
+                android:hint="@string/password"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_10sdp"
+                android:singleLine="true"
+                app:theme="@style/MyEditTextTheme" />
 
-                <EditText
-                    android:layout_marginTop="16dp"
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/ic_mail"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/email_address"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    app:theme="@style/MyEditTextTheme" />
-
-
-
-
-                <EditText
-                    android:layout_marginTop="16dp"
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/login_left"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/name"
-                    android:imeOptions="actionNext"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    app:theme="@style/MyEditTextTheme" />
-
-
-
-                <EditText
-                    android:layout_marginTop="16dp"
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/password_left"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/password"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    app:theme="@style/MyEditTextTheme" />
+            <EditText
+                android:id="@+id/confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_size"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/shadow_view"
+                android:drawableLeft="@drawable/ic_phone"
+                android:drawablePadding="@dimen/_10sdp"
+                android:hint="@string/confirm_password"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/_10sdp"
+                android:singleLine="true"
+                app:theme="@style/MyEditTextTheme" />
 
 
             <Button
@@ -115,10 +110,10 @@
 
             <LinearLayout
                 android:id="@+id/sigin_layout"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -131,10 +126,10 @@
                     android:textColor="@color/colorSecondaryText" />
 
                 <TextView
-                    android:layout_marginLeft="5dp"
                     android:id="@+id/terms_and_conditions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:maxLines="2"
                     android:text="@string/signin_here"
                     android:textColor="@color/colorTextBlack" />

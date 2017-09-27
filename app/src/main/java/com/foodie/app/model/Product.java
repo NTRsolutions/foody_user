@@ -21,9 +21,9 @@ public class Product {
     @SerializedName("position")
     @Expose
     private Integer position;
-    @SerializedName("veg")
+    @SerializedName("food_type")
     @Expose
-    private String veg;
+    private String foodType;
     @SerializedName("avalability")
     @Expose
     private Integer avalability;
@@ -33,6 +33,9 @@ public class Product {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("prices")
+    @Expose
+    private Prices prices;
 
     public Integer getId() {
         return id;
@@ -74,12 +77,12 @@ public class Product {
         this.position = position;
     }
 
-    public String getVeg() {
-        return veg;
+    public String getFoodType() {
+        return foodType;
     }
 
-    public void setVeg(String veg) {
-        this.veg = veg;
+    public void setFoodType(String foodType) {
+        this.foodType = foodType;
     }
 
     public Integer getAvalability() {
@@ -104,6 +107,14 @@ public class Product {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Prices getPrices() {
+        return prices;
+    }
+
+    public void setPrices(Prices prices) {
+        this.prices = prices;
     }
 
 }

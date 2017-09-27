@@ -206,6 +206,7 @@
                                         android:gravity="center">
 
                                         <TextView
+                                            android:id="@+id/rating"
                                             fontPath="fonts/Nunito-Bold.ttf"
                                             android:layout_width="wrap_content"
                                             android:layout_height="18dp"
@@ -214,7 +215,7 @@
                                             android:text="4.2"
                                             android:textAllCaps="true"
                                             android:textColor="@color/colorPrimaryText"
-                                            android:textSize="@dimen/text_small_large" />
+                                            android:textSize="@dimen/text_small" />
                                     </RelativeLayout>
 
 
@@ -271,6 +272,7 @@
                                     android:orientation="vertical">
 
                                     <TextView
+                                        android:id="@+id/delivery_time"
                                         fontPath="fonts/Nunito-Bold.ttf"
                                         android:layout_width="match_parent"
                                         android:layout_height="18dp"

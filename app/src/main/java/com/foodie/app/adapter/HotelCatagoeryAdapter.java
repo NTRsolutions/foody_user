@@ -2,32 +2,26 @@ package com.foodie.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
-import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.activities.PastOrderDetailActivity;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Category;
-import com.foodie.app.model.CategoryModel;
-import com.foodie.app.model.Order;
-import com.foodie.app.model.OrderModel;
 import com.foodie.app.model.Product;
-import com.foodie.app.model.RecommendedDish;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,9 +34,12 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     private LayoutInflater inflater;
     Context context1;
     Activity activity;
-    int lastPosition=-1;
+    int lastPosition = -1;
     int priceAmount = 0;
     int itemCount = 0;
+    Product product;
+    List<Product> productList;
+
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
@@ -52,6 +49,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         this.list = list;
         this.activity = activity;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -91,16 +89,16 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int section, int relativePosition, int absolutePosition) {
-        final Product object = list.get(section).getProducts().get(relativePosition);
+    public void onBindViewHolder(final ViewHolder holder, final int section, final int relativePosition, int absolutePosition) {
+        product = list.get(section).getProducts().get(relativePosition);
+        productList = list.get(section).getProducts();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
-        holder.dishNameTxt.setText(object.getName());
-
+        holder.dishNameTxt.setText(product.getName());
         holder.cardTextValueTicker.setText(String.valueOf(1));
-//        holder.priceTxt.setText("$"+dish.getPrice());
+        holder.priceTxt.setText(product.getPrices().getCurrency()+" "+product.getPrices().getPrice());
 
 //       /* check Availablity*/
-//        if (object.getAvalability().toString().equalsIgnoreCase("available")) {
+//        if (product.getAvalability().toString().equalsIgnoreCase("available")) {
 //            holder.cardAddTextLayout.setVisibility(View.VISIBLE);
 //            holder.cardTextValueTicker.setText(String.valueOf(1));
 //            holder.cardInfoLayout.setVisibility(View.GONE);
@@ -117,18 +115,67 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 //            holder.cardAddInfoText.setText(dish.getAvaialable());
 //        }
 
-        if (!object.getVeg().equalsIgnoreCase("veg")) {
+        if (!product.getFoodType().equalsIgnoreCase("veg")) {
             holder.foodImageType.setImageDrawable(context1.getResources().getDrawable(R.drawable.ic_nonveg));
         } else {
             holder.foodImageType.setImageDrawable(context1.getResources().getDrawable(R.drawable.ic_veg));
         }
+        holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /** Press Add Card Add button */
+                int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
+                itemCount = Integer.parseInt(holder.cardTextValue.getText().toString());
+//                    priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
+                HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
+                holder.cardTextValue.setText("" + countValue);
+                holder.cardTextValueTicker.setText("" + countValue);
+                product = list.get(section).getProducts().get(relativePosition);
+
+               String currentProductId = product.getId().toString();
+
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("name", product.getName());
+                map.put("price", product.getDescription());
+                map.put("id", product.getId().toString());
+                map.put("quantity", holder.cardTextValue.getText().toString());
+                Log.e("AddCart", map.toString());
+                CommonClass.getInstance().foodCart=new ArrayList<HashMap<String, String>>();
+
+                Log.e(" 1 st Food cart size","--------------------"+ CommonClass.getInstance().foodCart.size() );
+
+                boolean found = false;
+                if (CommonClass.getInstance().foodCart.size() != 0) {
+                    for (int i = 0; i < CommonClass.getInstance().foodCart.size(); i++) {
+                        String oldProductId = CommonClass.getInstance().foodCart.get(i).get("id");
+                        Log.e("fid values ",""+oldProductId);
+//                        validate that product in foodcart yes means
+                        if (oldProductId.equalsIgnoreCase(currentProductId)) {
+                            found = true;
+                            CommonClass.getInstance().foodCart.get(i).put("quantity", holder.cardTextValue.getText().toString());
+                            Log.e("quantity", "" + holder.cardTextValue.getText().toString());
+                            break;
+                        }
+
+                    }
+                }
+
+                if (!found) {
+                    //Add all the values
+                   CommonClass.getInstance().foodCart.add(map);
+
+
+                }
+            }
+        });
+
 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView headerTxt;
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
-        private TextView dishNameTxt, priceTxt,cardTextValue , cardAddInfoText, cardAddOutOfStock;
+        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock;
         TickerView cardTextValueTicker;
         RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
 
@@ -177,17 +224,29 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 //                    priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
                     HotelViewActivity.itemText.setText("" + itemCount + " Item | $" + "" + priceAmount);
                     cardAddTextLayout.setVisibility(View.GONE);
+                    cardTextValue.setText("1");
+
                     break;
 
-                case R.id.card_add_btn:
-                    /** Press Add Card Add button */
-                    int countValue = Integer.parseInt(cardTextValue.getText().toString()) + 1;
-                    itemCount = itemCount + 1;
-//                    priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
-                    HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
-                    cardTextValue.setText("" + countValue);
-                    cardTextValueTicker.setText("" + countValue);
-                    break;
+//                case R.id.card_add_btn:
+//                    /** Press Add Card Add button */
+//                    int countValue = Integer.parseInt(cardTextValue.getText().toString()) + 1;
+//                    itemCount = Integer.parseInt(cardTextValue.getText().toString());
+////                    priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
+//                    HotelViewActivity.itemText.setText("" + itemCount + " Items | $" + "" + priceAmount);
+//                    cardTextValue.setText("" + countValue);
+//                    cardTextValueTicker.setText("" + countValue);
+//
+//                    product = productList.get(getAdapterPosition());
+//                    HashMap<String, String> map = new HashMap<String, String>();
+//                    map.put("name", product.getName());
+//                    map.put("price", product.getDescription());
+//                    map.put("id", product.getId().toString());
+//                    map.put("quantity", cardTextValue.getText().toString());
+//                    Log.e("AddCart", map.toString());
+//
+//
+//                    break;
                 case R.id.card_minus_btn:
                     /** Press Add Card Minus button */
                     if (cardTextValue.getText().toString().equalsIgnoreCase("1")) {

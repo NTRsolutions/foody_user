@@ -3,6 +3,7 @@ package com.foodie.app.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,7 @@ import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.model.ShopsModel;
-import com.foodie.app.utils.CommonClass;
+import com.foodie.app.helper.CommonClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private SkeletonScreen skeletonScreen, skeletonScreen2;
     private TextView addressLabel;
     private TextView addressTxt;
-    private LinearLayout locationLl;
+    private LinearLayout locationAddressLayout;
+    private RelativeLayout errorLoadingLayout;
+
     private Button filterBtn;
 
     @BindView(R.id.restaurants_offer_rv)
@@ -204,7 +208,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 //                List<Cuisine> listCuisine = list.get(0).getCuisines();
                 restaurantList.clear();
                 restaurantList.addAll(CommonClass.getInstance().list);
-                restaurantCountTxt.setText(""+restaurantList.size()+" Restaurants");
+                restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
                 adapterRestaurant.notifyDataSetChanged();
             }
 
@@ -284,8 +288,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         addressLabel = (TextView) toolbarLayout.findViewById(R.id.address_label);
         addressTxt = (TextView) toolbarLayout.findViewById(R.id.address);
 
-        locationLl = (LinearLayout) toolbarLayout.findViewById(R.id.location_ll);
-        locationLl.setOnClickListener(new View.OnClickListener() {
+        locationAddressLayout = (LinearLayout) toolbarLayout.findViewById(R.id.location_ll);
+        errorLoadingLayout = (RelativeLayout) toolbarLayout.findViewById(R.id.error_loading_layout);
+        locationAddressLayout.setVisibility(View.INVISIBLE);
+        errorLoadingLayout.setVisibility(View.VISIBLE);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 5000ms
+                errorLoadingLayout.setVisibility(View.GONE);
+                locationAddressLayout.setVisibility(View.VISIBLE);
+                addressLabel.setText(CommonClass.getInstance().addressHeader);
+                addressTxt.setText(CommonClass.getInstance().address);
+
+            }
+        }, 3000);
+
+
+        locationAddressLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, SetDeliveryLocationActivity.class));

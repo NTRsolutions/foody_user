@@ -1,7 +1,7 @@
 package com.foodie.app.build.api;
 
 import com.foodie.app.build.configure.BuildConfigure;
-import com.foodie.app.utils.CommonClass;
+import com.foodie.app.helper.CommonClass;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

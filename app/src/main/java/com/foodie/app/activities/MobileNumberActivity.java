@@ -3,7 +3,6 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -22,8 +21,10 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.api.ErrorUtils;
 import com.foodie.app.model.OtpModel;
-import com.foodie.app.utils.CommonClass;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.utils.TextUtils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +60,8 @@ public class MobileNumberActivity extends AppCompatActivity {
     @BindView(R.id.countryNumber)
     TextView mCountryDialCodeTextView;
     private CountryPicker mCountryPicker;
-    String country_code;
+    String country_code="+91";
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class MobileNumberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mobile_number);
         ButterKnife.bind(this);
         mCountryPicker = CountryPicker.newInstance("Select Country");
+
+        context=MobileNumberActivity.this;
 
         // You can limit the displayed countries
         ArrayList<Country> nc = new ArrayList<>();
@@ -86,11 +90,13 @@ public class MobileNumberActivity extends AppCompatActivity {
     @OnClick(R.id.next_btn)
     public void onViewClicked() {
 
-        String mobileNumber = etMobileNumber.getText().toString();
+        String mobileNumber = country_code + etMobileNumber.getText().toString();
+        CommonClass.getInstance().mobile = mobileNumber;
+
         if (TextUtils.isEmpty(mobileNumber)) {
 
         } else {
-            getOtpVerification("+91" + mobileNumber);
+            getOtpVerification(mobileNumber);
         }
 
     }
@@ -105,20 +111,20 @@ public class MobileNumberActivity extends AppCompatActivity {
         call.enqueue(new Callback<OtpModel>() {
             @Override
             public void onResponse(Call<OtpModel> call, Response<OtpModel> response) {
-                Log.i("Otp_response", response.body().toString());
-                if (response.isSuccessful()) {
-                    // use response data and do some fancy stuff :)
+
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+                else if  (response.isSuccessful()) {
                     Toast.makeText(MobileNumberActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     CommonClass.getInstance().otpValue = response.body().getOtp();
                     startActivity(new Intent(MobileNumberActivity.this, OtpActivity.class));
-                } else {
-                    // parse the response body …
-                    APIError error = ErrorUtils.parseError(response);
-                    // … and use it to show error information
-                    // … or just log the issue like we’re doing :)
-                    Log.d("error message", error.message());
                 }
-
 
             }
 
@@ -138,6 +144,12 @@ public class MobileNumberActivity extends AppCompatActivity {
                 mCountryDialCodeTextView.setText(dialCode);
                 mCountryFlagImageView.setImageResource(flagDrawableResID);
                 mCountryPicker.dismiss();
+            }
+        });
+        mCountryDialCodeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
             }
         });
         mCountryFlagImageView.setOnClickListener(new View.OnClickListener() {

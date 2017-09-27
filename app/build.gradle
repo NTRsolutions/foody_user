@@ -72,6 +72,7 @@ dependencies {
     compile 'com.roughike:bottom-bar:2.3.1'
     compile 'com.ethanhua:skeleton:0.2.2'
     compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.intuit.sdp:sdp-android:1.0.4'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {

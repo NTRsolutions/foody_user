@@ -61,23 +61,23 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
                 .error(R.drawable.item1).into(holder.dishImg);
         holder.restaurantName.setText(shops.getName());
-        holder.category.setText(shops.getEmail());
+        holder.category.setText(shops.getDescription());
         if(shops.getOfferPercent()==null){
             holder.offer.setVisibility(View.GONE);
         }else {
             holder.offer.setVisibility(View.VISIBLE);
             holder.offer.setText("Flat "+shops.getOfferPercent().toString()+"% offer on all Orders");
         }
-        if(shops.getAvailability().equalsIgnoreCase("")){
-            holder.offer.setVisibility(View.GONE);
-            holder.restaurantInfo.setVisibility(View.GONE);
+//        if(shops.getav().equalsIgnoreCase("")){
+//            holder.offer.setVisibility(View.GONE);
+//            holder.restaurantInfo.setVisibility(View.GONE);
+//
+//        }else {
+//            holder.restaurantInfo.setVisibility(View.VISIBLE);
+//            holder.restaurantInfo.setText(shops.getAvailability());
+//        }
 
-        }else {
-            holder.restaurantInfo.setVisibility(View.VISIBLE);
-            holder.restaurantInfo.setText(shops.getAvailability());
-        }
-
-//        holder.rating.setText(shops.rating);
+        holder.rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
         holder.distanceTime.setText(shops.getEstimatedDeliveryTime().toString()+" Mins");
 //        holder.price.setText(shops.price);
 

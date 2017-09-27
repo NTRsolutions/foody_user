@@ -22,9 +22,9 @@ import com.bumptech.glide.Glide;
 import com.foodie.app.HeaderView;
 import com.foodie.app.R;
 import com.foodie.app.adapter.HotelCatagoeryAdapter;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.ShopsModel;
-import com.foodie.app.utils.CommonClass;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.List;
@@ -68,6 +68,10 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     NestedScrollView scroll;
     @BindView(R.id.offer)
     TextView offer;
+    @BindView(R.id.rating)
+    TextView rating;
+    @BindView(R.id.delivery_time)
+    TextView deliveryTime;
     private boolean isHideToolbarView = false;
     @BindView(R.id.toolbar_header_view)
     HeaderView toolbarHeaderView;
@@ -107,12 +111,16 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         }
         shops = CommonClass.getInstance().list.get(restaurantPosition);
 
-        if(shops.getOfferPercent()==null){
+        if (shops.getOfferPercent() == null) {
             offer.setVisibility(View.GONE);
-        }else {
+        } else {
             offer.setVisibility(View.VISIBLE);
-            offer.setText("Flat "+shops.getOfferPercent().toString()+"% offer on all Orders");
+            offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
         }
+
+        rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
+        deliveryTime.setText(shops.getEstimatedDeliveryTime().toString()+"Mins");
+
         itemText = (TextView) findViewById(R.id.item_text);
         viewCart = (TextView) findViewById(R.id.view_cart);
         viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
@@ -131,8 +139,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         //Get category list data
         List<Category> list = shops.getCategories();
         collapsingToolbar.setTitle(" ");
-        toolbarHeaderView.bindTo(shops.getName(), "American fast food");
-        floatHeaderView.bindTo(shops.getName(), "American fast food");
+        toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
+        floatHeaderView.bindTo(shops.getName(), shops.getDescription());
 
         //Set Categoery list adapter
         HotelCatagoeryAdapter catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, list);
