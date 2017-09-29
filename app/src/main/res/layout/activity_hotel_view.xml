@@ -456,7 +456,7 @@
     <RelativeLayout
         android:id="@+id/view_cart_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="@dimen/_38sdp"
         android:layout_alignParentBottom="true"
         android:background="@color/theme"
         android:gravity="center_vertical"
@@ -469,9 +469,8 @@
             fontPath="fonts/Nunito-Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1 item | $ 220"
             android:textColor="@color/colorTextWhite"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_small_large" />
 
         <TextView
             android:id="@+id/view_cart"
@@ -480,11 +479,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:drawableEnd="@drawable/ic_cart_bag"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/_5sdp"
             android:text="View Cart"
             android:textAllCaps="true"
             android:textColor="@color/colorTextWhite"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_small_large" />
 
     </RelativeLayout>
 

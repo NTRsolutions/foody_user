@@ -224,8 +224,9 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     //Get Profile data
+                    SharedHelper.putKey(context,"access_token",response.body().getTokenType() + " " + response.body().getAccessToken());
+                    CommonClass.getInstance().accessToken=response.body().getTokenType() + " " + response.body().getAccessToken();
                     getProfile();
                 }
 

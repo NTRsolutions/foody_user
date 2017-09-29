@@ -4,6 +4,8 @@ package com.foodie.app.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Product {
 
     @SerializedName("id")
@@ -33,6 +35,12 @@ public class Product {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("parent")
+    @Expose
+    private Object parent;
+    @SerializedName("images")
+    @Expose
+    private List<Image> images = null;
     @SerializedName("prices")
     @Expose
     private Prices prices;
@@ -107,6 +115,22 @@ public class Product {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Object getParent() {
+        return parent;
+    }
+
+    public void setParent(Object parent) {
+        this.parent = parent;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public Prices getPrices() {

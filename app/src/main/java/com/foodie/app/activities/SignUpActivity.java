@@ -147,7 +147,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 if (response.body() != null) {
-                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
+                    SharedHelper.putKey(context,"access_token",response.body().getTokenType() + " " + response.body().getAccessToken());
+                    CommonClass.getInstance().accessToken=response.body().getTokenType() + " " + response.body().getAccessToken();
                     //Get Profile data
                     getProfile();
 

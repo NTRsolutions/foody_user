@@ -4,6 +4,7 @@ package com.foodie.app.build.api;
  * Created by tamil@appoets.com on 30-08-2017.
  */
 
+import com.foodie.app.model.AddCart;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.model.User;
@@ -52,10 +53,14 @@ public interface ApiInterface {
     Call<ResetPassword> resetPassword(@FieldMap HashMap<String,String> params);
 
 
-
-
     @GET("api/user/shops")
     Call<List<ShopsModel>> getshops(@Query("latitude") double lat, @Query("longitude") double lng);
 
+    @FormUrlEncoded
+    @POST("api/user/cart")
+    Call<AddCart> postAddCart(@FieldMap HashMap<String,String> params);
+
+    @GET("api/user/cart")
+    Call<AddCart> getViewCart();
 
 }

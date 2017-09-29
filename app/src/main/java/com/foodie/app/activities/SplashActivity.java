@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.SharedHelper;
 
 import io.fabric.sdk.android.Fabric;
@@ -31,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 //Do something after 3000ms
                 if (SharedHelper.getKey(context, "logged").equalsIgnoreCase("true")) {
+                    CommonClass.getInstance().accessToken=SharedHelper.getKey(context,"access_token");
                     startActivity(new Intent(SplashActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 }

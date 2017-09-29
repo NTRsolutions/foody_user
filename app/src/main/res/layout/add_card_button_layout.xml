@@ -14,7 +14,7 @@
         android:visibility="gone">
 
         <ImageView
-            android:padding="8dp"
+            android:padding="9dp"
             android:id="@+id/card_minus_btn"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
@@ -44,10 +44,10 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:padding="8dp"
+            android:padding="9dp"
             android:id="@+id/card_add_btn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_add_btn" />

@@ -1,7 +1,10 @@
 package com.foodie.app.build.api;
 
+import android.util.Log;
+
 import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.SharedHelper;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -52,10 +55,10 @@ public class ApiClient {
     public static class AddHeaderInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
-
             Request.Builder builder = chain.request().newBuilder();
             builder.addHeader("X-Requested-With", "XMLHttpRequest");
-            builder.addHeader("Authorization", ""+ CommonClass.getInstance().accessToken);
+            builder.addHeader("Authorization", "" + CommonClass.getInstance().accessToken);
+            Log.e("access_token", CommonClass.getInstance().accessToken);
 
             return chain.proceed(builder.build());
         }
