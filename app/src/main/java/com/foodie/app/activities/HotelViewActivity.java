@@ -3,11 +3,14 @@ package com.foodie.app.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +30,10 @@ import com.foodie.app.model.Category;
 import com.foodie.app.model.ShopsModel;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,9 +109,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         activity = HotelViewActivity.this;
         appBarLayout.addOnOffsetChangedListener(this);
 
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-
         if (bundle != null) {
             restaurantPosition = bundle.getInt("position");
         }
@@ -118,8 +124,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
         }
 
-        rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
-        deliveryTime.setText(shops.getEstimatedDeliveryTime().toString()+"Mins");
+        rating.setText("" + Double.parseDouble(shops.getRatings().getRating()));
+        deliveryTime.setText(shops.getEstimatedDeliveryTime().toString() + "Mins");
 
         itemText = (TextView) findViewById(R.id.item_text);
         viewCart = (TextView) findViewById(R.id.view_cart);
@@ -135,6 +141,32 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
                 .error(R.drawable.item1).into(restaurantImage);
+
+        Bitmap imageBitmap = null;
+
+//        try {
+//            URL url = new URL(shops.getAvatar());
+//            imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//        } catch (IOException e) {
+//            System.out.println(e);
+//        }
+        restaurantImage.setDrawingCacheEnabled(true);
+        imageBitmap = restaurantImage.getDrawingCache();
+
+
+        if (imageBitmap != null) {
+            Palette.from(imageBitmap).generate(new Palette.PaletteAsyncListener() {
+                public void onGenerated(Palette palette) {
+                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+                    if (vibrantSwatch != null) {
+                        toolbar.setBackgroundColor(vibrantSwatch.getRgb());
+                        headerViewTitle.setTextColor(vibrantSwatch.getTitleTextColor());
+                        headerViewSubTitle.setTextColor(vibrantSwatch.getBodyTextColor());
+                    }
+                }
+            });
+        }
+
 
         //Get category list data
         List<Category> list = shops.getCategories();

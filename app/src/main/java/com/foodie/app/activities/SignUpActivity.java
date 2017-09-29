@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.HomeActivity;
@@ -18,11 +17,12 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
-import com.foodie.app.model.GetProfileModel;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.RegisterModel;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.User;
 import com.foodie.app.utils.TextUtils;
 
 import java.util.HashMap;
@@ -43,23 +43,24 @@ public class SignUpActivity extends AppCompatActivity {
     EditText nameEdit;
     @BindView(R.id.password)
     EditText passwordEdit;
-    @BindView(R.id.terms_and_conditions)
-    TextView termsAndConditionsTxt;
     @BindView(R.id.sign_up)
     Button signUpBtn;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     @BindView(R.id.app_logo)
     ImageView appLogo;
-    @BindView(R.id.sigin_layout)
-    LinearLayout siginLayout;
-    @BindView(R.id.linearLayout)
-    LinearLayout linearLayout;
 
     String name, email, password, strConfirmPassword;
     String GRANT_TYPE = "password";
     Context context;
     @BindView(R.id.confirm_password)
     EditText confirmPassword;
+    CustomDialog customDialog;
+    @BindView(R.id.back_img)
+    ImageView backImg;
+    @BindView(R.id.password_eye_img)
+    ImageView passwordEyeImg;
+    @BindView(R.id.confirm_password_eye_img)
+    ImageView confirmPasswordEyeImg;
 
 
     @Override
@@ -69,25 +70,49 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
         context = SignUpActivity.this;
+        customDialog = new CustomDialog(context);
+        passwordEyeImg.setTag(1);
+        confirmPasswordEyeImg.setTag(1);
 
     }
 
-    @OnClick({R.id.terms_and_conditions, R.id.sign_up})
+    @OnClick({R.id.sign_up, R.id.back_img,R.id.password_eye_img,R.id.confirm_password_eye_img})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.terms_and_conditions:
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-                break;
             case R.id.sign_up:
                 initValues();
-
+                break;
+            case R.id.back_img:
+                onBackPressed();
+                break;
+            case R.id.password_eye_img:
+                if (passwordEyeImg.getTag().equals(1)) {
+                    passwordEdit.setTransformationMethod(null);
+                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    passwordEyeImg.setTag(0);
+                } else {
+                    passwordEyeImg.setTag(1);
+                    passwordEdit.setTransformationMethod(new PasswordTransformationMethod());
+                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                }
+                break;
+            case R.id.confirm_password_eye_img:
+                if (confirmPasswordEyeImg.getTag().equals(1)) {
+                    confirmPassword.setTransformationMethod(null);
+                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    confirmPasswordEyeImg.setTag(0);
+                } else {
+                    confirmPasswordEyeImg.setTag(1);
+                    confirmPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                }
                 break;
         }
     }
 
 
     public void signup(HashMap<String, String> map) {
+        customDialog.show();
         Call<RegisterModel> call = apiInterface.postRegister(map);
         call.enqueue(new Callback<RegisterModel>() {
             @Override
@@ -140,8 +165,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void initValues() {
         name = nameEdit.getText().toString();
-        strConfirmPassword = confirmPassword.getText().toString();
         email = emailEdit.getText().toString();
+        strConfirmPassword = confirmPassword.getText().toString();
         password = passwordEdit.getText().toString();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show();
@@ -168,17 +193,18 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void getProfile() {
-        Call<GetProfileModel> getprofile = apiInterface.getProfile();
-        getprofile.enqueue(new Callback<GetProfileModel>() {
+        Call<User> getprofile = apiInterface.getProfile();
+        getprofile.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
+                customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
                 startActivity(new Intent(SignUpActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
 
             @Override
-            public void onFailure(Call<GetProfileModel> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
         });

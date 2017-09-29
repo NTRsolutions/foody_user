@@ -12,6 +12,7 @@ public class CustomDialog extends ProgressDialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setIndeterminate(true);
         setMessage("Please wait...");
+        setCancelable(false);
       //  setContentView(R.layout.custom_dialog);
     }
 }

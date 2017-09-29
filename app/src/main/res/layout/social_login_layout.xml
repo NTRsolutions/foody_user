@@ -11,7 +11,7 @@
             android:layout_marginBottom="@dimen/_20sdp"
             android:gravity="center"
             android:text="Connect with social"
-            android:textColor="@color/colorSecondaryText"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/text_normal" />
 
         <LinearLayout

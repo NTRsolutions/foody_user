@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,18 +21,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:gravity="center"
             android:text="@string/bookmark"
             android:textAllCaps="true"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:gravity="center"
             android:text="@string/bookmark_description"
             android:textSize="16dp" />

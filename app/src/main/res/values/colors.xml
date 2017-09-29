@@ -11,17 +11,18 @@
     <color name="lime_400">#D4E157</color>
     <color name="blue_200">#90CAF9</color>
 
-    <color name="colorPrimaryText">#000000</color>
-    <color name="colorSecondaryText">#4f4f4f </color>
+    <color name="colorPrimaryText">#303338</color>
+    <color name="colorSecondaryText">#838383</color>
     <color name="colorGreen">#00a551</color>
     <color name="colorRed">#b31101</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorTextWhite">#FFF</color>
     <color name="colorTextBlack">#212121</color>
+    <color name="background_color">#f5f5f5</color>
 
 
     <color name="theme">#ff6d00</color>
-    <color name="grey">#a3a3a3</color>
+    <color name="grey">#a4a4a4</color>
     <color name="light_grey">#dcdcdc</color>
 
 

@@ -165,6 +165,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     Log.d(TAG, je.toString());
                 }
                 chatMessage.setText("");
+
                 pubnub.publish(PubnubKeys.CHANNEL_NAME, messageObject, new Callback() {
                     @Override
                     public void successCallback(String channel, Object message) {

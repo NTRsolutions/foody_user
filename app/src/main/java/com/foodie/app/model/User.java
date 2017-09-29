@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Tamil on 9/25/2017.
  */
 
-public class GetProfileModel {
+public class User {
 
     @SerializedName("id")
     @Expose

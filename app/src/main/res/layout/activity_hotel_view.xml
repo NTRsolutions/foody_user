@@ -389,7 +389,7 @@
                             android:paddingTop="@dimen/activity_horizontal_margin"
                             android:text="Flat 20% offer on all orders"
                             android:textColor="@color/colorRed"
-                            android:textSize="@dimen/text_medium"
+                            android:textSize="@dimen/text_small"
                             android:visibility="gone" />
 
                         <LinearLayout

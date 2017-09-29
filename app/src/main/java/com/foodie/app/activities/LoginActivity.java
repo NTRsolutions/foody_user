@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,9 +23,11 @@ import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
-import com.foodie.app.model.GetProfileModel;
 import com.foodie.app.model.LoginModel;
+import com.foodie.app.model.User;
 import com.foodie.app.utils.TextUtils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,21 +73,21 @@ public class LoginActivity extends AppCompatActivity {
     ImageView countryImage;
     @BindView(R.id.countryNumber)
     TextView countryNumber;
-    TextView mCountryDialCodeTextView;
+    @BindView(R.id.back_img)
+    ImageView backImg;
+    @BindView(R.id.eye_img)
+    ImageView eyeImg;
     private CountryPicker mCountryPicker;
-    String country_code="+91";
+    String country_code = "+91";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
         context = LoginActivity.this;
 
-
         mCountryPicker = CountryPicker.newInstance("Select Country");
-
         // You can limit the displayed countries
         ArrayList<Country> nc = new ArrayList<>();
         for (Country c : Country.getAllCountries()) {
@@ -97,21 +99,39 @@ public class LoginActivity extends AppCompatActivity {
         Collections.reverse(nc);
         mCountryPicker.setCountriesList(nc);
         setListener();
+        final boolean once = false;
+        eyeImg.setTag(1);
+
 
     }
 
-    @OnClick({R.id.login_btn, R.id.forgot_password, R.id.donnot_have_account})
+    @OnClick({R.id.login_btn, R.id.forgot_password, R.id.donnot_have_account, R.id.back_img, R.id.eye_img})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.login_btn:
                 initValues();
                 break;
             case R.id.forgot_password:
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, MobileNumberActivity.class).putExtra("signup", false));
                 break;
             case R.id.donnot_have_account:
                 startActivity(new Intent(LoginActivity.this, MobileNumberActivity.class));
                 break;
+            case R.id.back_img:
+                onBackPressed();
+                break;
+            case R.id.eye_img:
+                if (eyeImg.getTag().equals(1)) {
+                    edPassword.setTransformationMethod(null);
+                    eyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    eyeImg.setTag(0);
+                } else {
+                    eyeImg.setTag(1);
+                    edPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    eyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                }
+                break;
+
         }
     }
 
@@ -120,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSelectCountry(String name, String code, String dialCode,
                                         int flagDrawableResID) {
-                mCountryDialCodeTextView.setText(dialCode);
+                countryNumber.setText(dialCode);
                 countryImage.setImageResource(flagDrawableResID);
                 mCountryPicker.dismiss();
             }
@@ -145,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         Country country = Country.getCountryFromSIM(LoginActivity.this);
         if (country != null) {
             countryImage.setImageResource(country.getFlag());
-            mCountryDialCodeTextView.setText(country.getDialCode());
+            countryNumber.setText(country.getDialCode());
             country_code = country.getDialCode();
         } else {
             Toast.makeText(LoginActivity.this, "Required Sim", Toast.LENGTH_SHORT).show();
@@ -195,7 +215,15 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if (response.body() != null) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    customDialog.dismiss();
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
                     CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     //Get Profile data
                     getProfile();
@@ -212,10 +240,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getProfile() {
-        Call<GetProfileModel> getprofile = apiInterface.getProfile();
-        getprofile.enqueue(new Callback<GetProfileModel>() {
+        Call<User> getprofile = apiInterface.getProfile();
+        getprofile.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<GetProfileModel> call, Response<GetProfileModel> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -223,7 +251,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<GetProfileModel> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 customDialog.dismiss();
 
             }

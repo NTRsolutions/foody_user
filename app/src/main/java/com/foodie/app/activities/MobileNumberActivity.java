@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +15,12 @@ import com.foodie.app.CountryPicker.Country;
 import com.foodie.app.CountryPicker.CountryPicker;
 import com.foodie.app.CountryPicker.CountryPickerListener;
 import com.foodie.app.R;
-import com.foodie.app.build.api.APIError;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.build.api.ErrorUtils;
-import com.foodie.app.model.OtpModel;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.model.ForgotPassword;
+import com.foodie.app.model.OtpModel;
 import com.foodie.app.utils.TextUtils;
 
 import org.json.JSONObject;
@@ -59,9 +58,15 @@ public class MobileNumberActivity extends AppCompatActivity {
     ImageView mCountryFlagImageView;
     @BindView(R.id.countryNumber)
     TextView mCountryDialCodeTextView;
+    @BindView(R.id.back_img)
+    ImageView backImg;
+    @BindView(R.id.already_have_aacount_txt)
+    TextView alreadyHaveAacountTxt;
     private CountryPicker mCountryPicker;
-    String country_code="+91";
+    String country_code = "+91";
     Context context;
+    boolean isSignUp = true;
+    CustomDialog customDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +74,15 @@ public class MobileNumberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mobile_number);
         ButterKnife.bind(this);
         mCountryPicker = CountryPicker.newInstance("Select Country");
+        context = MobileNumberActivity.this;
+        customDialog = new CustomDialog(context);
 
-        context=MobileNumberActivity.this;
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            isSignUp = bundle.getBoolean("signup");
+        }
 
         // You can limit the displayed countries
         ArrayList<Country> nc = new ArrayList<>();
@@ -87,18 +99,34 @@ public class MobileNumberActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.next_btn)
-    public void onViewClicked() {
+    private void forgotPassord(String mobileNumber) {
+        customDialog.show();
+        Call<ForgotPassword> call = apiInterface.forgotPassword(mobileNumber);
+        call.enqueue(new Callback<ForgotPassword>() {
+            @Override
+            public void onResponse(Call<ForgotPassword> call, Response<ForgotPassword> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    customDialog.dismiss();
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    customDialog.dismiss();
+                    CommonClass.profileModel = response.body().getUser();
+                    CommonClass.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
+                    startActivity(new Intent(context, OtpActivity.class).putExtra("signup", false));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                }
+            }
 
-        String mobileNumber = country_code + etMobileNumber.getText().toString();
-        CommonClass.getInstance().mobile = mobileNumber;
+            @Override
+            public void onFailure(Call<ForgotPassword> call, Throwable t) {
 
-        if (TextUtils.isEmpty(mobileNumber)) {
-
-        } else {
-            getOtpVerification(mobileNumber);
-        }
-
+            }
+        });
     }
 
     @Override
@@ -107,20 +135,22 @@ public class MobileNumberActivity extends AppCompatActivity {
     }
 
     public void getOtpVerification(String mobile) {
+        customDialog.show();
         Call<OtpModel> call = apiInterface.postOtp(mobile);
         call.enqueue(new Callback<OtpModel>() {
             @Override
             public void onResponse(Call<OtpModel> call, Response<OtpModel> response) {
 
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                }
-                else if  (response.isSuccessful()) {
+                } else if (response.isSuccessful()) {
+                    customDialog.dismiss();
                     Toast.makeText(MobileNumberActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     CommonClass.getInstance().otpValue = response.body().getOtp();
                     startActivity(new Intent(MobileNumberActivity.this, OtpActivity.class));
@@ -174,4 +204,35 @@ public class MobileNumberActivity extends AppCompatActivity {
     }
 
 
+    @OnClick({R.id.back_img, R.id.next_btn, R.id.already_have_aacount_txt})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.back_img:
+                onBackPressed();
+                break;
+            case R.id.already_have_aacount_txt:
+                startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                break;
+            case R.id.next_btn:
+                String mobileNumber = country_code + etMobileNumber.getText().toString();
+                CommonClass.getInstance().mobile = mobileNumber;
+                if (TextUtils.isEmpty(mobileNumber)) {
+
+                } else {
+                    if (isSignUp)
+                        getOtpVerification(mobileNumber);
+                    else
+                        forgotPassord(mobileNumber);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
 }

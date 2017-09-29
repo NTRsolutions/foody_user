@@ -37,12 +37,25 @@ public class OtpActivity extends AppCompatActivity {
     PinEntryView otpValue1;
     @BindView(R.id.otp_continue)
     Button otpContinue;
+    Context context;
+    boolean isSignUp = true;
+    @BindView(R.id.mobile_number_txt)
+    TextView mobileNumberTxt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
         ButterKnife.bind(this);
+        context = OtpActivity.this;
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            isSignUp = bundle.getBoolean("signup");
+        }
+        mobileNumberTxt.setText(CommonClass.getInstance().mobile);
 
     }
 
@@ -54,10 +67,16 @@ public class OtpActivity extends AppCompatActivity {
 
     @OnClick(R.id.otp_continue)
     public void onViewClicked() {
-        Log.d("OtpData",otpValue1.getText().toString()+" = "+CommonClass.getInstance().otpValue);
-        if(otpValue1.getText().toString().equals(""+CommonClass.getInstance().otpValue)){
-            startActivity(new Intent(OtpActivity.this,SignUpActivity.class));
-        }else {
+        Log.d("OtpData", otpValue1.getText().toString() + " = " + CommonClass.getInstance().otpValue);
+        if (otpValue1.getText().toString().equals("" + CommonClass.getInstance().otpValue)) {
+            if (isSignUp) {
+                startActivity(new Intent(OtpActivity.this, SignUpActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+            } else {
+                startActivity(new Intent(OtpActivity.this, ResetPasswordActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+            }
+        } else {
             Toast.makeText(this, "Enter otp is incorrect", Toast.LENGTH_SHORT).show();
         }
 

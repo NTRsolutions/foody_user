@@ -12,9 +12,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f6f6f6"
+        android:background="@color/background_color"
         android:focusable="true"
         android:focusableInTouchMode="true">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_back" />
 
         <!--   App Icon Image-->
 
@@ -47,7 +55,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_height="@dimen/edit_text_size"
                     android:background="@drawable/shadow_view">
 
 
@@ -85,22 +93,38 @@
                         android:textSize="@dimen/text_normal" />
                 </RelativeLayout>
 
+<RelativeLayout
+    android:layout_marginTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/ed_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/password_left"
-                    android:drawablePadding="10dp"
-                    android:hint="@string/password"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textSize="@dimen/text_normal"
-                    app:theme="@style/MyEditTextTheme" />
+    <EditText
+        android:id="@+id/ed_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_size"
+        android:background="@drawable/shadow_view"
+        android:drawableLeft="@drawable/password_left"
+        android:drawablePadding="@dimen/_8sdp"
+        android:hint="@string/password"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:paddingLeft="@dimen/_8sdp"
+        android:singleLine="true"
+        android:textSize="@dimen/text_normal"
+        app:theme="@style/MyEditTextTheme" />
+
+    <ImageView
+        android:id="@+id/eye_img"
+        android:src="@drawable/ic_eye_open"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp" />
+
+</RelativeLayout>
+
+
 
 
                 <Button
@@ -109,7 +133,7 @@
                     android:layout_height="55dp"
                     android:layout_marginTop="30dp"
                     android:background="@color/colorAccent"
-                    android:text="@string/login"
+                    android:text="@string/signin"
                     android:textColor="@color/colorWhite" />
 
                 <!--  Account Help Layout-->
@@ -128,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:text="@string/register_this_account"
-                        android:textColor="@color/colorSecondaryText" />
+                        android:textColor="@color/colorPrimaryText" />
 
                     <TextView
                         android:id="@+id/forgot_password"
@@ -136,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:text="@string/forgot_password"
-                        android:textColor="@color/colorSecondaryText"
+                        android:textColor="@color/colorPrimaryText"
                         android:textSize="@dimen/text_medium" />
 
                 </RelativeLayout>

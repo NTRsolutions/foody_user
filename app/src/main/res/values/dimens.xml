@@ -12,7 +12,7 @@
     <dimen name="text_tiny">@dimen/_10sdp</dimen>
 
 
-    <dimen name="edit_text_size">@dimen/_50sdp</dimen>
+    <dimen name="edit_text_size">@dimen/_45sdp</dimen>
 
     <dimen name="cp_dialog_width">@dimen/_300sdp</dimen>
     <dimen name="cp_dialog_height">@dimen/_400sdp</dimen>
@@ -24,7 +24,7 @@
     <dimen name="activity_common_margin">@dimen/_14sdp</dimen>
 
     <dimen name="header_view_start_margin_left">@dimen/_16sdp</dimen>
-    <dimen name="header_view_end_margin_left">@dimen/_56sdp</dimen>
+    <dimen name="header_view_end_margin_left">@dimen/_44sdp</dimen>
     <dimen name="header_view_end_margin_right">@dimen/_14sdp</dimen>
     <dimen name="header_view_start_margin_bottom">@dimen/_14sdp</dimen>
 </resources>

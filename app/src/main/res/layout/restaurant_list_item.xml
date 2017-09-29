@@ -35,13 +35,13 @@
 
             <TextView
                 android:id="@+id/restaurant_name"
-                fontPath="fonts/Nunito-Bold.ttf"
+                fontPath="fonts/Nunito-SemiBold.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="Funkies"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/text_medium" />
+                android:textSize="@dimen/text_small" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="20dp"
                     android:background="@color/light_grey" />
 

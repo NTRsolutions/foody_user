@@ -18,14 +18,13 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".activities.WelcomeScreenActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -98,8 +97,8 @@
         <activity
             android:name=".activities.OtherHelpActivity"
             android:label=" "
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
             android:label=" "
@@ -110,10 +109,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CurrentOrderDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3aef7a5b05836cf8166f23c95e43c52517bee917" />
+
+        <activity android:name=".activities.ResetPasswordActivity"></activity>
     </application>
 
 </manifest>
