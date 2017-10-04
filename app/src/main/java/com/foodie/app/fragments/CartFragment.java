@@ -1,5 +1,6 @@
 package com.foodie.app.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.ProductList;
@@ -40,6 +41,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,12 +70,30 @@ public class CartFragment extends Fragment {
     TextView locationErrorTitle;
     @BindView(R.id.location_error_sub_title)
     TextView locationErrorSubTitle;
-    @BindView(R.id.location_error_layout)
-    RelativeLayout locationErrorLayout;
-    @BindView(R.id.add_address_btn)
-    Button addAddressBtn;
+    @BindView(R.id.common_btn)
+    Button commonBtn;
     @BindView(R.id.dummy_image_view)
     ImageView dummyImageView;
+    @BindView(R.id.total_amount)
+    TextView totalAmount;
+    @BindView(R.id.buttonLayout)
+    LinearLayout buttonLayout;
+    @BindView(R.id.address_header)
+    TextView addressHeader;
+    @BindView(R.id.address_detail)
+    TextView addressDetail;
+    @BindView(R.id.address_delivery_time)
+    TextView addressDeliveryTime;
+    @BindView(R.id.add_address_txt)
+    TextView addAddressTxt;
+    @BindView(R.id.bottom_layout)
+    LinearLayout bottomLayout;
+    public static RelativeLayout dataLayout;
+    public static RelativeLayout errorLayout;
+    @BindView(R.id.location_info_layout)
+    LinearLayout locationInfoLayout;
+    @BindView(R.id.location_error_layout)
+    RelativeLayout locationErrorLayout;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -92,6 +112,7 @@ public class CartFragment extends Fragment {
     int discount = 0;
     int itemCount = 0;
     int itemQuantity = 0;
+    int ADDRESS_SELECTION = 1;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ViewCartAdapter viewCartAdapter;
@@ -101,6 +122,7 @@ public class CartFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = getContext();
+
     }
 
     @Override
@@ -108,15 +130,17 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         ButterKnife.bind(this, view);
 
+      /*  Intialize Global Values*/
         itemTotalAmount = (TextView) view.findViewById(R.id.item_total_amount);
         deliveryCharges = (TextView) view.findViewById(R.id.delivery_charges);
         promoCodeApply = (TextView) view.findViewById(R.id.promo_code_apply);
         discountAmount = (TextView) view.findViewById(R.id.discount_amount);
         payAmount = (TextView) view.findViewById(R.id.total_amount);
+        dataLayout = (RelativeLayout) view.findViewById(R.id.data_layout);
+        errorLayout = (RelativeLayout) view.findViewById(R.id.error_layout);
 
         customDialog = new CustomDialog(context);
         getViewCart();
-
 
         viewCartItemList = new ArrayList<>();
         //Offer Restaurant Adapter
@@ -125,13 +149,20 @@ public class CartFragment extends Fragment {
         orderItemRv.setHasFixedSize(false);
         orderItemRv.setNestedScrollingEnabled(false);
 
-        addAddressBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SetDeliveryLocationActivity.class));
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-            }
-        });
+        //Intialize address Value
+        if (CommonClass.getInstance().selectedAddress != null) {
+            commonBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
+            commonBtn.setText(getResources().getString(R.string.proceed_to_pay));
+            addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
+            addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
+            addressDeliveryTime.setText("30 Mins");
+        } else {
+            commonBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
+            commonBtn.setText(getResources().getString(R.string.add_address_to_proceed));
+            locationErrorLayout.setVisibility(View.VISIBLE);
+            locationInfoLayout.setVisibility(View.GONE);
+
+        }
 
         return view;
 
@@ -145,7 +176,10 @@ public class CartFragment extends Fragment {
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     customDialog.dismiss();
+                    errorLayout.setVisibility(View.VISIBLE);
+                    dataLayout.setVisibility(View.GONE);
                     try {
+
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
@@ -153,29 +187,36 @@ public class CartFragment extends Fragment {
                     }
                 } else if (response.isSuccessful()) {
                     customDialog.dismiss();
-                    //Get response data
                     //get Item Count
                     itemCount = response.body().getProductList().size();
-                    for (int i = 0; i < itemCount; i++) {
-                        //Get Total item Quantity
-                        itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
-                        //Get product price
-                        if (response.body().getProductList().get(i).getProduct().getPrices().getPrice() != null)
-                            priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
-                        discount = discount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getDiscount());
+                    if (itemCount == 0) {
+                        errorLayout.setVisibility(View.VISIBLE);
+                        dataLayout.setVisibility(View.GONE);
+                    } else {
+                        errorLayout.setVisibility(View.GONE);
+                        dataLayout.setVisibility(View.VISIBLE);
+                        for (int i = 0; i < itemCount; i++) {
+                            //Get Total item Quantity
+                            itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
+                            //Get product price
+                            if (response.body().getProductList().get(i).getProduct().getPrices().getPrice() != null)
+                                priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
+                            discount = discount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getDiscount());
+                        }
+
+                        //Set Payment details
+                        String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
+                        itemTotalAmount.setText(currency + "" + priceAmount);
+                        discountAmount.setText("- " + currency + "" + discount);
+                        int topPayAmount = priceAmount - discount;
+                        payAmount.setText(currency + "" + topPayAmount);
+
+                        deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
+                        viewCartItemList.addAll(response.body().getProductList());
+                        viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);
+                        orderItemRv.setAdapter(viewCartAdapter);
                     }
 
-                    //Set Payment details
-                    String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
-                    itemTotalAmount.setText(currency + "" + priceAmount);
-                    discountAmount.setText("- " + currency + "" + discount);
-                    int topPayAmount = priceAmount - discount;
-                    payAmount.setText(currency + "" + topPayAmount);
-
-                    deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
-                    viewCartItemList.addAll(response.body().getProductList());
-                    viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);
-                    orderItemRv.setAdapter(viewCartAdapter);
 
                 }
             }
@@ -183,6 +224,8 @@ public class CartFragment extends Fragment {
             @Override
             public void onFailure(Call<AddCart> call, Throwable t) {
 
+                errorLayout.setVisibility(View.VISIBLE);
+                dataLayout.setVisibility(View.GONE);
             }
         });
     }
@@ -210,6 +253,7 @@ public class CartFragment extends Fragment {
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
+
     }
 
 
@@ -245,45 +289,56 @@ public class CartFragment extends Fragment {
     }
 
 
-//
-//    @OnClick(R.id.number_button)
-//    public void onViewClicked() {
-//
-//    }
-//
-//    @OnClick({R.id.card_minus_btn, R.id.card_value, R.id.card_add_btn})
-//    public void onViewClicked(View view) {
-//        switch (view.getId()) {
-//            case R.id.card_minus_btn:
-//                /** Press Add Card Minus button */
-//                if (cardValue.getText().toString().equalsIgnoreCase("1")) {
-//                    Toast.makeText(context, "Your order canceled", Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    String num = numberButton.getNumber();
-//                    animationLineCartAdd.setVisibility(View.VISIBLE);
-//                    linearMain.setAlpha((float) 0.5);
-//                    view.setClickable(false);
-//                    initializeAvd();
-//                    int countMinusValue = Integer.parseInt(cardValue.getText().toString()) - 1;
-//                    cardValue.setText("" + countMinusValue);
-//                    cardValueTicker.setText("" + countMinusValue);
-//                }
-//                break;
-//            case R.id.card_value:
-//
-//                break;
-//            case R.id.card_add_btn:
-//                /** Press Add Card Add button */
-//                String num = numberButton.getNumber();
-//                animationLineCartAdd.setVisibility(View.VISIBLE);
-//                linearMain.setAlpha((float) 0.5);
-//                initializeAvd();
-//                int countValue = Integer.parseInt(cardValue.getText().toString()) + 1;
-//                cardValue.setText("" + countValue);
-//                cardValueTicker.setText("" + countValue);
-//
-//                break;
-//        }
-//    }
+    @OnClick({R.id.add_address_txt, R.id.common_btn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.add_address_txt:
+                /** Press Add address button */
+                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                break;
+            case R.id.common_btn:
+                /**  If address is empty */
+                if (commonBtn.getText().toString().equalsIgnoreCase(getResources().getString(R.string.add_address_to_proceed))) {
+                    startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                }
+                /**  If address is filled */
+                else if (commonBtn.getText().toString().equalsIgnoreCase(getResources().getString(R.string.proceed_to_pay))) {
+
+                }
+
+
+                break;
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.print("CartFragment");
+        if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_OK) {
+            System.out.print("CartFragment : Success");
+            if (CommonClass.getInstance().selectedAddress != null) {
+                locationErrorLayout.setVisibility(View.GONE);
+                locationInfoLayout.setVisibility(View.VISIBLE);
+                commonBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
+                commonBtn.setText(getResources().getString(R.string.proceed_to_pay));
+                addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
+                addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
+                addressDeliveryTime.setText("30 Mins");
+            } else {
+                commonBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
+                commonBtn.setText(getResources().getString(R.string.add_address_to_proceed));
+                locationErrorLayout.setVisibility(View.VISIBLE);
+                locationInfoLayout.setVisibility(View.GONE);
+
+            }
+
+
+        } else if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_CANCELED) {
+            System.out.print("CartFragment : Failure");
+
+        }
+    }
 }

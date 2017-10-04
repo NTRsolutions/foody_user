@@ -5,177 +5,221 @@
     android:layout_height="match_parent">
 
 
-    <com.amar.library.ui.StickyScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <!-- Data Layout-->
+
+    <RelativeLayout
+        android:id="@+id/data_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_layout"
-        app:stickyFooter="@+id/buttonLayout">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.amar.library.ui.StickyScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom_layout"
+            app:stickyFooter="@+id/buttonLayout">
 
-
-            <RelativeLayout
-                android:id="@+id/re"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_vertical_margin"
-                android:paddingTop="@dimen/activity_vertical_margin">
-
-                <ImageView
-                    android:id="@+id/dish_img"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:contentDescription="@string/restaurant"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/login_pic" />
-
-                <TextView
-                    android:id="@+id/dish_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_toEndOf="@+id/dish_img"
-                    android:maxLines="1"
-                    android:text="Bunny Burgs"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_medium" />
-
-                <TextView
-                    android:id="@+id/dish_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/dish_name"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_toEndOf="@+id/dish_img"
-                    android:maxLines="1"
-                    android:text="Burgur"
-                    android:textColor="@color/colorSecondaryText"
-                    android:textSize="@dimen/text_small" />
-            </RelativeLayout>
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/order_item_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin">
-
-            </android.support.v7.widget.RecyclerView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="20dp"
-                android:background="#eee" />
-
-            <!-- Order Payment Detail Layout -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/activity_vertical_margin">
+                android:layout_height="match_parent"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
 
+
+                <RelativeLayout
+                    android:id="@+id/re"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin">
+
+                    <ImageView
+                        android:id="@+id/dish_img"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/restaurant"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/login_pic" />
+
+                    <TextView
+                        android:id="@+id/dish_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@+id/dish_img"
+                        android:maxLines="1"
+                        android:text="Bunny Burgs"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/text_medium" />
+
+                    <TextView
+                        android:id="@+id/dish_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@+id/dish_name"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="-5dp"
+                        android:layout_toEndOf="@+id/dish_img"
+                        android:maxLines="1"
+                        android:text="Burgur"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="@dimen/text_small" />
+                </RelativeLayout>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/order_item_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#eee" />
+
+                <!-- Order Payment Detail Layout -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_vertical_margin">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Item Total"
-                        android:textColor="@color/colorSecondaryText" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Item Total"
+                            android:textColor="@color/colorSecondaryText" />
+
+                        <TextView
+                            android:id="@+id/item_total_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="$220"
+                            android:textColor="@color/colorSecondaryText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Delivery Fees"
+                            android:textColor="@color/colorSecondaryText" />
+
+                        <TextView
+                            android:id="@+id/delivery_charges"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="$20"
+                            android:textColor="@color/colorSecondaryText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Promo Code"
+                            android:textColor="@color/theme" />
+
+                        <TextView
+                            android:id="@+id/promo_code_apply"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Apply"
+                            android:textColor="@color/theme" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Discount"
+                            android:textColor="@color/colorSecondaryText" />
+
+                        <TextView
+                            android:id="@+id/discount_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="- $30"
+                            android:textColor="@color/colorSecondaryText" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1sp"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:background="#eee" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/buttonLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin">
 
                     <TextView
-                        android:id="@+id/item_total_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="$220"
-                        android:textColor="@color/colorSecondaryText" />
-                </LinearLayout>
+                        android:text="To Pay"
+                        android:textColor="@color/colorTextBlack" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/total_amount"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Delivery Fees"
-                        android:textColor="@color/colorSecondaryText" />
-
-                    <TextView
-                        android:id="@+id/delivery_charges"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="40dp"
                         android:gravity="end"
-                        android:text="$20"
-                        android:textColor="@color/colorSecondaryText" />
+                        android:text="$250"
+                        android:textColor="@color/colorTextBlack" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Promo Code"
-                        android:textColor="@color/theme" />
-
-                    <TextView
-                        android:id="@+id/promo_code_apply"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Apply"
-                        android:textColor="@color/theme" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Discount"
-                        android:textColor="@color/colorSecondaryText" />
-
-                    <TextView
-                        android:id="@+id/discount_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="- $30"
-                        android:textColor="@color/colorSecondaryText" />
-                </LinearLayout>
-
 
                 <View
                     android:layout_width="match_parent"
@@ -183,162 +227,174 @@
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:background="#eee" />
 
+
             </LinearLayout>
 
+        </com.amar.library.ui.StickyScrollView>
+
+        <!--  Bottom Address & Login Layout-->
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#f1f1f1"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
 
             <LinearLayout
-                android:id="@+id/buttonLayout"
+                android:id="@+id/location_info_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_vertical_margin">
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_map_marker" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_8sdp"
                     android:layout_weight="1"
-                    android:gravity="end"
-                    android:text="To Pay"
-                    android:textColor="@color/colorTextBlack" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/address_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delivery to Home"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:id="@+id/address_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Velachery,chennai" />
+
+                    <TextView
+                        android:id="@+id/address_delivery_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="50 mins"
+                        android:textAllCaps="true" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/add_address_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Address"
+                    android:textAllCaps="true"
+                    android:textColor="@color/theme" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/location_error_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/map_marker_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_map_marker" />
 
 
                 <TextView
-                    android:id="@+id/total_amount"
+                    android:id="@+id/location_error_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:gravity="end"
-                    android:text="$250"
-                    android:textColor="@color/colorTextBlack" />
-            </LinearLayout>
+                    android:layout_toRightOf="@id/map_marker_image"
+                    android:text="You Seem to be in a new Location"
+                    android:textColor="@color/colorPrimaryText" />
 
-            <View
+                <TextView
+                    android:id="@+id/location_error_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/location_error_title"
+                    android:layout_toRightOf="@id/map_marker_image"
+                    android:text="You Seem to be in a new Location"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="10sp" />
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/common_btn"
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="40dp"
+                android:layout_below="@id/location_error_layout"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:background="#eee" />
+                android:background="@drawable/button_corner_bg_theme"
+                android:text="proceed to pay"
+                android:textColor="@color/colorTextWhite" />
 
+            <ImageView
+                android:id="@+id/dummy_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@+id/add_address_btn"
+                android:visibility="gone" />
 
         </LinearLayout>
 
-    </com.amar.library.ui.StickyScrollView>
+    </RelativeLayout>
 
+    <!--  Error Layout-->
 
-    <!--  Bottom Address & Login Layout-->
-
-    <LinearLayout
-        android:id="@+id/bottom_layout"
+    <RelativeLayout
+        android:id="@+id/error_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#f1f1f1"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_map_marker" />
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:src="@drawable/no_cart_tem_bg" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                fontpath="fonts/Nunito-Bold.ttf"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/title_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Delivery to Home" />
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Velachery,chennai" />
-
-                <TextView
-                    android:id="@+id/delivery_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="50 mins"
-                    android:textAllCaps="true" />
-
-            </LinearLayout>
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/cart_error_title"
+                android:textAllCaps="true"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/text_medium" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Address"
-                android:textAllCaps="true"
-                android:textColor="@color/theme" />
+                android:layout_marginTop="@dimen/_3sdp"
+                android:text="@string/cart_error_description"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_medium" />
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/location_error_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/map_marker_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_map_marker" />
+    </RelativeLayout>
 
-
-            <TextView
-                android:id="@+id/location_error_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/map_marker_image"
-                android:text="You Seem to be in a new Location"
-                android:textColor="@color/colorPrimaryText" />
-
-            <TextView
-                android:id="@+id/location_error_sub_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/location_error_title"
-                android:layout_toRightOf="@id/map_marker_image"
-                android:text="You Seem to be in a new Location"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="10sp" />
-
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/add_address_btn"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/location_error_layout"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorGreen"
-            android:text="proceed to pay"
-            android:textColor="@color/colorTextWhite" />
-
-        <ImageView
-            android:id="@+id/dummy_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_below="@+id/add_address_btn"
-            android:visibility="gone" />
-
-    </LinearLayout>
 
 </RelativeLayout>

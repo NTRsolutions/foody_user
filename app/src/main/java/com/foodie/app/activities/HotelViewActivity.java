@@ -136,7 +136,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         itemText = (TextView) findViewById(R.id.item_text);
         viewCart = (TextView) findViewById(R.id.view_cart);
         viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
-        viewCart.setOnClickListener(new View.OnClickListener() {
+        viewCartLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HotelViewActivity.this, ViewCartActivity.class));

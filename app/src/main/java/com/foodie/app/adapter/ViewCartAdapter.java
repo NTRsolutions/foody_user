@@ -252,21 +252,29 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
                     //get Item Count
                     itemCount = addCart.getProductList().size();
-                    for (int i = 0; i < itemCount; i++) {
-                        //Get Total item Quantity
-                        itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
-                        //Get product price
-                        if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
-                            priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
-                        discount = discount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getDiscount());
+                    if(itemCount!=0){
+                        for (int i = 0; i < itemCount; i++) {
+                            //Get Total item Quantity
+                            itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
+                            //Get product price
+                            if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
+                                priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
+                            discount = discount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getDiscount());
+                        }
+
+                        //Set Payment details
+                        String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+                        CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
+                        CartFragment.discountAmount.setText("- " + currency + "" + discount);
+                        int payAmount = priceAmount - discount;
+                        CartFragment.payAmount.setText(currency + "" + payAmount);
+
+                    }else {
+                        CartFragment.errorLayout.setVisibility(View.VISIBLE);
+                        CartFragment.dataLayout.setVisibility(View.GONE);
+                        Toast.makeText(context, "Cart is empty", Toast.LENGTH_SHORT).show();
                     }
 
-                    //Set Payment details
-                    String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-                    CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
-                    CartFragment.discountAmount.setText("- " + currency + "" + discount);
-                    int payAmount = priceAmount - discount;
-                    CartFragment.payAmount.setText(currency + "" + payAmount);
 
                 }
             }
