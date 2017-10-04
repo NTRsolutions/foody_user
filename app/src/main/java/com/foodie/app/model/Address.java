@@ -38,10 +38,10 @@ public class Address {
     private String mapAddress;
     @SerializedName("latitude")
     @Expose
-    private String latitude;
+    private Double latitude;
     @SerializedName("longitude")
     @Expose
-    private String longitude;
+    private Double longitude;
     @SerializedName("type")
     @Expose
     private String type;
@@ -176,28 +176,28 @@ public class Address {
         return this;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public Address withLatitude(String latitude) {
+    public Address withLatitude(Double latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public Address withLongitude(String longitude) {
+    public Address withLongitude(Double longitude) {
         this.longitude = longitude;
         return this;
     }

@@ -16,14 +16,20 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.Message;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -41,12 +47,17 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SaveDeliveryLocationActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -64,6 +75,14 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     ImageView dummyImageView;
     @BindView(R.id.animation_line_cart_add)
     ImageView animationLineCartAdd;
+    @BindView(R.id.type_radiogroup)
+    RadioGroup typeRadiogroup;
+    @BindView(R.id.home_radio)
+    RadioButton homeRadio;
+    @BindView(R.id.work_radio)
+    RadioButton workRadio;
+    @BindView(R.id.other_radio)
+    RadioButton otherRadio;
 
     private String TAG = "SaveDelivery";
     private BottomSheetBehavior behavior;
@@ -82,13 +101,16 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
     com.foodie.app.model.Address address = null;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_delivery_location);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-
+        address = new com.foodie.app.model.Address();
+        address.setType("other");
         //Intialize Animation line
         initializeAvd();
 
@@ -138,6 +160,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String id = extras.getString("place_id");
+            String isEdit = extras.getString("edit");
             if (id != null) {
                 Places.GeoDataApi.getPlaceById(mGoogleApiClient, id).setResultCallback(new ResultCallback<PlaceBuffer>() {
                     @Override
@@ -156,7 +179,32 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 });
             }
 
+            if (isEdit != null && isEdit.equals("yes")) {
+                if (CommonClass.selectedAddress != null) {
+                    address = CommonClass.selectedAddress;
+                    addressEdit.setText(address.getMapAddress());
+                    flatNoEdit.setText(address.getBuilding());
+                    landmark.setText(address.getLandmark());
+                    if (address.getType().equals("home")) {
+                        homeRadio.setChecked(true);
+                    } else if (address.getType().equals("work")) {
+                        workRadio.setChecked(true);
+                    } else {
+                        otherRadio.setChecked(true);
+                    }
+                }
+            }
+
         }
+
+        typeRadiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
+                address.setType(radioButton.getText().toString().toLowerCase());
+            }
+        });
+
 
     }
 
@@ -230,15 +278,19 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     public void onLocationChanged(Location location) {
         if (value == 0) {
             value = 1;
-            LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(16).build();
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            getAddress(location.getLatitude(), location.getLongitude());
+            if (address.getId() == null) {
+                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(16).build();
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            } else {
+                LatLng loc = new LatLng(address.getLatitude(), address.getLongitude());
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(16).build();
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+            //getAddress(location.getLatitude(), location.getLongitude());
         }
         crtLat = location.getLatitude();
         crtLng = location.getLongitude();
-
-        System.out.println(TAG + crtLat);
     }
 
     private void getAddress(double latitude, double longitude) {
@@ -257,6 +309,14 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     strReturnedAddress.append(returnedAddress.getAddressLine(0)).append("");
                 }
                 addressEdit.setText(strReturnedAddress.toString());
+                Address obj = addresses.get(0);
+
+                address.setCity(obj.getLocality());
+                address.setState(obj.getAdminArea());
+                address.setCountry(obj.getCountryName());
+                address.setLatitude(obj.getLatitude());
+                address.setLongitude(obj.getLongitude());
+                address.setPincode(obj.getPostalCode());
                 //SharedHelper.putKey(context, "pickup_address", strReturnedAddress.toString());
             }
         } catch (Exception e) {
@@ -316,6 +376,62 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    private void saveAddress() {
+        if (address != null && address.getMapAddress() != null) {
+            Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
+            call.enqueue(new Callback<com.foodie.app.model.Address>() {
+                @Override
+                public void onResponse(Call<com.foodie.app.model.Address> call, Response<com.foodie.app.model.Address> response) {
+                    if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            Toast.makeText(SaveDeliveryLocationActivity.this, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(SaveDeliveryLocationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    } else if (response != null && response.isSuccessful()) {
+                        CommonClass.selectedAddress = response.body();
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<com.foodie.app.model.Address> call, Throwable t) {
+                    Log.e(TAG, t.toString());
+                    Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private void updateAddress() {
+        if (address != null && address.getMapAddress() != null && address.getId() != null) {
+            Call<com.foodie.app.model.Address> call = apiInterface.updateAddress(address.getId(), address);
+            call.enqueue(new Callback<com.foodie.app.model.Address>() {
+                @Override
+                public void onResponse(Call<com.foodie.app.model.Address> call, Response<com.foodie.app.model.Address> response) {
+                    if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                        try {
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            Toast.makeText(SaveDeliveryLocationActivity.this, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(SaveDeliveryLocationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    } else if (response != null && response.isSuccessful()) {
+                        CommonClass.selectedAddress = response.body();
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<com.foodie.app.model.Address> call, Throwable t) {
+                    Log.e(TAG, t.toString());
+                    Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -326,8 +442,23 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick(R.id.backArrow)
-    public void onViewClicked() {
-        onBackPressed();
+    @OnClick({R.id.backArrow, R.id.save})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.backArrow:
+                onBackPressed();
+                break;
+            case R.id.save:
+                address.setMapAddress(addressEdit.getText().toString());
+                address.setBuilding(flatNoEdit.getText().toString());
+                address.setLandmark(landmark.getText().toString());
+
+                if (address.getId() != null) {
+                    updateAddress();
+                } else {
+                    saveAddress();
+                }
+                break;
+        }
     }
 }

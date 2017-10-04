@@ -7,6 +7,7 @@ package com.foodie.app.build.api;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.ForgotPassword;
+import com.foodie.app.model.Message;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.model.User;
 import com.foodie.app.model.LoginModel;
@@ -18,11 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -66,4 +71,13 @@ public interface ApiInterface {
 
     @GET("api/user/address")
     Call<List<Address>> getAddresses();
+
+    @POST("api/user/address")
+    Call<Address> saveAddress(@Body Address address);
+
+    @PATCH("api/user/address/{id}")
+    Call<Address> updateAddress(@Path("id") int id, @Body Address address);
+
+    @DELETE("api/user/address/{id}")
+    Call<Message> deleteAddress(@Path("id") int id);
 }

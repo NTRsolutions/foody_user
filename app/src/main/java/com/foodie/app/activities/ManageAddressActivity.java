@@ -17,8 +17,6 @@ import com.foodie.app.adapter.ManageAddressAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.model.Address;
-import com.foodie.app.model.AddressModel;
-import com.foodie.app.model.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +41,7 @@ public class ManageAddressActivity extends AppCompatActivity {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     List<Address> locations;
     ManageAddressAdapter adapter;
+    boolean isSuccessDelete = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +63,13 @@ public class ManageAddressActivity extends AppCompatActivity {
         manageAddressRv.setLayoutManager(new LinearLayoutManager(this));
         manageAddressRv.setItemAnimator(new DefaultItemAnimator());
         manageAddressRv.setAdapter(adapter);
-        getAddress();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAddress();
     }
 
     private void getAddress() {
@@ -73,7 +77,7 @@ public class ManageAddressActivity extends AppCompatActivity {
         getres.enqueue(new Callback<List<Address>>() {
             @Override
             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     locations.clear();
                     locations.addAll(response.body());
                     adapter.notifyDataSetChanged();

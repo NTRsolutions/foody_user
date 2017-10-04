@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="410dp"
+    android:layout_height="wrap_content"
     android:background="@color/colorWhite"
     android:orientation="vertical"
     app:behavior_hideable="false"
@@ -66,7 +66,7 @@
                     android:id="@+id/flat_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="House/flat no"
+                    android:hint="House / Flat No"
                     android:inputType="textPostalAddress"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
@@ -107,9 +107,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
-            <LinearLayout
+
+            <RadioGroup
+                android:id="@+id/type_radiogroup"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/home_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/ic_home"
+                    android:background="@drawable/radio_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textAllCaps="true"
+                    android:layout_weight="1"
+                    android:text="Home" />
+
+                <RadioButton
+                    android:id="@+id/work_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/ic_work"
+                    android:background="@drawable/radio_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_weight="1"
+                    android:textAllCaps="true"
+                    android:text="@string/work" />
+                <RadioButton
+                    android:id="@+id/other_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/ic_pin_locator_1"
+                    android:background="@drawable/radio_button"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:checked="true"
+                    android:layout_weight="1"
+                    android:textAllCaps="true"
+                    android:text="@string/other" />
+
+            </RadioGroup>
+
+            <!--<LinearLayout
                 android:id="@+id/homelayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -176,18 +225,17 @@
                     android:textAllCaps="true" />
 
 
-            </LinearLayout>
+            </LinearLayout>-->
 
 
         </LinearLayout>
 
         <Button
+            android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:alpha="0.5"
             android:background="@color/colorAccent"
-            android:text="@string/save_and_proceed"
+            android:text="@string/save"
             android:textColor="@color/colorWhite" />
 
     </LinearLayout>

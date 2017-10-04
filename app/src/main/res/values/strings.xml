@@ -44,10 +44,13 @@
     <string name="open_settings">"Open Settings"</string>
     <string name="home">"Home"</string>
     <string name="work">"Work"</string>
+    <string name="office">"Office"</string>
     <string name="other">"Other"</string>
+    <string name="save">"Save"</string>
     <string name="save_and_proceed">"Save and Proceed"</string>
     <string name="edit">"Edit"</string>
     <string name="delete">"Delete"</string>
+    <string name="delete_confirm">"Do you really want to delete?"</string>
     <string name="orders">"Orders"</string>
     <string name="apply_filter">"Apply Filter"</string>
 
