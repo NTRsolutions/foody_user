@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -17,9 +18,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.foodie.app.HeaderView;
@@ -29,6 +33,8 @@ import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.ShopsModel;
 import com.sackcentury.shinebuttonlib.ShineButton;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.net.URL;
@@ -141,6 +147,52 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
                 .error(R.drawable.item1).into(restaurantImage);
+
+        //Set Palette color
+        Picasso.with(HotelViewActivity.this)
+                .load(shops.getAvatar())
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        assert restaurantImage != null;
+                        restaurantImage.setImageBitmap(bitmap);
+                        Palette.from(bitmap)
+                                .generate(new Palette.PaletteAsyncListener() {
+                                    @Override
+                                    public void onGenerated(Palette palette) {
+                                        Palette.Swatch textSwatch = palette.getVibrantSwatch();
+                                        if (textSwatch == null) {
+                                            Toast.makeText(HotelViewActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                            Window window = getWindow();
+                                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                                            window.setStatusBarColor(textSwatch.getRgb());
+//                                            if (Build.VERSION.SDK_INT >= 21) {
+//                                                int defaultColor = getResources().getColor(R.color.colorTransparent);
+//                                                getWindow().setNavigationBarColor(palette.getVibrantColor(defaultColor));
+//                                            }
+                                        }
+                                        headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
+                                        headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
+                                    }
+                                });
+
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+
 
         Bitmap imageBitmap = null;
 

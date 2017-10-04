@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,25 +16,21 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
-import com.foodie.app.adapter.PromotionsAdapter;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.ProductList;
-import com.foodie.app.model.PromotionsModel;
 import com.robinhood.ticker.TickerUtils;
 
 import org.json.JSONObject;
@@ -67,8 +62,6 @@ public class CartFragment extends Fragment {
     @BindView(R.id.order_item_rv)
     RecyclerView orderItemRv;
 
-    @BindView(R.id.linear_main)
-    LinearLayout linearMain;
     @BindView(R.id.map_marker_image)
     ImageView mapMarkerImage;
     @BindView(R.id.location_error_title)
@@ -88,10 +81,17 @@ public class CartFragment extends Fragment {
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
+    public static TextView itemTotalAmount, deliveryCharges, promoCodeApply, discountAmount, payAmount;
+
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
     //Orderitem List
     List<ProductList> viewCartItemList;
+
+    int priceAmount = 0;
+    int discount = 0;
+    int itemCount = 0;
+    int itemQuantity = 0;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ViewCartAdapter viewCartAdapter;
@@ -106,26 +106,15 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-
         ButterKnife.bind(this, view);
 
-        customDialog = new CustomDialog(context);
-//        addCardLayout.setVisibility(View.VISIBLE);
-//        cardValueTicker.setCharacterList(NUMBER_LIST);
-//        cardValueTicker.setText(String.valueOf(1));
-//        addCardTextLayout.setVisibility(View.GONE);
-//        animationLineCartAdd.setVisibility(View.INVISIBLE);
-//        numberButton.setOnClickListener(new ElegantNumberButton.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String num = numberButton.getNumber();
-//                animationLineCartAdd.setVisibility(View.VISIBLE);
-//                linearMain.setAlpha((float) 0.5);
-//                view.setClickable(false);
-//                initializeAvd();
-//            }
-//        });
+        itemTotalAmount = (TextView) view.findViewById(R.id.item_total_amount);
+        deliveryCharges = (TextView) view.findViewById(R.id.delivery_charges);
+        promoCodeApply = (TextView) view.findViewById(R.id.promo_code_apply);
+        discountAmount = (TextView) view.findViewById(R.id.discount_amount);
+        payAmount = (TextView) view.findViewById(R.id.total_amount);
 
+        customDialog = new CustomDialog(context);
         getViewCart();
 
 
@@ -133,7 +122,7 @@ public class CartFragment extends Fragment {
         //Offer Restaurant Adapter
         orderItemRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         orderItemRv.setItemAnimator(new DefaultItemAnimator());
-        orderItemRv.setHasFixedSize(true);
+        orderItemRv.setHasFixedSize(false);
         orderItemRv.setNestedScrollingEnabled(false);
 
         addAddressBtn.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +153,26 @@ public class CartFragment extends Fragment {
                     }
                 } else if (response.isSuccessful()) {
                     customDialog.dismiss();
-                    //Get Profile data
+                    //Get response data
+                    //get Item Count
+                    itemCount = response.body().getProductList().size();
+                    for (int i = 0; i < itemCount; i++) {
+                        //Get Total item Quantity
+                        itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
+                        //Get product price
+                        if (response.body().getProductList().get(i).getProduct().getPrices().getPrice() != null)
+                            priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
+                        discount = discount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getDiscount());
+                    }
+
+                    //Set Payment details
+                    String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
+                    itemTotalAmount.setText(currency + "" + priceAmount);
+                    discountAmount.setText("- " + currency + "" + discount);
+                    int topPayAmount = priceAmount - discount;
+                    payAmount.setText(currency + "" + topPayAmount);
+
+                    deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
                     viewCartItemList.addAll(response.body().getProductList());
                     viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);
                     orderItemRv.setAdapter(viewCartAdapter);
@@ -179,29 +187,6 @@ public class CartFragment extends Fragment {
         });
     }
 
-//    Runnable action = new Runnable() {
-//        @Override
-//        public void run() {
-//            avdProgress.stop();
-//            if (animationLineCartAdd != null)
-//                animationLineCartAdd.setVisibility(View.INVISIBLE);
-//            if (linearMain != null) {
-//                linearMain.setAlpha((float) 1);
-//                numberButton.setClickable(true);
-//            }
-//        }
-//    };
-//
-//    private void initializeAvd() {
-//        avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
-//        animationLineCartAdd.setBackground(avdProgress);
-//        repeatAnimation();
-//    }
-//
-//    private void repeatAnimation() {
-//        avdProgress.start();
-//        animationLineCartAdd.postDelayed(action, 3000); // Will repeat animation in every 1 second
-//    }
 
     @Override
     public void onResume() {
@@ -253,9 +238,9 @@ public class CartFragment extends Fragment {
             toolbar.setVisibility(View.GONE);
             dummyImageView.setVisibility(View.VISIBLE);
         } else {
+
             dummyImageView.setVisibility(View.GONE);
         }
-//        cardValueTicker.setCharacterList(NUMBER_LIST);
 
     }
 

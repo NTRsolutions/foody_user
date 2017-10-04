@@ -1,11 +1,15 @@
 package com.foodie.app.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Handler;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Product;
@@ -38,12 +43,17 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     private List<ProductList> list;
     private Context context;
     int priceAmount = 0;
+    int discount = 0;
     int itemCount = 0;
     int itemQuantity = 0;
     Product product;
-    List<Product> productList;
+    boolean dataResponse = false;
+    ProductList productList;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     AddCart addCart;
+    AnimatedVectorDrawableCompat avdProgress;
+    Dialog dialog;
+    Runnable action;
 
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
@@ -70,6 +80,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         int position = list.indexOf(item);
         list.remove(position);
         notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -77,25 +88,12 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
         holder.cardAddTextLayout.setVisibility(View.GONE);
         holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-//        cardValueTicker.setCharacterList(NUMBER_LIST);
-//        cardValueTicker.setText(String.valueOf(1));
-//        addCardTextLayout.setVisibility(View.GONE);
-//        animationLineCartAdd.setVisibility(View.INVISIBLE);
-//        numberButton.setOnClickListener(new ElegantNumberButton.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String num = numberButton.getNumber();
-//                animationLineCartAdd.setVisibility(View.VISIBLE);
-//                linearMain.setAlpha((float) 0.5);
-//                view.setClickable(false);
-//                initializeAvd();
-//            }
-//        });
         product = list.get(position).getProduct();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
-        holder.cardTextValueTicker.setText(String.valueOf(1));
-        holder.priceTxt.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
+        holder.cardTextValue.setText(list.get(position).getQuantity().toString());
+        holder.cardTextValueTicker.setText(list.get(position).getQuantity().toString());
+        holder.priceTxt.setText(product.getPrices().getCurrency() + " " +list.get(position).getQuantity()*product.getPrices().getPrice());
         if (!product.getFoodType().equalsIgnoreCase("veg")) {
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
         } else {
@@ -105,6 +103,24 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
             @Override
             public void onClick(View v) {
                 Log.e("access_token2", CommonClass.getInstance().accessToken);
+                /** Intilaize Animation View Image */
+                holder.animationLineCartAdd.setVisibility(View.VISIBLE);
+                //Intialize
+                avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
+                holder.animationLineCartAdd.setBackground(avdProgress);
+                avdProgress.start();
+                action = new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!dataResponse){
+                            avdProgress.start();
+                            holder.animationLineCartAdd.postDelayed(action, 3000);
+                        }
+
+                    }
+                };
+                holder.animationLineCartAdd.postDelayed(action, 3000);
+
                 /** Press Add Card Add button */
                 product = list.get(position).getProduct();
                 int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
@@ -115,6 +131,9 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 map.put("quantity", holder.cardTextValue.getText().toString());
                 Log.e("AddCart_add", map.toString());
                 addCart(map);
+                int quantity= Integer.parseInt(holder.cardTextValue.getText().toString());
+                priceAmount=quantity*product.getPrices().getPrice();
+                holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
 
             }
         });
@@ -123,32 +142,52 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
             @Override
             public void onClick(View v) {
 
+                /** Intilaize Animation View Image */
+                holder.animationLineCartAdd.setVisibility(View.VISIBLE);
+                //Intialize
+                avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
+                holder.animationLineCartAdd.setBackground(avdProgress);
+                avdProgress.start();
+                action = new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!dataResponse){
+                            avdProgress.start();
+                            holder.animationLineCartAdd.postDelayed(action, 3000);
+                        }
+                    }
+                };
+                holder.animationLineCartAdd.postDelayed(action, 3000);
+
+                int countMinusValue;
                 /** Press Add Card Minus button */
                 product = list.get(position).getProduct();
                 if (holder.cardTextValue.getText().toString().equalsIgnoreCase("1")) {
-                    int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
+                    countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity", "0");
-                    Log.e("AddCart_Minus", map.toString());
-                    addCart(map);
+                    productList = list.get(position);
+                    remove(productList);
                 } else {
-                    int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
+                    countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity", holder.cardTextValue.getText().toString());
-                    Log.e("AddCart_Minus", map.toString());
-                    addCart(map);
                 }
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("product_id", product.getId().toString());
+                map.put("quantity", String.valueOf(countMinusValue));
+                Log.e("AddCart_Minus", map.toString());
+                addCart(map);
+
+                int quantity= Integer.parseInt(holder.cardTextValue.getText().toString());
+                priceAmount=quantity*product.getPrices().getPrice();
+                holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
             }
         });
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -182,11 +221,21 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
     }
 
+
     private void addCart(HashMap<String, String> map) {
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.empty_dialog);
+        dialog.setCancelable(true);
+        dataResponse = false;
+        dialog.show();
         Call<AddCart> call = apiInterface.postAddCart(map);
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                avdProgress.stop();
+                dialog.dismiss();
+                dataResponse = true;
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -197,6 +246,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
                     priceAmount = 0;
+                    discount = 0;
                     itemQuantity = 0;
                     itemCount = 0;
 
@@ -208,30 +258,15 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         //Get product price
                         if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                             priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
-                    }
-                    if (itemQuantity == 0) {
-//                        HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
-//                        // Start animation
-//                        HotelViewActivity.viewCartLayout.startAnimation(slide_down);
-                    } else if (itemQuantity == 1) {
-                        String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-//                        HotelViewActivity.itemText.setText("" + itemQuantity + " Item | " + currency + "" + priceAmount);
-//                        if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
-//                            // Start animation
-//                            HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
-//                            HotelViewActivity.viewCartLayout.startAnimation(slide_up);
-//                        }
-                    } else {
-                        String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-//                        HotelViewActivity.itemText.setText("" + itemQuantity + " Items | " + currency + "" + priceAmount);
-//                        if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
-//                            // Start animation
-//                            HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
-//                            HotelViewActivity.viewCartLayout.startAnimation(slide_up);
-//                        }
-
+                        discount = discount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getDiscount());
                     }
 
+                    //Set Payment details
+                    String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+                    CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
+                    CartFragment.discountAmount.setText("- " + currency + "" + discount);
+                    int payAmount = priceAmount - discount;
+                    CartFragment.payAmount.setText(currency + "" + payAmount);
 
                 }
             }

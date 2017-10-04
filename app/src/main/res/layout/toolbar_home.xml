@@ -31,17 +31,19 @@
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical"
+            android:gravity="center_vertical"
             android:visibility="invisible">
 
 
             <TextView
+                android:paddingEnd="@dimen/_8sdp"
                 android:id="@+id/address_label"
                 fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_down"
-                android:gravity="center_vertical"
+                android:drawableRight="@drawable/ic_down"
                 android:maxLines="1"
                 android:text="Home"
                 android:textAllCaps="true"
@@ -53,7 +55,7 @@
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-5dp"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:text="Washington, DC, Green town west..."

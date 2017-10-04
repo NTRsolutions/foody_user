@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,12 +48,15 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 v = inflater.inflate(R.layout.header_order, parent, false);
+//                setScaleAnimation(v);
                 return new ViewHolder(v, true);
             case VIEW_TYPE_ITEM:
                 v = inflater.inflate(R.layout.orders_list_item, parent, false);
+//                setScaleAnimation(v);
                 return new ViewHolder(v, false);
             default:
                 v = inflater.inflate(R.layout.orders_list_item, parent, false);
+//                setScaleAnimation(v);
                 return new ViewHolder(v, false);
         }
     }
@@ -75,6 +81,12 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
                 System.out.println(list.get(section).getHeader());
             }
         });
+    }
+
+    private void setScaleAnimation(View view) {
+        ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setDuration(1000);
+        view.startAnimation(anim);
     }
 
     @Override
@@ -104,7 +116,9 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         });
 
 
+
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;

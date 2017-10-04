@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -22,6 +24,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.foodie.app.LocationUtil.PermissionUtils;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
@@ -58,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private static final int TIME_DELAY = 2000;
     private static long back_pressed;
-    private BottomBar bottomBar;
+    private AHBottomNavigation bottomNavigation;
     private ConnectionHelper connectionHelper;
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -130,28 +135,67 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.main_container, fragment).commit();
 
-        bottomBar = (BottomBar) findViewById(R.id.bottom_navigation);
-        bottomBar.setTabTitleTextAppearance(2);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
+
+        // Create items
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.home, R.drawable.ic_home, R.color.grey);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.search, R.drawable.ic_search, R.color.grey);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem("Cart", R.drawable.ic_cart, R.color.grey);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem("Profile", R.drawable.ic_user, R.color.grey);
+
+// Add items
+        bottomNavigation.addItem(item1);
+        bottomNavigation.addItem(item2);
+        bottomNavigation.addItem(item3);
+        bottomNavigation.addItem(item4);
+
+// Set background color
+        bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
+
+
+// Disable the translation inside the CoordinatorLayout
+        bottomNavigation.setBehaviorTranslationEnabled(true);
+        bottomNavigation.setTranslucentNavigationEnabled(true);
+
+        bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+
+// Change colors
+        bottomNavigation.setAccentColor(Color.parseColor("#FF5722"));
+        bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
+
+        AHNotification notification = new AHNotification.Builder()
+                .setText("2")
+                .setBackgroundColor(ContextCompat.getColor(HomeActivity.this, R.color.theme))
+                .setTextColor(ContextCompat.getColor(HomeActivity.this, R.color.colorTextWhite))
+                .build();
+        bottomNavigation.setNotification(notification, 2);
+
+        // Set current item programmatically
+        bottomNavigation.setCurrentItem(0);
+
+        // Set listeners
+        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                switch (tabId) {
-                    case R.id.action_home:
+            public boolean onTabSelected(int position, boolean wasSelected) {
+                // Do something cool here...
+                switch (position) {
+                    case 0:
                         fragment = new HomeFragment();
                         break;
-                    case R.id.action_search:
+                    case 1:
                         fragment = new SearchFragment();
                         break;
-                    case R.id.action_cart:
+                    case 2:
                         fragment = new CartFragment();
                         break;
-                    case R.id.action_profile:
+                    case 3:
                         fragment = new ProfileFragment();
                         break;
                 }
 
                 final FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.main_container, fragment).commit();
+                return true;
             }
         });
 

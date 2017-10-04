@@ -89,7 +89,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ViewCartActivity" />
+        <activity android:name=".activities.ViewCartActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.PastOrderDetailActivity"
             android:label=" "

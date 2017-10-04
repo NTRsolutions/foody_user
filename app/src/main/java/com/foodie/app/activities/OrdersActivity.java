@@ -8,9 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.OrdersAdapter;
+import com.foodie.app.helper.SlideUpItemAnimator;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 
@@ -28,8 +31,9 @@ public class OrdersActivity extends AppCompatActivity {
     RecyclerView ordersRv;
 
     private OrdersAdapter adapter;
-    Activity activity=OrdersActivity.this;
+    Activity activity = OrdersActivity.this;
     private List<OrderModel> modelListReference = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +49,19 @@ public class OrdersActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        toolbar.setPadding(0,0,0,0);//for tab otherwise give space in tab
-        toolbar.setContentInsetsAbsolute(0,0);
+        toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
+        toolbar.setContentInsetsAbsolute(0, 0);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         ordersRv.setLayoutManager(manager);
-        adapter = new OrdersAdapter(this,activity, modelListReference);
+        adapter = new OrdersAdapter(this, activity, modelListReference);
         ordersRv.setAdapter(adapter);
+        ordersRv.setHasFixedSize(false);
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+        ordersRv.setLayoutAnimation(controller);
+        ordersRv.scheduleLayoutAnimation();
+
     }
 
     @Override
@@ -81,9 +91,10 @@ public class OrdersActivity extends AppCompatActivity {
 
         modelListReference.clear();
         modelListReference.addAll(modelList);
-        adapter.notifyDataSetChanged();
+        ordersRv.getAdapter().notifyDataSetChanged();
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
