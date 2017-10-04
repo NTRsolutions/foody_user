@@ -107,5 +107,9 @@
     <string name="new_password">New Password</string>
     <string name="change">Change</string>
     <string name="register">Register</string>
+    <string name="cart_error_title">Good food is always getting cooked</string>
+    <string name="cart_error_description">Please order the dishes</string>
+    <string name="add_address_to_proceed">Add address to proceed</string>
+    <string name="proceed_to_pay">Proceed to pay</string>
 
 </resources>

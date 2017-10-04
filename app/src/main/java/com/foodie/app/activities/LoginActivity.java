@@ -141,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSelectCountry(String name, String code, String dialCode,
                                         int flagDrawableResID) {
                 countryNumber.setText(dialCode);
+                country_code = dialCode;
                 countryImage.setImageResource(flagDrawableResID);
                 mCountryPicker.dismiss();
             }
@@ -225,8 +226,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 } else if (response.isSuccessful()) {
                     //Get Profile data
-                    SharedHelper.putKey(context,"access_token",response.body().getTokenType() + " " + response.body().getAccessToken());
-                    CommonClass.getInstance().accessToken=response.body().getTokenType() + " " + response.body().getAccessToken();
+                    SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
+                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     getProfile();
                 }
 

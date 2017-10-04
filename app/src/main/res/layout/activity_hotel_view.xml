@@ -465,6 +465,7 @@
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <TextView
+            android:gravity="center"
             android:id="@+id/item_text"
             fontPath="fonts/Nunito-Bold.ttf"
             android:layout_width="wrap_content"
@@ -473,12 +474,13 @@
             android:textSize="@dimen/text_small_large" />
 
         <TextView
+            android:gravity="center"
             android:id="@+id/view_cart"
             fontPath="fonts/Nunito-Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:drawableEnd="@drawable/ic_cart_bag"
+            android:drawableEnd="@drawable/ic_cart_white"
             android:drawablePadding="@dimen/_5sdp"
             android:text="View Cart"
             android:textAllCaps="true"

@@ -26,6 +26,7 @@ public class CommonClass {
     public static Address selectedAddress = null;
 
     public static List<ShopsModel> list;
+    public static Address selectedAddress;
 
     public static int otpValue = 0;
     public static String mobile = "";

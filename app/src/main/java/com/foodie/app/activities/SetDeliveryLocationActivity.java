@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,12 +52,18 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     private List<AddressModel> modelListReference = new ArrayList<>();
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     List<AddressModel> modelList = new ArrayList<>();
+
+    public static boolean isAddressSelection = false;
+    Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_delivery_location);
         ButterKnife.bind(this);
+        activity = SetDeliveryLocationActivity.this;
 
+        isAddressSelection = getIntent().getBooleanExtra("get_address", false);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,7 +75,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
 
         manager = new LinearLayoutManager(this);
         deliveryLocationRv.setLayoutManager(manager);
-        adapter = new DeliveryLocationAdapter(this, modelListReference);
+        adapter = new DeliveryLocationAdapter(this, activity, modelListReference);
         deliveryLocationRv.setAdapter(adapter);
         getAddress();
     }
@@ -78,29 +85,6 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        /*List<AddressModel> modelList = new ArrayList<>();
-
-        List<Location> locations = new ArrayList<>();
-        locations.add(new Location("Home", "Madhavaram, Chennai", 1));
-        locations.add(new Location("Work", "Greems Road, Chennai", 2));
-        locations.add(new Location("Karthik Home", "Reteri, Anna salai, Chennai", 0));
-        AddressModel model = new AddressModel();
-        model.setHeader("Saved Address");
-        model.setLocations(locations);
-        modelList.add(model);
-
-        locations = new ArrayList<>();
-        locations.add(new Location("Anna Nager", "Koyambedu Busstand, Chennai", 0));
-        locations.add(new Location("Thousand Lights", "9629071600", 0));
-        model = new AddressModel();
-        model.setHeader("Recent Searches");
-        model.setLocations(locations);
-        modelList.add(model);
-
-        modelListReference.clear();
-        modelListReference.addAll(modelList);
-        adapter.notifyDataSetChanged();*/
-
     }
 
     private void getAddress() {
@@ -108,7 +92,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         getres.enqueue(new Callback<List<Address>>() {
             @Override
             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     AddressModel model = new AddressModel();
                     model.setHeader("Saved Address");

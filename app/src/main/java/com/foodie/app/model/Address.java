@@ -5,7 +5,7 @@ package com.foodie.app.model;
  */
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-public class Address {
+public class Address {h
     @SerializedName("id")
     @Expose
     private Integer id;

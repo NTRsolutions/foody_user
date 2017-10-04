@@ -1,6 +1,8 @@
 package com.foodie.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Location;
 import com.foodie.app.model.AddressModel;
@@ -26,9 +29,12 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
 
     private List<AddressModel> list = new ArrayList<>();
     private LayoutInflater inflater;
+    Context context;
+    Activity activity;
 
-    public DeliveryLocationAdapter(Context context, List<AddressModel> list) {
-        Context context1 = context;
+    public DeliveryLocationAdapter(Context context, Activity activity, List<AddressModel> list) {
+        this.context = context;
+        this.activity = activity;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
 
@@ -83,7 +89,11 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(object.getMapAddress());
+                //some code
+                Intent returnIntent = new Intent();
+                CommonClass.getInstance().selectedAddress=object;
+                activity.setResult(Activity.RESULT_OK,returnIntent);
+                activity.finish();
 
             }
         });
