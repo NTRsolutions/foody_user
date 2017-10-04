@@ -13,8 +13,11 @@ import android.widget.LinearLayout;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.DeliveryLocationAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.model.Address;
 import com.foodie.app.model.Location;
-import com.foodie.app.model.LocationModel;
+import com.foodie.app.model.AddressModel;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -27,6 +30,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SetDeliveryLocationActivity extends AppCompatActivity {
@@ -42,8 +48,9 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     LinearLayout findPlaceLl;
     private String TAG = "DeliveryLocationActi";
     private DeliveryLocationAdapter adapter;
-    private List<LocationModel> modelListReference = new ArrayList<>();
-
+    private List<AddressModel> modelListReference = new ArrayList<>();
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    List<AddressModel> modelList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +70,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         deliveryLocationRv.setLayoutManager(manager);
         adapter = new DeliveryLocationAdapter(this, modelListReference);
         deliveryLocationRv.setAdapter(adapter);
-
+        getAddress();
     }
 
 
@@ -71,13 +78,13 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        List<LocationModel> modelList = new ArrayList<>();
+        /*List<AddressModel> modelList = new ArrayList<>();
 
         List<Location> locations = new ArrayList<>();
         locations.add(new Location("Home", "Madhavaram, Chennai", 1));
         locations.add(new Location("Work", "Greems Road, Chennai", 2));
         locations.add(new Location("Karthik Home", "Reteri, Anna salai, Chennai", 0));
-        LocationModel model = new LocationModel();
+        AddressModel model = new AddressModel();
         model.setHeader("Saved Address");
         model.setLocations(locations);
         modelList.add(model);
@@ -85,15 +92,39 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         locations = new ArrayList<>();
         locations.add(new Location("Anna Nager", "Koyambedu Busstand, Chennai", 0));
         locations.add(new Location("Thousand Lights", "9629071600", 0));
-        model = new LocationModel();
+        model = new AddressModel();
         model.setHeader("Recent Searches");
         model.setLocations(locations);
         modelList.add(model);
 
         modelListReference.clear();
         modelListReference.addAll(modelList);
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
 
+    }
+
+    private void getAddress() {
+        Call<List<Address>> getres = apiInterface.getAddresses();
+        getres.enqueue(new Callback<List<Address>>() {
+            @Override
+            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                if(response.isSuccessful()){
+
+                    AddressModel model = new AddressModel();
+                    model.setHeader("Saved Address");
+                    model.setAddresses(response.body());
+                    modelList.add(model);
+                    modelListReference.clear();
+                    modelListReference.addAll(modelList);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Address>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

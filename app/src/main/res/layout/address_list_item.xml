@@ -22,10 +22,10 @@
             <ImageView
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
-                android:padding="5dp"
+                android:padding="8dp"
                 android:id="@+id/icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="@string/address"
                 android:src="@drawable/ic_pin_locator_1" />
 
@@ -75,7 +75,7 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:text="@string/edit"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:textColor="@color/colorAccent" />
 
                 <Button
                     android:id="@+id/delete"
@@ -87,7 +87,7 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:text="@string/delete"
-                    android:textColor="@color/colorSecondaryText" />
+                    android:textColor="@color/colorAccent" />
             </LinearLayout>
 
         </LinearLayout>

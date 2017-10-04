@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.model.Address;
 import com.foodie.app.model.Location;
 
 import java.util.List;
@@ -21,10 +22,10 @@ import java.util.List;
 
 public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdapter.MyViewHolder> {
 
-    private List<Location> list;
+    private List<Address> list;
     private Context context;
 
-    public ManageAddressAdapter(List<Location> list, Context con) {
+    public ManageAddressAdapter(List<Address> list, Context con) {
         this.list = list;
         this.context = con;
     }
@@ -39,11 +40,11 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Location location = list.get(position);
+        Address obj = list.get(position);
 
-        holder.addressLabelTxt.setText(location.name);
-        holder.addressTxt.setText(location.address);
-        setIcon(holder.iconImg, location.icon_id);
+        holder.addressLabelTxt.setText(obj.getType());
+        holder.addressTxt.setText(obj.getMapAddress());
+        //setIcon(holder.iconImg, obj.icon_id);
 
     }
 
@@ -87,7 +88,7 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (v.getId() == editBtn.getId()) {
-                Toast.makeText(v.getContext(), "editBtn PRESSED = " + list.get(position).name + list.get(position).address, Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "editBtn PRESSED = " + list.get(position).getType() + list.get(position).getMapAddress(), Toast.LENGTH_SHORT).show();
             } else if (v.getId() == deleteBtn.getId()) {
                 Toast.makeText(v.getContext(), "deleteBtn PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
             }

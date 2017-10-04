@@ -81,7 +81,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     ImageView backArrow;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-
+    com.foodie.app.model.Address address = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

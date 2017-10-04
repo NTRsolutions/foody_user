@@ -14,6 +14,10 @@ import android.widget.Button;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.model.Address;
+import com.foodie.app.model.AddressModel;
 import com.foodie.app.model.Location;
 
 import java.util.ArrayList;
@@ -22,6 +26,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ManageAddressActivity extends AppCompatActivity {
@@ -33,6 +40,9 @@ public class ManageAddressActivity extends AppCompatActivity {
     @BindView(R.id.add_new_address)
     Button addNewAddress;
 
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    List<Address> locations;
+    ManageAddressAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +59,32 @@ public class ManageAddressActivity extends AppCompatActivity {
             }
         });
 
-        List<Location> locations = new ArrayList<>();
-        locations.add(new Location("Home", "1/12-D flat no-5, Madhavaram, Chennai, Tamilnadu", 1));
-        locations.add(new Location("Work", "8/13-D flat no-6, Greems Road, Chennai, Tamilnadu", 2));
-        locations.add(new Location("Other", "Reteri, Anna salai, Chennai, Tamilnadu", 0));
-        ManageAddressAdapter adapter = new ManageAddressAdapter(locations, ManageAddressActivity.this);
+        locations = new ArrayList<>();
+        adapter = new ManageAddressAdapter(locations, ManageAddressActivity.this);
         manageAddressRv.setLayoutManager(new LinearLayoutManager(this));
         manageAddressRv.setItemAnimator(new DefaultItemAnimator());
         manageAddressRv.setAdapter(adapter);
+        getAddress();
 
+    }
+
+    private void getAddress() {
+        Call<List<Address>> getres = apiInterface.getAddresses();
+        getres.enqueue(new Callback<List<Address>>() {
+            @Override
+            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                if(response.isSuccessful()){
+                    locations.clear();
+                    locations.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Address>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

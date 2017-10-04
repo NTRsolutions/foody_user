@@ -5,6 +5,7 @@ package com.foodie.app.build.api;
  */
 
 import com.foodie.app.model.AddCart;
+import com.foodie.app.model.Address;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.model.User;
@@ -63,4 +64,6 @@ public interface ApiInterface {
     @GET("api/user/cart")
     Call<AddCart> getViewCart();
 
+    @GET("api/user/address")
+    Call<List<Address>> getAddresses();
 }

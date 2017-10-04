@@ -11,8 +11,9 @@ import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
+import com.foodie.app.model.Address;
 import com.foodie.app.model.Location;
-import com.foodie.app.model.LocationModel;
+import com.foodie.app.model.AddressModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,10 @@ import java.util.List;
 
 public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<DeliveryLocationAdapter.ViewHolder> {
 
-    private List<LocationModel> list = new ArrayList<>();
+    private List<AddressModel> list = new ArrayList<>();
     private LayoutInflater inflater;
 
-    public DeliveryLocationAdapter(Context context, List<LocationModel> list) {
+    public DeliveryLocationAdapter(Context context, List<AddressModel> list) {
         Context context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
@@ -57,7 +58,7 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
 
     @Override
     public int getItemCount(int section) {
-        return list.get(section).getLocations().size();
+        return list.get(section).getAddresses().size();
     }
 
     @Override
@@ -73,16 +74,16 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int section, int relativePosition, int absolutePosition) {
-        final Location object = list.get(section).getLocations().get(relativePosition);
-        holder.addressLabel.setText(object.name);
-        holder.address.setText(object.address);
+        final Address object = list.get(section).getAddresses().get(relativePosition);
+        holder.addressLabel.setText(object.getType());
+        holder.address.setText(object.getMapAddress());
 
-        setIcon(holder.icon, object.icon_id);
+        //setIcon(holder.icon, object.icon_id);
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(object.name);
+                System.out.println(object.getMapAddress());
 
             }
         });

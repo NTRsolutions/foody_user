@@ -7,9 +7,9 @@ import java.util.List;
  * Created by santhosh@appoets.com on 28-08-2017.
  */
 
-public class LocationModel {
+public class AddressModel {
     String header;
-    List<Location> locations = new ArrayList<>();
+    List<Address> addresses = new ArrayList<>();
 
     public String getHeader() {
         return header;
@@ -19,11 +19,11 @@ public class LocationModel {
         this.header = header;
     }
 
-    public List<Location> getLocations() {
-        return locations;
+    public List<Address> getAddresses() {
+        return addresses;
     }
 
-    public void setLocations(List<Location> persons) {
-        this.locations = persons;
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 }
