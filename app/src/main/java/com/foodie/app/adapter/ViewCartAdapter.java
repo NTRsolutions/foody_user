@@ -23,6 +23,8 @@ import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Product;
 import com.foodie.app.model.ProductList;
+import com.foodie.app.model.Shop;
+import com.foodie.app.model.ShopsModel;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
@@ -54,6 +56,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     AnimatedVectorDrawableCompat avdProgress;
     Dialog dialog;
     Runnable action;
+    ShopsModel selectedShop=CommonClass.getInstance().selectedShop;
+
 
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
@@ -134,6 +138,18 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 int quantity= Integer.parseInt(holder.cardTextValue.getText().toString());
                 priceAmount=quantity*product.getPrices().getPrice();
                 holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
+
+//                for (int i = 0; i <selectedShop.getCategories().size() ; i++) {
+//                    for (int j = 0; j <selectedShop.getCategories().get(i).getProducts().size() ; j++) {
+//                        if(selectedShop.getCategories().get(i).getProducts().get(j).getId().equals()){
+//
+//                        }
+//
+//                    }
+//
+//
+//                }
+
 
             }
         });

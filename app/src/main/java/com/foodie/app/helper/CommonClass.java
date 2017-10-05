@@ -1,6 +1,8 @@
 package com.foodie.app.helper;
 
 import com.foodie.app.model.Address;
+import com.foodie.app.model.Checkout;
+import com.foodie.app.model.Shop;
 import com.foodie.app.model.User;
 import com.foodie.app.model.OtpModel;
 import com.foodie.app.model.ShopsModel;
@@ -24,8 +26,11 @@ public class CommonClass {
     public static String address = "";
     public static User profileModel = null;
     public static Address selectedAddress = null;
+    public static Checkout checkoutData = null;
 
     public static List<ShopsModel> list;
+
+    public  static ShopsModel selectedShop;
 
     public static int otpValue = 0;
     public static String mobile = "";

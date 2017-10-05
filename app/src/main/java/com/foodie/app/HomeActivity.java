@@ -22,18 +22,23 @@ import android.os.Bundle;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.foodie.app.LocationUtil.PermissionUtils;
+import com.foodie.app.adapter.ViewCartAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.AddCart;
 import com.foodie.app.utils.ConnectionHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -50,11 +55,16 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -86,6 +96,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     PermissionUtils permissionUtils;
     boolean isPermissionGranted;
 
+    int itemCount = 0;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    Context context = HomeActivity.this;
+    AHNotification notification;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +125,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             buildGoogleApiClient();
         }
 
+        getViewCart();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -163,12 +179,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         bottomNavigation.setAccentColor(Color.parseColor("#FF5722"));
         bottomNavigation.setInactiveColor(Color.parseColor("#747474"));
 
-        AHNotification notification = new AHNotification.Builder()
-                .setText("2")
-                .setBackgroundColor(ContextCompat.getColor(HomeActivity.this, R.color.theme))
-                .setTextColor(ContextCompat.getColor(HomeActivity.this, R.color.colorTextWhite))
-                .build();
-        bottomNavigation.setNotification(notification, 2);
 
         // Set current item programmatically
         bottomNavigation.setCurrentItem(0);
@@ -385,6 +395,44 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
                 break;
         }
+    }
+
+    private void getViewCart() {
+
+        Call<AddCart> call = apiInterface.getViewCart();
+        call.enqueue(new Callback<AddCart>() {
+            @Override
+            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    //get Item Count
+                    itemCount = response.body().getProductList().size();
+                    if (itemCount == 0) {
+
+                    } else {
+                         notification = new AHNotification.Builder()
+                                .setText(String.valueOf(itemCount))
+                                .setBackgroundColor(ContextCompat.getColor(HomeActivity.this, R.color.theme))
+                                .setTextColor(ContextCompat.getColor(HomeActivity.this, R.color.colorTextWhite))
+                                .build();
+                        bottomNavigation.setNotification(notification, 2);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCart> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

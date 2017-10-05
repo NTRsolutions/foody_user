@@ -21,6 +21,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.AddCart;
+import com.foodie.app.model.Cart;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.Product;
 import com.robinhood.ticker.TickerUtils;
@@ -110,7 +111,18 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         productList = list.get(section).getProducts();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
-        holder.cardTextValueTicker.setText(String.valueOf(1));
+        if (product.getCart() != null) {
+            holder.cardAddTextLayout.setVisibility(View.GONE);
+            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+            holder.cardTextValueTicker.setText(String.valueOf(product.getCart().getQuantity()));
+            holder.cardTextValue.setText(String.valueOf(product.getCart().getQuantity()));
+        } else {
+            holder.cardAddTextLayout.setVisibility(View.VISIBLE);
+            holder.cardAddDetailLayout.setVisibility(View.GONE);
+            holder.cardTextValueTicker.setText(String.valueOf(1));
+            holder.cardTextValue.setText(String.valueOf(1));
+        }
+
         holder.priceTxt.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
 
 //       /* check Availablity*/
@@ -150,6 +162,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 map.put("quantity", holder.cardTextValue.getText().toString());
                 Log.e("AddCart_add", map.toString());
                 addCart(map);
+                product.getCart().setQuantity(countValue);
 
             }
         });
@@ -173,6 +186,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     map.put("quantity", "0");
                     Log.e("AddCart_Minus", map.toString());
                     addCart(map);
+                    product.setCart(null);
                 } else {
                     int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
@@ -182,6 +196,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     map.put("quantity", holder.cardTextValue.getText().toString());
                     Log.e("AddCart_Minus", map.toString());
                     addCart(map);
+                    //Add model values
+                    product.getCart().setQuantity(countMinusValue);
                 }
             }
         });
@@ -200,6 +216,16 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 map.put("quantity", holder.cardTextValue.getText().toString());
                 Log.e("AddCart_Text", map.toString());
                 addCart(map);
+
+                if(product.getCart()!=null){
+                    product.getCart().setQuantity(1);
+                }
+                else {
+                    Cart cart=new Cart();
+                    cart.setQuantity(1);
+                    product.setCart(cart);
+                }
+
             }
         });
 

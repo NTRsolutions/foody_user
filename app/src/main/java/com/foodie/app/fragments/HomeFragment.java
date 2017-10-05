@@ -42,6 +42,7 @@ import com.foodie.app.model.ShopsModel;
 import com.foodie.app.helper.CommonClass;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -158,7 +159,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .load(R.layout.skeleton_restaurant_list_item)
                 .count(2)
                 .show();
-        getRestaurant();
+
+
+        //get User Profile Data
+        if (CommonClass.getInstance().profileModel != null) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
+            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+            map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
+            getRestaurant(map);
+
+        } else {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
+            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+            getRestaurant(map);
+        }
+
 
         final ArrayList<Restaurant> offerRestaurantList = new ArrayList<>();
         offerRestaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20", ""));
@@ -199,13 +216,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     }
 
-    private void getRestaurant() {
-        Call<List<ShopsModel>> getres = apiInterface.getshops(CommonClass.getInstance().latitude, CommonClass.getInstance().longitude);
+    private void getRestaurant(HashMap<String, String> map) {
+
+        Call<List<ShopsModel>> getres = apiInterface.getshops(map);
         getres.enqueue(new Callback<List<ShopsModel>>() {
             @Override
             public void onResponse(Call<List<ShopsModel>> call, Response<List<ShopsModel>> response) {
                 CommonClass.getInstance().list = response.body();
-//                List<Cuisine> listCuisine = list.get(0).getCuisines();
                 restaurantList.clear();
                 restaurantList.addAll(CommonClass.getInstance().list);
                 restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");

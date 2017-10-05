@@ -248,6 +248,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
+                CommonClass.getInstance().profileModel=response.body();
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

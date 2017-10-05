@@ -2,14 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item>
-
         <layer-list>
 
             <item>
                 <shape>
                     <gradient android:angle="90" android:endColor="#ffffff" android:startColor="#ffffff" android:type="linear" />
 
-<!--                    <stroke android:width="0.33dp" android:color="#0fb1fa" />-->
+                    <!--                    <stroke android:width="0.33dp" android:color="#0fb1fa" />-->
 
                     <corners android:radius="0dp" />
 
@@ -19,7 +18,7 @@
 
             <item android:right="5dp">
 
-                <bitmap android:gravity="center_vertical|right" android:src="@drawable/ic_down" />
+                <bitmap android:gravity="center_vertical|right" android:src="@drawable/ic_down_arrow" />
 
             </item>
 

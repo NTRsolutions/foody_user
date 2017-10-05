@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
@@ -31,6 +32,7 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
+import com.foodie.app.model.Checkout;
 import com.foodie.app.model.ProductList;
 import com.robinhood.ticker.TickerUtils;
 
@@ -306,12 +308,45 @@ public class CartFragment extends Fragment {
                 /**  If address is filled */
                 else if (commonBtn.getText().toString().equalsIgnoreCase(getResources().getString(R.string.proceed_to_pay))) {
 
+                    checkOut(CommonClass.getInstance().selectedAddress.getId());
                 }
 
 
                 break;
 
         }
+    }
+
+    private void checkOut(Integer id) {
+        customDialog.show();
+        Call<Checkout> call = apiInterface.postCheckout(id);
+        call.enqueue(new Callback<Checkout>() {
+            @Override
+            public void onResponse(Call<Checkout> call, Response<Checkout> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    CommonClass.getInstance().checkoutData = response.body();
+                    startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    getActivity().finish();
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Checkout> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

@@ -29,8 +29,11 @@ import com.bumptech.glide.Glide;
 import com.foodie.app.HeaderView;
 import com.foodie.app.R;
 import com.foodie.app.adapter.HotelCatagoeryAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Category;
+import com.foodie.app.model.Shop;
 import com.foodie.app.model.ShopsModel;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
@@ -38,11 +41,15 @@ import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HotelViewActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
@@ -93,8 +100,14 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     Activity activity;
     int restaurantPosition = 0;
 
+
     Context context;
     ShopsModel shops;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+
+    List<Category> categoryList;
+    HotelCatagoeryAdapter catagoeryAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +143,11 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
         }
 
-        rating.setText("" + Double.parseDouble(shops.getRatings().getRating()));
+        if (shops.getRatings() != null)
+            rating.setText("" + Double.parseDouble(shops.getRatings().getRating()));
+        else
+            rating.setText("No Rating");
+
         deliveryTime.setText(shops.getEstimatedDeliveryTime().toString() + "Mins");
 
         itemText = (TextView) findViewById(R.id.item_text);
@@ -170,10 +187,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                                             Window window = getWindow();
                                             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                                             window.setStatusBarColor(textSwatch.getRgb());
-//                                            if (Build.VERSION.SDK_INT >= 21) {
-//                                                int defaultColor = getResources().getColor(R.color.colorTransparent);
-//                                                getWindow().setNavigationBarColor(palette.getVibrantColor(defaultColor));
-//                                            }
                                         }
                                         headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
                                         headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
@@ -195,13 +208,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
 
         Bitmap imageBitmap = null;
-
-//        try {
-//            URL url = new URL(shops.getAvatar());
-//            imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//        } catch (IOException e) {
-//            System.out.println(e);
-//        }
         restaurantImage.setDrawingCacheEnabled(true);
         imageBitmap = restaurantImage.getDrawingCache();
 
@@ -220,14 +226,16 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         }
 
 
-        //Get category list data
-        List<Category> list = shops.getCategories();
+        //Set title
         collapsingToolbar.setTitle(" ");
         toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
         floatHeaderView.bindTo(shops.getName(), shops.getDescription());
 
+        //Get category list data
+        categoryList = shops.getCategories();
+
         //Set Categoery list adapter
-        HotelCatagoeryAdapter catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, list);
+        catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, categoryList);
         accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
         accompanimentDishesRv.setAdapter(catagoeryAdapter);
@@ -293,17 +301,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         });
 
 
-//        final ArrayList<RecommendedDish> list = new ArrayList<>();
-//        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "20", true, "url", "description", "available"));
-//        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "30", true, "url", "description", "out of stock"));
-//        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "50", false, "url", "description", "available"));
-//        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "20", true, "url", "description", "available"));
-//        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "300", true, "url", "description", "available"));
-//        list.add(new RecommendedDish("Red Velvet Brownie", "Interplay Brownie", "200", false, "url", "description", "Next Available at 12.30pm tommorrow"));
-//        list.add(new RecommendedDish("Classic Brownie Eggless", "Brownies", "90", true, "url", "description", "available"));
-//        list.add(new RecommendedDish("Roasted Nuts Brownie", "Breakfast", "50", true, "url", "description", "out of stock"));
-
-
     }
 
 
@@ -311,6 +308,23 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (CommonClass.getInstance().list != null) {
+            List<ShopsModel> shopList = CommonClass.getInstance().list;
+            for (int i = 0; i < shopList.size(); i++) {
+                if (shopList.get(i).getId().equals(shops.getId())) {
+                    shops = shopList.get(i);
+                    categoryList = shops.getCategories();
+                    catagoeryAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {

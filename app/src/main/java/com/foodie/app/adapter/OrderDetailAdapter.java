@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
+import com.foodie.app.model.Image;
+import com.foodie.app.model.Item;
 import com.foodie.app.model.OrderItem;
 import com.foodie.app.model.OrderItem;
 import com.foodie.app.model.Restaurant;
@@ -21,10 +23,10 @@ import java.util.List;
  */
 
 public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.MyViewHolder> {
-    private List<OrderItem> list;
+    private List<Item> list;
     private Context context;
 
-    public OrderDetailAdapter(List<OrderItem> list, Context con) {
+    public OrderDetailAdapter(List<Item> list, Context con) {
         this.list = list;
         this.context = con;
     }
@@ -37,12 +39,12 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         return new MyViewHolder(itemView);
     }
 
-    public void add(OrderItem item, int position) {
+    public void add(Item item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Restaurant item) {
+    public void remove(Item item) {
         int position = list.indexOf(item);
         list.remove(position);
         notifyItemRemoved(position);
@@ -50,9 +52,13 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        OrderItem orderItem = list.get(position);
-        holder.dishName.setText(orderItem.name);
-        holder.price.setText(orderItem.price);
+        Item item = list.get(position);
+        holder.dishName.setText(item.getProduct().getName());
+        holder.price.setText(item.getProduct().getPrices().getCurrency() + item.getProduct().getPrices().getPrice());
+        if (item.getProduct().getFoodType().equalsIgnoreCase("veg"))
+            holder.dishImg.setImageResource(R.drawable.ic_veg);
+        else
+            holder.dishImg.setImageResource(R.drawable.ic_nonveg);
 
     }
 
@@ -71,6 +77,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
             super(view);
             itemView = (LinearLayout) view.findViewById(R.id.item_view);
             dishName = (TextView) view.findViewById(R.id.restaurant_name);
+            dishImg = (ImageView) view.findViewById(R.id.food_type_image);
             price = (TextView) view.findViewById(R.id.price);
             itemView.setOnClickListener(this);
         }

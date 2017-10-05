@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Item Total"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
 
         <TextView
             android:id="@+id/item_total_amount"
@@ -24,30 +25,10 @@
             android:layout_weight="1"
             android:gravity="end"
             android:text="$220"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delivery Charges"
-            android:textColor="@color/colorSecondaryText" />
-
-        <TextView
-            android:id="@+id/delivery_charges"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="$20"
-            android:textColor="@color/colorSecondaryText" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Service Tax"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorGreen"
+            android:textSize="@dimen/text_small" />
 
         <TextView
             android:id="@+id/service_tax"
@@ -69,9 +51,34 @@
             android:layout_weight="1"
             android:gravity="end"
             android:text="$30"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delivery Charges"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/delivery_charges"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="$20"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
+    </LinearLayout>
 
 
     <LinearLayout
@@ -82,21 +89,25 @@
         android:orientation="horizontal">
 
         <TextView
+            fontpath="fonts/Nunito-Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
             android:text="Total"
-            android:textColor="@color/colorTextBlack" />
+            android:textColor="@color/colorTextBlack"
+            android:textSize="@dimen/text_small_large" />
 
         <TextView
             android:id="@+id/total_amount"
+            fontpath="fonts/Nunito-Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:gravity="end"
             android:text="$250"
-            android:textColor="@color/colorTextBlack" />
+            android:textColor="@color/colorTextBlack"
+            android:textSize="@dimen/text_small_large" />
     </LinearLayout>
 
 

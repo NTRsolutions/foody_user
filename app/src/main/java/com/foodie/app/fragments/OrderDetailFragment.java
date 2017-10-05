@@ -14,9 +14,13 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.OrderDetailAdapter;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.Checkout;
+import com.foodie.app.model.Item;
 import com.foodie.app.model.OrderItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +45,17 @@ public class OrderDetailFragment extends Fragment {
     TextView deliveryCharges;
     @BindView(R.id.total_amount)
     TextView totalAmount;
+    List<Item> itemList;
+
+
+
+    int totalAmountValue = 0;
+    int discount = 0;
+    int itemCount = 0;
+    int itemQuantity = 0;
+    String currency = "";
+
+
 
     public OrderDetailFragment() {
         // Required empty public constructor
@@ -55,17 +70,24 @@ public class OrderDetailFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
 
-        final ArrayList<OrderItem> orderItemList = new ArrayList<>();
-        orderItemList.add(new OrderItem("Madras Coffee House", "$20"));
-        orderItemList.add(new OrderItem("Biriyani", "$50"));
-        orderItemList.add(new OrderItem("American fast food", "$5"));
+        Checkout checkout=CommonClass.getInstance().checkoutData;
+        //set Item List Values
+        itemList = new ArrayList<>();
+        itemList.addAll(checkout.getItems());
 
         //Offer Restaurant Adapter
         orderRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         orderRecyclerView.setItemAnimator(new DefaultItemAnimator());
         orderRecyclerView.setHasFixedSize(true);
-        OrderDetailAdapter orderItemListAdapter = new OrderDetailAdapter(orderItemList, context);
+        OrderDetailAdapter orderItemListAdapter = new OrderDetailAdapter(itemList, context);
         orderRecyclerView.setAdapter(orderItemListAdapter);
+
+        currency = checkout.getItems().get(0).getProduct().getPrices().getCurrency();
+        itemQuantity=checkout.getInvoice().getQuantity();
+        totalAmountValue=checkout.getInvoice().getGross();
+        itemTotalAmount.setText(currency+checkout.getInvoice().getGross().toString());
+        serviceTax.setText(currency+checkout.getInvoice().getTax().toString());
+        totalAmount.setText(currency+String.valueOf(totalAmountValue));
 
         return view;
     }

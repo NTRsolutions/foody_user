@@ -77,9 +77,11 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 //            holder.restaurantInfo.setText(shops.getAvailability());
 //        }
 
+        if(shops.getRatings()!=null)
         holder.rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
+        else
+            holder.rating.setText("No Rating");
         holder.distanceTime.setText(shops.getEstimatedDeliveryTime().toString()+" Mins");
-//        holder.price.setText(shops.price);
 
     }
 

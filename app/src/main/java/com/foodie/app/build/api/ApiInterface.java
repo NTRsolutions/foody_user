@@ -6,6 +6,7 @@ package com.foodie.app.build.api;
 
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
+import com.foodie.app.model.Checkout;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.ResetPassword;
@@ -29,14 +30,13 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
 
 
     @GET("api/user/profile")
     Call<User> getProfile();
-
-
 
     @FormUrlEncoded
     @POST("api/user/otp")
@@ -60,7 +60,7 @@ public interface ApiInterface {
 
 
     @GET("api/user/shops")
-    Call<List<ShopsModel>> getshops(@Query("latitude") double lat, @Query("longitude") double lng);
+    Call<List<ShopsModel>> getshops(@QueryMap HashMap<String,String> params);
 
     @FormUrlEncoded
     @POST("api/user/cart")
@@ -80,4 +80,12 @@ public interface ApiInterface {
 
     @DELETE("api/user/address/{id}")
     Call<Message> deleteAddress(@Path("id") int id);
+
+    @FormUrlEncoded
+    @POST("api/user/order")
+    Call<Checkout> postCheckout(@Field("user_address_id") Integer id);
+
+
+
+
 }

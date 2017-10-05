@@ -35,15 +35,12 @@ public class Product {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("parent")
-    @Expose
-    private Object parent;
-    @SerializedName("images")
-    @Expose
-    private List<Image> images = null;
     @SerializedName("prices")
     @Expose
     private Prices prices;
+    @SerializedName("cart")
+    @Expose
+    private Cart cart;
 
     public Integer getId() {
         return id;
@@ -117,28 +114,20 @@ public class Product {
         this.status = status;
     }
 
-    public Object getParent() {
-        return parent;
-    }
-
-    public void setParent(Object parent) {
-        this.parent = parent;
-    }
-
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
     public Prices getPrices() {
         return prices;
     }
 
     public void setPrices(Prices prices) {
         this.prices = prices;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
 }
