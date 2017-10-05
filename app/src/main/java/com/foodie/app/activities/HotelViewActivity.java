@@ -102,7 +102,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
 
     Context context;
-    ShopsModel shops;
+    public  static  ShopsModel shops;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     List<Category> categoryList;
@@ -206,26 +206,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                     }
                 });
 
-
-        Bitmap imageBitmap = null;
-        restaurantImage.setDrawingCacheEnabled(true);
-        imageBitmap = restaurantImage.getDrawingCache();
-
-
-        if (imageBitmap != null) {
-            Palette.from(imageBitmap).generate(new Palette.PaletteAsyncListener() {
-                public void onGenerated(Palette palette) {
-                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-                    if (vibrantSwatch != null) {
-                        toolbar.setBackgroundColor(vibrantSwatch.getRgb());
-                        headerViewTitle.setTextColor(vibrantSwatch.getTitleTextColor());
-                        headerViewSubTitle.setTextColor(vibrantSwatch.getBodyTextColor());
-                    }
-                }
-            });
-        }
-
-
         //Set title
         collapsingToolbar.setTitle(" ");
         toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
@@ -239,6 +219,10 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
         accompanimentDishesRv.setAdapter(catagoeryAdapter);
+
+        if(CommonClass.getInstance().addCart!=null){
+
+        }
 
 
 //        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

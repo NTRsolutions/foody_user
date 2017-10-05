@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amar.library.ui.StickyScrollView;
+import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
@@ -50,6 +53,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.foodie.app.HomeActivity.bottomNavigation;
+import static com.foodie.app.HomeActivity.notification;
 
 
 /**
@@ -271,6 +277,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override

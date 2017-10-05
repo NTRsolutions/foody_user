@@ -112,6 +112,9 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
         if (product.getCart() != null) {
+            CommonClass.getInstance().selectedShop=HotelViewActivity.shops;
+            if(CommonClass.getInstance().addCart!=null)
+            setViewcartBottomLayout(CommonClass.getInstance().addCart);
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
             holder.cardTextValueTicker.setText(String.valueOf(product.getCart().getQuantity()));
@@ -124,24 +127,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         }
 
         holder.priceTxt.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
-
-//       /* check Availablity*/
-//        if (product.getAvalability().toString().equalsIgnoreCase("available")) {
-//            holder.cardAddTextLayout.setVisibility(View.VISIBLE);
-//            holder.cardTextValueTicker.setText(String.valueOf(1));
-//            holder.cardInfoLayout.setVisibility(View.GONE);
-//        } else if (dish.getAvaialable().equalsIgnoreCase("out of stock")) {
-//            holder.cardAddTextLayout.setVisibility(View.GONE);
-//            holder.cardInfoLayout.setVisibility(View.VISIBLE);
-//            holder.cardAddInfoText.setVisibility(View.GONE);
-//            holder.cardAddOutOfStock.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.cardAddTextLayout.setVisibility(View.GONE);
-//            holder.cardInfoLayout.setVisibility(View.VISIBLE);
-//            holder.cardAddInfoText.setVisibility(View.VISIBLE);
-//            holder.cardAddOutOfStock.setVisibility(View.GONE);
-//            holder.cardAddInfoText.setText(dish.getAvaialable());
-//        }
 
         if (!product.getFoodType().equalsIgnoreCase("veg")) {
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
@@ -236,6 +221,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                    CommonClass.getInstance().selectedShop=HotelViewActivity.shops;
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -245,41 +231,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     }
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
-                    priceAmount = 0;
-                    itemQuantity = 0;
-                    itemCount = 0;
-
-                    //get Item Count
-                    itemCount = addCart.getProductList().size();
-                    for (int i = 0; i < itemCount; i++) {
-                        //Get Total item Quantity
-                        itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
-                        //Get product price
-                        if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
-                            priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
-                    }
-                    if (itemQuantity == 0) {
-                        HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
-                        // Start animation
-                        HotelViewActivity.viewCartLayout.startAnimation(slide_down);
-                    } else if (itemQuantity == 1) {
-                        String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-                        HotelViewActivity.itemText.setText("" + itemQuantity + " Item | " + currency + "" + priceAmount);
-                        if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
-                            // Start animation
-                            HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
-                            HotelViewActivity.viewCartLayout.startAnimation(slide_up);
-                        }
-                    } else {
-                        String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-                        HotelViewActivity.itemText.setText("" + itemQuantity + " Items | " + currency + "" + priceAmount);
-                        if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
-                            // Start animation
-                            HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
-                            HotelViewActivity.viewCartLayout.startAnimation(slide_up);
-                        }
-
-                    }
+                   setViewcartBottomLayout(addCart);
 
 
                 }
@@ -291,6 +243,44 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             }
         });
 
+    }
+
+    private void setViewcartBottomLayout(AddCart addCart) {
+        priceAmount = 0;
+        itemQuantity = 0;
+        itemCount = 0;
+        //get Item Count
+        itemCount = addCart.getProductList().size();
+        for (int i = 0; i < itemCount; i++) {
+            //Get Total item Quantity
+            itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
+            //Get product price
+            if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
+                priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
+        }
+        CommonClass.getInstance().notificationCount=itemQuantity;
+        if (itemQuantity == 0) {
+            HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
+            // Start animation
+            HotelViewActivity.viewCartLayout.startAnimation(slide_down);
+        } else if (itemQuantity == 1) {
+            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+            HotelViewActivity.itemText.setText("" + itemQuantity + " Item | " + currency + "" + priceAmount);
+            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
+                // Start animation
+                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+                HotelViewActivity.viewCartLayout.startAnimation(slide_up);
+            }
+        } else {
+            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+            HotelViewActivity.itemText.setText("" + itemQuantity + " Items | " + currency + "" + priceAmount);
+            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
+                // Start animation
+                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+                HotelViewActivity.viewCartLayout.startAnimation(slide_up);
+            }
+
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

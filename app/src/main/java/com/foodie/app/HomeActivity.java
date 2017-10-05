@@ -67,13 +67,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.foodie.app.helper.CommonClass.notificationCount;
+
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback,
         PermissionUtils.PermissionResultCallback {
 
     private static final int TIME_DELAY = 2000;
     private static long back_pressed;
-    private AHBottomNavigation bottomNavigation;
+    public static AHBottomNavigation bottomNavigation;
     private ConnectionHelper connectionHelper;
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -99,7 +101,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     int itemCount = 0;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Context context = HomeActivity.this;
-    AHNotification notification;
+    public static AHNotification notification;
 
 
     @Override
@@ -413,11 +415,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 } else if (response.isSuccessful()) {
                     //get Item Count
                     itemCount = response.body().getProductList().size();
-                    if (itemCount == 0) {
-
+                    CommonClass.getInstance().addCart = response.body();
+                    int itemQuantity = 0;
+                    for (int i = 0; i < itemCount; i++) {
+                        //Get Total item Quantity
+                        itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
+                        //Get product price
+                    }
+                    if (itemQuantity == 0) {
+                        bottomNavigation.setNotification(notification, 2);
                     } else {
-                         notification = new AHNotification.Builder()
-                                .setText(String.valueOf(itemCount))
+                        notification = new AHNotification.Builder()
+                                .setText(String.valueOf(itemQuantity))
                                 .setBackgroundColor(ContextCompat.getColor(HomeActivity.this, R.color.theme))
                                 .setTextColor(ContextCompat.getColor(HomeActivity.this, R.color.colorTextWhite))
                                 .build();
@@ -439,6 +448,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onResume() {
         super.onResume();
         connectionHelper.isConnectingToInternet();
+        updateNotificationCount(context,notificationCount);
     }
 
     @Override
@@ -513,6 +523,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void updateNotificationCount(Context context, int itemCount) {
+
+        if (itemCount == 0) {
+            notification = null;
+            bottomNavigation.setNotification(notification, 2);
+        } else if (bottomNavigation != null) {
+            bottomNavigation.setNotification(String.valueOf(itemCount), 2);
+
+        }
+
     }
 
 

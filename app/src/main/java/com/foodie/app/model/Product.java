@@ -41,6 +41,9 @@ public class Product {
     @SerializedName("cart")
     @Expose
     private Cart cart;
+    @SerializedName("shops")
+    @Expose
+    private Shops shops;
 
     public Integer getId() {
         return id;
@@ -130,4 +133,11 @@ public class Product {
         this.cart = cart;
     }
 
+    public Shops getShops() {
+        return shops;
+    }
+
+    public void setShops(Shops shops) {
+        this.shops = shops;
+    }
 }

@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
@@ -55,12 +56,6 @@ import retrofit2.Response;
 
 public class CartFragment extends Fragment {
 
-    @BindView(R.id.dish_img)
-    ImageView dishImg;
-    @BindView(R.id.dish_name)
-    TextView dishName;
-    @BindView(R.id.dish_category)
-    TextView dishCategory;
     @BindView(R.id.re)
     RelativeLayout re;
     @BindView(R.id.order_item_rv)
@@ -96,6 +91,12 @@ public class CartFragment extends Fragment {
     LinearLayout locationInfoLayout;
     @BindView(R.id.location_error_layout)
     RelativeLayout locationErrorLayout;
+    @BindView(R.id.restaurant_image)
+    ImageView restaurantImage;
+    @BindView(R.id.restaurant_name)
+    TextView restaurantName;
+    @BindView(R.id.restaurant_description)
+    TextView restaurantDescription;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -213,6 +214,14 @@ public class CartFragment extends Fragment {
                         int topPayAmount = priceAmount - discount;
                         payAmount.setText(currency + "" + topPayAmount);
 
+                        //Set Restaurant Details
+                        restaurantName.setText(response.body().getProductList().get(0).getProduct().getShops().getName());
+                        restaurantDescription.setText(response.body().getProductList().get(0).getProduct().getShops().getDescription());
+                        String image_url=response.body().getProductList().get(0).getProduct().getShops().getAvatar();
+                        Glide.with(context).load(image_url).placeholder(R.drawable.item1).dontAnimate()
+                                .error(R.drawable.item1).into(restaurantImage);
+
+
                         deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
                         viewCartItemList.addAll(response.body().getProductList());
                         viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);
@@ -255,6 +264,7 @@ public class CartFragment extends Fragment {
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
+
 
     }
 
