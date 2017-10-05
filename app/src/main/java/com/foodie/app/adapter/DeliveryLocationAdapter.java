@@ -84,7 +84,7 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
         holder.addressLabel.setText(object.getType());
         holder.address.setText(object.getMapAddress());
 
-        //setIcon(holder.icon, object.icon_id);
+        setIcon(holder.icon, object.getType());
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +101,12 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
     }
 
 
-    private void setIcon(ImageView imgView, Integer id) {
+    private void setIcon(ImageView imgView, String id) {
         switch (id) {
-            case 1:
+            case "home":
                 imgView.setImageResource(R.drawable.home);
                 break;
-            case 2:
+            case "work":
                 imgView.setImageResource(R.drawable.ic_work);
                 break;
             default:

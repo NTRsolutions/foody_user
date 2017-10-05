@@ -52,10 +52,10 @@
                     android:layout_height="wrap_content"
                     android:background="#eee"
                     android:padding="16dp"
-                    android:text="Saved Address"
+                    android:text="Saved Addresses"
                     android:textAllCaps="true"
                     android:textColor="@color/colorSecondaryText"
-                    android:textSize="@dimen/text_medium" />
+                    android:textSize="@dimen/text_small" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/manage_address_rv"

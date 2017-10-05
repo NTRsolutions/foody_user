@@ -47,6 +47,7 @@
     <string name="office">"Office"</string>
     <string name="other">"Other"</string>
     <string name="save">"Save"</string>
+    <string name="saved_addresses">"Saved Addresses"</string>
     <string name="save_and_proceed">"Save and Proceed"</string>
     <string name="edit">"Edit"</string>
     <string name="delete">"Delete"</string>
@@ -82,7 +83,7 @@
     <string name="no_location_data_provided">No location data provided</string>
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
-    <string name="getting_address">"getting address"</string>
+    <string name="getting_address">"Getting Address"</string>
     <string name="fresh">F r e s h</string>
     <string name="fresh_description">Discover new dishes everyday and hold your favourite restaurant</string>
     <string name="signin">Sign in</string>

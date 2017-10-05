@@ -377,7 +377,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void saveAddress() {
-        if (address != null && address.getMapAddress() != null) {
+        if (address != null && address.getMapAddress() != null && validate()) {
             Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
@@ -405,7 +405,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void updateAddress() {
-        if (address != null && address.getMapAddress() != null && address.getId() != null) {
+        if (address != null && address.getId() != null && validate()) {
             Call<com.foodie.app.model.Address> call = apiInterface.updateAddress(address.getId(), address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
@@ -429,6 +429,24 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
             });
+        }
+    }
+
+    private boolean validate(){
+        if(address.getMapAddress().isEmpty() && address.getMapAddress().equals(getResources().getString(R.string.getting_address))){
+            Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(address.getBuilding().isEmpty()){
+            Toast.makeText(this, "Please enter Flat No", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(address.getLandmark().isEmpty()){
+            Toast.makeText(this, "Please enter landmark", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(address.getLatitude() == null || address.getLongitude() == null){
+            Toast.makeText(this, "Lat & long cannot be left blank", Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            return true;
         }
     }
 

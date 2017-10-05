@@ -12,16 +12,13 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:contentDescription="@string/address"
-            android:padding="4dp"
             android:src="@drawable/ic_pin_locator_1" />
 
     </LinearLayout>
@@ -41,15 +38,16 @@
             android:maxLines="1"
             android:text="Home"
             android:textAllCaps="true"
+            fontPath="fonts/Nunito-Bold.ttf"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_medium" />
+            android:textSize="@dimen/text_small" />
 
         <TextView
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4sp"
-            android:maxLines="1"
+            android:maxLines="3"
             android:text="thousand lights"
             android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/text_small" />

@@ -95,7 +95,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     AddressModel model = new AddressModel();
-                    model.setHeader("Saved Address");
+                    model.setHeader(getResources().getString(R.string.saved_addresses));
                     model.setAddresses(response.body());
                     modelList.add(model);
                     modelListReference.clear();
