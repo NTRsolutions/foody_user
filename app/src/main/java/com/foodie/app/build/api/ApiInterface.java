@@ -6,6 +6,7 @@ package com.foodie.app.build.api;
 
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
+import com.foodie.app.model.ChangePassword;
 import com.foodie.app.model.Checkout;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.Message;
@@ -58,6 +59,9 @@ public interface ApiInterface {
     @POST("api/user/reset/password")
     Call<ResetPassword> resetPassword(@FieldMap HashMap<String,String> params);
 
+    @FormUrlEncoded
+    @POST("api/user/profile/password")
+    Call<ChangePassword>  changePassword(@FieldMap HashMap<String,String> params);
 
     @GET("api/user/shops")
     Call<List<ShopsModel>> getshops(@QueryMap HashMap<String,String> params);

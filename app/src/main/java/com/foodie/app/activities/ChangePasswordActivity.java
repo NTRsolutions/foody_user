@@ -1,31 +1,62 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.model.ChangePassword;
+import com.foodie.app.utils.TextUtils;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar_top)
     Toolbar toolbarTop;
-    @BindView(R.id.new_password)
-    EditText newPassword;
-    @BindView(R.id.re_enter_password)
-    EditText reEnterPassword;
     @BindView(R.id.confirm)
     Button confirm;
+    @BindView(R.id.old_password)
+    EditText oldPassword;
+    @BindView(R.id.old_password_eye_img)
+    ImageView oldPasswordEyeImg;
+    @BindView(R.id.new_password)
+    EditText newPassword;
+    @BindView(R.id.password_eye_img)
+    ImageView passwordEyeImg;
+    @BindView(R.id.confirm_password)
+    EditText confirmPassword;
+    @BindView(R.id.confirm_password_eye_img)
+    ImageView confirmPasswordEyeImg;
+
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    String strConfirmPassword, strNewPassword, strOldPassword;
+    CustomDialog customDialog;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +64,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change_password);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+
+        context = ChangePasswordActivity.this;
+        passwordEyeImg.setTag(1);
+        confirmPasswordEyeImg.setTag(1);
+        oldPasswordEyeImg.setTag(1);
 
         setSupportActionBar(toolbarTop);
         toolbarTop.setNavigationIcon(R.drawable.ic_back);
@@ -44,8 +80,58 @@ public class ChangePasswordActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.confirm)
-    public void onViewClicked() {
+
+    private void initValues() {
+        strOldPassword = oldPassword.getText().toString();
+        strConfirmPassword = confirmPassword.getText().toString();
+        strNewPassword = newPassword.getText().toString();
+
+        if (TextUtils.isEmpty(strOldPassword)) {
+            Toast.makeText(this, "Please enter old password", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(strNewPassword)) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(strConfirmPassword)) {
+            Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
+        } else if (!strConfirmPassword.equalsIgnoreCase(strNewPassword)) {
+            Toast.makeText(this, "Password and confirm password doesn't match", Toast.LENGTH_SHORT).show();
+        } else {
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("password_old", strOldPassword);
+            map.put("password", strNewPassword);
+            map.put("password_confirmation", strConfirmPassword);
+            changePassword(map);
+        }
+
+    }
+
+    private void changePassword(HashMap<String, String> map) {
+        customDialog = new CustomDialog(context);
+        customDialog.show();
+        Call<ChangePassword> call = apiInterface.changePassword(map);
+        call.enqueue(new Callback<ChangePassword>() {
+            @Override
+            public void onResponse(Call<ChangePassword> call, Response<ChangePassword> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChangePassword> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @Override
@@ -58,5 +144,47 @@ public class ChangePasswordActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @OnClick({R.id.old_password_eye_img, R.id.password_eye_img, R.id.confirm_password_eye_img, R.id.confirm})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.old_password_eye_img:
+                if (oldPasswordEyeImg.getTag().equals(1)) {
+                    oldPassword.setTransformationMethod(null);
+                    oldPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    oldPasswordEyeImg.setTag(0);
+                } else {
+                    oldPasswordEyeImg.setTag(1);
+                    oldPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    oldPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                }
+                break;
+            case R.id.password_eye_img:
+                if (passwordEyeImg.getTag().equals(1)) {
+                    newPassword.setTransformationMethod(null);
+                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    passwordEyeImg.setTag(0);
+                } else {
+                    passwordEyeImg.setTag(1);
+                    newPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                }
+                break;
+            case R.id.confirm_password_eye_img:
+                if (confirmPasswordEyeImg.getTag().equals(1)) {
+                    confirmPassword.setTransformationMethod(null);
+                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    confirmPasswordEyeImg.setTag(0);
+                } else {
+                    confirmPasswordEyeImg.setTag(1);
+                    confirmPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                }
+                break;
+            case R.id.confirm:
+                initValues();
+                break;
+        }
     }
 }

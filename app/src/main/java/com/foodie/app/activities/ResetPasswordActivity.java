@@ -115,6 +115,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
     }
 
+
     private void initValues() {
 
         strConfirmPassword = confirmPassword.getText().toString();

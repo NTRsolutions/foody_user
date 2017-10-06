@@ -16,8 +16,7 @@ import com.foodie.app.R;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Address;
-import com.foodie.app.model.Location;
-import com.foodie.app.model.AddressModel;
+import com.foodie.app.model.AddressList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +27,12 @@ import java.util.List;
 
 public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<DeliveryLocationAdapter.ViewHolder> {
 
-    private List<AddressModel> list = new ArrayList<>();
+    private List<AddressList> list = new ArrayList<>();
     private LayoutInflater inflater;
     Context context;
     Activity activity;
 
-    public DeliveryLocationAdapter(Context context, Activity activity, List<AddressModel> list) {
+    public DeliveryLocationAdapter(Context context, Activity activity, List<AddressList> list) {
         this.context = context;
         this.activity = activity;
         this.inflater = LayoutInflater.from(context);

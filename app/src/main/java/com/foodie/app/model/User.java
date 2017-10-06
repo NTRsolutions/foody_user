@@ -3,6 +3,8 @@ package com.foodie.app.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Tamil on 9/25/2017.
  */
@@ -26,10 +28,10 @@ public class User {
     private Object avatar;
     @SerializedName("device_token")
     @Expose
-    private Object deviceToken;
+    private String deviceToken;
     @SerializedName("device_id")
     @Expose
-    private Object deviceId;
+    private String deviceId;
     @SerializedName("device_type")
     @Expose
     private String deviceType;
@@ -48,6 +50,12 @@ public class User {
     @SerializedName("otp")
     @Expose
     private String otp;
+    @SerializedName("addresses")
+    @Expose
+    private List<Address> addresses = null;
+    @SerializedName("cart")
+    @Expose
+    private List<Cart> cart = null;
 
     public Integer getId() {
         return id;
@@ -89,19 +97,19 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Object getDeviceToken() {
+    public String getDeviceToken() {
         return deviceToken;
     }
 
-    public void setDeviceToken(Object deviceToken) {
+    public void setDeviceToken(String deviceToken) {
         this.deviceToken = deviceToken;
     }
 
-    public Object getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(Object deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
@@ -151,6 +159,22 @@ public class User {
 
     public void setOtp(String otp) {
         this.otp = otp;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public List<Cart> getCart() {
+        return cart;
+    }
+
+    public void setCart(List<Cart> cart) {
+        this.cart = cart;
     }
 
 }

@@ -10,7 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.foodie.app.R;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,12 +38,24 @@ public class EditAccountActivity extends AppCompatActivity {
     @BindView(R.id.edit_user_profile)
     ImageView editUserProfileImg;
 
+    Context context;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+
+        context=EditAccountActivity.this;
+
+        user =CommonClass.getInstance().profileModel;
+        Glide.with(context).load(user.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
+                .error(R.drawable.item1).into(userProfileImg);
+        usernameEdit.setText(user.getName());
+        emailAddressEdit.setText(user.getEmail());
+        mobileNumberEdit.setText(user.getPhone());
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);

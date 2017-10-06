@@ -13,7 +13,14 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.SharedHelper;
+import com.foodie.app.model.AddCart;
+import com.foodie.app.model.AddressList;
+import com.foodie.app.model.Cart;
+import com.foodie.app.model.ProductList;
 import com.foodie.app.model.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
@@ -57,6 +64,10 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 SharedHelper.putKey(context, "logged", "true");
                 CommonClass.getInstance().profileModel = response.body();
+                CommonClass.getInstance().cartList=new ArrayList<Cart>();
+                CommonClass.getInstance().cartList.addAll(response.body().getCart());
+                CommonClass.getInstance().addressList=new AddressList();
+                CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
                 startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

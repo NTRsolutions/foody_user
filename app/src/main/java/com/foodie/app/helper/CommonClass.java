@@ -2,8 +2,9 @@ package com.foodie.app.helper;
 
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
+import com.foodie.app.model.AddressList;
+import com.foodie.app.model.Cart;
 import com.foodie.app.model.Checkout;
-import com.foodie.app.model.Shop;
 import com.foodie.app.model.User;
 import com.foodie.app.model.OtpModel;
 import com.foodie.app.model.ShopsModel;
@@ -31,6 +32,8 @@ public class CommonClass {
     public static AddCart addCart = null;
 
     public static List<ShopsModel> list;
+    public static List<Cart> cartList;
+    public static AddressList addressList=null;
 
     public static ShopsModel selectedShop;
 

@@ -7,7 +7,8 @@ import java.util.List;
  * Created by santhosh@appoets.com on 28-08-2017.
  */
 
-public class AddressModel {
+public class AddressList {
+
     String header;
     List<Address> addresses = new ArrayList<>();
 

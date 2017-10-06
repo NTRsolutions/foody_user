@@ -17,8 +17,7 @@ import com.foodie.app.adapter.DeliveryLocationAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.model.Address;
-import com.foodie.app.model.Location;
-import com.foodie.app.model.AddressModel;
+import com.foodie.app.model.AddressList;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -49,9 +48,9 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     LinearLayout findPlaceLl;
     private String TAG = "DeliveryLocationActi";
     private DeliveryLocationAdapter adapter;
-    private List<AddressModel> modelListReference = new ArrayList<>();
+    private List<AddressList> modelListReference = new ArrayList<>();
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-    List<AddressModel> modelList = new ArrayList<>();
+    List<AddressList> modelList = new ArrayList<>();
 
     public static boolean isAddressSelection = false;
     Activity activity;
@@ -94,7 +93,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                 if (response.isSuccessful()) {
 
-                    AddressModel model = new AddressModel();
+                    AddressList model = new AddressList();
                     model.setHeader(getResources().getString(R.string.saved_addresses));
                     model.setAddresses(response.body());
                     modelList.add(model);

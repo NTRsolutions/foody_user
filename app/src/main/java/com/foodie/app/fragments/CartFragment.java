@@ -69,8 +69,8 @@ public class CartFragment extends Fragment {
     TextView locationErrorTitle;
     @BindView(R.id.location_error_sub_title)
     TextView locationErrorSubTitle;
-    @BindView(R.id.common_btn)
-    Button commonBtn;
+    @BindView(R.id.add_address_btn)
+    Button addAddressBtn;
     @BindView(R.id.dummy_image_view)
     ImageView dummyImageView;
     @BindView(R.id.total_amount)
@@ -99,6 +99,10 @@ public class CartFragment extends Fragment {
     TextView restaurantName;
     @BindView(R.id.restaurant_description)
     TextView restaurantDescription;
+    @BindView(R.id.proceed_to_pay_btn)
+    Button proceedToPayBtn;
+    @BindView(R.id.selected_address_btn)
+    Button selectedAddressBtn;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -144,7 +148,7 @@ public class CartFragment extends Fragment {
         dataLayout = (RelativeLayout) view.findViewById(R.id.data_layout);
         errorLayout = (RelativeLayout) view.findViewById(R.id.error_layout);
 
-        HomeActivity.updateNotificationCount(context,0);
+        HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
         getViewCart();
 
@@ -157,16 +161,27 @@ public class CartFragment extends Fragment {
 
         //Intialize address Value
         if (CommonClass.getInstance().selectedAddress != null) {
-            addAddressTxt.setText(getString(R.string.change_address));
-            commonBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
-            commonBtn.setText(getResources().getString(R.string.proceed_to_pay));
+            if (CommonClass.getInstance().addressList.getAddresses().size() == 1)
+                addAddressTxt.setText(getString(R.string.add_address));
+            else
+                addAddressTxt.setText(getString(R.string.change_address));
+            addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
+            addAddressBtn.setText(getResources().getString(R.string.proceed_to_pay));
             addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
             addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
-            addressDeliveryTime.setText("30 Mins");
-        } else {
-            commonBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
-            commonBtn.setText(getResources().getString(R.string.add_address_to_proceed));
+            if (viewCartItemList != null && viewCartItemList.size() != 0)
+                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString()+" Mins");
+        } else if (CommonClass.getInstance().addressList != null) {
+            addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
+            addAddressBtn.setText(getResources().getString(R.string.add_address));
+            locationErrorSubTitle.setText(CommonClass.getInstance().addressHeader);
+            selectedAddressBtn.setVisibility(View.VISIBLE);
             locationErrorLayout.setVisibility(View.VISIBLE);
+            locationInfoLayout.setVisibility(View.GONE);
+        } else {
+            locationErrorSubTitle.setText(CommonClass.getInstance().addressHeader);
+            locationErrorLayout.setVisibility(View.VISIBLE);
+            selectedAddressBtn.setVisibility(View.GONE);
             locationInfoLayout.setVisibility(View.GONE);
         }
 
@@ -304,7 +319,7 @@ public class CartFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.add_address_txt, R.id.common_btn})
+    @OnClick({R.id.add_address_txt, R.id.add_address_btn, R.id.selected_address_btn, R.id.proceed_to_pay_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_address_txt:
@@ -315,23 +330,25 @@ public class CartFragment extends Fragment {
                 }
                 /**  If address is filled */
                 else if (addAddressTxt.getText().toString().equalsIgnoreCase(getResources().getString(R.string.add_address))) {
-                    startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
-                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                }
-                break;
-            case R.id.common_btn:
-                /**  If address is empty */
-                if (commonBtn.getText().toString().equalsIgnoreCase(getResources().getString(R.string.add_address_to_proceed))) {
                     startActivityForResult(new Intent(getActivity(), SaveDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
                     getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 }
+                break;
+            case R.id.add_address_btn:
+                /**  If address is empty */
+                startActivityForResult(new Intent(getActivity(), SaveDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                break;
+            case R.id.selected_address_btn:
                 /**  If address is filled */
-                else if (commonBtn.getText().toString().equalsIgnoreCase(getResources().getString(R.string.proceed_to_pay))) {
+                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
 
-                    checkOut(CommonClass.getInstance().selectedAddress.getId());
-                }
+                break;
 
-
+            case R.id.proceed_to_pay_btn:
+                /**  If address is filled */
+                checkOut(CommonClass.getInstance().selectedAddress.getId());
                 break;
 
         }
@@ -353,16 +370,13 @@ public class CartFragment extends Fragment {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    CommonClass.getInstance().addCart=null;
-                    CommonClass.getInstance().notificationCount=0;
-                    CommonClass.getInstance().selectedShop=null;
+                    CommonClass.getInstance().addCart = null;
+                    CommonClass.getInstance().notificationCount = 0;
+                    CommonClass.getInstance().selectedShop = null;
                     CommonClass.getInstance().checkoutData = response.body();
                     startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();
-
                 }
-
-
             }
 
             @Override
@@ -380,20 +394,13 @@ public class CartFragment extends Fragment {
             if (CommonClass.getInstance().selectedAddress != null) {
                 locationErrorLayout.setVisibility(View.GONE);
                 locationInfoLayout.setVisibility(View.VISIBLE);
-                commonBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
-                commonBtn.setText(getResources().getString(R.string.proceed_to_pay));
                 addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
                 addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
-                addressDeliveryTime.setText("30 Mins");
+                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString()+" Mins");
             } else {
-                commonBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
-                commonBtn.setText(getResources().getString(R.string.add_address_to_proceed));
                 locationErrorLayout.setVisibility(View.VISIBLE);
                 locationInfoLayout.setVisibility(View.GONE);
-
             }
-
-
         } else if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_CANCELED) {
             System.out.print("CartFragment : Failure");
 

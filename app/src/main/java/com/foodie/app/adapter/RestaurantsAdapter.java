@@ -82,7 +82,6 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         if(shops.getRatings()!=null){
             Double rating=new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
             holder.rating.setText(""+rating);
-//            holder.rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
         }
 
         else

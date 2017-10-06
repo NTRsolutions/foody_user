@@ -40,6 +40,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +104,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
 
     Context context;
-    public  static  ShopsModel shops;
+    public static ShopsModel shops;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     List<Category> categoryList;
@@ -143,9 +145,10 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
         }
 
-        if (shops.getRatings() != null)
-            rating.setText("" + Double.parseDouble(shops.getRatings().getRating()));
-        else
+        if (shops.getRatings() != null) {
+            Double ratingvalue = new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            rating.setText("" + ratingvalue);
+        } else
             rating.setText("No Rating");
 
         deliveryTime.setText(shops.getEstimatedDeliveryTime().toString() + "Mins");
@@ -220,7 +223,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
         accompanimentDishesRv.setAdapter(catagoeryAdapter);
 
-        if(CommonClass.getInstance().addCart!=null){
+        if (CommonClass.getInstance().addCart != null) {
 
         }
 
