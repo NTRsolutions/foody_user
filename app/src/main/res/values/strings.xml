@@ -112,5 +112,7 @@
     <string name="cart_error_description">Please order the dishes</string>
     <string name="add_address_to_proceed">Add address to proceed</string>
     <string name="proceed_to_pay">Proceed to pay</string>
+    <string name="add_address">Add Address</string>
+    <string name="change_address">Change Address</string>
 
 </resources>

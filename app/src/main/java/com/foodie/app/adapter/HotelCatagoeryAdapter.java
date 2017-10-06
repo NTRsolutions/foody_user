@@ -111,10 +111,11 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         productList = list.get(section).getProducts();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
+        addCart=CommonClass.getInstance().addCart;
         if (product.getCart() != null) {
-            CommonClass.getInstance().selectedShop=HotelViewActivity.shops;
-            if(CommonClass.getInstance().addCart!=null)
-            setViewcartBottomLayout(CommonClass.getInstance().addCart);
+            CommonClass.getInstance().selectedShop = HotelViewActivity.shops;
+            if (CommonClass.getInstance().addCart != null)
+                setViewcartBottomLayout(CommonClass.getInstance().addCart);
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
             holder.cardTextValueTicker.setText(String.valueOf(product.getCart().getQuantity()));
@@ -163,7 +164,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
                     holder.cardAddDetailLayout.setVisibility(View.GONE);
-                    if (addCart.getProductList().size() == 0)
+                    if (addCart.getProductList().size() == 0&&addCart!=null)
                         HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
                     HashMap<String, String> map = new HashMap<String, String>();
@@ -202,11 +203,10 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 Log.e("AddCart_Text", map.toString());
                 addCart(map);
 
-                if(product.getCart()!=null){
+                if (product.getCart() != null) {
                     product.getCart().setQuantity(1);
-                }
-                else {
-                    Cart cart=new Cart();
+                } else {
+                    Cart cart = new Cart();
                     cart.setQuantity(1);
                     product.setCart(cart);
                 }
@@ -221,7 +221,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
-                    CommonClass.getInstance().selectedShop=HotelViewActivity.shops;
+                CommonClass.getInstance().selectedShop = HotelViewActivity.shops;
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -231,9 +231,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     }
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
-                   setViewcartBottomLayout(addCart);
-
-
+                    CommonClass.getInstance().addCart = response.body();
+                    setViewcartBottomLayout(addCart);
                 }
             }
 
@@ -258,7 +257,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
         }
-        CommonClass.getInstance().notificationCount=itemQuantity;
+        CommonClass.getInstance().notificationCount = itemQuantity;
         if (itemQuantity == 0) {
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
             // Start animation
@@ -316,12 +315,9 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 //Load animation
                 slide_down = AnimationUtils.loadAnimation(context,
                         R.anim.slide_down);
-
                 slide_up = AnimationUtils.loadAnimation(context,
                         R.anim.slide_up);
-
             }
-
 
         }
 

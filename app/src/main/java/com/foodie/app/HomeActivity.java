@@ -422,6 +422,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
                         //Get product price
                     }
+                    CommonClass.getInstance().notificationCount = itemQuantity;
                     if (itemQuantity == 0) {
                         bottomNavigation.setNotification(notification, 2);
                     } else {
@@ -448,7 +449,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onResume() {
         super.onResume();
         connectionHelper.isConnectingToInternet();
-        updateNotificationCount(context,notificationCount);
+        updateNotificationCount(context, notificationCount);
     }
 
     @Override
@@ -526,13 +527,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public static void updateNotificationCount(Context context, int itemCount) {
-
         if (itemCount == 0) {
             notification = null;
             bottomNavigation.setNotification(notification, 2);
         } else if (bottomNavigation != null) {
+            bottomNavigation.setNotificationBackgroundColor(context.getResources().getColor(R.color.theme));
             bottomNavigation.setNotification(String.valueOf(itemCount), 2);
-
         }
 
     }

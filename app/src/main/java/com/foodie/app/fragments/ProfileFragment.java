@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
 import com.foodie.app.activities.ChangePasswordActivity;
@@ -32,8 +34,11 @@ import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.activities.PromotionActivity;
 import com.foodie.app.activities.WelcomeScreenActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.utils.ListViewSizeHelper;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,7 +86,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
-        arrowImage.setTag(true);
+
 
         final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
         List<Integer> listIcons = new ArrayList<>();
@@ -102,6 +107,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        arrowImage.setTag(false);
+        collapse(listLayout);
+
+        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
         return view;
 
@@ -111,6 +120,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
     }
 
     @Override
@@ -130,7 +140,6 @@ public class ProfileFragment extends Fragment {
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
-
 
 
     }
@@ -170,9 +179,23 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         System.out.println("ProfileFragment");
 
+
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
+
+        ImageView userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
+        TextView userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
+        TextView userPhone = (TextView) toolbarLayout.findViewById(R.id.user_phone);
+        TextView userEmail = (TextView) toolbarLayout.findViewById(R.id.user_mail);
+
+        if(CommonClass.getInstance().profileModel!=null){
+            Glide.with(context).load(CommonClass.getInstance().profileModel.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
+                    .error(R.drawable.item1).into(userImage);
+            userPhone.setText(CommonClass.getInstance().profileModel.getPhone());
+            userName.setText(CommonClass.getInstance().profileModel.getName());
+            userEmail.setText(" - "+CommonClass.getInstance().profileModel.getEmail());
+        }
 
         Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +208,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.arrow_image, R.id.logout,R.id.myaccount_layout})
+    @OnClick({R.id.arrow_image, R.id.logout, R.id.myaccount_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.myaccount_layout:
@@ -209,7 +232,7 @@ public class ProfileFragment extends Fragment {
                 }
                 break;
             case R.id.logout:
-                SharedHelper.putKey(context,"logged","false");
+                SharedHelper.putKey(context, "logged", "false");
                 startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 getActivity().finish();
                 break;

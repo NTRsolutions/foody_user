@@ -1,7 +1,7 @@
 package com.foodie.app.activities;
 
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.fragments.OrderViewFragment;
 import com.foodie.app.helper.CommonClass;
@@ -63,7 +64,6 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     String currency = "";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,23 +87,26 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
 
             Checkout checkout = CommonClass.getInstance().checkoutData;
             //set Title values
+//            orderIdTxt.setText("ORDER #000" + checkout.getId().toString());
+//            if (checkout.getItems().size() != 0 && checkout.getItems() != null) {
+//                itemCount = checkout.getItems().size();
+//                for (int i = 0; i < itemCount; i++) {
+//                    //Get Total item Quantity
+//                    itemQuantity = itemQuantity + checkout.getItems().get(i).getQuantity();
+//                    //Get product price
+//                    if (checkout.getItems().get(i).getProduct().getPrices().getPrice() != null)
+//                        priceAmount = priceAmount + (checkout.getItems().get(i).getQuantity() * checkout.getItems().get(i).getProduct().getPrices().getPrice());
+//                    discount = discount + (checkout.getItems().get(i).getQuantity() * checkout.getItems().get(i).getProduct().getPrices().getDiscount());
+//                }
+//            }
             orderIdTxt.setText("ORDER #000" + checkout.getId().toString());
-            if (checkout.getItems().size() != 0 && checkout.getItems() != null) {
-                itemCount = checkout.getItems().size();
-                for (int i = 0; i < itemCount; i++) {
-                    //Get Total item Quantity
-                    itemQuantity = itemQuantity + checkout.getItems().get(i).getQuantity();
-                    //Get product price
-                    if (checkout.getItems().get(i).getProduct().getPrices().getPrice() != null)
-                        priceAmount = priceAmount + (checkout.getItems().get(i).getQuantity() * checkout.getItems().get(i).getProduct().getPrices().getPrice());
-                    discount = discount + (checkout.getItems().get(i).getQuantity() * checkout.getItems().get(i).getProduct().getPrices().getDiscount());
-                }
-            }
+            itemQuantity = checkout.getInvoice().getQuantity();
+            priceAmount = checkout.getInvoice().getNet();
             currency = checkout.getItems().get(0).getProduct().getPrices().getCurrency();
-            if (itemCount == 1)
-                orderItemTxt.setText(String.valueOf(itemCount) + " Item, " + currency + String.valueOf(priceAmount));
+            if (itemQuantity == 1)
+                orderItemTxt.setText(String.valueOf(itemQuantity) + " Item, " + currency + String.valueOf(priceAmount));
             else
-                orderItemTxt.setText(String.valueOf(itemCount) + " Items, " + currency + String.valueOf(priceAmount));
+                orderItemTxt.setText(String.valueOf(itemQuantity) + " Items, " + currency + String.valueOf(priceAmount));
 
             orderIdTxt2.setText("#000" + checkout.getId().toString());
             orderPlacedTime.setText(getTimeFromString(checkout.getCreatedAt()));
@@ -121,12 +124,12 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        startActivity(new Intent(CurrentOrderDetailActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
     private String getTimeFromString(String time) {
-        System.out.println("Time : "+time);
+        System.out.println("Time : " + time);
         String value = "";
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
@@ -134,7 +137,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
 
             if (time != null) {
                 Date date = df.parse(time);
-                value= sdf.format(date);
+                value = sdf.format(date);
             }
 
         } catch (ParseException e) {

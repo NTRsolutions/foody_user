@@ -1,7 +1,9 @@
 package com.foodie.app.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Address;
@@ -103,6 +105,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     com.foodie.app.model.Address address = null;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
+    boolean isAddressSave = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +117,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         address.setType("other");
         //Intialize Animation line
         initializeAvd();
+
+        isAddressSave = getIntent().getBooleanExtra("get_address", false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -390,8 +396,18 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             Toast.makeText(SaveDeliveryLocationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     } else if (response != null && response.isSuccessful()) {
-                        CommonClass.selectedAddress = response.body();
-                        finish();
+
+                        if (isAddressSave) {
+                            //select the address data and set to address in Cart fargment page
+                            Intent returnIntent = new Intent();
+                            CommonClass.getInstance().selectedAddress = response.body();
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            finish();
+                        } else {
+                            CommonClass.selectedAddress = response.body();
+                            finish();
+                        }
+
                     }
                 }
 
@@ -432,20 +448,20 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
     }
 
-    private boolean validate(){
-        if(address.getMapAddress().isEmpty() && address.getMapAddress().equals(getResources().getString(R.string.getting_address))){
+    private boolean validate() {
+        if (address.getMapAddress().isEmpty() && address.getMapAddress().equals(getResources().getString(R.string.getting_address))) {
             Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(address.getBuilding().isEmpty()){
+        } else if (address.getBuilding().isEmpty()) {
             Toast.makeText(this, "Please enter Flat No", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(address.getLandmark().isEmpty()){
+        } else if (address.getLandmark().isEmpty()) {
             Toast.makeText(this, "Please enter landmark", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(address.getLatitude() == null || address.getLongitude() == null){
+        } else if (address.getLatitude() == null || address.getLongitude() == null) {
             Toast.makeText(this, "Lat & long cannot be left blank", Toast.LENGTH_SHORT).show();
             return false;
-        }else {
+        } else {
             return true;
         }
     }

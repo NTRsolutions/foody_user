@@ -92,7 +92,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
         holder.cardAddTextLayout.setVisibility(View.GONE);
         holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
         product = list.get(position).getProduct();
@@ -302,7 +301,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         }
 
                         CommonClass.getInstance().notificationCount = itemQuantity;
-                        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+//                        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
                         //Set Payment details
                         String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
@@ -313,7 +312,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
                     } else {
                         CommonClass.getInstance().notificationCount = itemQuantity;
-                        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+//                        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
                         CartFragment.errorLayout.setVisibility(View.VISIBLE);
                         CartFragment.dataLayout.setVisibility(View.GONE);
                         Toast.makeText(context, "Cart is empty", Toast.LENGTH_SHORT).show();

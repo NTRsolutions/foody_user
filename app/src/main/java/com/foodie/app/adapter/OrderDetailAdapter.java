@@ -53,7 +53,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Item item = list.get(position);
-        holder.dishName.setText(item.getProduct().getName());
+        holder.dishName.setText(item.getProduct().getName() +" x " +String.valueOf(item.getQuantity()));
         holder.price.setText(item.getProduct().getPrices().getCurrency() + item.getProduct().getPrices().getPrice());
         if (item.getProduct().getFoodType().equalsIgnoreCase("veg"))
             holder.dishImg.setImageResource(R.drawable.ic_veg);

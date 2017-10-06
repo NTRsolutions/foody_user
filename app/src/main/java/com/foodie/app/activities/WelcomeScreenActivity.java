@@ -62,6 +62,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WelcomeScreenActivity.this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                finish();
             }
         });
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +70,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WelcomeScreenActivity.this, MobileNumberActivity.class).putExtra("signup", true).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                finish();
             }
         });
         overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
@@ -77,7 +79,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(WelcomeScreenActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                finish();
+
             }
         });
         // adding bottom dots

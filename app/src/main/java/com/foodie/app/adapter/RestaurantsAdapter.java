@@ -18,6 +18,8 @@ import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.model.ShopsModel;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -77,8 +79,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 //            holder.restaurantInfo.setText(shops.getAvailability());
 //        }
 
-        if(shops.getRatings()!=null)
-        holder.rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
+        if(shops.getRatings()!=null){
+            Double rating=new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            holder.rating.setText(""+rating);
+//            holder.rating.setText(""+Double.parseDouble(shops.getRatings().getRating()));
+        }
+
         else
             holder.rating.setText("No Rating");
         holder.distanceTime.setText(shops.getEstimatedDeliveryTime().toString()+" Mins");

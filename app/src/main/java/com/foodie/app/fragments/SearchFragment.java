@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.helper.CommonClass;
 
 
 /**
@@ -28,12 +30,15 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
     }
 
     @Override

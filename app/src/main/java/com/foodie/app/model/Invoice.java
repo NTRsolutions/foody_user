@@ -24,6 +24,9 @@ public class Invoice {
     @SerializedName("discount")
     @Expose
     private Integer discount;
+    @SerializedName("delivery_charge")
+    @Expose
+    private Integer deliveryCharge;
     @SerializedName("tax")
     @Expose
     private Integer tax;
@@ -90,8 +93,16 @@ public class Invoice {
         return discount;
     }
 
+    public Integer getDeliveryCharge() {
+        return deliveryCharge;
+    }
+
     public void setDiscount(Integer discount) {
         this.discount = discount;
+    }
+
+    public void setDeliveryCharge(Integer deliveryCharge) {
+        this.deliveryCharge = deliveryCharge;
     }
 
     public Integer getTax() {

@@ -62,7 +62,7 @@ public class ProfileSettingsAdapter extends BaseAdapter {
 
         //Load the animation from the xml file and set it to the row
         Animation animation = AnimationUtils.loadAnimation(context_, R.anim.anim_push_left_in);
-        animation.setDuration(800);
+        animation.setDuration(400);
         convertView.startAnimation(animation);
 
         return convertView;

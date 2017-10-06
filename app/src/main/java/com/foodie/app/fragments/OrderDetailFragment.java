@@ -17,7 +17,6 @@ import com.foodie.app.adapter.OrderDetailAdapter;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Checkout;
 import com.foodie.app.model.Item;
-import com.foodie.app.model.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +47,13 @@ public class OrderDetailFragment extends Fragment {
     List<Item> itemList;
 
 
-
     int totalAmountValue = 0;
     int discount = 0;
     int itemCount = 0;
     int itemQuantity = 0;
     String currency = "";
-
+    @BindView(R.id.discount_amount)
+    TextView discountAmount;
 
 
     public OrderDetailFragment() {
@@ -70,7 +69,7 @@ public class OrderDetailFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
 
-        Checkout checkout=CommonClass.getInstance().checkoutData;
+        Checkout checkout = CommonClass.getInstance().checkoutData;
         //set Item List Values
         itemList = new ArrayList<>();
         itemList.addAll(checkout.getItems());
@@ -83,11 +82,12 @@ public class OrderDetailFragment extends Fragment {
         orderRecyclerView.setAdapter(orderItemListAdapter);
 
         currency = checkout.getItems().get(0).getProduct().getPrices().getCurrency();
-        itemQuantity=checkout.getInvoice().getQuantity();
-        totalAmountValue=checkout.getInvoice().getGross();
-        itemTotalAmount.setText(currency+checkout.getInvoice().getGross().toString());
-        serviceTax.setText(currency+checkout.getInvoice().getTax().toString());
-        totalAmount.setText(currency+String.valueOf(totalAmountValue));
+        itemQuantity = checkout.getInvoice().getQuantity();
+        itemTotalAmount.setText(currency + checkout.getInvoice().getGross().toString());
+        serviceTax.setText(currency + checkout.getInvoice().getTax().toString());
+        deliveryCharges.setText(currency + checkout.getInvoice().getDeliveryCharge().toString());
+        discountAmount.setText("-"+currency + checkout.getInvoice().getDiscount().toString());
+        totalAmount.setText(currency + String.valueOf(checkout.getInvoice().getNet()));
 
         return view;
     }

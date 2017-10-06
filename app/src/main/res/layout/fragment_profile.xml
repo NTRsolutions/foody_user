@@ -12,6 +12,7 @@
         tools:context="com.foodie.app.activities.ProfileActivity">
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -37,13 +38,14 @@
                         android:orientation="vertical">
 
                         <TextView
+                            fontPath="fonts/Nunito-Bold.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:maxLines="1"
                             android:paddingStart="8dp"
                             android:text="My Account"
-                            android:textColor="@color/colorPrimaryText"
+                            android:textColor="@color/colorTextBlack"
                             android:textSize="@dimen/text_medium" />
 
                         <TextView
@@ -100,8 +102,8 @@
 
             </LinearLayout>
 
-
             <RelativeLayout
+                android:layout_marginBottom="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:id="@+id/list_layout"
                 android:layout_width="match_parent"
@@ -117,47 +119,42 @@
                     android:scrollbars="none" />
 
                 <View
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/profile_setting_lv"
                     android:layout_marginTop="10dp"
-                    android:background="@color/colorSecondaryText" />
+                    android:background="#eee" />
             </RelativeLayout>
 
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_below="@id/profile_setting_lv"
                 android:layout_marginTop="30dp"
                 android:background="#eee" />
 
             <Button
+                fontPath="fonts/Nunito-Bold.ttf"
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:drawableEnd="@drawable/logout"
                 android:drawablePadding="8dp"
                 android:gravity="start|center"
-                android:padding="8dp"
+                android:padding="@dimen/activity_vertical_margin"
                 android:text="@string/logout"
-                android:textColor="@color/colorSecondaryText" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="20dp"
-                android:background="#eee" />
+                android:textColor="@color/colorTextBlack" />
 
             <TextView
+                android:background="#eee"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="120dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_45sdp"
                 android:gravity="center"
                 android:text="App version 1.0" />
 

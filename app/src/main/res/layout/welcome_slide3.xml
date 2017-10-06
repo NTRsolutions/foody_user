@@ -4,18 +4,17 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     android:orientation="vertical">
-
     <LinearLayout
+        android:layout_marginTop="@dimen/_70sdp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <ImageView
+            android:src="@drawable/ic_bookmark"
+            android:layout_margin="@dimen/_10sdp"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_bookmark" />
+            android:layout_height="@dimen/_120sdp" />
 
 
         <TextView

@@ -17,11 +17,9 @@
     </RelativeLayout>
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-
         >
 
 
@@ -29,36 +27,36 @@
             android:id="@+id/location_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
             android:gravity="center_vertical"
+            android:orientation="vertical"
             android:visibility="invisible">
 
 
             <TextView
-                android:paddingEnd="@dimen/_8sdp"
                 android:id="@+id/address_label"
                 fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_down"
                 android:maxLines="1"
+                android:paddingEnd="@dimen/_8sdp"
                 android:text="Home"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_small" />
 
             <TextView
-                android:paddingRight="@dimen/_5sdp"
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
+                android:paddingRight="@dimen/_10sdp"
                 android:text="Washington, DC, Green town west..."
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_tiny" />
@@ -68,16 +66,17 @@
         <Button
             android:id="@+id/filter"
             fontPath="fonts/Nunito-Bold.ttf"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_60sdp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_filter"
+            android:drawablePadding="-10dp"
             android:gravity="center"
             android:text="@string/filter"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="12sp" />
+            android:textSize="@dimen/text_tiny" />
 
     </LinearLayout>
 

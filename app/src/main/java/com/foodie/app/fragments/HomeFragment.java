@@ -144,6 +144,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 Log.d("Hello", "onItemClick position: " + dish.getName());
             }
         });
+        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
         //Spinner
         //Creating the ArrayAdapter instance having the country list
@@ -277,6 +278,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
+        HomeActivity.updateNotificationCount(context,CommonClass.getInstance().notificationCount);
 
     }
 

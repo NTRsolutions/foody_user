@@ -24,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
+import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
@@ -142,6 +144,7 @@ public class CartFragment extends Fragment {
         dataLayout = (RelativeLayout) view.findViewById(R.id.data_layout);
         errorLayout = (RelativeLayout) view.findViewById(R.id.error_layout);
 
+        HomeActivity.updateNotificationCount(context,0);
         customDialog = new CustomDialog(context);
         getViewCart();
 
@@ -154,6 +157,7 @@ public class CartFragment extends Fragment {
 
         //Intialize address Value
         if (CommonClass.getInstance().selectedAddress != null) {
+            addAddressTxt.setText(getString(R.string.change_address));
             commonBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
             commonBtn.setText(getResources().getString(R.string.proceed_to_pay));
             addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
@@ -164,7 +168,6 @@ public class CartFragment extends Fragment {
             commonBtn.setText(getResources().getString(R.string.add_address_to_proceed));
             locationErrorLayout.setVisibility(View.VISIBLE);
             locationInfoLayout.setVisibility(View.GONE);
-
         }
 
         return view;
@@ -217,7 +220,7 @@ public class CartFragment extends Fragment {
                         //Set Restaurant Details
                         restaurantName.setText(response.body().getProductList().get(0).getProduct().getShops().getName());
                         restaurantDescription.setText(response.body().getProductList().get(0).getProduct().getShops().getDescription());
-                        String image_url=response.body().getProductList().get(0).getProduct().getShops().getAvatar();
+                        String image_url = response.body().getProductList().get(0).getProduct().getShops().getAvatar();
                         Glide.with(context).load(image_url).placeholder(R.drawable.item1).dontAnimate()
                                 .error(R.drawable.item1).into(restaurantImage);
 
@@ -305,14 +308,21 @@ public class CartFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_address_txt:
-                /** Press Add address button */
-                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                /**  If address is empty */
+                if (addAddressTxt.getText().toString().equalsIgnoreCase(getResources().getString(R.string.change_address))) {
+                    startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                }
+                /**  If address is filled */
+                else if (addAddressTxt.getText().toString().equalsIgnoreCase(getResources().getString(R.string.add_address))) {
+                    startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                }
                 break;
             case R.id.common_btn:
                 /**  If address is empty */
                 if (commonBtn.getText().toString().equalsIgnoreCase(getResources().getString(R.string.add_address_to_proceed))) {
-                    startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                    startActivityForResult(new Intent(getActivity(), SaveDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
                     getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 }
                 /**  If address is filled */
@@ -343,6 +353,9 @@ public class CartFragment extends Fragment {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
+                    CommonClass.getInstance().addCart=null;
+                    CommonClass.getInstance().notificationCount=0;
+                    CommonClass.getInstance().selectedShop=null;
                     CommonClass.getInstance().checkoutData = response.body();
                     startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();
