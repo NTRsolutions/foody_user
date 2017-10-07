@@ -118,7 +118,6 @@
                     android:drawableLeft="@drawable/password_left"
                     android:drawablePadding="@dimen/_10sdp"
                     android:hint="@string/confirm_password"
-                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:paddingLeft="@dimen/_10sdp"
                     android:singleLine="true"

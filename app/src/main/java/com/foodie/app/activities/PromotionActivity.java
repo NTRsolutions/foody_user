@@ -10,10 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.NotificationAdapter;
 import com.foodie.app.adapter.PromotionsAdapter;
-import com.foodie.app.model.NotificationItem;
-import com.foodie.app.model.PromotionsModel;
+import com.foodie.app.model.Promotions;
 
 import java.util.ArrayList;
 
@@ -46,9 +44,9 @@ public class PromotionActivity extends AppCompatActivity {
         });
         toolbar.setContentInsetsAbsolute(toolbar.getContentInsetLeft(), 0);
 
-        final ArrayList<PromotionsModel> promotionsModelArrayList = new ArrayList<>();
-        promotionsModelArrayList.add(new PromotionsModel("12-5-2017 5:00AM", "AC1234 Applied", "$40"));
-        promotionsModelArrayList.add(new PromotionsModel("26-6-2017 6:30PM", "DJ1234 Applied", "$80"));
+        final ArrayList<Promotions> promotionsModelArrayList = new ArrayList<>();
+        promotionsModelArrayList.add(new Promotions("12-5-2017 5:00AM", "AC1234 Applied", "$40"));
+        promotionsModelArrayList.add(new Promotions("26-6-2017 6:30PM", "DJ1234 Applied", "$80"));
 
         //Offer Restaurant Adapter
         promotionsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));

@@ -6,8 +6,8 @@ import com.foodie.app.model.AddressList;
 import com.foodie.app.model.Cart;
 import com.foodie.app.model.Checkout;
 import com.foodie.app.model.User;
-import com.foodie.app.model.OtpModel;
-import com.foodie.app.model.ShopsModel;
+import com.foodie.app.model.Otp;
+import com.foodie.app.model.Shop;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CommonClass {
 
-    public OtpModel otpModel = null;
+    public Otp otpModel = null;
 
     public static double latitude = 13.0587107;
     public static double longitude = 80.2757063;
@@ -31,11 +31,11 @@ public class CommonClass {
     public static Checkout checkoutData = null;
     public static AddCart addCart = null;
 
-    public static List<ShopsModel> list;
+    public static List<Shop> list;
     public static List<Cart> cartList;
     public static AddressList addressList=null;
 
-    public static ShopsModel selectedShop;
+    public static Shop selectedShop;
 
     public static int otpValue = 0;
     public static String mobile = "";

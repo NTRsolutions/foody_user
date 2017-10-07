@@ -7,7 +7,7 @@ import java.util.List;
  * Created by santhosh@appoets.com on 28-08-2017.
  */
 
-public class CategoryModel {
+public class Categories {
     String header;
     List<Product> productList = new ArrayList<>();
 

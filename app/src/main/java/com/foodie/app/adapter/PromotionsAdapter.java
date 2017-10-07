@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.model.PromotionsModel;
+import com.foodie.app.model.Promotions;
 import com.foodie.app.model.Restaurant;
 
 import java.util.List;
@@ -19,10 +19,10 @@ import java.util.List;
  */
 
 public class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.MyViewHolder> {
-    private List<PromotionsModel> list;
+    private List<Promotions> list;
     private Context context;
 
-    public PromotionsAdapter(List<PromotionsModel> list, Context con) {
+    public PromotionsAdapter(List<Promotions> list, Context con) {
         this.list = list;
         this.context = con;
     }
@@ -35,7 +35,7 @@ public class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.My
         return new MyViewHolder(itemView);
     }
 
-    public void add(PromotionsModel item, int position) {
+    public void add(Promotions item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
@@ -48,7 +48,7 @@ public class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        PromotionsModel PromotionsModel = list.get(position);
+        Promotions PromotionsModel = list.get(position);
         holder.promotionsDate.setText(PromotionsModel.promotionsDate);
         holder.promotionsAmount.setText(PromotionsModel.promotionAmount);
         holder.promotionsCode.setText(PromotionsModel.promotionCode);

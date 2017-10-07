@@ -75,6 +75,7 @@
         </ScrollView>
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_below="@+id/line_view"
             android:id="@+id/error_layout"
             android:background="#eee"

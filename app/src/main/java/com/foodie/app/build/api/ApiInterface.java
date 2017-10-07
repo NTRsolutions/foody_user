@@ -13,9 +13,9 @@ import com.foodie.app.model.Message;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.model.User;
 import com.foodie.app.model.LoginModel;
-import com.foodie.app.model.OtpModel;
+import com.foodie.app.model.Otp;
 import com.foodie.app.model.RegisterModel;
-import com.foodie.app.model.ShopsModel;
+import com.foodie.app.model.Shop;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,6 @@ import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
@@ -41,7 +40,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("api/user/otp")
-    Call<OtpModel> postOtp(@Field("phone") String mobile);
+    Call<Otp> postOtp(@Field("phone") String mobile);
 
     @FormUrlEncoded
     @POST("api/user/register")
@@ -64,7 +63,7 @@ public interface ApiInterface {
     Call<ChangePassword>  changePassword(@FieldMap HashMap<String,String> params);
 
     @GET("api/user/shops")
-    Call<List<ShopsModel>> getshops(@QueryMap HashMap<String,String> params);
+    Call<List<Shop>> getshops(@QueryMap HashMap<String,String> params);
 
     @FormUrlEncoded
     @POST("api/user/cart")

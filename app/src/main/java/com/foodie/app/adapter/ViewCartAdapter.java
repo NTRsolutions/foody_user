@@ -2,7 +2,6 @@ package com.foodie.app.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Handler;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
@@ -25,7 +23,6 @@ import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Product;
 import com.foodie.app.model.ProductList;
 import com.foodie.app.model.Shop;
-import com.foodie.app.model.ShopsModel;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
@@ -37,8 +34,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.foodie.app.HomeActivity.bottomNavigation;
 
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
@@ -59,7 +54,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     AnimatedVectorDrawableCompat avdProgress;
     Dialog dialog;
     Runnable action;
-    ShopsModel selectedShop = CommonClass.getInstance().selectedShop;
+    Shop selectedShop = CommonClass.getInstance().selectedShop;
 
 
     //Animation number

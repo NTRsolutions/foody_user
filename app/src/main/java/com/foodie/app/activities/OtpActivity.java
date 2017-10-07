@@ -72,9 +72,11 @@ public class OtpActivity extends AppCompatActivity {
             if (isSignUp) {
                 startActivity(new Intent(OtpActivity.this, SignUpActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                finish();
             } else {
                 startActivity(new Intent(OtpActivity.this, ResetPasswordActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                finish();
             }
         } else {
             Toast.makeText(this, "Enter otp is incorrect", Toast.LENGTH_SHORT).show();

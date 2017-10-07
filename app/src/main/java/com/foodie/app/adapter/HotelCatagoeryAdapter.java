@@ -111,7 +111,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         productList = list.get(section).getProducts();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
-        addCart=CommonClass.getInstance().addCart;
+        addCart = CommonClass.getInstance().addCart;
         if (product.getCart() != null) {
             CommonClass.getInstance().selectedShop = HotelViewActivity.shops;
             if (CommonClass.getInstance().addCart != null)
@@ -139,17 +139,16 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             public void onClick(View v) {
                 Log.e("access_token2", CommonClass.getInstance().accessToken);
                 /** Press Add Card Add button */
-                product = list.get(section).getProducts().get(relativePosition);
-                int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
-                holder.cardTextValue.setText("" + countValue);
-                holder.cardTextValueTicker.setText("" + countValue);
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("product_id", product.getId().toString());
-                map.put("quantity", holder.cardTextValue.getText().toString());
-                Log.e("AddCart_add", map.toString());
-                addCart(map);
-                product.getCart().setQuantity(countValue);
-
+                    product = list.get(section).getProducts().get(relativePosition);
+                    int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
+                    holder.cardTextValue.setText("" + countValue);
+                    holder.cardTextValueTicker.setText("" + countValue);
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("product_id", product.getId().toString());
+                    map.put("quantity", holder.cardTextValue.getText().toString());
+                    Log.e("AddCart_add", map.toString());
+                    addCart(map);
+                    product.getCart().setQuantity(countValue);
             }
         });
 
@@ -164,7 +163,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
                     holder.cardAddDetailLayout.setVisibility(View.GONE);
-                    if (addCart.getProductList().size() == 0&&addCart!=null)
+                    if (addCart.getProductList().size() == 0 && addCart != null)
                         HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
                     HashMap<String, String> map = new HashMap<String, String>();
@@ -192,23 +191,30 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             @Override
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
-                product = list.get(section).getProducts().get(relativePosition);
-                holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                holder.cardAddTextLayout.setVisibility(View.GONE);
-                holder.cardTextValue.setText("1");
-                holder.cardTextValueTicker.setText("1");
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("product_id", product.getId().toString());
-                map.put("quantity", holder.cardTextValue.getText().toString());
-                Log.e("AddCart_Text", map.toString());
-                addCart(map);
 
-                if (product.getCart() != null) {
-                    product.getCart().setQuantity(1);
-                } else {
-                    Cart cart = new Cart();
-                    cart.setQuantity(1);
-                    product.setCart(cart);
+                if (CommonClass.getInstance().profileModel != null) {
+                    product = list.get(section).getProducts().get(relativePosition);
+                    holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                    holder.cardAddTextLayout.setVisibility(View.GONE);
+                    holder.cardTextValue.setText("1");
+                    holder.cardTextValueTicker.setText("1");
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("product_id", product.getId().toString());
+                    map.put("quantity", holder.cardTextValue.getText().toString());
+                    Log.e("AddCart_Text", map.toString());
+                    addCart(map);
+
+                    if (product.getCart() != null) {
+                        product.getCart().setQuantity(1);
+                    } else {
+                        Cart cart = new Cart();
+                        cart.setQuantity(1);
+                        product.setCart(cart);
+                    }
+
+                }
+                else {
+                    Toast.makeText(context, context.getResources().getString(R.string.please_login_and_order_dishes), Toast.LENGTH_SHORT).show();
                 }
 
             }

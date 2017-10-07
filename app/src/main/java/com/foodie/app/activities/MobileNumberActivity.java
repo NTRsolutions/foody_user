@@ -20,7 +20,7 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.ForgotPassword;
-import com.foodie.app.model.OtpModel;
+import com.foodie.app.model.Otp;
 import com.foodie.app.utils.TextUtils;
 
 import org.json.JSONObject;
@@ -119,6 +119,7 @@ public class MobileNumberActivity extends AppCompatActivity {
                     CommonClass.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
                     startActivity(new Intent(context, OtpActivity.class).putExtra("signup", false));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                    finish();
                 }
             }
 
@@ -136,10 +137,10 @@ public class MobileNumberActivity extends AppCompatActivity {
 
     public void getOtpVerification(String mobile) {
         customDialog.show();
-        Call<OtpModel> call = apiInterface.postOtp(mobile);
-        call.enqueue(new Callback<OtpModel>() {
+        Call<Otp> call = apiInterface.postOtp(mobile);
+        call.enqueue(new Callback<Otp>() {
             @Override
-            public void onResponse(Call<OtpModel> call, Response<OtpModel> response) {
+            public void onResponse(Call<Otp> call, Response<Otp> response) {
 
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     customDialog.dismiss();
@@ -154,12 +155,13 @@ public class MobileNumberActivity extends AppCompatActivity {
                     Toast.makeText(MobileNumberActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     CommonClass.getInstance().otpValue = response.body().getOtp();
                     startActivity(new Intent(MobileNumberActivity.this, OtpActivity.class));
+                    finish();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<OtpModel> call, Throwable t) {
+            public void onFailure(Call<Otp> call, Throwable t) {
 
             }
         });
@@ -213,6 +215,7 @@ public class MobileNumberActivity extends AppCompatActivity {
             case R.id.already_have_aacount_txt:
                 startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                finish();
                 break;
             case R.id.next_btn:
                 String mobileNumber = country_code + etMobileNumber.getText().toString();

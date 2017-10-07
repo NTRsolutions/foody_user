@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amar.library.ui.StickyScrollView;
-import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.HomeActivity;
@@ -41,7 +39,7 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
-import com.foodie.app.model.ShopsModel;
+import com.foodie.app.model.Shop;
 import com.foodie.app.helper.CommonClass;
 
 import java.util.ArrayList;
@@ -53,9 +51,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.foodie.app.HomeActivity.bottomNavigation;
-import static com.foodie.app.HomeActivity.notification;
 
 
 /**
@@ -100,7 +95,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     String[] catagoery = {"Relevance", "Cost for Two", "Delivery Time", "Rating"};
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-    List<ShopsModel> restaurantList;
+    List<Shop> restaurantList;
     RestaurantsAdapter adapterRestaurant;
 
     @Override
@@ -225,10 +220,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private void getRestaurant(HashMap<String, String> map) {
 
-        Call<List<ShopsModel>> getres = apiInterface.getshops(map);
-        getres.enqueue(new Callback<List<ShopsModel>>() {
+        Call<List<Shop>> getres = apiInterface.getshops(map);
+        getres.enqueue(new Callback<List<Shop>>() {
             @Override
-            public void onResponse(Call<List<ShopsModel>> call, Response<List<ShopsModel>> response) {
+            public void onResponse(Call<List<Shop>> call, Response<List<Shop>> response) {
                 CommonClass.getInstance().list = response.body();
                 restaurantList.clear();
                 restaurantList.addAll(CommonClass.getInstance().list);
@@ -237,7 +232,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             }
 
             @Override
-            public void onFailure(Call<List<ShopsModel>> call, Throwable t) {
+            public void onFailure(Call<List<Shop>> call, Throwable t) {
 
             }
         });
@@ -356,7 +351,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(context, catagoery[position], Toast.LENGTH_LONG).show();
+//        Toast.makeText(context, catagoery[position], Toast.LENGTH_LONG).show();
     }
 
     @Override

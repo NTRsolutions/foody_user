@@ -1,6 +1,7 @@
 
 package com.foodie.app.model;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,10 +42,10 @@ public class Shop {
     private String mapsAddress;
     @SerializedName("latitude")
     @Expose
-    private String latitude;
+    private Double latitude;
     @SerializedName("longitude")
     @Expose
-    private String longitude;
+    private Double longitude;
     @SerializedName("pure_veg")
     @Expose
     private Integer pureVeg;
@@ -60,6 +61,21 @@ public class Shop {
     @SerializedName("deleted_at")
     @Expose
     private Object deletedAt;
+    @SerializedName("distance")
+    @Expose
+    private Double distance;
+    @SerializedName("cuisines")
+    @Expose
+    private List<Cuisine> cuisines = null;
+    @SerializedName("timings")
+    @Expose
+    private List<Timing> timings = null;
+    @SerializedName("ratings")
+    @Expose
+    private Ratings ratings;
+    @SerializedName("categories")
+    @Expose
+    private List<Category> categories = null;
 
     public Integer getId() {
         return id;
@@ -149,19 +165,19 @@ public class Shop {
         this.mapsAddress = mapsAddress;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
@@ -203,6 +219,46 @@ public class Shop {
 
     public void setDeletedAt(Object deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public List<Cuisine> getCuisines() {
+        return cuisines;
+    }
+
+    public void setCuisines(List<Cuisine> cuisines) {
+        this.cuisines = cuisines;
+    }
+
+    public List<Timing> getTimings() {
+        return timings;
+    }
+
+    public void setTimings(List<Timing> timings) {
+        this.timings = timings;
+    }
+
+    public Ratings getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Ratings ratings) {
+        this.ratings = ratings;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
 }

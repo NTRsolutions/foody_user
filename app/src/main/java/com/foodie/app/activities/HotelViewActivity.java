@@ -34,24 +34,16 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.Shop;
-import com.foodie.app.model.ShopsModel;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HotelViewActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
@@ -104,7 +96,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
 
     Context context;
-    public static ShopsModel shops;
+    public static Shop shops;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     List<Category> categoryList;
@@ -300,7 +292,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     protected void onResume() {
         super.onResume();
         if (CommonClass.getInstance().list != null) {
-            List<ShopsModel> shopList = CommonClass.getInstance().list;
+            List<Shop> shopList = CommonClass.getInstance().list;
             for (int i = 0; i < shopList.size(); i++) {
                 if (shopList.get(i).getId().equals(shops.getId())) {
                     shops = shopList.get(i);

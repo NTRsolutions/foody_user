@@ -14,9 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.fragments.HomeFragment;
-import com.foodie.app.model.Restaurant;
-import com.foodie.app.model.ShopsModel;
+import com.foodie.app.model.Shop;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,11 +25,11 @@ import java.util.List;
  */
 
 public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.MyViewHolder> {
-    private List<ShopsModel> list;
+    private List<Shop> list;
     private Context context;
     private Activity activity;
 
-    public RestaurantsAdapter(List<ShopsModel> list, Context con,Activity act) {
+    public RestaurantsAdapter(List<Shop> list, Context con, Activity act) {
         this.list = list;
         this.context = con;
         this.activity = act;
@@ -45,12 +43,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         return new MyViewHolder(itemView);
     }
 
-    public void add(ShopsModel item, int position) {
+    public void add(Shop item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(ShopsModel item) {
+    public void remove(Shop item) {
         int position = list.indexOf(item);
         list.remove(position);
         notifyItemRemoved(position);
@@ -58,7 +56,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        ShopsModel shops = list.get(position);
+        Shop shops = list.get(position);
 
         Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
                 .error(R.drawable.item1).into(holder.dishImg);
