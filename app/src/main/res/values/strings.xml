@@ -116,5 +116,12 @@
     <string name="change_address">Change Address</string>
     <string name="old_password">Old Password</string>
     <string name="select_address">Select Address</string>
+    <string name="submit">Submit</string>
+    <string name="enter_secret_key">Enter your secret key</string>
+    <string name="account">Account</string>
+    <string name="login_or_sign_up_to_place_order">Login or Signup to place your order</string>
+    <string name="please_login_and_order_dishes">Please login and order our dishes</string>
+    <string name="manage_address_error_title">Knock Knock ! Who\'s there ?</string>
+    <string name="manage_address_error_description">Saving address helps you check out faster</string>
 
 </resources>

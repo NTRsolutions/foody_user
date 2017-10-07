@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,8 +36,6 @@ import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.utils.ListViewSizeHelper;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,6 +62,10 @@ public class ProfileFragment extends Fragment {
     RelativeLayout listLayout;
     @BindView(R.id.myaccount_layout)
     LinearLayout myaccountLayout;
+    @BindView(R.id.error_layout)
+    RelativeLayout errorLayout;
+    @BindView(R.id.login_btn)
+    Button loginBtn;
     private Activity activity;
     private Context context;
 
@@ -87,33 +87,34 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
 
-
-        final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
-        List<Integer> listIcons = new ArrayList<>();
-        listIcons.add(R.drawable.home);
-        listIcons.add(R.drawable.heart);
-        listIcons.add(R.drawable.payment);
-        listIcons.add(R.drawable.ic_myorders);
-        listIcons.add(R.drawable.ic_notifications);
-        listIcons.add(R.drawable.ic_promotion_details);
-        listIcons.add(R.drawable.padlock);
-        ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
-        profileSettingLv.setAdapter(adbPerson);
-        ListViewSizeHelper.getListViewSize(profileSettingLv);
-        profileSettingLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openSettingPage(position);
-            }
-        });
-
-        arrowImage.setTag(false);
-        collapse(listLayout);
-
-        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
-
+        if (CommonClass.getInstance().profileModel != null) {
+            errorLayout.setVisibility(View.GONE);
+            final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
+            List<Integer> listIcons = new ArrayList<>();
+            listIcons.add(R.drawable.home);
+            listIcons.add(R.drawable.heart);
+            listIcons.add(R.drawable.payment);
+            listIcons.add(R.drawable.ic_myorders);
+            listIcons.add(R.drawable.ic_notifications);
+            listIcons.add(R.drawable.ic_promotion_details);
+            listIcons.add(R.drawable.padlock);
+            ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
+            profileSettingLv.setAdapter(adbPerson);
+            ListViewSizeHelper.getListViewSize(profileSettingLv);
+            profileSettingLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    openSettingPage(position);
+                }
+            });
+            arrowImage.setTag(false);
+            collapse(listLayout);
+            HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+        } else {
+            //set Error Layout
+            errorLayout.setVisibility(View.VISIBLE);
+        }
         return view;
-
     }
 
 
@@ -141,7 +142,6 @@ public class ProfileFragment extends Fragment {
             toolbar.removeView(toolbarLayout);
         }
 
-
     }
 
     private void openSettingPage(int position) {
@@ -167,9 +167,7 @@ public class ProfileFragment extends Fragment {
             case 6:
                 startActivity(new Intent(context, ChangePasswordActivity.class));
                 break;
-
             default:
-
         }
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
     }
@@ -178,37 +176,34 @@ public class ProfileFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         System.out.println("ProfileFragment");
-
-
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
-        toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
-
-        ImageView userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
-        TextView userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
-        TextView userPhone = (TextView) toolbarLayout.findViewById(R.id.user_phone);
-        TextView userEmail = (TextView) toolbarLayout.findViewById(R.id.user_mail);
-
-        if(CommonClass.getInstance().profileModel!=null){
+        if (CommonClass.getInstance().profileModel != null) {
+            toolbar.setVisibility(View.VISIBLE);
+            toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
+            ImageView userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
+            TextView userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
+            TextView userPhone = (TextView) toolbarLayout.findViewById(R.id.user_phone);
+            TextView userEmail = (TextView) toolbarLayout.findViewById(R.id.user_mail);
             Glide.with(context).load(CommonClass.getInstance().profileModel.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
                     .error(R.drawable.item1).into(userImage);
             userPhone.setText(CommonClass.getInstance().profileModel.getPhone());
             userName.setText(CommonClass.getInstance().profileModel.getName());
-            userEmail.setText(" - "+CommonClass.getInstance().profileModel.getEmail());
+            userEmail.setText(" - " + CommonClass.getInstance().profileModel.getEmail());
+            Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(context, EditAccountActivity.class));
+                }
+            });
+            toolbar.addView(toolbarLayout);
+        } else {
+            toolbar.setVisibility(View.GONE);
         }
-
-        Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, EditAccountActivity.class));
-            }
-        });
-        toolbar.addView(toolbarLayout);
     }
 
 
-    @OnClick({R.id.arrow_image, R.id.logout, R.id.myaccount_layout})
+    @OnClick({R.id.arrow_image, R.id.logout, R.id.myaccount_layout, R.id.login_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.myaccount_layout:
@@ -228,12 +223,17 @@ public class ProfileFragment extends Fragment {
                     textLine.setVisibility(View.VISIBLE);
                     //expand animation
                     expand(listLayout);
-
                 }
                 break;
             case R.id.logout:
                 SharedHelper.putKey(context, "logged", "false");
-                startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                CommonClass.getInstance().profileModel = null;
+                getActivity().finish();
+                break;
+            case R.id.login_btn:
+                SharedHelper.putKey(context, "logged", "false");
+                startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 getActivity().finish();
                 break;
         }

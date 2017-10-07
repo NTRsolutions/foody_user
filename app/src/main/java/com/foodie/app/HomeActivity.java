@@ -119,14 +119,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         permissionUtils.check_permission(permissions, "Need GPS permission for getting your location", 1);
 
-
         // check availability of play services
         if (checkPlayServices()) {
-
             // Building the GoogleApi client
             buildGoogleApiClient();
         }
 
+        if(CommonClass.getInstance().profileModel!=null)
         getViewCart();
 
         final Handler handler = new Handler();

@@ -24,7 +24,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -89,8 +89,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ViewCartActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.ViewCartActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.PastOrderDetailActivity"
             android:label=" "
@@ -116,7 +117,8 @@
             android:name="io.fabric.ApiKey"
             android:value="3aef7a5b05836cf8166f23c95e43c52517bee917" />
 
-        <activity android:name=".activities.ResetPasswordActivity"></activity>
+        <activity android:name=".activities.ResetPasswordActivity" />
+        <activity android:name=".activities.SecretKeyActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
@@ -42,6 +44,11 @@ public class ManageAddressActivity extends AppCompatActivity {
     List<Address> locations;
     ManageAddressAdapter adapter;
     boolean isSuccessDelete = false;
+    @BindView(R.id.error_layout_description)
+    TextView errorLayoutDescription;
+    @BindView(R.id.error_layout)
+    RelativeLayout errorLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +87,14 @@ public class ManageAddressActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     locations.clear();
                     locations.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+                    if (locations.size() == 0) {
+                        errorLayout.setVisibility(View.VISIBLE);
+
+                    } else {
+                        errorLayout.setVisibility(View.GONE);
+                        adapter.notifyDataSetChanged();
+                    }
+
                 }
             }
 

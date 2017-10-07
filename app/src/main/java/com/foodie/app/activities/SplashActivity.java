@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.foodie.app.HomeActivity;
@@ -18,6 +19,8 @@ import com.foodie.app.model.AddressList;
 import com.foodie.app.model.Cart;
 import com.foodie.app.model.ProductList;
 import com.foodie.app.model.User;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,14 +65,32 @@ public class SplashActivity extends AppCompatActivity {
         getprofile.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                SharedHelper.putKey(context, "logged", "true");
-                CommonClass.getInstance().profileModel = response.body();
-                CommonClass.getInstance().cartList=new ArrayList<Cart>();
-                CommonClass.getInstance().cartList.addAll(response.body().getCart());
-                CommonClass.getInstance().addressList=new AddressList();
-                CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
-                startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
+                if (!response.isSuccessful() && response.errorBody() != null) {
+
+                    if(response.code() == 401){
+                        SharedHelper.putKey(context, "logged", "false");
+                        startActivity(new Intent(context, LoginActivity.class));
+                        finish();
+                    }
+
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().toString());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if(response.isSuccessful()){
+                    SharedHelper.putKey(context, "logged", "true");
+                    CommonClass.getInstance().profileModel = response.body();
+                    CommonClass.getInstance().cartList=new ArrayList<Cart>();
+                    CommonClass.getInstance().cartList.addAll(response.body().getCart());
+                    CommonClass.getInstance().addressList=new AddressList();
+                    CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
+                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+
+
             }
 
             @Override

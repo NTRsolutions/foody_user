@@ -13,6 +13,7 @@
 
 
     <dimen name="edit_text_size">@dimen/_42sdp</dimen>
+    <dimen name="botttom_bar_size">@dimen/_45sdp</dimen>
 
     <dimen name="cp_dialog_width">@dimen/_300sdp</dimen>
     <dimen name="cp_dialog_height">@dimen/_400sdp</dimen>

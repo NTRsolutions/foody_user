@@ -103,6 +103,8 @@ public class CartFragment extends Fragment {
     Button proceedToPayBtn;
     @BindView(R.id.selected_address_btn)
     Button selectedAddressBtn;
+    @BindView(R.id.error_layout_description)
+    TextView errorLayoutDescription;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -150,7 +152,17 @@ public class CartFragment extends Fragment {
 
         HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
-        getViewCart();
+        if (CommonClass.getInstance().profileModel == null) {
+            dataLayout.setVisibility(View.GONE);
+            errorLayout.setVisibility(View.VISIBLE);
+            errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
+        } else {
+            dataLayout.setVisibility(View.VISIBLE);
+            errorLayout.setVisibility(View.GONE);
+            errorLayoutDescription.setText(getResources().getString(R.string.cart_error_description));
+            getViewCart();
+        }
+
 
         viewCartItemList = new ArrayList<>();
         //Offer Restaurant Adapter
@@ -170,7 +182,7 @@ public class CartFragment extends Fragment {
             addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
             addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
             if (viewCartItemList != null && viewCartItemList.size() != 0)
-                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString()+" Mins");
+                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString() + " Mins");
         } else if (CommonClass.getInstance().addressList != null) {
             addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
             addAddressBtn.setText(getResources().getString(R.string.add_address));
@@ -238,8 +250,6 @@ public class CartFragment extends Fragment {
                         String image_url = response.body().getProductList().get(0).getProduct().getShops().getAvatar();
                         Glide.with(context).load(image_url).placeholder(R.drawable.item1).dontAnimate()
                                 .error(R.drawable.item1).into(restaurantImage);
-
-
                         deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
                         viewCartItemList.addAll(response.body().getProductList());
                         viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);
@@ -282,7 +292,6 @@ public class CartFragment extends Fragment {
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
-
 
     }
 
@@ -396,7 +405,7 @@ public class CartFragment extends Fragment {
                 locationInfoLayout.setVisibility(View.VISIBLE);
                 addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
                 addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
-                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString()+" Mins");
+                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString() + " Mins");
             } else {
                 locationErrorLayout.setVisibility(View.VISIBLE);
                 locationInfoLayout.setVisibility(View.GONE);
