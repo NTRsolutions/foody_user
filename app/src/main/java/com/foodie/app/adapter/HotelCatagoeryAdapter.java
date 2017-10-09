@@ -38,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by santhosh@appoets.com on 28-08-2017.
+ * Created by Tamil on 28-08-2017.
  */
 
 public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCatagoeryAdapter.ViewHolder> {
@@ -139,16 +139,16 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             public void onClick(View v) {
                 Log.e("access_token2", CommonClass.getInstance().accessToken);
                 /** Press Add Card Add button */
-                    product = list.get(section).getProducts().get(relativePosition);
-                    int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
-                    holder.cardTextValue.setText("" + countValue);
-                    holder.cardTextValueTicker.setText("" + countValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity", holder.cardTextValue.getText().toString());
-                    Log.e("AddCart_add", map.toString());
-                    addCart(map);
-                    product.getCart().setQuantity(countValue);
+                product = list.get(section).getProducts().get(relativePosition);
+                int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
+                holder.cardTextValue.setText("" + countValue);
+                holder.cardTextValueTicker.setText("" + countValue);
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("product_id", product.getId().toString());
+                map.put("quantity", holder.cardTextValue.getText().toString());
+                Log.e("AddCart_add", map.toString());
+                addCart(map);
+                product.getCart().setQuantity(countValue);
             }
         });
 
@@ -212,8 +212,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         product.setCart(cart);
                     }
 
-                }
-                else {
+                } else {
                     Toast.makeText(context, context.getResources().getString(R.string.please_login_and_order_dishes), Toast.LENGTH_SHORT).show();
                 }
 

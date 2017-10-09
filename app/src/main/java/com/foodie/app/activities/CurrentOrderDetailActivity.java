@@ -7,22 +7,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.adapter.OrderFlowAdapter;
+import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.fragments.OrderViewFragment;
 import com.foodie.app.helper.CommonClass;
-import com.foodie.app.model.Checkout;
+import com.foodie.app.model.Order;
+import com.foodie.app.model.OrderFlow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,16 +42,6 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     TextView orderItemTxt;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.order_placed_img)
-    ImageView orderPlacedImg;
-    @BindView(R.id.order_confirmed_img)
-    ImageView orderConfirmedImg;
-    @BindView(R.id.order_processed_img)
-    ImageView orderProcessedImg;
-    @BindView(R.id.order_pickedup_img)
-    ImageView orderPickedupImg;
-    @BindView(R.id.order_succeess_image)
-    ImageView orderSucceessImage;
     @BindView(R.id.order_status_txt)
     TextView orderStatusTxt;
     @BindView(R.id.order_status_layout)
@@ -62,6 +59,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     int itemCount = 0;
     int itemQuantity = 0;
     String currency = "";
+    @BindView(R.id.order_flow_rv)
+    RecyclerView orderFlowRv;
 
 
     @Override
@@ -83,41 +82,46 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
         toolbar.setContentInsetsAbsolute(0, 0);
 
-        if (CommonClass.getInstance().checkoutData != null) {
 
-            Checkout checkout = CommonClass.getInstance().checkoutData;
-            //set Title values
-//            orderIdTxt.setText("ORDER #000" + checkout.getId().toString());
-//            if (checkout.getItems().size() != 0 && checkout.getItems() != null) {
-//                itemCount = checkout.getItems().size();
-//                for (int i = 0; i < itemCount; i++) {
-//                    //Get Total item Quantity
-//                    itemQuantity = itemQuantity + checkout.getItems().get(i).getQuantity();
-//                    //Get product price
-//                    if (checkout.getItems().get(i).getProduct().getPrices().getPrice() != null)
-//                        priceAmount = priceAmount + (checkout.getItems().get(i).getQuantity() * checkout.getItems().get(i).getProduct().getPrices().getPrice());
-//                    discount = discount + (checkout.getItems().get(i).getQuantity() * checkout.getItems().get(i).getProduct().getPrices().getDiscount());
-//                }
-//            }
-            orderIdTxt.setText("ORDER #000" + checkout.getId().toString());
-            itemQuantity = checkout.getInvoice().getQuantity();
-            priceAmount = checkout.getInvoice().getNet();
-            currency = checkout.getItems().get(0).getProduct().getPrices().getCurrency();
+        List<OrderFlow> orderFlowList = new ArrayList<>();
+        orderFlowList.add(new OrderFlow(getString(R.string.order_placed), getString(R.string.description_1), R.drawable.ic_order_placed));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_confirmed), getString(R.string.description_2), R.drawable.ic_order_confirmed));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_processed), getString(R.string.description_3), R.drawable.ic_order_processed));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_pickedup), getString(R.string.description_4), R.drawable.ic_order_picked_up));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_delivered), getString(R.string.description_5), R.drawable.ic_order_delivered));
+
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        orderFlowRv.setLayoutManager(manager);
+        OrderFlowAdapter adapter = new OrderFlowAdapter(orderFlowList, this);
+        orderFlowRv.setAdapter(adapter);
+        orderFlowRv.setHasFixedSize(false);
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(this, R.anim.item_animation_slide_right);
+        orderFlowRv.setLayoutAnimation(controller);
+        orderFlowRv.scheduleLayoutAnimation();
+
+        if (CommonClass.getInstance().isSelectedOrder != null) {
+
+            Order order = CommonClass.getInstance().isSelectedOrder;
+            orderIdTxt.setText("ORDER #000" + order.getId().toString());
+            itemQuantity = order.getInvoice().getQuantity();
+            priceAmount = order.getInvoice().getNet();
+            currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
             if (itemQuantity == 1)
                 orderItemTxt.setText(String.valueOf(itemQuantity) + " Item, " + currency + String.valueOf(priceAmount));
             else
                 orderItemTxt.setText(String.valueOf(itemQuantity) + " Items, " + currency + String.valueOf(priceAmount));
 
-            orderIdTxt2.setText("#000" + checkout.getId().toString());
-            orderPlacedTime.setText(getTimeFromString(checkout.getCreatedAt()));
+            orderIdTxt2.setText("#000" + order.getId().toString());
+            orderPlacedTime.setText(getTimeFromString(order.getCreatedAt()));
+
+            //set Fragment
+            orderFullViewFragment = new OrderViewFragment();
+            fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.order_detail_fargment, orderFullViewFragment).commit();
         }
 
-
-        //set Fragment
-        orderFullViewFragment = new OrderViewFragment();
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.order_detail_fargment, orderFullViewFragment).commit();
 
     }
 

@@ -124,4 +124,21 @@
     <string name="manage_address_error_title">Knock Knock ! Who\'s there ?</string>
     <string name="manage_address_error_description">Saving address helps you check out faster</string>
 
+
+
+    <!--Order Flow Title-->
+    <string name="order_placed">Order Placed</string>
+    <string name="order_confirmed">Order Confirmed</string>
+    <string name="order_processed">Order Processed</string>
+    <string name="order_pickedup">Order Pickedup</string>
+    <string name="order_delivered">Order Delivered</string>
+
+    <!--Order Flow Description-->
+    <string name="description_1">We have recieved your order</string>
+    <string name="description_2">Your order has been confirmed</string>
+    <string name="description_3">We are preparing your order</string>
+    <string name="description_4">Your order is already pickup</string>
+    <string name="description_5">Your order is delivered successfully</string>
+
+
 </resources>

@@ -5,14 +5,13 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -29,7 +28,7 @@
                 android:text="Funkies"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/text_medium" />
+                android:textSize="@dimen/text_small_large" />
 
             <TextView
                 android:id="@+id/restaurant_address"
@@ -38,7 +37,7 @@
                 android:maxLines="1"
                 android:text="Washington. DC"
                 android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/text_small" />
+                android:textSize="@dimen/text_tiny" />
 
         </LinearLayout>
 
@@ -46,48 +45,54 @@
             android:id="@+id/total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:gravity="center"
             android:maxLines="1"
             android:text="$250"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_medium" />
+            android:textSize="@dimen/text_small" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#eee" />
+        android:layout_height="3dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/horizantal_dotted_line"
+        android:layerType="software" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/dish_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:maxLines="1"
+            android:maxLines="2"
+            android:paddingEnd="@dimen/_5sdp"
             android:text="Spicy Tikka x 1"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_medium" />
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
 
         <TextView
             android:id="@+id/date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:maxLines="1"
             android:text="Aug 8, 8:21 PM"
             android:textColor="@color/colorSecondaryText"
-            android:textSize="@dimen/text_small" />
+            android:textSize="@dimen/text_tiny" />
 
         <Button
             android:id="@+id/reorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:background="@drawable/button"
             android:minHeight="0dp"
             android:minWidth="0dp"
@@ -97,5 +102,13 @@
             android:textSize="@dimen/text_small" />
 
     </LinearLayout>
+
+    <View
+       android:visibility="gone"
+        android:id="@+id/divider_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/_21sdp"
+        android:background="@color/colorPrimaryText" />
 
 </LinearLayout>

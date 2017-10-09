@@ -1,10 +1,9 @@
+
 package com.foodie.app.model;
 
-/**
- * Created by santhosh@appoets.com on 04-10-2017.
- */
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 public class Address {
 
     @SerializedName("id")
@@ -55,22 +54,12 @@ public class Address {
         this.id = id;
     }
 
-    public Address withId(Integer id) {
-        this.id = id;
-        return this;
-    }
-
     public Integer getUserId() {
         return userId;
     }
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public Address withUserId(Integer userId) {
-        this.userId = userId;
-        return this;
     }
 
     public String getBuilding() {
@@ -81,22 +70,12 @@ public class Address {
         this.building = building;
     }
 
-    public Address withBuilding(String building) {
-        this.building = building;
-        return this;
-    }
-
     public String getStreet() {
         return street;
     }
 
     public void setStreet(String street) {
         this.street = street;
-    }
-
-    public Address withStreet(String street) {
-        this.street = street;
-        return this;
     }
 
     public String getCity() {
@@ -107,22 +86,12 @@ public class Address {
         this.city = city;
     }
 
-    public Address withCity(String city) {
-        this.city = city;
-        return this;
-    }
-
     public String getState() {
         return state;
     }
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public Address withState(String state) {
-        this.state = state;
-        return this;
     }
 
     public String getCountry() {
@@ -133,22 +102,12 @@ public class Address {
         this.country = country;
     }
 
-    public Address withCountry(String country) {
-        this.country = country;
-        return this;
-    }
-
     public String getPincode() {
         return pincode;
     }
 
     public void setPincode(String pincode) {
         this.pincode = pincode;
-    }
-
-    public Address withPincode(String pincode) {
-        this.pincode = pincode;
-        return this;
     }
 
     public String getLandmark() {
@@ -159,22 +118,12 @@ public class Address {
         this.landmark = landmark;
     }
 
-    public Address withLandmark(String landmark) {
-        this.landmark = landmark;
-        return this;
-    }
-
     public String getMapAddress() {
         return mapAddress;
     }
 
     public void setMapAddress(String mapAddress) {
         this.mapAddress = mapAddress;
-    }
-
-    public Address withMapAddress(String mapAddress) {
-        this.mapAddress = mapAddress;
-        return this;
     }
 
     public Double getLatitude() {
@@ -185,22 +134,12 @@ public class Address {
         this.latitude = latitude;
     }
 
-    public Address withLatitude(Double latitude) {
-        this.latitude = latitude;
-        return this;
-    }
-
     public Double getLongitude() {
         return longitude;
     }
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
-    }
-
-    public Address withLongitude(Double longitude) {
-        this.longitude = longitude;
-        return this;
     }
 
     public String getType() {
@@ -211,8 +150,4 @@ public class Address {
         this.type = type;
     }
 
-    public Address withType(String type) {
-        this.type = type;
-        return this;
-    }
 }

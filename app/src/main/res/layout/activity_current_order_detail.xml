@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     tools:context="com.foodie.app.activities.CurrentOrderDetailActivity">
+
 
     <!--  Toolbar   -->
 
@@ -53,7 +55,7 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar">
@@ -70,277 +72,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
-            <!-- Order Placed Layout-->
-
-            <RelativeLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/order_flow_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/order_placed_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="0dp"
-                    android:src="@drawable/ic_order_placed" />
+            </android.support.v7.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/order_placed_img"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Order Placed"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textSize="@dimen/text_medium"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="We have recieved your order"
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_tiny" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="22dp"
-                android:background="#5b5b5b"
-                android:verticalSpacing="2dp" />
-
-            <!--Order Confirmed Layout-->
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
-
-                <ImageView
-
-                    android:id="@+id/order_confirmed_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="0dp"
-                    android:src="@drawable/ic_order_confirmed" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/order_confirmed_img"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Order Confirmed"
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_medium" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Your order has been confirmed"
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_tiny" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="22dp"
-                android:background="#5b5b5b"
-                android:verticalSpacing="2dp" />
-
-            <!--Order Processed Layout-->
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
-
-                <ImageView
-                    android:id="@+id/order_processed_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="0dp"
-                    android:src="@drawable/ic_order_processed" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/order_processed_img"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Order Processed"
-
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_medium" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="We are preparing your order"
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_tiny" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="22dp"
-                android:background="#5b5b5b"
-                android:verticalSpacing="2dp" />
-
-            <!--Order Pickedup Layout-->
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
-
-                <ImageView
-                    android:id="@+id/order_pickedup_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="0dp"
-                    android:src="@drawable/ic_order_picked_up" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/order_pickedup_img"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Order Pickedup"
-
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_medium" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Your order is ready to pickup"
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_tiny" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="2dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="22dp"
-                android:background="#5b5b5b"
-                android:verticalSpacing="2dp" />
-
-            <!--Order Delivered Layout-->
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp">
-
-                <ImageView
-                    android:id="@+id/order_delivered_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="0dp"
-                    android:src="@drawable/ic_order_delivered" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/order_delivered_img"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Order Delivered"
-
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_medium" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Your order is ready to pickup"
-                        android:textColor="@color/colorSecondaryText"
-                        android:textSize="@dimen/text_tiny" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="35dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/colorSecondaryText"
-                android:layerType="software" />
 
             <!--   Order Status Layout-->
 
@@ -430,7 +168,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </RelativeLayout>

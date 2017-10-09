@@ -35,7 +35,7 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Checkout;
+import com.foodie.app.model.Order;
 import com.foodie.app.model.ProductList;
 import com.robinhood.ticker.TickerUtils;
 
@@ -365,10 +365,10 @@ public class CartFragment extends Fragment {
 
     private void checkOut(Integer id) {
         customDialog.show();
-        Call<Checkout> call = apiInterface.postCheckout(id);
-        call.enqueue(new Callback<Checkout>() {
+        Call<Order> call = apiInterface.postCheckout(id);
+        call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Checkout> call, Response<Checkout> response) {
+            public void onResponse(Call<Order> call, Response<Order> response) {
                 customDialog.dismiss();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
@@ -382,14 +382,14 @@ public class CartFragment extends Fragment {
                     CommonClass.getInstance().addCart = null;
                     CommonClass.getInstance().notificationCount = 0;
                     CommonClass.getInstance().selectedShop = null;
-                    CommonClass.getInstance().checkoutData = response.body();
+                    CommonClass.getInstance().isSelectedOrder = response.body();
                     startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<Checkout> call, Throwable t) {
+            public void onFailure(Call<Order> call, Throwable t) {
 
             }
         });

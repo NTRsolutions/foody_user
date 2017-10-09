@@ -107,8 +107,8 @@ public class ProfileFragment extends Fragment {
                     openSettingPage(position);
                 }
             });
-            arrowImage.setTag(false);
-            collapse(listLayout);
+            arrowImage.setTag(true);
+//            collapse(listLayout);
             HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
         } else {
             //set Error Layout

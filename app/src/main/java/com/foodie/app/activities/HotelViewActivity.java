@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -40,10 +41,15 @@ import com.squareup.picasso.Target;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class HotelViewActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
@@ -127,8 +133,22 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             restaurantPosition = bundle.getInt("position");
+
         }
         shops = CommonClass.getInstance().list.get(restaurantPosition);
+
+        //get User Profile Data
+        if (CommonClass.getInstance().profileModel != null) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("shop", String.valueOf(shops.getId()));
+            map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
+            getCategories(map);
+
+        } else {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("shop", String.valueOf(shops.getId()));
+            getCategories(map);
+        }
 
         if (shops.getOfferPercent() == null) {
             offer.setVisibility(View.GONE);
@@ -206,9 +226,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
         floatHeaderView.bindTo(shops.getName(), shops.getDescription());
 
-        //Get category list data
-        categoryList = shops.getCategories();
-
+        categoryList = new ArrayList<>();
         //Set Categoery list adapter
         catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, categoryList);
         accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -282,6 +300,26 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
     }
 
+    private void getCategories(HashMap<String, String> map) {
+        Call<List<Category>> call = apiInterface.getCategories(map);
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Category>> call, Response<List<Category>> response) {
+                categoryList = response.body();
+                catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
+                accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
+                accompanimentDishesRv.setAdapter(catagoeryAdapter);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Category>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -296,7 +334,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             for (int i = 0; i < shopList.size(); i++) {
                 if (shopList.get(i).getId().equals(shops.getId())) {
                     shops = shopList.get(i);
-                    categoryList = shops.getCategories();
+                    categoryList = CommonClass.getInstance().categoryList;
                     catagoeryAdapter.notifyDataSetChanged();
                 }
             }

@@ -93,12 +93,12 @@ public class Invoice {
         return discount;
     }
 
-    public Integer getDeliveryCharge() {
-        return deliveryCharge;
-    }
-
     public void setDiscount(Integer discount) {
         this.discount = discount;
+    }
+
+    public Integer getDeliveryCharge() {
+        return deliveryCharge;
     }
 
     public void setDeliveryCharge(Integer deliveryCharge) {

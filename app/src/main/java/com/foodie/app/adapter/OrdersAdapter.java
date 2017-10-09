@@ -3,12 +3,13 @@ package com.foodie.app.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -18,10 +19,15 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.PastOrderDetailActivity;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.Item;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,14 +40,16 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
     private LayoutInflater inflater;
     Context context1;
     Activity activity;
-    int lastPosition=-1;
+    int lastPosition = -1;
+    List<Item> itemList;
 
-    public OrdersAdapter(Context context,Activity activity,  List<OrderModel> list) {
+    public OrdersAdapter(Context context, Activity activity, List<OrderModel> list) {
         this.context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
         this.activity = activity;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -90,31 +98,54 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int section, int relativePosition, int absolutePosition) {
+    public void onBindViewHolder(ViewHolder holder, final int section, final int relativePosition, int absolutePosition) {
         final Order object = list.get(section).getOrders().get(relativePosition);
-        holder.restaurantNameTxt.setText(object.restaurantName);
-        holder.restaurantAddressTxt.setText(object.restaurantAddress);
-        holder.dishNameTxt.setText(object.dishName);
-        holder.dateTimeTxt.setText(object.dateTime);
-
+        holder.restaurantNameTxt.setText(object.getShop().getName());
+        holder.restaurantAddressTxt.setText(object.getShop().getAddress());
         holder.reorderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(object.dishName);
+                //do something
             }
         });
+        int lastPostion = relativePosition + 1;
+        if (list.get(section).getOrders().size() == 1) {
+            holder.dividerLine.setVisibility(View.GONE);
+        } else if (list.get(section).getOrders().size() == relativePosition + 1) {
+            holder.dividerLine.setVisibility(View.GONE);
+        } else {
+            holder.dividerLine.setVisibility(View.VISIBLE);
+        }
+
+        holder.totalAmount.setText(CommonClass.getInstance().currencySymbol + object.getInvoice().getNet().toString());
+        //set Item List Values
+        itemList = new ArrayList<>();
+        itemList.addAll(object.getItems());
+        String dishNameValue = "";
+        for (int i = 0; i < itemList.size(); i++) {
+            if (i == 0)
+                dishNameValue = object.getItems().get(i).getProduct().getName() + " (" + object.getItems().get(i).getQuantity() + ")";
+            else
+                dishNameValue = dishNameValue + ", " + object.getItems().get(i).getProduct().getName() + " (" + object.getItems().get(i).getQuantity() + ")";
+        }
+        holder.dishNameTxt.setText(dishNameValue);
+        holder.dateTimeTxt.setText(getTimeFromString(object.getInvoice().getCreatedAt()));
+
+
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (section==0)
-                context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class));
-                else
+                if (section == 0) {
+                    CommonClass.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
+                    context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class));
+                } else {
+                    CommonClass.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
                     context1.startActivity(new Intent(context1, PastOrderDetailActivity.class));
+                }
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
         });
-
 
 
     }
@@ -122,9 +153,11 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
-        TextView restaurantNameTxt, restaurantAddressTxt, dishNameTxt, dateTimeTxt;
+        TextView restaurantNameTxt, restaurantAddressTxt, totalAmount, dishNameTxt, dateTimeTxt;
         Button reorderBtn;
+        View dividerLine;
         LinearLayout itemLayout;
+
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
@@ -134,13 +167,34 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
                 itemLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
                 restaurantNameTxt = (TextView) itemView.findViewById(R.id.restaurant_name);
                 restaurantAddressTxt = (TextView) itemView.findViewById(R.id.restaurant_address);
+                totalAmount = (TextView) itemView.findViewById(R.id.total_amount);
+                reorderBtn = (Button) itemView.findViewById(R.id.reorder);
                 dishNameTxt = (TextView) itemView.findViewById(R.id.dish_name);
                 dateTimeTxt = (TextView) itemView.findViewById(R.id.date_time);
-                reorderBtn = (Button) itemView.findViewById(R.id.reorder);
+                dividerLine = (View) itemView.findViewById(R.id.divider_line);
             }
 
 
         }
 
+    }
+
+    private String getTimeFromString(String time) {
+        System.out.println("Time : " + time);
+        String value = "";
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy, hh:mm aa");
+
+            if (time != null) {
+                Date date = df.parse(time);
+                value = sdf.format(date);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+        return value;
     }
 }

@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.foodie.app.R;
 import com.foodie.app.adapter.OrderDetailAdapter;
 import com.foodie.app.helper.CommonClass;
-import com.foodie.app.model.Checkout;
 import com.foodie.app.model.Item;
+import com.foodie.app.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,10 +69,10 @@ public class OrderDetailFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
 
-        Checkout checkout = CommonClass.getInstance().checkoutData;
+        Order order = CommonClass.getInstance().isSelectedOrder;
         //set Item List Values
         itemList = new ArrayList<>();
-        itemList.addAll(checkout.getItems());
+        itemList.addAll(order.getItems());
 
         //Offer Restaurant Adapter
         orderRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -81,13 +81,13 @@ public class OrderDetailFragment extends Fragment {
         OrderDetailAdapter orderItemListAdapter = new OrderDetailAdapter(itemList, context);
         orderRecyclerView.setAdapter(orderItemListAdapter);
 
-        currency = checkout.getItems().get(0).getProduct().getPrices().getCurrency();
-        itemQuantity = checkout.getInvoice().getQuantity();
-        itemTotalAmount.setText(currency + checkout.getInvoice().getGross().toString());
-        serviceTax.setText(currency + checkout.getInvoice().getTax().toString());
-        deliveryCharges.setText(currency + checkout.getInvoice().getDeliveryCharge().toString());
-        discountAmount.setText("-"+currency + checkout.getInvoice().getDiscount().toString());
-        totalAmount.setText(currency + String.valueOf(checkout.getInvoice().getNet()));
+        currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
+        itemQuantity = order.getInvoice().getQuantity();
+        itemTotalAmount.setText(currency + order.getInvoice().getGross().toString());
+        serviceTax.setText(currency + order.getInvoice().getTax().toString());
+        deliveryCharges.setText(currency + order.getInvoice().getDeliveryCharge().toString());
+        discountAmount.setText("-"+currency + order.getInvoice().getDiscount().toString());
+        totalAmount.setText(currency + String.valueOf(order.getInvoice().getNet()));
 
         return view;
     }

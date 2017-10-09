@@ -13,6 +13,6 @@
         android:text="Recent Searches"
         android:textAllCaps="true"
         android:textColor="@color/colorSecondaryText"
-        android:textSize="@dimen/text_medium" />
+        android:textSize="@dimen/text_tiny" />
 
 </LinearLayout>
