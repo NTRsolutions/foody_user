@@ -2,7 +2,9 @@ package com.foodie.app.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,8 +20,11 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Order;
+import com.foodie.app.model.OrderFlow;
 import com.foodie.app.model.OrderModel;
+import com.foodie.app.service.OrderStatusService;
 
 import org.json.JSONObject;
 
@@ -31,6 +36,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.foodie.app.helper.CommonClass.onGoingOrderList;
+import static com.foodie.app.helper.CommonClass.pastOrderList;
 
 public class OrdersActivity extends AppCompatActivity {
 
@@ -46,6 +54,8 @@ public class OrdersActivity extends AppCompatActivity {
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     List<OrderModel> modelList = new ArrayList<>();
+    Handler handler;
+    Intent orderIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,9 @@ public class OrdersActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        context=OrdersActivity.this;
+
+
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,16 +83,41 @@ public class OrdersActivity extends AppCompatActivity {
         adapter = new OrdersAdapter(this, activity, modelListReference);
         ordersRv.setAdapter(adapter);
         ordersRv.setHasFixedSize(false);
-//        LayoutAnimationController controller =
-//                AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-//        ordersRv.setLayoutAnimation(controller);
-//        ordersRv.scheduleLayoutAnimation();
+        orderIntent = new Intent(context, OrderStatusService.class);
+        orderIntent.putExtra("type", "ORDER_LIST");
+        startService(orderIntent);
+
+        handler = new Handler();
+        Runnable orderStatusRunnable = new Runnable() {
+            public void run() {
+                if (onGoingOrderList != null && pastOrderList != null) {
+                    modelList.clear();
+                    OrderModel onGoingOrderModel = new OrderModel();
+                    onGoingOrderModel.setHeader("Current Orders");
+                    onGoingOrderModel.setOrders(onGoingOrderList);
+                    modelList.add(onGoingOrderModel);
+                    OrderModel pastOrderModel = new OrderModel();
+                    pastOrderModel.setHeader("Past Orders");
+                    pastOrderModel.setOrders(pastOrderList);
+                    modelList.add(pastOrderModel);
+                    modelListReference.clear();
+                    modelListReference.addAll(modelList);
+                    LayoutAnimationController controller =
+                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+                    ordersRv.setLayoutAnimation(controller);
+                    ordersRv.scheduleLayoutAnimation();
+                    ordersRv.getAdapter().notifyDataSetChanged();
+
+                }
+            }
+        };
+        handler.postDelayed(orderStatusRunnable, 5000);
         getOngoingOrders();
 
     }
 
     private void getPastOrders() {
-        Call<List<Order>> call= apiInterface.getPastOders();
+        Call<List<Order>> call = apiInterface.getPastOders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
@@ -92,20 +130,14 @@ public class OrdersActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    List<Order> orders = new ArrayList<>();
-                    orders= response.body();
+                    pastOrderList = new ArrayList<Order>();
+                    pastOrderList = response.body();
                     OrderModel model = new OrderModel();
                     model.setHeader("Past Orders");
-                    model.setOrders(orders);
+                    model.setOrders(pastOrderList);
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-                    LayoutAnimationController controller =
-                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-                    ordersRv.setLayoutAnimation(controller);
-                    ordersRv.scheduleLayoutAnimation();
-                    ordersRv.getAdapter().notifyDataSetChanged();
-
 
                 }
             }
@@ -119,7 +151,7 @@ public class OrdersActivity extends AppCompatActivity {
     }
 
     private void getOngoingOrders() {
-        Call<List<Order>> call= apiInterface.getOngoingOrders();
+        Call<List<Order>> call = apiInterface.getOngoingOrders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
@@ -132,17 +164,15 @@ public class OrdersActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    List<Order> orders = new ArrayList<>();
+                    onGoingOrderList = new ArrayList<Order>();
+                    onGoingOrderList = response.body();
                     OrderModel model = new OrderModel();
-                    orders= response.body();
                     model.setHeader("Current Orders");
-                    model.setOrders(orders);
+                    model.setOrders(onGoingOrderList);
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
                     getPastOrders();
-
-
                 }
             }
 
@@ -156,33 +186,15 @@ public class OrdersActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        stopService(orderIntent);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-//
-//        List<OrderModel> modelList = new ArrayList<>();
-//
-//        List<Order> orders = new ArrayList<>();
-//        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
-//        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
-//        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
-//        orders.add(new Order("Funkie", "Washington, DC", "$250", "Noodles 1", "29, Aug, 2017"));
-//        OrderModel model = new OrderModel();
-//        model.setHeader("Current Orders");
-//        model.setOrders(orders);
-//        modelList.add(model);
-//
-//        orders = new ArrayList<>();
-//        orders.add(new Order("Funkie", "Washington, DC", "$50", "Dosa 2", "28, Aug, 2017"));
-//        orders.add(new Order("Funkie", "Washington, DC", "$71", "Rotti 3", "26, Aug, 2017"));
-//        orders.add(new Order("Funkie", "Washington, DC", "$132", "Biriyani", "26, Aug, 2017"));
-//        model = new OrderModel();
-//        model.setHeader("Past Orders");
-//        model.setOrders(orders);
-//        modelList.add(model);
-//
-//        modelListReference.clear();
-//        modelListReference.addAll(modelList);
-//        ordersRv.getAdapter().notifyDataSetChanged();
+        startService(orderIntent);
 
     }
 
@@ -191,6 +203,12 @@ public class OrdersActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(orderIntent);
     }
 
 }

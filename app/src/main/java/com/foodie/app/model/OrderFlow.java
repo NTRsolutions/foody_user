@@ -8,11 +8,14 @@ import android.widget.TextView;
 
 public class OrderFlow {
     public   int statusImage;
-    public  String statusTitle,statusDescription;
+    public  String statusTitle,statusDescription,status;
 
-    public  OrderFlow(String statusTitle,String statusDescription, int statusImage){
+    public  OrderFlow(String statusTitle,String statusDescription, int statusImage,String status){
         this.statusImage=statusImage;
         this.statusTitle=statusTitle;
         this.statusDescription=statusDescription;
+        this.status=status;
     }
+
+
 }

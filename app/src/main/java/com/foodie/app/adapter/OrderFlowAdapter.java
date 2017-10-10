@@ -16,6 +16,8 @@ import com.foodie.app.model.Restaurant;
 
 import java.util.List;
 
+import static com.foodie.app.helper.CommonClass.isSelectedOrder;
+
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
  */
@@ -23,6 +25,8 @@ import java.util.List;
 public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyViewHolder> {
     private List<OrderFlow> list;
     private Context context;
+    public  String orderStatus="";
+
 
     public OrderFlowAdapter(List<OrderFlow> list, Context con) {
         this.list = list;
@@ -54,6 +58,10 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
         holder.statusTitle.setText(orderFlow.statusTitle);
         holder.statusDescription.setText(orderFlow.statusDescription);
         holder.statusImage.setImageResource(orderFlow.statusImage);
+        if(orderFlow.status.contains(isSelectedOrder.getStatus())){
+            holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+        }
+
         if (list.size() == position + 1)
             holder.viewLine.setVisibility(View.GONE);
         else

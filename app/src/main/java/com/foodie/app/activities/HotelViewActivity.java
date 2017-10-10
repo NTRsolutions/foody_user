@@ -136,6 +136,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         }
         shops = CommonClass.getInstance().list.get(restaurantPosition);
+        CommonClass.getInstance().selectedShop=CommonClass.getInstance().list.get(restaurantPosition);
 
         //get User Profile Data
         if (CommonClass.getInstance().profileModel != null) {
@@ -306,6 +307,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(@NonNull Call<List<Category>> call, Response<List<Category>> response) {
                 categoryList = response.body();
+                CommonClass.getInstance().categoryList=categoryList;
+                CommonClass.getInstance().selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
                 accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                 accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());

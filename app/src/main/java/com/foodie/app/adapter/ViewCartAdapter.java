@@ -35,6 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.helper.CommonClass.categoryList;
+
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
  */
@@ -141,10 +143,14 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 priceAmount = quantity * product.getPrices().getPrice();
                 holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
 
-                for (int i = 0; i < selectedShop.getCategories().size(); i++) {
-                    for (int j = 0; j < selectedShop.getCategories().get(i).getProducts().size(); j++) {
-                        if (selectedShop.getCategories().get(i).getProducts().get(j).getId().equals(product.getId())) {
-                            selectedShop.getCategories().get(i).getProducts().get(j).getCart().setQuantity(countValue);
+                //We don't know categories means do nothing,
+                if (categoryList != null) {
+                    //we Know category
+                    for (int i = 0; i < categoryList.size(); i++) {
+                        for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
+                            if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
+                                categoryList.get(i).getProducts().get(j).getCart().setQuantity(countValue);
+                            }
                         }
                     }
                 }
@@ -184,24 +190,30 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     productList = list.get(position);
                     remove(productList);
 
-                    for (int i = 0; i < selectedShop.getCategories().size(); i++) {
-                        for (int j = 0; j < selectedShop.getCategories().get(i).getProducts().size(); j++) {
-                            if (selectedShop.getCategories().get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                selectedShop.getCategories().get(i).getProducts().get(j).setCart(null);
+                    if (categoryList != null) {
+                        for (int i = 0; i < categoryList.size(); i++) {
+                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
+                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
+                                    categoryList.get(i).getProducts().get(j).setCart(null);
+                                }
                             }
                         }
                     }
+
                 } else {
                     countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
-                    for (int i = 0; i < selectedShop.getCategories().size(); i++) {
-                        for (int j = 0; j < selectedShop.getCategories().get(i).getProducts().size(); j++) {
-                            if (selectedShop.getCategories().get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                selectedShop.getCategories().get(i).getProducts().get(j).getCart().setQuantity(countMinusValue);
+                    if (categoryList != null) {
+                        for (int i = 0; i < categoryList.size(); i++) {
+                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
+                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
+                                    categoryList.get(i).getProducts().get(j).getCart().setQuantity(countMinusValue);
+                                }
                             }
                         }
                     }
+
 
                 }
                 HashMap<String, String> map = new HashMap<String, String>();
@@ -277,7 +289,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
-                    CommonClass.getInstance().addCart=response.body();
+                    CommonClass.getInstance().addCart = response.body();
                     priceAmount = 0;
                     discount = 0;
                     itemQuantity = 0;

@@ -31,6 +31,7 @@ import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
@@ -106,6 +107,9 @@ public interface ApiInterface {
 
     @GET("api/user/ongoing/order")
     Call<List<Order>> getOngoingOrders();
+
+    @GET("api/user/order/{id}")
+    Call<Order> getParticularOrders(@Path("id") int id);
 
     @GET("api/user/order")
     Call<List<Order>> getPastOders();

@@ -132,7 +132,13 @@ public class SignUpActivity extends AppCompatActivity {
 
                     login(map);
                 } else if (response.errorBody() != null) {
-
+                    customDialog.dismiss();
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
 
                 }
 
@@ -152,8 +158,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 if (response.body() != null) {
-                    SharedHelper.putKey(context,"access_token",response.body().getTokenType() + " " + response.body().getAccessToken());
-                    CommonClass.getInstance().accessToken=response.body().getTokenType() + " " + response.body().getAccessToken();
+                    SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
+                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     //Get Profile data
                     getProfile();
 
@@ -205,7 +211,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful() && response.errorBody() != null) {
 
-                    if(response.code() == 401){
+                    if (response.code() == 401) {
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, LoginActivity.class));
                         finish();
@@ -217,12 +223,12 @@ public class SignUpActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if(response.isSuccessful()){
+                } else if (response.isSuccessful()) {
                     SharedHelper.putKey(context, "logged", "true");
                     CommonClass.getInstance().profileModel = response.body();
-                    CommonClass.getInstance().cartList=new ArrayList<Cart>();
+                    CommonClass.getInstance().cartList = new ArrayList<Cart>();
                     CommonClass.getInstance().cartList.addAll(response.body().getCart());
-                    CommonClass.getInstance().addressList=new AddressList();
+                    CommonClass.getInstance().addressList = new AddressList();
                     CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
                     startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();

@@ -11,6 +11,7 @@ import com.foodie.app.model.Otp;
 import com.foodie.app.model.Shop;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,9 +34,12 @@ public class CommonClass {
     public static AddCart addCart = null;
 
     public static List<Shop> list;
-    public static List<Category> categoryList;
+    public static List<Category> categoryList=null;
+    public static List<Order> onGoingOrderList;
+    public static List<Order> pastOrderList;
     public static List<Cart> cartList;
     public static AddressList addressList=null;
+    public static List<String> ORDER_STATUS = Arrays.asList("ORDERED", "RECEIVED", "ASSIGNED", "PROCESSING", "REACHED", "PICKEDUP", "ARRIVED", "COMPLETED");
 
     public static Shop selectedShop;
 
