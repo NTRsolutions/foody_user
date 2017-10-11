@@ -23,6 +23,8 @@ import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
+import com.foodie.app.model.AddCart;
+import com.foodie.app.model.AddressList;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.User;
 import com.foodie.app.utils.TextUtils;
@@ -248,7 +250,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
-                CommonClass.getInstance().profileModel=response.body();
+                CommonClass.getInstance().profileModel = response.body();
+                CommonClass.getInstance().addCart=new AddCart();
+                CommonClass.getInstance().addCart.setProductList(response.body().getCart());
+                CommonClass.getInstance().addressList=new AddressList();
+                CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

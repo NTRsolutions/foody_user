@@ -55,12 +55,6 @@ public class OrderStatusService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        // Gets data from the incoming Intent
-//        String dataString = intent.getDataString();
-//        ...
-//        // Do work here, based on the contents of dataString
-//        ...
-
         if (intent != null) {
             Bundle extras = intent.getExtras();
             type = extras.getString("type");
@@ -86,7 +80,7 @@ public class OrderStatusService extends IntentService {
             public void run() {
                 if (type.equalsIgnoreCase("ORDER_LIST"))
                     getOngoingOrders();
-                else
+                else if (type.equalsIgnoreCase("SINGLE_ORDER"))
                     getParticularOrders(id);
 
                 handler.postDelayed(this, 5000);
@@ -103,7 +97,6 @@ public class OrderStatusService extends IntentService {
             public void onResponse(Call<Order> call, Response<Order> response) {
 
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
@@ -111,6 +104,7 @@ public class OrderStatusService extends IntentService {
 //                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
+                    isSelectedOrder=new  Order();
                     isSelectedOrder = response.body();
                     Log.i("isSelectedOrder : ", isSelectedOrder.toString());
                 }

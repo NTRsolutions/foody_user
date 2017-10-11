@@ -401,7 +401,8 @@
                                 android:id="@+id/accompaniment_dishes_rv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="vertical"
                                 android:padding="@dimen/activity_horizontal_margin" />
 
                         </LinearLayout>
@@ -456,32 +457,55 @@
     <RelativeLayout
         android:id="@+id/view_cart_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_38sdp"
+        android:layout_height="@dimen/_45sdp"
         android:layout_alignParentBottom="true"
         android:background="@color/theme"
         android:gravity="center_vertical"
-        android:padding="10dp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/_5sdp"
         android:visibility="gone"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
-        <TextView
-            android:gravity="center"
-            android:id="@+id/item_text"
-            fontPath="fonts/Nunito-Bold.ttf"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorTextWhite"
-            android:textSize="@dimen/text_small_large" />
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/item_text"
+                fontPath="fonts/Nunito-Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="sjdhfbjsda"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="@dimen/text_small_large" />
+
+            <TextView
+                android:id="@+id/view_cart_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_text"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:text="From : Thalapakatti"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="@dimen/text_tiny"
+                android:visibility="gone" />
+        </RelativeLayout>
+
 
         <TextView
-            android:gravity="center"
             android:id="@+id/view_cart"
             fontPath="fonts/Nunito-Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:drawableEnd="@drawable/ic_cart_white"
             android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
             android:text="View Cart"
             android:textAllCaps="true"
             android:textColor="@color/colorTextWhite"

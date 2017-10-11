@@ -20,6 +20,7 @@ import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
+import com.foodie.app.model.AddCart;
 import com.foodie.app.model.AddressList;
 import com.foodie.app.model.Cart;
 import com.foodie.app.model.LoginModel;
@@ -226,9 +227,9 @@ public class SignUpActivity extends AppCompatActivity {
                 } else if (response.isSuccessful()) {
                     SharedHelper.putKey(context, "logged", "true");
                     CommonClass.getInstance().profileModel = response.body();
-                    CommonClass.getInstance().cartList = new ArrayList<Cart>();
-                    CommonClass.getInstance().cartList.addAll(response.body().getCart());
-                    CommonClass.getInstance().addressList = new AddressList();
+                    CommonClass.getInstance().addCart=new AddCart();
+                    CommonClass.getInstance().addCart.setProductList(response.body().getCart());
+                    CommonClass.getInstance().addressList=new AddressList();
                     CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
                     startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();

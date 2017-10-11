@@ -18,9 +18,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -31,7 +33,6 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
-import com.foodie.app.model.Message;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -85,6 +86,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     RadioButton workRadio;
     @BindView(R.id.other_radio)
     RadioButton otherRadio;
+    @BindView(R.id.imgCurrentLoc)
+    ImageView imgCurrentLoc;
+    @BindView(R.id.save)
+    Button save;
+    @BindView(R.id.bottom_sheet)
+    CardView bottomSheet;
 
     private String TAG = "SaveDelivery";
     private BottomSheetBehavior behavior;
@@ -476,11 +483,18 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick({R.id.backArrow, R.id.save})
+    @OnClick({R.id.backArrow, R.id.save,R.id.imgCurrentLoc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.backArrow:
                 onBackPressed();
+                break;
+            case R.id.imgCurrentLoc:
+                if (crtLat != null && crtLng != null) {
+                    LatLng loc = new LatLng(crtLat, crtLng);
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(16).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
                 break;
             case R.id.save:
                 address.setMapAddress(addressEdit.getText().toString());

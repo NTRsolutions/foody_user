@@ -21,7 +21,7 @@ import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Product;
-import com.foodie.app.model.ProductList;
+import com.foodie.app.model.Cart;
 import com.foodie.app.model.Shop;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
@@ -42,7 +42,7 @@ import static com.foodie.app.helper.CommonClass.categoryList;
  */
 
 public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyViewHolder> {
-    private List<ProductList> list;
+    private List<Cart> list;
     private Context context;
     int priceAmount = 0;
     int discount = 0;
@@ -50,7 +50,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     int itemQuantity = 0;
     Product product;
     boolean dataResponse = false;
-    ProductList productList;
+    Cart productList;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     AddCart addCart;
     AnimatedVectorDrawableCompat avdProgress;
@@ -62,7 +62,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
-    public ViewCartAdapter(List<ProductList> list, Context con) {
+    public ViewCartAdapter(List<Cart> list, Context con) {
         this.list = list;
         this.context = con;
     }
@@ -75,12 +75,12 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         return new MyViewHolder(itemView);
     }
 
-    public void add(ProductList item, int position) {
+    public void add(Cart item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(ProductList item) {
+    public void remove(Cart item) {
         int position = list.indexOf(item);
         list.remove(position);
         notifyItemRemoved(position);
@@ -294,7 +294,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     discount = 0;
                     itemQuantity = 0;
                     itemCount = 0;
-
                     //get Item Count
                     itemCount = addCart.getProductList().size();
                     if (itemCount != 0) {

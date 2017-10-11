@@ -1,5 +1,6 @@
 package com.foodie.app.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
+import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.DiscoverAdapter;
 import com.foodie.app.adapter.ImpressiveDishesAdapter;
@@ -51,6 +53,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.foodie.app.helper.CommonClass.latitude;
+import static com.foodie.app.helper.CommonClass.longitude;
 
 
 /**
@@ -87,6 +92,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     RecyclerView restaurantsRv;
     @BindView(R.id.discover_rv)
     RecyclerView discoverRv;
+    int ADDRESS_SELECTION = 1;
 
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -219,7 +225,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     private void getRestaurant(HashMap<String, String> map) {
-
         Call<List<Shop>> getres = apiInterface.getshops(map);
         getres.enqueue(new Callback<List<Shop>>() {
             @Override
@@ -273,7 +278,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context,CommonClass.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
     }
 
@@ -297,6 +302,42 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_OK) {
+            System.out.print("HomeFragment : Success");
+            if (CommonClass.getInstance().selectedAddress != null) {
+                addressLabel.setText(CommonClass.getInstance().addressHeader);
+                addressTxt.setText(CommonClass.getInstance().address);
+                addressLabel.setText(CommonClass.getInstance().selectedAddress.getType());
+                addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
+                latitude = CommonClass.getInstance().selectedAddress.getLatitude();
+                longitude = CommonClass.getInstance().selectedAddress.getLongitude();
+                //get User Profile Data
+                if (CommonClass.getInstance().profileModel != null) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("latitude", String.valueOf(latitude));
+                    map.put("longitude", String.valueOf(longitude));
+                    map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
+                    getRestaurant(map);
+
+                } else {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
+                    map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+                    getRestaurant(map);
+                }
+
+            } else {
+
+            }
+        } else if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_CANCELED) {
+            System.out.print("HomeFragment : Failure");
+
+        }
+    }
 
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -331,7 +372,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         locationAddressLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, SetDeliveryLocationActivity.class));
+                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
                 getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
         });

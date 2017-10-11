@@ -135,10 +135,9 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (section == 0) {
+                if (list.get(section).getHeader().equalsIgnoreCase("Current Orders")) {
                     CommonClass.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
-                    context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class));
+                    context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class).putExtra("is_order_page",true));
                 } else {
                     CommonClass.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
                     context1.startActivity(new Intent(context1, PastOrderDetailActivity.class));

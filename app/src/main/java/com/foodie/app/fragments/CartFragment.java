@@ -36,7 +36,7 @@ import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Order;
-import com.foodie.app.model.ProductList;
+import com.foodie.app.model.Cart;
 import com.robinhood.ticker.TickerUtils;
 
 import org.json.JSONObject;
@@ -117,7 +117,7 @@ public class CartFragment extends Fragment {
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
     //Orderitem List
-    List<ProductList> viewCartItemList;
+    List<Cart> viewCartItemList;
 
     int priceAmount = 0;
     int discount = 0;
@@ -236,7 +236,7 @@ public class CartFragment extends Fragment {
                                 priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
                             discount = discount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getDiscount());
                         }
-
+                        CommonClass.getInstance().addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
                         //Set Payment details
                         String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
                         itemTotalAmount.setText(currency + "" + priceAmount);
@@ -382,6 +382,7 @@ public class CartFragment extends Fragment {
                     CommonClass.getInstance().addCart = null;
                     CommonClass.getInstance().notificationCount = 0;
                     CommonClass.getInstance().selectedShop = null;
+                    CommonClass.getInstance().isSelectedOrder=new Order();
                     CommonClass.getInstance().isSelectedOrder = response.body();
                     startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();

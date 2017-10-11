@@ -227,7 +227,7 @@ public class ProfileFragment extends Fragment {
                 break;
             case R.id.logout:
                 SharedHelper.putKey(context, "logged", "false");
-                startActivity(new Intent(context, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 CommonClass.getInstance().profileModel = null;
                 getActivity().finish();
                 break;

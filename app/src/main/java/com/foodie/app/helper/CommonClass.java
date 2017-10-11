@@ -28,6 +28,7 @@ public class CommonClass {
     public static String addressHeader = "";
 
     public static String address = "";
+    public static int addCartShopId =0;
     public static User profileModel = null;
     public static Address selectedAddress = null;
     public static Order isSelectedOrder = null;
@@ -37,7 +38,6 @@ public class CommonClass {
     public static List<Category> categoryList=null;
     public static List<Order> onGoingOrderList;
     public static List<Order> pastOrderList;
-    public static List<Cart> cartList;
     public static AddressList addressList=null;
     public static List<String> ORDER_STATUS = Arrays.asList("ORDERED", "RECEIVED", "ASSIGNED", "PROCESSING", "REACHED", "PICKEDUP", "ARRIVED", "COMPLETED");
 

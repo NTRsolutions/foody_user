@@ -42,8 +42,6 @@ import butterknife.ButterKnife;
 
 import static com.foodie.app.helper.CommonClass.ORDER_STATUS;
 import static com.foodie.app.helper.CommonClass.isSelectedOrder;
-import static com.foodie.app.helper.CommonClass.onGoingOrderList;
-import static com.foodie.app.helper.CommonClass.pastOrderList;
 
 public class CurrentOrderDetailActivity extends AppCompatActivity {
 
@@ -80,6 +78,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     String previousStatus = "";
     Runnable orderStatusRunnable;
 
+    boolean isOrderPage = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +91,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         orderIntent.putExtra("type", "SINGLE_ORDER");
         orderIntent.putExtra("order_id", isSelectedOrder.getId());
         startService(orderIntent);
+        isOrderPage = getIntent().getBooleanExtra("is_order_page", false);
 
 
         //set Toolbar
@@ -131,12 +132,12 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
 
-                    handler.postDelayed(this, 5000);
+                    handler.postDelayed(this, 2000);
                 }
 
             }
         };
-        handler.postDelayed(orderStatusRunnable, 5000);
+        handler.postDelayed(orderStatusRunnable, 2000);
 
 
         if (CommonClass.getInstance().isSelectedOrder != null) {
@@ -166,8 +167,13 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(CurrentOrderDetailActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+        if (isOrderPage) {
+            finish();
+        } else {
+            startActivity(new Intent(CurrentOrderDetailActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+        }
+
     }
 
     private String getTimeFromString(String time) {

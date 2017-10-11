@@ -57,6 +57,9 @@ public class OrdersActivity extends AppCompatActivity {
     Handler handler;
     Intent orderIntent;
 
+    int ONGOING_ORDER_LIST_SIZE=0;
+    int PAST_ORDER_LIST_SIZE=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,41 +91,47 @@ public class OrdersActivity extends AppCompatActivity {
         startService(orderIntent);
 
         handler = new Handler();
+        getOngoingOrders();
+        getPastOrders();
+
+    }
+
+
+    private  void  runHandler(){
         Runnable orderStatusRunnable = new Runnable() {
             public void run() {
                 if (onGoingOrderList != null && pastOrderList != null) {
-                    modelList.clear();
-                    OrderModel onGoingOrderModel = new OrderModel();
-                    onGoingOrderModel.setHeader("Current Orders");
-                    onGoingOrderModel.setOrders(onGoingOrderList);
-                    modelList.add(onGoingOrderModel);
-                    OrderModel pastOrderModel = new OrderModel();
-                    pastOrderModel.setHeader("Past Orders");
-                    pastOrderModel.setOrders(pastOrderList);
-                    modelList.add(pastOrderModel);
-                    modelListReference.clear();
-                    modelListReference.addAll(modelList);
-                    LayoutAnimationController controller =
-                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-                    ordersRv.setLayoutAnimation(controller);
-                    ordersRv.scheduleLayoutAnimation();
-                    ordersRv.getAdapter().notifyDataSetChanged();
+
+                    if( ONGOING_ORDER_LIST_SIZE!=onGoingOrderList.size()||
+                            PAST_ORDER_LIST_SIZE!=pastOrderList.size()){
+                        ONGOING_ORDER_LIST_SIZE=onGoingOrderList.size();
+                        PAST_ORDER_LIST_SIZE=pastOrderList.size();
+                        modelList.clear();
+                        OrderModel onGoingOrderModel = new OrderModel();
+                        onGoingOrderModel.setHeader("Current Orders");
+                        onGoingOrderModel.setOrders(onGoingOrderList);
+                        modelList.add(onGoingOrderModel);
+                        OrderModel pastOrderModel = new OrderModel();
+                        pastOrderModel.setHeader("Past Orders");
+                        pastOrderModel.setOrders(pastOrderList);
+                        modelList.add(pastOrderModel);
+                        modelListReference.clear();
+                        modelListReference.addAll(modelList);
+                        ordersRv.getAdapter().notifyDataSetChanged();
+                        handler.postDelayed(this, 2000);
+                    }
 
                 }
             }
         };
-        handler.postDelayed(orderStatusRunnable, 5000);
-        getOngoingOrders();
-
+        handler.postDelayed(orderStatusRunnable, 2000);
     }
-
     private void getPastOrders() {
         Call<List<Order>> call = apiInterface.getPastOders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
@@ -138,6 +147,12 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
+//                    LayoutAnimationController controller =
+//                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+//                    ordersRv.setLayoutAnimation(controller);
+//                    ordersRv.scheduleLayoutAnimation();
+                    adapter.notifyDataSetChanged();
+
 
                 }
             }
@@ -172,7 +187,7 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-                    getPastOrders();
+                    adapter.notifyDataSetChanged();
                 }
             }
 

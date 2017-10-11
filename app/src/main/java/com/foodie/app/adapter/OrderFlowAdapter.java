@@ -60,6 +60,8 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
         holder.statusImage.setImageResource(orderFlow.statusImage);
         if(orderFlow.status.contains(isSelectedOrder.getStatus())){
             holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+        }else {
+            holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorSecondaryText));
         }
 
         if (list.size() == position + 1)

@@ -4,25 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
-        android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="@dimen/activity_vertical_margin">
 
         <!--     Source Address-->
 
+
         <RelativeLayout
+
             android:id="@+id/source_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:padding="2dp"
                 android:id="@+id/source_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="16dp"
+                android:padding="2dp"
                 android:src="@drawable/ic_map_marker" />
 
             <LinearLayout
@@ -32,7 +34,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/address_header"
+                    android:id="@+id/restaurant_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -41,7 +43,7 @@
                     android:textSize="@dimen/text_medium" />
 
                 <TextView
-                    android:id="@+id/address"
+                    android:id="@+id/restaurant_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -74,11 +76,11 @@
             android:layout_below="@+id/dot_line">
 
             <ImageView
-                android:padding="2dp"
                 android:id="@+id/destination_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="16dp"
+                android:padding="2dp"
                 android:src="@drawable/ic_home" />
 
             <LinearLayout
@@ -88,7 +90,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/destination_address_header"
+                    android:id="@+id/user_address_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -98,7 +100,7 @@
 
                 <TextView
 
-                    android:id="@+id/destination_address"
+                    android:id="@+id/user_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -116,8 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_below="@id/destination_layout"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@color/colorSecondaryText"
             android:layerType="software" />
 
@@ -132,28 +134,37 @@
 
 
             <ImageView
-                android:padding="3dp"
                 android:id="@+id/order_succeess_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginRight="20dp"
+                android:padding="3dp"
                 android:src="@drawable/ic_circle_tick" />
 
             <TextView
-                android:textSize="@dimen/text_medium"
                 android:id="@+id/order_status_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@id/order_succeess_image"
                 android:text="Order Delivered Successfully on 12-3-17, 12.00am "
-                android:textColor="@color/colorGreen" />
+                android:textColor="@color/colorGreen"
+                android:textSize="@dimen/text_tiny" />
 
         </RelativeLayout>
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/order_status_layout"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/colorSecondaryText"
+            android:layerType="software" />
+
 
     </RelativeLayout>
+
 
     <!-- Order Detail Fragment-->
 
@@ -164,7 +175,6 @@
         android:layout_marginBottom="20dp">
 
     </FrameLayout>
-
 
 
 </LinearLayout>

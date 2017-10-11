@@ -18,7 +18,7 @@ public class AddCart {
     private Integer taxPercentage;
     @SerializedName("products")
     @Expose
-    private List<ProductList> products = null;
+    private List<Cart> products = null;
 
     public Integer getDeliveryCharges() {
         return deliveryCharges;
@@ -44,11 +44,11 @@ public class AddCart {
         this.taxPercentage = taxPercentage;
     }
 
-    public List<ProductList> getProductList() {
+    public List<Cart> getProductList() {
         return products;
     }
 
-    public void setProductList(List<ProductList> products) {
+    public void setProductList(List<Cart> products) {
         this.products = products;
     }
 

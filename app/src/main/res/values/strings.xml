@@ -138,5 +138,9 @@
     <string name="description_4">Your order is already pickup</string>
     <string name="description_5">Your order is delivered successfully</string>
 
+    <!--Past Order Page-->
+    <string name="order_delivered_successfully_on">Order Delivered Successfully on </string>
+
+
 
 </resources>

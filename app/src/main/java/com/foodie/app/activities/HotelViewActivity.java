@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,7 +35,9 @@ import com.foodie.app.adapter.HotelCatagoeryAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Category;
+import com.foodie.app.model.Favorite;
 import com.foodie.app.model.Shop;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
@@ -51,6 +55,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.foodie.app.helper.CommonClass.selectedShop;
 
 public class HotelViewActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -71,6 +77,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     @BindView(R.id.scroll_view)
     NestedScrollView scrollView;
     public static TextView itemText;
+    public static TextView viewCartShopName;
     public static TextView viewCart;
     public static RelativeLayout viewCartLayout;
     @BindView(R.id.restaurant_image)
@@ -97,8 +104,14 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     @BindView(R.id.float_header_view)
     HeaderView floatHeaderView;
 
+
     Activity activity;
     int restaurantPosition = 0;
+    boolean isShopIsChanged = true;
+    int priceAmount = 0;
+    int itemCount = 0;
+    int itemQuantity = 0;
+    Animation slide_down, slide_up;
 
 
     Context context;
@@ -128,6 +141,11 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         activity = HotelViewActivity.this;
         appBarLayout.addOnOffsetChangedListener(this);
 
+        //Load animation
+        slide_down = AnimationUtils.loadAnimation(context,
+                R.anim.slide_down);
+        slide_up = AnimationUtils.loadAnimation(context,
+                R.anim.slide_up);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -136,7 +154,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         }
         shops = CommonClass.getInstance().list.get(restaurantPosition);
-        CommonClass.getInstance().selectedShop=CommonClass.getInstance().list.get(restaurantPosition);
+        CommonClass.getInstance().selectedShop = CommonClass.getInstance().list.get(restaurantPosition);
 
         //get User Profile Data
         if (CommonClass.getInstance().profileModel != null) {
@@ -167,6 +185,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         deliveryTime.setText(shops.getEstimatedDeliveryTime().toString() + "Mins");
 
         itemText = (TextView) findViewById(R.id.item_text);
+        viewCartShopName = (TextView) findViewById(R.id.view_cart_shop_name);
         viewCart = (TextView) findViewById(R.id.view_cart);
         viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
         viewCartLayout.setOnClickListener(new View.OnClickListener() {
@@ -193,9 +212,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                                 .generate(new Palette.PaletteAsyncListener() {
                                     @Override
                                     public void onGenerated(Palette palette) {
-                                        Palette.Swatch textSwatch = palette.getVibrantSwatch();
+                                        Palette.Swatch textSwatch = palette.getDarkMutedSwatch();
                                         if (textSwatch == null) {
-                                            Toast.makeText(HotelViewActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(HotelViewActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
                                             return;
                                         }
                                         collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
@@ -234,11 +253,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
         accompanimentDishesRv.setAdapter(catagoeryAdapter);
 
-        if (CommonClass.getInstance().addCart != null) {
-
-        }
-
-
 //        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
 //            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -276,6 +290,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             public void onClick(View v) {
                 if (heartBtn.getTag().equals(0)) {
                     heartBtn.setTag(1);
+
                     heartBtn.setShapeResource(R.raw.heart);
                 } else {
                     heartBtn.setTag(0);
@@ -288,17 +303,98 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onCheckedChanged(View view, boolean checked) {
                 Log.e("HeartButton", "click " + checked);
-//                if (checked) {
-//                    heartBtn.setShapeResource(R.raw.heart);
-//                }
-//                else{
-//                    heartBtn.setShapeResource(R.raw.icc_heart);
-//                }
+                if (checked) {
+                    doFavorite(shops.getId());
+                } else {
+                    deleteFavorite(shops.getId());
+                }
 
             }
         });
 
 
+    }
+
+    private void deleteFavorite(Integer id) {
+        Call<Favorite> call = apiInterface.deleteFavorite(id);
+        call.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                Favorite favorite = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void doFavorite(Integer id) {
+        Call<Favorite> call = apiInterface.doFavorite(id);
+        call.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                Favorite favorite = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void setViewcartBottomLayout(AddCart addCart) {
+        priceAmount = 0;
+        itemQuantity = 0;
+        itemCount = 0;
+        //get Item Count
+        itemCount = addCart.getProductList().size();
+        for (int i = 0; i < itemCount; i++) {
+            //Get Total item Quantity
+            itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
+            //Get product price
+            if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
+                priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
+        }
+        CommonClass.getInstance().notificationCount = itemQuantity;
+        if (itemQuantity == 0) {
+            HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
+            // Start animation
+            viewCartLayout.startAnimation(slide_down);
+        } else if (itemQuantity == 1) {
+            if (shops.getId() == CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+                HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
+                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShops().getName());
+            } else
+                HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
+            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+            HotelViewActivity.itemText.setText("" + itemQuantity + " Item | " + currency + "" + priceAmount);
+            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
+                // Start animation
+                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+                viewCartLayout.startAnimation(slide_up);
+            }
+        } else {
+            if (shops.getId() != CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+                HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
+                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShops().getName());
+            } else
+                HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
+
+            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+            HotelViewActivity.itemText.setText("" + itemQuantity + " Items | " + currency + "" + priceAmount);
+            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
+                // Start animation
+                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+                viewCartLayout.startAnimation(slide_up);
+            }
+
+        }
     }
 
     private void getCategories(HashMap<String, String> map) {
@@ -307,12 +403,15 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(@NonNull Call<List<Category>> call, Response<List<Category>> response) {
                 categoryList = response.body();
-                CommonClass.getInstance().categoryList=categoryList;
+                CommonClass.getInstance().categoryList = categoryList;
                 CommonClass.getInstance().selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
                 accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                 accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
                 accompanimentDishesRv.setAdapter(catagoeryAdapter);
+                if (CommonClass.getInstance().addCart != null && CommonClass.getInstance().addCart.getProductList().size() != 0) {
+                    setViewcartBottomLayout(CommonClass.getInstance().addCart);
+                }
             }
 
             @Override

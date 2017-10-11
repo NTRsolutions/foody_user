@@ -1,20 +1,14 @@
+
 package com.foodie.app.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-/**
- * Created by Tamil on 10/5/2017.
- */
 
 public class Cart {
 
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("product_id")
-    @Expose
-    private Integer productId;
     @SerializedName("promocode_id")
     @Expose
     private Object promocodeId;
@@ -27,6 +21,9 @@ public class Cart {
     @SerializedName("savedforlater")
     @Expose
     private Integer savedforlater;
+    @SerializedName("product")
+    @Expose
+    private Product product;
 
     public Integer getId() {
         return id;
@@ -34,14 +31,6 @@ public class Cart {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
     }
 
     public Object getPromocodeId() {
@@ -74,6 +63,14 @@ public class Cart {
 
     public void setSavedforlater(Integer savedforlater) {
         this.savedforlater = savedforlater;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

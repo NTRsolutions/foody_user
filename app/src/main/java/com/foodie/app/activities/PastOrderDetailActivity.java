@@ -15,37 +15,52 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.fragments.OrderViewFragment;
+import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.Order;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.foodie.app.helper.CommonClass.isSelectedOrder;
 
 public class PastOrderDetailActivity extends AppCompatActivity {
 
 
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
-    @BindView(R.id.title)
-    TextView title;
-    @BindView(R.id.location)
-    TextView location;
+
+
+    int priceAmount = 0;
+    int discount = 0;
+    int itemCount = 0;
+    int itemQuantity = 0;
+    String currency = "";
+    @BindView(R.id.order_id_txt)
+    TextView orderIdTxt;
+    @BindView(R.id.order_item_txt)
+    TextView orderItemTxt;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.source_image)
     ImageView sourceImage;
-    @BindView(R.id.address_header)
-    TextView addressHeader;
-    @BindView(R.id.address)
-    TextView address;
+    @BindView(R.id.restaurant_name)
+    TextView restaurantName;
+    @BindView(R.id.restaurant_address)
+    TextView restaurantAddress;
     @BindView(R.id.source_layout)
     RelativeLayout sourceLayout;
     @BindView(R.id.dot_line)
     View dotLine;
     @BindView(R.id.destination_image)
     ImageView destinationImage;
-    @BindView(R.id.destination_address_header)
-    TextView destinationAddressHeader;
-    @BindView(R.id.destination_address)
-    TextView destinationAddress;
+    @BindView(R.id.user_address_title)
+    TextView userAddressTitle;
+    @BindView(R.id.user_address)
+    TextView userAddress;
     @BindView(R.id.destination_layout)
     RelativeLayout destinationLayout;
     @BindView(R.id.view_line2)
@@ -77,13 +92,49 @@ public class PastOrderDetailActivity extends AppCompatActivity {
             }
         });
 
-        //set Fragment
-        orderFullViewFragment = new OrderViewFragment();
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.order_detail_fargment, orderFullViewFragment).commit();
+        if (isSelectedOrder != null) {
+            Order order = CommonClass.getInstance().isSelectedOrder;
+            orderIdTxt.setText("ORDER #000" + order.getId().toString());
+            itemQuantity = order.getInvoice().getQuantity();
+            priceAmount = order.getInvoice().getNet();
+            orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on)+getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
+            currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
+            if (itemQuantity == 1)
+                orderItemTxt.setText(String.valueOf(itemQuantity) + " Item, " + currency + String.valueOf(priceAmount));
+            else
+                orderItemTxt.setText(String.valueOf(itemQuantity) + " Items, " + currency + String.valueOf(priceAmount));
 
+            restaurantName.setText(order.getShop().getName());
+            restaurantAddress.setText(order.getShop().getAddress());
+            userAddressTitle.setText(order.getAddress().getType());
+            userAddress.setText(order.getAddress().getMapAddress());
 
+            //set Fragment
+            orderFullViewFragment = new OrderViewFragment();
+            fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.order_detail_fargment, orderFullViewFragment).commit();
+        }
+
+    }
+
+    private String getFormatTime(String time) {
+        System.out.println("Time : " + time);
+        String value = "";
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm aa");
+
+            if (time != null) {
+                Date date = df.parse(time);
+                value = sdf.format(date);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+        return value;
     }
 
 

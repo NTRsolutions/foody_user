@@ -8,6 +8,8 @@ import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.ChangePassword;
+import com.foodie.app.model.Favorite;
+import com.foodie.app.model.FavoriteList;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
@@ -35,7 +37,6 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
-
 
 
     /*-------------USER--------------------*/
@@ -102,6 +103,17 @@ public interface ApiInterface {
     @DELETE("api/user/address/{id}")
     Call<Message> deleteAddress(@Path("id") int id);
 
+    /*-------------FAVORITE--------------------*/
+
+    @FormUrlEncoded
+    @POST("api/user/favorite")
+    Call<Favorite> doFavorite(@Field("shop_id") int shop_id);
+
+    @DELETE("api/user/favorite/{id}")
+    Call<Favorite> deleteFavorite(@Path("id") int id);
+
+    @GET("api/user/favorite")
+    Call<FavoriteList> getFavoriteList();
 
     /*-------------ORDER--------------------*/
 
