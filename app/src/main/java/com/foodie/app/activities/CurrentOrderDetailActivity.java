@@ -1,17 +1,21 @@
 package com.foodie.app.activities;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -42,6 +46,8 @@ import butterknife.ButterKnife;
 
 import static com.foodie.app.helper.CommonClass.ORDER_STATUS;
 import static com.foodie.app.helper.CommonClass.isSelectedOrder;
+import static com.foodie.app.helper.CommonClass.onGoingOrderList;
+import static com.foodie.app.helper.CommonClass.pastOrderList;
 
 public class CurrentOrderDetailActivity extends AppCompatActivity {
 
@@ -62,23 +68,17 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
 
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
-
     int priceAmount = 0;
-    int discount = 0;
-    int itemCount = 0;
     int itemQuantity = 0;
     String currency = "";
     @BindView(R.id.order_flow_rv)
     RecyclerView orderFlowRv;
 
     Context context;
-    Handler handler;
     Intent orderIntent;
     OrderFlowAdapter adapter;
-    String previousStatus = "";
-    Runnable orderStatusRunnable;
-
     boolean isOrderPage = false;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,9 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         startService(orderIntent);
         isOrderPage = getIntent().getBooleanExtra("is_order_page", false);
 
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                new IntentFilter("SINGLE_ORDER"));
 
         //set Toolbar
         setSupportActionBar(toolbar);
@@ -122,22 +125,6 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
                 AnimationUtils.loadLayoutAnimation(this, R.anim.item_animation_slide_right);
         orderFlowRv.setLayoutAnimation(controller);
         orderFlowRv.scheduleLayoutAnimation();
-
-        handler = new Handler();
-        orderStatusRunnable = new Runnable() {
-            public void run() {
-                if (isSelectedOrder != null) {
-                    if (!isSelectedOrder.getStatus().equalsIgnoreCase(previousStatus)) {
-                        previousStatus = isSelectedOrder.getStatus();
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    handler.postDelayed(this, 2000);
-                }
-
-            }
-        };
-        handler.postDelayed(orderStatusRunnable, 2000);
 
 
         if (CommonClass.getInstance().isSelectedOrder != null) {
@@ -173,8 +160,14 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
             startActivity(new Intent(CurrentOrderDetailActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
         }
-
     }
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            adapter.notifyDataSetChanged();
+            Log.d("receiver", "Success");
+        }
+    };
 
     private String getTimeFromString(String time) {
         System.out.println("Time : " + time);
@@ -199,20 +192,21 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopService(orderIntent);
-        handler.removeCallbacks(null);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         startService(orderIntent);
-        handler.postDelayed(orderStatusRunnable, 5000);
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                new IntentFilter("SINGLE_ORDER"));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         stopService(orderIntent);
-        handler.removeCallbacks(null);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
     }
 }

@@ -51,6 +51,7 @@ public class OrderStatusService extends IntentService {
     String type;
     int id = 0;
     int ONGOING_ORDER_LIST_SIZE = 0;
+    String previousStatus = "";
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -111,9 +112,17 @@ public class OrderStatusService extends IntentService {
 //                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    isSelectedOrder = new Order();
                     isSelectedOrder = response.body();
                     Log.i("isSelectedOrder : ", isSelectedOrder.toString());
+                    if (!isSelectedOrder.getStatus().equalsIgnoreCase(previousStatus)) {
+                        previousStatus = isSelectedOrder.getStatus();
+                        Intent chat_intent = new Intent("SINGLE_ORDER");
+                        // You can also include some extra data.
+                        LocalBroadcastManager.getInstance(OrderStatusService.this).sendBroadcast(chat_intent);
+
+                    }
+
+
                 }
             }
 

@@ -73,6 +73,8 @@
                 android:layout_height="200dp" />
 
             <android.support.v7.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
                 android:id="@+id/order_flow_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

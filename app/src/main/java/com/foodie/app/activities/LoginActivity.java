@@ -206,7 +206,6 @@ public class LoginActivity extends AppCompatActivity {
             map.put("client_secret", BuildConfigure.CLIENT_SECRET);
             login(map);
         }
-
     }
 
 

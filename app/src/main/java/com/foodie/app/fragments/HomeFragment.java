@@ -54,8 +54,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.helper.CommonClass.addressList;
 import static com.foodie.app.helper.CommonClass.latitude;
 import static com.foodie.app.helper.CommonClass.longitude;
+import static com.foodie.app.helper.CommonClass.selectedAddress;
 
 
 /**
@@ -113,8 +115,30 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
         ButterKnife.bind(this, view);
+
+        return view;
+
+
+    }
+
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+        System.out.println("HomeFragment");
+
+
+        toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_home, toolbar, false);
+        addressLabel = (TextView) toolbarLayout.findViewById(R.id.address_label);
+        addressTxt = (TextView) toolbarLayout.findViewById(R.id.address);
+
+        locationAddressLayout = (LinearLayout) toolbarLayout.findViewById(R.id.location_ll);
+        errorLoadingLayout = (RelativeLayout) toolbarLayout.findViewById(R.id.error_loading_layout);
+        locationAddressLayout.setVisibility(View.INVISIBLE);
+        errorLoadingLayout.setVisibility(View.VISIBLE);
 
         final ArrayList<ImpressiveDish> list = new ArrayList<>();
         list.add(new ImpressiveDish("Santhosh1", "Hello"));
@@ -168,21 +192,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .count(2)
                 .show();
 
-
-        //get User Profile Data
-        if (CommonClass.getInstance().profileModel != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
-            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
-            map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
-            getRestaurant(map);
-
-        } else {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
-            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
-            getRestaurant(map);
-        }
+        findRestaurant();
 
 
         final ArrayList<Restaurant> offerRestaurantList = new ArrayList<>();
@@ -220,8 +230,71 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        return view;
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 5000ms
+                errorLoadingLayout.setVisibility(View.GONE);
+                locationAddressLayout.setVisibility(View.VISIBLE);
 
+                if (addressList != null) {
+                    for (com.foodie.app.model.Address address1 : addressList.getAddresses()) {
+                        if (latitude == address1.getLatitude() && longitude == address1.getLongitude()) {
+                            selectedAddress = address1;
+                            addressLabel.setText(CommonClass.getInstance().addressHeader);
+                            addressTxt.setText(CommonClass.getInstance().address);
+                            addressLabel.setText(CommonClass.getInstance().selectedAddress.getType());
+                            addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
+                            latitude = CommonClass.getInstance().selectedAddress.getLatitude();
+                            longitude = CommonClass.getInstance().selectedAddress.getLongitude();
+                            findRestaurant();
+                            break;
+                        }
+                    }
+                } else {
+                    addressLabel.setText(CommonClass.getInstance().addressHeader);
+                    addressTxt.setText(CommonClass.getInstance().address);
+                }
+
+            }
+        }, 3000);
+
+        locationAddressLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+            }
+        });
+        filterBtn = (Button) toolbarLayout.findViewById(R.id.filter);
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, FilterActivity.class));
+                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.anim_nothing);
+            }
+        });
+        toolbar.addView(toolbarLayout);
+        //intialize image line
+        initializeAvd();
+    }
+
+    private void findRestaurant() {
+        //get User Profile Data
+        if (CommonClass.getInstance().profileModel != null) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
+            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+            map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
+            getRestaurant(map);
+
+        } else {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
+            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+            getRestaurant(map);
+        }
     }
 
     private void getRestaurant(HashMap<String, String> map) {
@@ -315,20 +388,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
                 latitude = CommonClass.getInstance().selectedAddress.getLatitude();
                 longitude = CommonClass.getInstance().selectedAddress.getLongitude();
-                //get User Profile Data
-                if (CommonClass.getInstance().profileModel != null) {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("latitude", String.valueOf(latitude));
-                    map.put("longitude", String.valueOf(longitude));
-                    map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
-                    getRestaurant(map);
-
-                } else {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
-                    map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
-                    getRestaurant(map);
-                }
+                findRestaurant();
 
             } else {
 
@@ -337,56 +397,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             System.out.print("HomeFragment : Failure");
 
         }
-    }
-
-    public void onActivityCreated(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onActivityCreated(savedInstanceState);
-        System.out.println("HomeFragment");
-
-        toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
-        toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_home, toolbar, false);
-        addressLabel = (TextView) toolbarLayout.findViewById(R.id.address_label);
-        addressTxt = (TextView) toolbarLayout.findViewById(R.id.address);
-
-        locationAddressLayout = (LinearLayout) toolbarLayout.findViewById(R.id.location_ll);
-        errorLoadingLayout = (RelativeLayout) toolbarLayout.findViewById(R.id.error_loading_layout);
-        locationAddressLayout.setVisibility(View.INVISIBLE);
-        errorLoadingLayout.setVisibility(View.VISIBLE);
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 5000ms
-                errorLoadingLayout.setVisibility(View.GONE);
-                locationAddressLayout.setVisibility(View.VISIBLE);
-                addressLabel.setText(CommonClass.getInstance().addressHeader);
-                addressTxt.setText(CommonClass.getInstance().address);
-
-            }
-        }, 3000);
-
-
-        locationAddressLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-            }
-        });
-        filterBtn = (Button) toolbarLayout.findViewById(R.id.filter);
-        filterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, FilterActivity.class));
-                getActivity().overridePendingTransition(R.anim.slide_up, R.anim.anim_nothing);
-            }
-        });
-        toolbar.addView(toolbarLayout);
-        //intialize image line
-        initializeAvd();
     }
 
 
