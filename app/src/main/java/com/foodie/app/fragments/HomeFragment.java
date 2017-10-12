@@ -38,6 +38,7 @@ import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.model.Address;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
@@ -237,9 +238,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 //Do something after 5000ms
                 errorLoadingLayout.setVisibility(View.GONE);
                 locationAddressLayout.setVisibility(View.VISIBLE);
-
-                if (addressList != null) {
-                    for (com.foodie.app.model.Address address1 : addressList.getAddresses()) {
+                if (addressList != null&&addressList.getAddresses().size()!=0) {
+                    for (int i = 0; i <addressList.getAddresses().size() ; i++) {
+                        Address address1=addressList.getAddresses().get(i);
                         if (latitude == address1.getLatitude() && longitude == address1.getLongitude()) {
                             selectedAddress = address1;
                             addressLabel.setText(CommonClass.getInstance().addressHeader);
@@ -248,8 +249,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
                             latitude = CommonClass.getInstance().selectedAddress.getLatitude();
                             longitude = CommonClass.getInstance().selectedAddress.getLongitude();
-                            findRestaurant();
+//                            findRestaurant();
                             break;
+                        }
+                        else {
+                            addressLabel.setText(CommonClass.getInstance().addressHeader);
+                            addressTxt.setText(CommonClass.getInstance().address);
                         }
                     }
                 } else {

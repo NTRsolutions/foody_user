@@ -7,20 +7,29 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
@@ -30,6 +39,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.OrderViewFragment;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderFlow;
 import com.foodie.app.model.OrderModel;
@@ -39,10 +49,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.foodie.app.helper.CommonClass.ORDER_STATUS;
 import static com.foodie.app.helper.CommonClass.isSelectedOrder;
@@ -79,6 +93,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     OrderFlowAdapter adapter;
     boolean isOrderPage = false;
     private BroadcastReceiver mReceiver;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +201,75 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
 
         }
         return value;
+    }
+
+    private void rateTransporter(HashMap<String, String> map) {
+        System.out.println(map.toString());
+        Call<Message> call = apiInterface.rate(map);
+        call.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
+                if (response.errorBody() != null) {
+                    finish();
+                } else if (response.isSuccessful()) {
+                    Message message = response.body();
+                    Toast.makeText(context, message.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Something wrong - rateTransporter", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    public void rate() {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            final FrameLayout frameView = new FrameLayout(this);
+            builder.setView(frameView);
+
+            final AlertDialog alertDialog = builder.create();
+            LayoutInflater inflater = alertDialog.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.feedback_popup, frameView);
+            alertDialog.show();
+
+            final Integer[] rating = {5};
+            final RadioGroup rateRadioGroup = (RadioGroup) dialogView.findViewById(R.id.rate_radiogroup);
+            ((RadioButton) rateRadioGroup.getChildAt(4)).setChecked(true);
+            rateRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    rating[0] = i;
+                }
+            });
+
+            final EditText comment = (EditText) dialogView.findViewById(R.id.comment);
+            Button feedbackSubmit = (Button) dialogView.findViewById(R.id.feedback_submit);
+            feedbackSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (CommonClass.isSelectedOrder != null && CommonClass.isSelectedOrder.getId() != null) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("order_id", String.valueOf(CommonClass.isSelectedOrder.getId()));
+                        map.put("rating", String.valueOf(rating[0]));
+                        map.put("comment", comment.getText().toString());
+                        map.put("type", "transporter");
+                        rateTransporter(map);
+                        alertDialog.dismiss();
+                    }
+
+                }
+            });
+            alertDialog.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

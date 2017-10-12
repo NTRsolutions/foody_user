@@ -201,6 +201,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (mLastLocation != null) {
                     latitude = mLastLocation.getLatitude();
                     longitude = mLastLocation.getLongitude();
+                    CommonClass.getInstance().latitude = mLastLocation.getLatitude();
+                    CommonClass.getInstance().longitude = mLastLocation.getLongitude();
                     getAddress();
 
                 } else {
