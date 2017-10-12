@@ -1,9 +1,8 @@
 package com.foodie.app.model;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 /**
  * Created by Tamil on 10/11/2017.
@@ -11,19 +10,24 @@ import java.util.List;
 
 public class FavoriteList {
 
-    @SerializedName("avalabilable")
+    @SerializedName("available")
     @Expose
-    private List<Avalabilable> avalabilable = null;
+    private List<Available> available = null;
     @SerializedName("un_available")
     @Expose
     private List<UnAvailable> unAvailable = null;
 
-    public List<Avalabilable> getAvalabilable() {
-        return avalabilable;
+    public List<Available> getAvailable() {
+        return available;
     }
 
-    public void setAvalabilable(List<Avalabilable> avalabilable) {
-        this.avalabilable = avalabilable;
+    public void setAvailable(List<Available> available) {
+        this.available = available;
+    }
+
+    public FavoriteList withAvailable(List<Available> available) {
+        this.available = available;
+        return this;
     }
 
     public List<UnAvailable> getUnAvailable() {
@@ -33,5 +37,11 @@ public class FavoriteList {
     public void setUnAvailable(List<UnAvailable> unAvailable) {
         this.unAvailable = unAvailable;
     }
+
+    public FavoriteList withUnAvailable(List<UnAvailable> unAvailable) {
+        this.unAvailable = unAvailable;
+        return this;
+    }
+
 
 }

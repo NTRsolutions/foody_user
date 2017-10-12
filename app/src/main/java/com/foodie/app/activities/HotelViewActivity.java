@@ -153,8 +153,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             restaurantPosition = bundle.getInt("position");
 
         }
-        shops = CommonClass.getInstance().list.get(restaurantPosition);
-        CommonClass.getInstance().selectedShop = CommonClass.getInstance().list.get(restaurantPosition);
+        shops = CommonClass.getInstance().selectedShop;
+//        CommonClass.getInstance().selectedShop = CommonClass.getInstance().list.get(restaurantPosition);
 
         //get User Profile Data
         if (CommonClass.getInstance().profileModel != null) {

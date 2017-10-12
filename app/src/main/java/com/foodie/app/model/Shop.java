@@ -27,7 +27,7 @@ public class Shop {
     private String description;
     @SerializedName("offer_min_amount")
     @Expose
-    private String offerMinAmount;
+    private Double offerMinAmount;
     @SerializedName("offer_percent")
     @Expose
     private Integer offerPercent;
@@ -125,11 +125,11 @@ public class Shop {
         this.description = description;
     }
 
-    public String getOfferMinAmount() {
+    public Double getOfferMinAmount() {
         return offerMinAmount;
     }
 
-    public void setOfferMinAmount(String offerMinAmount) {
+    public void setOfferMinAmount(Double offerMinAmount) {
         this.offerMinAmount = offerMinAmount;
     }
 
