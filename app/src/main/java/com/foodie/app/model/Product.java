@@ -42,6 +42,9 @@ public class Product {
     @SerializedName("shops")
     @Expose
     private Shop shops;
+    @SerializedName("shop")
+    @Expose
+    private Shop shop;
 
     public Integer getId() {
         return id;
@@ -133,6 +136,13 @@ public class Product {
 
     public Shop getShops() {
         return shops;
+    }
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
     public void setShops(Shop shops) {

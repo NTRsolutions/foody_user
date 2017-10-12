@@ -26,22 +26,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.foodie.app.fragments.SearchFragment.shopList;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RestaurantFragment extends Fragment {
+public class RestaurantSearchFragment extends Fragment {
 
-    RestaurantsAdapter restaurantsAdapter;
-    @BindView(R.id.related_txt)
-    TextView relatedTxt;
+    public  static RestaurantsAdapter restaurantsAdapter;
+
     Unbinder unbinder;
     @BindView(R.id.restaurants_rv)
     RecyclerView restaurantsRv;
     Context context;
-    List<Shop> restaurantList;
-    private SkeletonScreen skeletonScreen;
+    public static SkeletonScreen skeletonScreen;
 
-    public RestaurantFragment() {
+    public RestaurantSearchFragment() {
         // Required empty public constructor
     }
 
@@ -65,13 +65,14 @@ public class RestaurantFragment extends Fragment {
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
-        restaurantList=new ArrayList<>();
-        restaurantsAdapter = new RestaurantsAdapter(restaurantList, context, getActivity());
+        shopList=new ArrayList<>();
+        restaurantsAdapter = new RestaurantsAdapter(shopList, context, getActivity());
         skeletonScreen = Skeleton.bind(restaurantsRv)
                 .adapter(restaurantsAdapter)
                 .load(R.layout.skeleton_restaurant_list_item)
                 .count(6)
                 .show();
+        skeletonScreen.hide();
 
     }
 

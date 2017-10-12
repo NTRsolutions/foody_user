@@ -97,14 +97,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                getLocation();
+//                getLocation();
 
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
             }
         } else {
-            getLocation();
+//            getLocation();
         }
 
         // check availability of play services
@@ -186,12 +186,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
      */
 
     private void getLocation() {
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 5000ms
                 try {
                     mLastLocation = LocationServices.FusedLocationApi
                             .getLastLocation(mGoogleApiClient);
@@ -208,10 +202,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 } else {
                     showToast("Couldn't get the location. Make sure location is enabled on the device");
                 }
-
-            }
-        }, 2000);
-
 
     }
 
@@ -312,7 +302,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         // All location settings are satisfied. The client can initialize location requests here
-                        getLocation();
+//                        getLocation();
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
@@ -438,8 +428,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnectionSuspended(int arg0) {
         mGoogleApiClient.connect();
     }
-
-
     // Permission check functions
 
 

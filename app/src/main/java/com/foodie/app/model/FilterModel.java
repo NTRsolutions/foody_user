@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by santhosh@appoets.com on 28-08-2017.
+ * Created by Tamil on 28-08-2017.
  */
 
 public class FilterModel {
     String header;
-    List<String> filters = new ArrayList<>();
+    List<Cuisine> filters = new ArrayList<>();
 
     public String getHeader() {
         return header;
@@ -19,11 +19,11 @@ public class FilterModel {
         this.header = header;
     }
 
-    public List<String> getFilters() {
+    public List<Cuisine> getFilters() {
         return filters;
     }
 
-    public void setFilters(List<String> filters) {
+    public void setFilters(List<Cuisine> filters) {
         this.filters = filters;
     }
 

@@ -8,12 +8,14 @@ import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.ChangePassword;
+import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Favorite;
 import com.foodie.app.model.FavoriteList;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.ResetPassword;
+import com.foodie.app.model.Search;
 import com.foodie.app.model.User;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.Otp;
@@ -87,6 +89,12 @@ public interface ApiInterface {
     @GET("api/user/categories")
     Call<List<Category>> getCategories(@QueryMap HashMap<String, String> params);
 
+
+     /*-------------CUISINE--------------------*/
+     @GET("api/user/cuisines")
+     Call<List<Cuisine>> getcuCuisineCall();
+
+
     /*-------------CART--------------------*/
 
     @FormUrlEncoded
@@ -140,4 +148,12 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("api/user/rating")
     Call<Message> rate(@FieldMap HashMap<String, String> params);
+
+
+    /*-------------SEARCH--------------------*/
+    @GET("api/user/search")
+    Call<Search> getSearch(@Query("name") String search);
+
+
+
 }

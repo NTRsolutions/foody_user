@@ -104,10 +104,10 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         context = CurrentOrderDetailActivity.this;
         orderIntent = new Intent(context, OrderStatusService.class);
         orderIntent.putExtra("type", "SINGLE_ORDER");
+        if(isSelectedOrder!=null)
         orderIntent.putExtra("order_id", isSelectedOrder.getId());
         startService(orderIntent);
         isOrderPage = getIntent().getBooleanExtra("is_order_page", false);
-
 
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("SINGLE_ORDER"));

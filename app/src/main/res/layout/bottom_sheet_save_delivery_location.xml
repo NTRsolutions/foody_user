@@ -103,60 +103,86 @@
             android:textSize="@dimen/text_tiny" />
 
         <LinearLayout
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_height="@dimen/_50sdp"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
 
             <RadioGroup
                 android:id="@+id/type_radiogroup"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:visibility="visible">
 
                 <RadioButton
                     android:id="@+id/home_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button"
                     android:button="@null"
                     android:drawableTop="@drawable/ic_home"
-                    android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:textAllCaps="true"
-                    android:layout_weight="1"
-                    android:text="Home" />
+                    android:text="Home"
+                    android:textAllCaps="true" />
 
                 <RadioButton
                     android:id="@+id/work_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button"
                     android:button="@null"
                     android:drawableTop="@drawable/ic_work"
-                    android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="@string/work" />
+                    android:text="@string/work"
+                    android:textAllCaps="true" />
+
                 <RadioButton
                     android:id="@+id/other_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@null"
-                    android:drawableTop="@drawable/ic_pin_locator_1"
+                    android:layout_weight="1"
                     android:background="@drawable/radio_button"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableTop="@drawable/ic_pin_locator_1"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:checked="true"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="@string/other" />
+                    android:text="@string/other"
+                    android:textAllCaps="true" />
 
             </RadioGroup>
+
+            <RelativeLayout
+                android:id="@+id/other_address_title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/other_address_header_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/address_hint"
+                    android:textColor="@color/colorPrimaryText" />
+
+                <TextView
+                    android:id="@+id/cancel_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/cancel"
+                    android:textColor="@color/colorSecondaryText" />
+
+            </RelativeLayout>
+
 
             <!--<LinearLayout
                 android:id="@+id/homelayout"

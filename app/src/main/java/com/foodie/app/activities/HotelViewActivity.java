@@ -26,7 +26,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.foodie.app.HeaderView;
@@ -55,8 +54,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
-import static com.foodie.app.helper.CommonClass.selectedShop;
 
 public class HotelViewActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -154,7 +151,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         }
         shops = CommonClass.getInstance().selectedShop;
-//        CommonClass.getInstance().selectedShop = CommonClass.getInstance().list.get(restaurantPosition);
+//        CommonClass.getInstance().selectedShop = CommonClass.getInstance().shopList.get(restaurantPosition);
 
         //get User Profile Data
         if (CommonClass.getInstance().profileModel != null) {
@@ -247,7 +244,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         floatHeaderView.bindTo(shops.getName(), shops.getDescription());
 
         categoryList = new ArrayList<>();
-        //Set Categoery list adapter
+        //Set Categoery shopList adapter
         catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, categoryList);
         accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
@@ -431,8 +428,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     @Override
     protected void onResume() {
         super.onResume();
-        if (CommonClass.getInstance().list != null) {
-            List<Shop> shopList = CommonClass.getInstance().list;
+        if (CommonClass.getInstance().shopList != null) {
+            List<Shop> shopList = CommonClass.getInstance().shopList;
             for (int i = 0; i < shopList.size(); i++) {
                 if (shopList.get(i).getId().equals(shops.getId())) {
                     shops = shopList.get(i);

@@ -125,11 +125,11 @@ public class FavouritesActivity extends AppCompatActivity {
 
                     *//*model = new FavListModel();
                     model.setHeader("un available");
-                    List<Available> list = new ArrayList<>();
+                    List<Available> shopList = new ArrayList<>();
                     for (UnAvailable obj : response.body().getUnAvailable()) {
-                        list.add(obj);
+                        shopList.add(obj);
                     }
-                    model.setFav(list);
+                    model.setFav(shopList);
                     modelList.add(model);*//*
 
                     modelListReference.clear();
