@@ -1,15 +1,19 @@
 package com.foodie.app.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -59,6 +63,8 @@ public class OrdersActivity extends AppCompatActivity {
 
     int ONGOING_ORDER_LIST_SIZE=0;
     int PAST_ORDER_LIST_SIZE=0;
+    private BroadcastReceiver mReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +76,8 @@ public class OrdersActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context=OrdersActivity.this;
 
-
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                new IntentFilter("ONGOING"));
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,49 +90,76 @@ public class OrdersActivity extends AppCompatActivity {
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         ordersRv.setLayoutManager(manager);
+        modelListReference.clear();
         adapter = new OrdersAdapter(this, activity, modelListReference);
         ordersRv.setAdapter(adapter);
         ordersRv.setHasFixedSize(false);
         orderIntent = new Intent(context, OrderStatusService.class);
         orderIntent.putExtra("type", "ORDER_LIST");
         startService(orderIntent);
-
         handler = new Handler();
         getOngoingOrders();
-        getPastOrders();
+
+
 
     }
 
 
-    private  void  runHandler(){
-        Runnable orderStatusRunnable = new Runnable() {
-            public void run() {
-                if (onGoingOrderList != null && pastOrderList != null) {
-
-                    if( ONGOING_ORDER_LIST_SIZE!=onGoingOrderList.size()||
-                            PAST_ORDER_LIST_SIZE!=pastOrderList.size()){
-                        ONGOING_ORDER_LIST_SIZE=onGoingOrderList.size();
-                        PAST_ORDER_LIST_SIZE=pastOrderList.size();
-                        modelList.clear();
-                        OrderModel onGoingOrderModel = new OrderModel();
-                        onGoingOrderModel.setHeader("Current Orders");
-                        onGoingOrderModel.setOrders(onGoingOrderList);
-                        modelList.add(onGoingOrderModel);
-                        OrderModel pastOrderModel = new OrderModel();
-                        pastOrderModel.setHeader("Past Orders");
-                        pastOrderModel.setOrders(pastOrderList);
-                        modelList.add(pastOrderModel);
-                        modelListReference.clear();
-                        modelListReference.addAll(modelList);
-                        ordersRv.getAdapter().notifyDataSetChanged();
-                        handler.postDelayed(this, 2000);
-                    }
-
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            modelList.clear();
+            OrderModel onGoingOrderModel = new OrderModel();
+            onGoingOrderModel.setHeader("Current Orders");
+            onGoingOrderModel.setOrders(onGoingOrderList);
+            modelList.add(onGoingOrderModel);
+            OrderModel pastOrderModel = new OrderModel();
+            pastOrderModel.setHeader("Past Orders");
+            pastOrderModel.setOrders(pastOrderList);
+            modelList.add(pastOrderModel);
+            modelListReference.clear();
+            modelListReference.addAll(modelList);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    adapter.notifyDataSetChanged();
                 }
-            }
-        };
-        handler.postDelayed(orderStatusRunnable, 2000);
-    }
+            });
+            Log.d("receiver", "Success");
+        }
+    };
+//    private  void  runHandler(){
+//        Runnable orderStatusRunnable = new Runnable() {
+//            public void run() {
+//                if (onGoingOrderList != null && pastOrderList != null) {
+////                    if( ONGOING_ORDER_LIST_SIZE!=onGoingOrderList.size()){
+//                        ONGOING_ORDER_LIST_SIZE=onGoingOrderList.size();
+//                        PAST_ORDER_LIST_SIZE=pastOrderList.size();
+//                        modelList.clear();
+//                        OrderModel onGoingOrderModel = new OrderModel();
+//                        onGoingOrderModel.setHeader("Current Orders");
+//                        onGoingOrderModel.setOrders(onGoingOrderList);
+//                        modelList.add(onGoingOrderModel);
+//                        OrderModel pastOrderModel = new OrderModel();
+//                        pastOrderModel.setHeader("Past Orders");
+//                        pastOrderModel.setOrders(pastOrderList);
+//                        modelList.add(pastOrderModel);
+//                        modelListReference.clear();
+//                        modelListReference.addAll(modelList);
+//                        runOnUiThread(new Runnable() {
+//                            public void run() {
+//                                adapter.notifyDataSetChanged();
+//                            }
+//                        });
+//
+////                    }
+//                }
+//                handler.postDelayed(this, 2000);
+//
+//
+//            }
+//        };
+//        handler.postDelayed(orderStatusRunnable, 2000);
+//    }
     private void getPastOrders() {
         Call<List<Order>> call = apiInterface.getPastOders();
         call.enqueue(new Callback<List<Order>>() {
@@ -147,11 +181,12 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-//                    LayoutAnimationController controller =
-//                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-//                    ordersRv.setLayoutAnimation(controller);
-//                    ordersRv.scheduleLayoutAnimation();
+                    LayoutAnimationController controller =
+                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+                    ordersRv.setLayoutAnimation(controller);
+                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
+//                    runHandler();
 
 
                 }
@@ -187,7 +222,7 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-                    adapter.notifyDataSetChanged();
+                    getPastOrders();
                 }
             }
 
@@ -204,12 +239,15 @@ public class OrdersActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         stopService(orderIntent);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         startService(orderIntent);
+        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                new IntentFilter("ONGOING"));
 
     }
 
@@ -224,6 +262,7 @@ public class OrdersActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopService(orderIntent);
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
     }
 
 }
