@@ -1,10 +1,13 @@
-
 package com.foodie.app.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Avalabilable {
+/**
+ * Created by santhosh@appoets.com on 12-10-2017.
+ */
+
+public class Available {
 
     @SerializedName("id")
     @Expose
@@ -27,12 +30,22 @@ public class Avalabilable {
         this.id = id;
     }
 
+    public Available withId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
     public Integer getShopId() {
         return shopId;
     }
 
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+
+    public Available withShopId(Integer shopId) {
+        this.shopId = shopId;
+        return this;
     }
 
     public Integer getUserId() {
@@ -43,12 +56,22 @@ public class Avalabilable {
         this.userId = userId;
     }
 
+    public Available withUserId(Integer userId) {
+        this.userId = userId;
+        return this;
+    }
+
     public Shop getShop() {
         return shop;
     }
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    public Available withShop(Shop shop) {
+        this.shop = shop;
+        return this;
     }
 
 }

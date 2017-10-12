@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Shop;
 
 import java.math.BigDecimal;
@@ -62,11 +63,11 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
                 .error(R.drawable.item1).into(holder.dishImg);
         holder.restaurantName.setText(shops.getName());
         holder.category.setText(shops.getDescription());
-        if(shops.getOfferPercent()==null){
+        if (shops.getOfferPercent() == null) {
             holder.offer.setVisibility(View.GONE);
-        }else {
+        } else {
             holder.offer.setVisibility(View.VISIBLE);
-            holder.offer.setText("Flat "+shops.getOfferPercent().toString()+"% offer on all Orders");
+            holder.offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
         }
 //        if(shops.getav().equalsIgnoreCase("")){
 //            holder.offer.setVisibility(View.GONE);
@@ -77,14 +78,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 //            holder.restaurantInfo.setText(shops.getAvailability());
 //        }
 
-        if(shops.getRatings()!=null){
-            Double rating=new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-            holder.rating.setText(""+rating);
-        }
-
-        else
+        if (shops.getRatings() != null) {
+            Double rating = new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            holder.rating.setText("" + rating);
+        } else
             holder.rating.setText("No Rating");
-        holder.distanceTime.setText(shops.getEstimatedDeliveryTime().toString()+" Mins");
+        holder.distanceTime.setText(shops.getEstimatedDeliveryTime().toString() + " Mins");
 
     }
 
@@ -97,7 +96,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout itemView;
         private ImageView dishImg;
-        private TextView restaurantName, category, offer, rating, restaurantInfo, price,distanceTime;
+        private TextView restaurantName, category, offer, rating, restaurantInfo, price, distanceTime;
 
 
         private MyViewHolder(View view) {
@@ -116,7 +115,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
-                context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position",getAdapterPosition()));
+                context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position", getAdapterPosition()));
+                CommonClass.getInstance().selectedShop = list.get(getAdapterPosition());
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 list.get(getAdapterPosition()).getCuisines();
 

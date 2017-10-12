@@ -79,7 +79,7 @@
                 android:textSize="@dimen/text_medium" />
 
             <EditText
-                android:id="@+id/username"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -98,12 +98,13 @@
                 android:textSize="@dimen/text_medium" />
 
             <EditText
-                android:id="@+id/mobile_number"
+                android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:background="@drawable/edt_bg_selector"
                 android:inputType="phone"
+                android:enabled="false"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_medium" />
 
@@ -116,7 +117,7 @@
                 android:textSize="@dimen/text_medium" />
 
             <EditText
-                android:id="@+id/email_address"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"

@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.CurrentOrderDetailActivity;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.NotificationItem;
 import com.foodie.app.model.OrderFlow;
 import com.foodie.app.model.Restaurant;
@@ -62,6 +64,9 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
             holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
         }else {
             holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorSecondaryText));
+        }
+        if(isSelectedOrder.getStatus().equals(CommonClass.ORDER_STATUS.get(CommonClass.ORDER_STATUS.size() - 1))){
+            ((CurrentOrderDetailActivity)context).rate();
         }
 
         if (list.size() == position + 1)

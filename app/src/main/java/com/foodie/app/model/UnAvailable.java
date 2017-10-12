@@ -4,7 +4,7 @@ package com.foodie.app.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UnAvailable {
+public class UnAvailable{
 
     @SerializedName("id")
     @Expose

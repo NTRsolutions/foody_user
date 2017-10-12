@@ -34,23 +34,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_marginTop="16dp"
-            android:id="@+id/message"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/favorites_Rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:text="Currently unavailable"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="15sp" />
-
-        <ListView
-            android:id="@+id/favorites_lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none" />
+            android:orientation="vertical" />
 
     </LinearLayout>
 
