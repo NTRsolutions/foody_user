@@ -13,12 +13,15 @@ import com.foodie.app.model.FavoriteList;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
+import com.foodie.app.model.PromotionResponse;
+import com.foodie.app.model.Promotions;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.model.User;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.Otp;
 import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.Shop;
+import com.foodie.app.model.WalletHistory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,14 +36,12 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ApiInterface {
@@ -140,4 +141,14 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("api/user/rating")
     Call<Message> rate(@FieldMap HashMap<String, String> params);
+
+    @GET("api/user/wallet")
+    Call<List<WalletHistory>> getWalletHistory();
+
+    @GET("api/user/wallet/promocode")
+    Call<List<Promotions>> getWalletPromoCode();
+
+    @FormUrlEncoded
+    @POST("api/user/wallet/promocode")
+    Call<PromotionResponse> applyWalletPromoCode(@Field("promocode_id") String id);
 }

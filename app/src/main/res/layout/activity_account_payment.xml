@@ -1,40 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.foodie.app.activities.AccountPaymentActivity">
 
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:minHeight="?attr/actionBarSize"
-        android:paddingRight="10dp"
-        app:theme="@style/ToolBarStyle">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/payment"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="18sp" />
-
-
-        </LinearLayout>
-
-    </android.support.v7.widget.Toolbar>
+        layout="@layout/toolbar" />
 
     <View
         android:layout_width="match_parent"
@@ -57,12 +32,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Wallet"
+                android:text="@string/walletHistory"
                 android:textAllCaps="true"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_medium" />
 
             <RelativeLayout
+                android:id="@+id/wallet_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
@@ -71,16 +47,16 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="WalletAmount"
+                    android:text="@string/wallet_amount"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 
 
                 <TextView
+                    android:id="@+id/wallet_amount_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="$150"
                     android:textColor="@color/theme"
                     android:textSize="@dimen/text_medium" />
 
@@ -92,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Card"
+                android:text="@string/card"
                 android:textAllCaps="true"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_medium" />
@@ -127,13 +103,16 @@
                         android:id="@+id/add_card_img"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
+                        android:contentDescription="@string/app_name"
                         android:src="@drawable/ic_add_card" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/add_card_img"
                         android:layout_toRightOf="@+id/add_card_img"
                         android:text="@string/add_new_card"
                         android:textAllCaps="true"
@@ -151,7 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="Pay on Delivery"
+                android:text="@string/pay_on_delivery"
                 android:textAllCaps="true"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_medium" />
@@ -166,15 +145,18 @@
                     android:id="@+id/cash_img"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
+                    android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_cash" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/cash_img"
                     android:layout_toRightOf="@+id/cash_img"
-                    android:text="By Cash"
+                    android:text="@string/by_cash"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 

@@ -4,29 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f3"
+    android:background="@color/colorWhite"
     tools:context="com.foodie.app.activities.PromotionActivity">
 
-
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:elevation="1dp"
-        android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="@color/colorTextBlack">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Promotions"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="16sp" />
-
-
-    </android.support.v7.widget.Toolbar>
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,22 +17,12 @@
         android:layout_below="@+id/toolbar"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="History" />
-
-
         <android.support.v7.widget.RecyclerView
-
             android:id="@+id/promotions_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"/>
 
-        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 

@@ -137,7 +137,6 @@ public class PastOrderDetailActivity extends AppCompatActivity {
         return value;
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

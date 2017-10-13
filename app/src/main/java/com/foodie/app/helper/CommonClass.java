@@ -10,10 +10,13 @@ import com.foodie.app.model.User;
 import com.foodie.app.model.Otp;
 import com.foodie.app.model.Shop;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Tamil on 9/22/2017.
@@ -55,6 +58,13 @@ public class CommonClass {
 
     public static CommonClass getInstance() {
         return ourInstance;
+    }
+
+    public static NumberFormat getNumberFormat() {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        numberFormat.setCurrency(Currency.getInstance("INR"));
+        numberFormat.setMinimumFractionDigits(0);
+        return numberFormat;
     }
 
     private CommonClass() {
