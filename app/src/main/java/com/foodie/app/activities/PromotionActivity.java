@@ -22,7 +22,6 @@ import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.PromotionResponse;
 import com.foodie.app.model.Promotions;
-import com.foodie.app.model.WalletHistory;
 
 import org.json.JSONObject;
 
@@ -116,7 +115,15 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this,AddMoneyActivity.class));
+        String tag = null;
+        try {
+            tag = getIntent().getExtras().getString("tag");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (tag != null && tag.equalsIgnoreCase(AddMoneyActivity.TAG)) {
+            startActivity(new Intent(this, AddMoneyActivity.class));
+        }
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
@@ -159,7 +166,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     }
 
     private void gotoFlow() {
-        startActivity(new Intent(this,WalletActivity.class));
+        startActivity(new Intent(this, AccountPaymentActivity.class));
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
         finish();
     }

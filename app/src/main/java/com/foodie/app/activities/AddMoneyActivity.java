@@ -2,6 +2,7 @@ package com.foodie.app.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -41,6 +42,8 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AddMoneyActivity extends AppCompatActivity {
+
+    public static final String TAG = "AddMoneyActivity";
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Context context = AddMoneyActivity.this;
@@ -132,7 +135,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.promo_layout:
-                startActivity(new Intent(this, PromotionActivity.class));
+                startActivity(new Intent(this, PromotionActivity.class).putExtra("tag",TAG ));
                 finish();
                 break;
         }
