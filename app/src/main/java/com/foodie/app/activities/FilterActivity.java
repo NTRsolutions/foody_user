@@ -1,6 +1,7 @@
 package com.foodie.app.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.fragments.HomeFragment.isFilterApplied;
 import static com.foodie.app.helper.CommonClass.cuisineIdArrayList;
@@ -143,5 +145,10 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

@@ -68,8 +68,8 @@
             android:id="@+id/filter_selection_image"
             android:layout_gravity="center_vertical"
            android:src="@drawable/circle"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp" />
+            android:layout_width="@dimen/_6sdp"
+            android:layout_height="@dimen/_6sdp" />
 
         <Button
             android:layout_marginTop="@dimen/_3sdp"

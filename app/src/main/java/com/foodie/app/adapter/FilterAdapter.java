@@ -73,6 +73,11 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
     @Override
     public void onBindHeaderViewHolder(ViewHolder holder, final int section) {
         holder.headerTxt.setText(list.get(section).getHeader());
+        if (section == 0)
+            holder.viewBox.setVisibility(View.GONE);
+        else
+            holder.viewBox.setVisibility(View.VISIBLE);
+
         holder.headerTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,18 +183,18 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
         CheckBox chkSelected;
-        View viewLine;
+        View viewLine, viewBox;
         LinearLayout itemLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
             if (isHeader) {
                 headerTxt = (TextView) itemView.findViewById(R.id.header);
+                viewBox = (View) itemView.findViewById(R.id.view_box);
             } else {
                 itemLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
                 chkSelected = (CheckBox) itemView.findViewById(R.id.chk_selected);
                 viewLine = (View) itemView.findViewById(R.id.view_line);
-
             }
 
         }
