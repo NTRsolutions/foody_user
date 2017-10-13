@@ -366,7 +366,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         } else if (itemQuantity == 1) {
             if (shops.getId() == CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShops().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
             String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
@@ -379,7 +379,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         } else {
             if (shops.getId() != CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShops().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
 

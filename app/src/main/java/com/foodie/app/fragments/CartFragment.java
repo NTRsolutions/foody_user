@@ -182,7 +182,7 @@ public class CartFragment extends Fragment {
             addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
             addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
             if (viewCartItemList != null && viewCartItemList.size() != 0)
-                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString() + " Mins");
+                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");
         } else if (CommonClass.getInstance().addressList != null) {
             addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
             addAddressBtn.setText(getResources().getString(R.string.add_address));
@@ -245,9 +245,9 @@ public class CartFragment extends Fragment {
                         payAmount.setText(currency + "" + topPayAmount);
 
                         //Set Restaurant Details
-                        restaurantName.setText(response.body().getProductList().get(0).getProduct().getShops().getName());
-                        restaurantDescription.setText(response.body().getProductList().get(0).getProduct().getShops().getDescription());
-                        String image_url = response.body().getProductList().get(0).getProduct().getShops().getAvatar();
+                        restaurantName.setText(response.body().getProductList().get(0).getProduct().getShop().getName());
+                        restaurantDescription.setText(response.body().getProductList().get(0).getProduct().getShop().getDescription());
+                        String image_url = response.body().getProductList().get(0).getProduct().getShop().getAvatar();
                         Glide.with(context).load(image_url).placeholder(R.drawable.item1).dontAnimate()
                                 .error(R.drawable.item1).into(restaurantImage);
                         deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
@@ -406,7 +406,7 @@ public class CartFragment extends Fragment {
                 locationInfoLayout.setVisibility(View.VISIBLE);
                 addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
                 addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
-                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShops().getEstimatedDeliveryTime().toString() + " Mins");
+                addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");
             } else {
                 locationErrorLayout.setVisibility(View.VISIBLE);
                 locationInfoLayout.setVisibility(View.GONE);

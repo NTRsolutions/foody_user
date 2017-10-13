@@ -19,11 +19,11 @@ public class FilterModel {
         this.header = header;
     }
 
-    public List<Cuisine> getFilters() {
+    public List<Cuisine> getCuisines() {
         return filters;
     }
 
-    public void setFilters(List<Cuisine> filters) {
+    public void setCuisines(List<Cuisine> filters) {
         this.filters = filters;
     }
 

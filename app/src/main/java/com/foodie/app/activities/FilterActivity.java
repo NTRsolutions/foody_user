@@ -1,5 +1,7 @@
 package com.foodie.app.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,10 +24,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.foodie.app.helper.CommonClass.cuisineList;
-import static com.foodie.app.helper.CommonClass.shopList;
+import static com.foodie.app.fragments.HomeFragment.isFilterApplied;
+import static com.foodie.app.helper.CommonClass.cuisineIdArrayList;
+import static com.foodie.app.helper.CommonClass.isOfferApplied;
+import static com.foodie.app.helper.CommonClass.isPureVegApplied;
 
-public class FilterActivity extends AppCompatActivity {
+public class FilterActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -33,6 +37,7 @@ public class FilterActivity extends AppCompatActivity {
     RecyclerView filterRv;
     public static Button applyFilterBtn;
     public static TextView resetTxt;
+    public static boolean isReset = false;
 
 
     private FilterAdapter adapter;
@@ -57,16 +62,6 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        filterRv.setLayoutManager(manager);
-        adapter = new FilterAdapter(this, modelListReference);
-        filterRv.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
         List<FilterModel> modelList = new ArrayList<>();
 
         List<String> filters = new ArrayList<>();
@@ -79,7 +74,7 @@ public class FilterActivity extends AppCompatActivity {
         cuisineList1.add(cuisine2);
         FilterModel model = new FilterModel();
         model.setHeader("Show Restaurants With");
-        model.setFilters(cuisineList1);
+        model.setCuisines(cuisineList1);
         modelList.add(model);
         filters = new ArrayList<>();
         List<Cuisine> cuisineList2 = CommonClass.cuisineList;
@@ -88,21 +83,65 @@ public class FilterActivity extends AppCompatActivity {
             filters.add(cuisineList2.get(i).getName());
         }
         model = new FilterModel();
-        model.setHeader("Cusines");
-        model.setFilters(cuisineList2);
+        model.setHeader("Cuisines");
+        model.setCuisines(cuisineList2);
         modelList.add(model);
-
         modelListReference.clear();
         modelListReference.addAll(modelList);
-        adapter.notifyDataSetChanged();
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        filterRv.setLayoutManager(manager);
+        adapter = new FilterAdapter(this, modelListReference);
+        isReset=false;
+        filterRv.setAdapter(adapter);
+
+        resetTxt.setOnClickListener(this);
+        applyFilterBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
 
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        FilterAdapter.cuisineIdList.clear();
+        isReset=false;
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_down);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.reset_txt:
+                isReset = true;
+                adapter.notifyDataSetChanged();
+                break;
+
+            case R.id.apply_filter:
+                isPureVegApplied = FilterAdapter.isPureVegApplied;
+                isOfferApplied = FilterAdapter.isOfferApplied;
+                cuisineIdArrayList=new ArrayList<>();
+                CommonClass.cuisineIdArrayList .addAll(FilterAdapter.cuisineIdList);
+                isFilterApplied = false;
+                if (isOfferApplied)
+                    isFilterApplied = true;
+                if (isPureVegApplied)
+                    isFilterApplied = true;
+                if (cuisineIdArrayList != null && cuisineIdArrayList.size() != 0)
+                    isFilterApplied = true;
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+                break;
+
+        }
 
     }
 }

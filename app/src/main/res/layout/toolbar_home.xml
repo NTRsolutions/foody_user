@@ -63,7 +63,16 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/filter_selection_image"
+            android:layout_gravity="center_vertical"
+           android:src="@drawable/circle"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp" />
+
         <Button
+            android:layout_marginTop="@dimen/_3sdp"
             android:id="@+id/filter"
             fontPath="fonts/Nunito-Bold.ttf"
             android:layout_width="@dimen/_60sdp"
@@ -71,7 +80,6 @@
             android:layout_alignParentEnd="true"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_filter"
-            android:drawablePadding="-10dp"
             android:gravity="center"
             android:text="@string/filter"
             android:textAllCaps="true"

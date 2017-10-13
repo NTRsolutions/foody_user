@@ -39,9 +39,7 @@ public class Product {
     @SerializedName("cart")
     @Expose
     private Cart cart;
-    @SerializedName("shops")
-    @Expose
-    private Shop shops;
+
     @SerializedName("shop")
     @Expose
     private Shop shop;
@@ -134,9 +132,6 @@ public class Product {
         this.cart = cart;
     }
 
-    public Shop getShops() {
-        return shops;
-    }
     public Shop getShop() {
         return shop;
     }
@@ -145,7 +140,4 @@ public class Product {
         this.shop = shop;
     }
 
-    public void setShops(Shop shops) {
-        this.shops = shops;
-    }
 }

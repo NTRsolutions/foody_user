@@ -277,7 +277,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             if (HotelViewActivity.shops.getId() != CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
                 isShopIsChanged=true;
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : "+CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShops().getName());            } else{
+                HotelViewActivity.viewCartShopName.setText("From : "+CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());            } else{
                 isShopIsChanged=false;
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
             }
@@ -292,7 +292,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             if (HotelViewActivity.shops.getId() != CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
                 isShopIsChanged=true;
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : "+CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShops().getName());            } else{
+                HotelViewActivity.viewCartShopName.setText("From : "+CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());            } else{
                 isShopIsChanged=false;
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
             }

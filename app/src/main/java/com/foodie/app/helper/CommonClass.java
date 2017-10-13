@@ -1,5 +1,6 @@
 package com.foodie.app.helper;
 
+import android.content.Intent;
 import android.location.Location;
 
 import com.foodie.app.model.AddCart;
@@ -30,6 +31,13 @@ public class CommonClass {
     public static double longitude ;
     public static String addressHeader = "";
     public static Location CURRENT_LOCATION = null;
+
+    /*------------Filter--------*/
+    public static boolean isPureVegApplied=false;
+    public static boolean isOfferApplied=false;
+    public static ArrayList<Integer> cuisineIdArrayList=null;
+
+
 
     public static String address = "";
     public static int addCartShopId =0;

@@ -37,14 +37,13 @@ import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.SharedHelper;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.model.Shop;
-import com.foodie.app.helper.CommonClass;
 
 import org.json.JSONObject;
 
@@ -61,7 +60,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.foodie.app.helper.CommonClass.addressList;
+import static com.foodie.app.helper.CommonClass.cuisineIdArrayList;
 import static com.foodie.app.helper.CommonClass.cuisineList;
+import static com.foodie.app.helper.CommonClass.isOfferApplied;
+import static com.foodie.app.helper.CommonClass.isPureVegApplied;
 import static com.foodie.app.helper.CommonClass.latitude;
 import static com.foodie.app.helper.CommonClass.longitude;
 import static com.foodie.app.helper.CommonClass.selectedAddress;
@@ -85,6 +87,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     StickyScrollView scrollView;
     @BindView(R.id.restaurant_count_txt)
     TextView restaurantCountTxt;
+    @BindView(R.id.offer_title_header)
+    TextView offerTitleHeader;
     private SkeletonScreen skeletonScreen, skeletonScreen2;
     private TextView addressLabel;
     private TextView addressTxt;
@@ -102,16 +106,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @BindView(R.id.discover_rv)
     RecyclerView discoverRv;
     int ADDRESS_SELECTION = 1;
+    int FILTER_APPLIED_CHECK = 2;
+    ImageView filterSelectionImage;
 
     private ViewGroup toolbar;
     private View toolbarLayout;
     AnimatedVectorDrawableCompat avdProgress;
+    public static ArrayList<Integer> cuisineSelectedList=null;
 
     String[] catagoery = {"Relevance", "Cost for Two", "Delivery Time", "Rating"};
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     List<Shop> restaurantList;
     RestaurantsAdapter adapterRestaurant;
+    public static boolean isFilterApplied = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -277,10 +285,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
         filterBtn = (Button) toolbarLayout.findViewById(R.id.filter);
+        filterSelectionImage = (ImageView) toolbarLayout.findViewById(R.id.filter_selection_image);
         filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, FilterActivity.class));
+                startActivityForResult(new Intent(context, FilterActivity.class), FILTER_APPLIED_CHECK);
                 getActivity().overridePendingTransition(R.anim.slide_up, R.anim.anim_nothing);
             }
         });
@@ -290,20 +299,31 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     private void findRestaurant() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("latitude", String.valueOf(latitude));
+        map.put("longitude", String.valueOf(longitude));
         //get User Profile Data
         if (CommonClass.getInstance().profileModel != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("latitude", String.valueOf(latitude));
-            map.put("longitude", String.valueOf(longitude));
             map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
-            getRestaurant(map);
+        }
+        if (isFilterApplied) {
+            filterSelectionImage.setVisibility(View.VISIBLE);
+            if (isOfferApplied)
+                map.put("offer", "1");
+            if (isPureVegApplied)
+                map.put("pure_veg", "1");
+            if (cuisineIdArrayList != null && cuisineIdArrayList.size() != 0) {
+                for (int i = 0; i < cuisineIdArrayList.size(); i++) {
+                    map.put("cuisine[" + "" + i + "]", cuisineIdArrayList.get(i).toString());
+                }
+            }
 
         } else {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("latitude", String.valueOf(latitude));
-            map.put("longitude", String.valueOf(longitude));
-            getRestaurant(map);
+            filterSelectionImage.setVisibility(View.GONE);
         }
+        getRestaurant(map);
+
+
     }
 
     private void getRestaurant(HashMap<String, String> map) {
@@ -311,11 +331,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         getres.enqueue(new Callback<List<Shop>>() {
             @Override
             public void onResponse(Call<List<Shop>> call, Response<List<Shop>> response) {
-                CommonClass.getInstance().shopList = response.body();
-                restaurantList.clear();
-                restaurantList.addAll(CommonClass.getInstance().shopList);
-                restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
-                adapterRestaurant.notifyDataSetChanged();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    CommonClass.getInstance().shopList = response.body();
+                    restaurantList.clear();
+                    restaurantList.addAll(CommonClass.getInstance().shopList);
+                    restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
+                    adapterRestaurant.notifyDataSetChanged();
+                }
+
             }
 
             @Override
@@ -339,7 +369,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    cuisineList=new ArrayList<Cuisine>();
+                    cuisineList = new ArrayList<Cuisine>();
                     cuisineList.addAll(response.body());
                 }
             }
@@ -415,7 +445,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
-
     }
 
 
@@ -440,6 +469,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             System.out.print("HomeFragment : Failure");
 
         }
+
+        if (requestCode == FILTER_APPLIED_CHECK && resultCode == Activity.RESULT_OK) {
+            System.out.print("HomeFragment : Filter Success");
+                findRestaurant();
+
+
+        } else if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_CANCELED) {
+            System.out.print("HomeFragment : Filter Failure");
+
+        }
+
     }
 
 
