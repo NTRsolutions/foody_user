@@ -1,10 +1,10 @@
 package com.foodie.app.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,11 +20,15 @@ import java.util.List;
 
 public class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.MyViewHolder> {
     private List<Promotions> list;
-    private Context context;
+    PromotionListener promotionListener;
 
-    public PromotionsAdapter(List<Promotions> list, Context con) {
+    public PromotionsAdapter(List<Promotions> list,PromotionListener promotionListener) {
         this.list = list;
-        this.context = con;
+        this.promotionListener=promotionListener;
+    }
+
+    public interface PromotionListener{
+        void onApplyBtnClick(Promotions promotions);
     }
 
     @Override
@@ -48,12 +52,9 @@ public class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Promotions PromotionsModel = list.get(position);
-        holder.promotionsDate.setText(PromotionsModel.promotionsDate);
-        holder.promotionsAmount.setText(PromotionsModel.promotionAmount);
-        holder.promotionsCode.setText(PromotionsModel.promotionCode);
-
-
+        Promotions promotionsModel = list.get(position);
+        holder.promoNameTxt.setText(promotionsModel.getPromoCode());
+        holder.statusBtnTxt.setTag(promotionsModel);
     }
 
     @Override
@@ -63,26 +64,21 @@ public class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.My
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private LinearLayout notificatioLayout;
-        private TextView promotionsDate, promotionsCode,promotionsAmount;
+
+        TextView promoNameTxt;
+        Button statusBtnTxt;
 
         private MyViewHolder(View view) {
             super(view);
-            notificatioLayout = (LinearLayout) view.findViewById(R.id.notification_layout);
-            promotionsDate = (TextView) view.findViewById(R.id.promotions_date);
-            promotionsAmount = (TextView) view.findViewById(R.id.promotions_amount);
-            promotionsCode = (TextView) view.findViewById(R.id.promotions_code);
-//            notificatioLayout.setOnClickListener(this);
+            promoNameTxt= (TextView) view.findViewById(R.id.promo_name_txt);
+            statusBtnTxt= (Button) view.findViewById(R.id.status_btn);
+
+            statusBtnTxt.setOnClickListener(this);
         }
 
         public void onClick(View v) {
-            if (v.getId() == notificatioLayout.getId()) {
-//                context.startActivity(new Intent(context, HotelViewActivity.class));
-                //Toast.makeText(v.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-            }
+            Promotions promotions= (Promotions) v.getTag();
+            promotionListener.onApplyBtnClick(promotions);
         }
-
     }
-
-
 }

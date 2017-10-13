@@ -119,13 +119,20 @@
         <activity
             android:name=".activities.CurrentOrderDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.AddMoneyActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.WalletActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3aef7a5b05836cf8166f23c95e43c52517bee917" />
 
         <activity android:name=".activities.ResetPasswordActivity" />
-        <activity android:name=".activities.SecretKeyActivity"></activity>
+        <activity android:name=".activities.SecretKeyActivity" />
+
     </application>
 
 </manifest>

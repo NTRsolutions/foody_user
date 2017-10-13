@@ -143,5 +143,22 @@
     <string name="address_hint">Dad\'s place, John\'s Home</string>
     <string name="cancel">Cancel</string>
 
+    <!--PAYMENT SCREEN-->
+    <string name="wallet_amount">Wallet Amount</string>
+    <string name="card">CARD</string>
+    <string name="pay_on_delivery">PAY ON DELIVERY</string>
+    <string name="by_cash">By cash</string>
+    <string name="walletHistory">WALLET</string>
+    <string name="history">History</string>
+    <string name="add">Add</string>
+    <string name="payment_options">Payment options</string>
+    <string name="promotion_details">Promotion details</string>
+    <string name="add_money">Add amount</string>
+    <string name="enter_the_amount">Enter the amount</string>
+    <string name="pay">pay</string>
+    <string name="promo_apply_text">Apply promo code to avail exciting offers</string>
+    <string name="apply">Apply</string>
+    <string name="promocode">Promocode</string>
+
 
 </resources>

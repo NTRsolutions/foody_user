@@ -12,15 +12,18 @@ import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Favorite;
 import com.foodie.app.model.FavoriteList;
 import com.foodie.app.model.ForgotPassword;
+import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
+import com.foodie.app.model.Otp;
+import com.foodie.app.model.PromotionResponse;
+import com.foodie.app.model.Promotions;
+import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.model.Search;
-import com.foodie.app.model.User;
-import com.foodie.app.model.LoginModel;
-import com.foodie.app.model.Otp;
-import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.Shop;
+import com.foodie.app.model.User;
+import com.foodie.app.model.WalletHistory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +38,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -90,9 +92,9 @@ public interface ApiInterface {
     Call<List<Category>> getCategories(@QueryMap HashMap<String, String> params);
 
 
-     /*-------------CUISINE--------------------*/
-     @GET("api/user/cuisines")
-     Call<List<Cuisine>> getcuCuisineCall();
+    /*-------------CUISINE--------------------*/
+    @GET("api/user/cuisines")
+    Call<List<Cuisine>> getcuCuisineCall();
 
 
     /*-------------CART--------------------*/
@@ -154,6 +156,14 @@ public interface ApiInterface {
     @GET("api/user/search")
     Call<Search> getSearch(@Query("name") String search);
 
+    /*-----------------------WALLET-----------------------*/
+    @GET("api/user/wallet")
+    Call<List<WalletHistory>> getWalletHistory();
 
+    @GET("api/user/wallet/promocode")
+    Call<List<Promotions>> getWalletPromoCode();
 
+    @FormUrlEncoded
+    @POST("api/user/wallet/promocode")
+    Call<PromotionResponse> applyWalletPromoCode(@Field("promocode_id") String id);
 }

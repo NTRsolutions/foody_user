@@ -1,18 +1,22 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.AccountPaymentAdapter;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.PaymentMethod;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -26,7 +30,16 @@ public class AccountPaymentActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.payment_method_lv)
     ListView paymentMethodLv;
+    @BindView(R.id.wallet_amount_txt)
+    TextView walletAmtTxt;
+    @BindView(R.id.wallet_layout)
+    RelativeLayout walletLayout;
 
+    NumberFormat numberFormat = CommonClass.getNumberFormat();
+    @BindView(R.id.back)
+    ImageView back;
+    @BindView(R.id.title)
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +48,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        title.setText(getResources().getString(R.string.payment));
 
         ArrayList<PaymentMethod> list = new ArrayList<>();
         list.add(new PaymentMethod("5431-XXXX-XXXX-4242", 0));
@@ -62,4 +68,23 @@ public class AccountPaymentActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
+    @OnClick(R.id.wallet_layout)
+    public void onViewClicked() {
+        startActivity(new Intent(this, WalletActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int walletMoney = CommonClass.profileModel.getWalletBalance();
+        if (walletMoney > 0) {
+            walletAmtTxt.setText(numberFormat.format(walletMoney));
+        }
+    }
+
+    @OnClick(R.id.back)
+    public void onBackClicked() {
+        onBackPressed();
+    }
 }
