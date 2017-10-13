@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,12 +36,13 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Order;
 import com.foodie.app.model.Cart;
+import com.foodie.app.model.Order;
 import com.robinhood.ticker.TickerUtils;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +107,12 @@ public class CartFragment extends Fragment {
     Button selectedAddressBtn;
     @BindView(R.id.error_layout_description)
     TextView errorLayoutDescription;
+    @BindView(R.id.use_wallet_chk_box)
+    CheckBox useWalletChkBox;
+    @BindView(R.id.amount_txt)
+    TextView amountTxt;
+    @BindView(R.id.wallet_layout)
+    LinearLayout walletLayout;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -128,6 +136,8 @@ public class CartFragment extends Fragment {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ViewCartAdapter viewCartAdapter;
     CustomDialog customDialog;
+
+    NumberFormat numberFormat=CommonClass.getNumberFormat();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -273,6 +283,12 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        int money=CommonClass.profileModel.getWalletBalance();
+        if(money>0){
+            amountTxt.setText(numberFormat.format(money));
+        }else{
+            walletLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -292,7 +308,6 @@ public class CartFragment extends Fragment {
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
-
     }
 
 
@@ -382,7 +397,7 @@ public class CartFragment extends Fragment {
                     CommonClass.getInstance().addCart = null;
                     CommonClass.getInstance().notificationCount = 0;
                     CommonClass.getInstance().selectedShop = null;
-                    CommonClass.getInstance().isSelectedOrder=new Order();
+                    CommonClass.getInstance().isSelectedOrder = new Order();
                     CommonClass.getInstance().isSelectedOrder = response.body();
                     startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();
@@ -415,5 +430,9 @@ public class CartFragment extends Fragment {
             System.out.print("CartFragment : Failure");
 
         }
+    }
+
+    @OnClick(R.id.wallet_layout)
+    public void onViewClicked() {
     }
 }
