@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
+import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.FilterModel;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
 
     private List<FilterModel> list = new ArrayList<>();
     private LayoutInflater inflater;
+    ArrayList cuisineArrayList=new ArrayList();
 
     public FilterAdapter(Context context, List<FilterModel> list) {
         Context context1 = context;
@@ -71,18 +74,21 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int section, int relativePosition, int absolutePosition) {
-        final String item = list.get(section).getFilters().get(relativePosition);
-        holder.filterNameTxt.setText(item);
-        holder.filterNameTxt.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(final ViewHolder holder, final int section, final int relativePosition, int absolutePosition) {
+        final String item = list.get(section).getFilters().get(relativePosition).getName();
+        holder.chkSelected.setText(item);
+        holder.chkSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if(holder.chkSelected.isChecked()){
-                    holder.chkSelected.setChecked(false);
-                }else {
-                    holder.chkSelected.setChecked(true);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Cuisine cuisine=list.get(section).getFilters().get(relativePosition);
+
                     FilterActivity.applyFilterBtn.setAlpha(1);
                     FilterActivity.resetTxt.setAlpha(1);
+
+                }
+                else {
+
                 }
             }
         });
@@ -91,7 +97,6 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
-        TextView filterNameTxt;
         CheckBox chkSelected;
         LinearLayout itemLayout;
 
@@ -101,7 +106,6 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
                 headerTxt = (TextView) itemView.findViewById(R.id.header);
             } else {
                 itemLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
-                filterNameTxt = (TextView) itemView.findViewById(R.id.filter_name);
                 chkSelected = (CheckBox) itemView.findViewById(R.id.chk_selected);
 
             }

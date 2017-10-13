@@ -5,18 +5,41 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.adapter.ViewPagerAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.model.Product;
+import com.foodie.app.model.Search;
+import com.foodie.app.model.Shop;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.foodie.app.fragments.RestaurantSearchFragment.skeletonScreen;
 
 
 /**
@@ -31,9 +54,19 @@ public class SearchFragment extends Fragment {
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     Unbinder unbinder;
+    @BindView(R.id.related_txt)
+    TextView relatedTxt;
+    EditText searchEt;
+    ProgressBar progressBar;
+    ImageView searchCloseImg;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+
+    public static List<Shop> shopList;
+    public static List<Product> productList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,9 +78,6 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         unbinder = ButterKnife.bind(this, view);
-
-
-
 
 
         return view;
@@ -83,21 +113,104 @@ public class SearchFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         System.out.println("SearchFragment");
+        shopList = new ArrayList<>();
+        productList = new ArrayList<>();
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_search, toolbar, false);
+        searchEt = (EditText) toolbarLayout.findViewById(R.id.search_et);
+        progressBar=(ProgressBar)toolbarLayout.findViewById(R.id.progress_bar);
+        searchCloseImg=(ImageView) toolbarLayout.findViewById(R.id.search_close_img);
+        searchEt.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if (s.length() != 0) {
+                    getSearch(s);
+                    searchCloseImg.setVisibility(View.VISIBLE);
+                    relatedTxt.setText("Related to \"" + s.toString()+"\"");
+                } else if (s.length() == 0) {
+                    relatedTxt.setText("Related to ");
+                    searchCloseImg.setVisibility(View.GONE);
+                    shopList.clear();
+                    productList.clear();
+                    relatedTxt.setText(s.toString());
+                    skeletonScreen.hide();
+                    RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+
         toolbar.addView(toolbarLayout);
         HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
-
+        searchCloseImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchEt.setText("");
+                shopList.clear();
+                productList.clear();
+                ProductSearchFragment.productsAdapter.notifyDataSetChanged();
+                RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
+            }
+        });
         //ViewPager Adapter
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new RestaurantFragment(), "RESTAURANT");
-        adapter.addFragment(new OrderHelpFragment(), "DISHES");
+        adapter.addFragment(new RestaurantSearchFragment(), "RESTAURANT");
+        adapter.addFragment(new ProductSearchFragment(), "DISHES");
         viewPager.setAdapter(adapter);
         //set ViewPager
         tabLayout.setupWithViewPager(viewPager);
 
+    }
+
+    private void getSearch(final CharSequence s) {
+        skeletonScreen.show();
+        progressBar.setVisibility(View.VISIBLE);
+        Call<Search> call = apiInterface.getSearch(s.toString());
+        call.enqueue(new Callback<Search>() {
+            @Override
+            public void onResponse(Call<Search> call, Response<Search> response) {
+                progressBar.setVisibility(View.GONE);
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    progressBar.setVisibility(View.GONE);
+                    shopList.clear();
+                    productList.clear();
+                    shopList.addAll(response.body().getShops());
+                    productList.addAll(response.body().getProducts());
+                    skeletonScreen.hide();
+                    ProductSearchFragment.productsAdapter.notifyDataSetChanged();
+                    RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Search> call, Throwable t) {
+
+            }
+        });
+
 
     }
+
 
 }

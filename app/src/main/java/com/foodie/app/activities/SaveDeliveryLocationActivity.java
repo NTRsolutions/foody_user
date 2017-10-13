@@ -27,6 +27,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
@@ -92,6 +94,14 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     Button save;
     @BindView(R.id.bottom_sheet)
     CardView bottomSheet;
+    @BindView(R.id.current_loc_img)
+    ImageView currentLocImg;
+    @BindView(R.id.other_address_header_et)
+    EditText otherAddressHeaderEt;
+    @BindView(R.id.cancel_txt)
+    TextView cancelTxt;
+    @BindView(R.id.other_address_title_layout)
+    RelativeLayout otherAddressTitleLayout;
 
     private String TAG = "SaveDelivery";
     private BottomSheetBehavior behavior;
@@ -214,7 +224,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
+                if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
+                    otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                    typeRadiogroup.setVisibility(View.GONE);
+                }
                 address.setType(radioButton.getText().toString().toLowerCase());
+
             }
         });
 
@@ -390,6 +405,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void saveAddress() {
+        if (address.getType().equalsIgnoreCase("other")) {
+            address.setType(otherAddressHeaderEt.getText().toString());
+        }
         if (address != null && address.getMapAddress() != null && validate()) {
             Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
@@ -483,7 +501,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick({R.id.backArrow, R.id.save,R.id.imgCurrentLoc})
+    @OnClick({R.id.backArrow, R.id.save, R.id.imgCurrentLoc, R.id.cancel_txt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.backArrow:
@@ -495,6 +513,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(16).build();
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
+                break;
+            case R.id.cancel_txt:
+                typeRadiogroup.setVisibility(View.VISIBLE);
                 break;
             case R.id.save:
                 address.setMapAddress(addressEdit.getText().toString());

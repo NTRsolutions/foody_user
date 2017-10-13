@@ -102,9 +102,9 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         } else {
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
         }
-        for (int i = 0; i < CommonClass.getInstance().list.size(); i++) {
-            if (list.get(0).getProduct().getShopId().equals(CommonClass.getInstance().list.get(i).getId()))
-                selectedShop = CommonClass.getInstance().list.get(i);
+        for (int i = 0; i < CommonClass.getInstance().shopList.size(); i++) {
+            if (list.get(0).getProduct().getShopId().equals(CommonClass.getInstance().shopList.get(i).getId()))
+                selectedShop = CommonClass.getInstance().shopList.get(i);
         }
 
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {

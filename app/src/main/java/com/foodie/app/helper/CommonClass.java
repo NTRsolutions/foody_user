@@ -1,10 +1,13 @@
 package com.foodie.app.helper;
 
+import android.location.Location;
+
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.AddressList;
 import com.foodie.app.model.Cart;
 import com.foodie.app.model.Category;
+import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.User;
 import com.foodie.app.model.Otp;
@@ -26,9 +29,10 @@ public class CommonClass {
 
     public Otp otpModel = null;
 
-    public static double latitude = 13.0587107;
-    public static double longitude = 80.2757063;
+    public static double latitude ;
+    public static double longitude ;
     public static String addressHeader = "";
+    public static Location CURRENT_LOCATION = null;
 
     public static String address = "";
     public static int addCartShopId =0;
@@ -37,7 +41,8 @@ public class CommonClass {
     public static Order isSelectedOrder = null;
     public static AddCart addCart = null;
 
-    public static List<Shop> list;
+    public static List<Shop> shopList;
+    public static List<Cuisine> cuisineList;
     public static List<Category> categoryList=null;
     public static List<Order> onGoingOrderList;
     public static List<Order> pastOrderList;

@@ -30,7 +30,6 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
-import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.DiscoverAdapter;
 import com.foodie.app.adapter.ImpressiveDishesAdapter;
@@ -38,13 +37,19 @@ import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.Address;
+import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.model.Shop;
 import com.foodie.app.helper.CommonClass;
 
+import org.json.JSONObject;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +61,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.foodie.app.helper.CommonClass.addressList;
+import static com.foodie.app.helper.CommonClass.cuisineList;
 import static com.foodie.app.helper.CommonClass.latitude;
 import static com.foodie.app.helper.CommonClass.longitude;
 import static com.foodie.app.helper.CommonClass.selectedAddress;
@@ -141,6 +147,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         locationAddressLayout.setVisibility(View.INVISIBLE);
         errorLoadingLayout.setVisibility(View.VISIBLE);
 
+        getCuisines();
+
         final ArrayList<ImpressiveDish> list = new ArrayList<>();
         list.add(new ImpressiveDish("Santhosh1", "Hello"));
         list.add(new ImpressiveDish("Santhosh2", "Hello"));
@@ -173,7 +181,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
         //Spinner
-        //Creating the ArrayAdapter instance having the country list
+        //Creating the ArrayAdapter instance having the country shopList
         ArrayAdapter aa = new ArrayAdapter(context, R.layout.spinner_layout, catagoery);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
@@ -192,9 +200,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .load(R.layout.skeleton_restaurant_list_item)
                 .count(2)
                 .show();
-
-        findRestaurant();
-
 
         final ArrayList<Restaurant> offerRestaurantList = new ArrayList<>();
         offerRestaurantList.add(new Restaurant("Madras Coffee House", "Cafe, South Indian", "", "3.8", "51 Mins", "$20", ""));
@@ -236,12 +241,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void run() {
                 //Do something after 5000ms
+                findRestaurant();
                 errorLoadingLayout.setVisibility(View.GONE);
                 locationAddressLayout.setVisibility(View.VISIBLE);
-                if (addressList != null&&addressList.getAddresses().size()!=0) {
-                    for (int i = 0; i <addressList.getAddresses().size() ; i++) {
-                        Address address1=addressList.getAddresses().get(i);
-                        if (latitude == address1.getLatitude() && longitude == address1.getLongitude()) {
+                if (addressList != null && addressList.getAddresses().size() != 0) {
+                    for (int i = 0; i < addressList.getAddresses().size(); i++) {
+                        Address address1 = addressList.getAddresses().get(i);
+                        if (getDoubleThreeDigits(latitude) == getDoubleThreeDigits(address1.getLatitude()) && getDoubleThreeDigits(longitude) == getDoubleThreeDigits(address1.getLongitude())) {
                             selectedAddress = address1;
                             addressLabel.setText(CommonClass.getInstance().addressHeader);
                             addressTxt.setText(CommonClass.getInstance().address);
@@ -249,10 +255,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
                             latitude = CommonClass.getInstance().selectedAddress.getLatitude();
                             longitude = CommonClass.getInstance().selectedAddress.getLongitude();
-//                            findRestaurant();
                             break;
-                        }
-                        else {
+                        } else {
                             addressLabel.setText(CommonClass.getInstance().addressHeader);
                             addressTxt.setText(CommonClass.getInstance().address);
                         }
@@ -289,15 +293,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         //get User Profile Data
         if (CommonClass.getInstance().profileModel != null) {
             HashMap<String, String> map = new HashMap<>();
-            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
-            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+            map.put("latitude", String.valueOf(latitude));
+            map.put("longitude", String.valueOf(longitude));
             map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
             getRestaurant(map);
 
         } else {
             HashMap<String, String> map = new HashMap<>();
-            map.put("latitude", String.valueOf(CommonClass.getInstance().latitude));
-            map.put("longitude", String.valueOf(CommonClass.getInstance().longitude));
+            map.put("latitude", String.valueOf(latitude));
+            map.put("longitude", String.valueOf(longitude));
             getRestaurant(map);
         }
     }
@@ -307,9 +311,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         getres.enqueue(new Callback<List<Shop>>() {
             @Override
             public void onResponse(Call<List<Shop>> call, Response<List<Shop>> response) {
-                CommonClass.getInstance().list = response.body();
+                CommonClass.getInstance().shopList = response.body();
                 restaurantList.clear();
-                restaurantList.addAll(CommonClass.getInstance().list);
+                restaurantList.addAll(CommonClass.getInstance().shopList);
                 restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
                 adapterRestaurant.notifyDataSetChanged();
             }
@@ -319,6 +323,40 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
             }
         });
+    }
+
+
+    public void getCuisines() {
+        Call<List<Cuisine>> call = apiInterface.getcuCuisineCall();
+        call.enqueue(new Callback<List<Cuisine>>() {
+            @Override
+            public void onResponse(Call<List<Cuisine>> call, Response<List<Cuisine>> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    cuisineList=new ArrayList<Cuisine>();
+                    cuisineList.addAll(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Cuisine>> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+    public double getDoubleThreeDigits(Double value) {
+        Double outputValue = new BigDecimal(value.toString()).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return outputValue;
+
     }
 
     Runnable action = new Runnable() {

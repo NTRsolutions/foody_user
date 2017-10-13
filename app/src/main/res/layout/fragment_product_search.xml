@@ -1,15 +1,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#eee"
     android:layout_height="match_parent"
-    tools:context="com.foodie.app.fragments.RestaurantSearchFragment">
+    android:background="#eee"
+    tools:context="com.foodie.app.fragments.ProductSearchFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/restaurants_rv"
+        android:id="@+id/product_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical"
+      />
 
 </FrameLayout>
