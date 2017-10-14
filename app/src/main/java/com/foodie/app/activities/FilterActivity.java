@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodie.app.R;
@@ -40,6 +41,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     public static Button applyFilterBtn;
     public static TextView resetTxt;
     public static boolean isReset = false;
+    @BindView(R.id.close_img)
+    ImageView closeImg;
 
 
     private FilterAdapter adapter;
@@ -54,9 +57,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
         applyFilterBtn = (Button) findViewById(R.id.apply_filter);
         resetTxt = (TextView) findViewById(R.id.reset_txt);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_close);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        closeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -65,7 +66,6 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         List<FilterModel> modelList = new ArrayList<>();
-
         List<String> filters = new ArrayList<>();
         Cuisine cuisine1 = new Cuisine();
         cuisine1.setName("Offers");
@@ -93,9 +93,11 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         LinearLayoutManager manager = new LinearLayoutManager(this);
         filterRv.setLayoutManager(manager);
         adapter = new FilterAdapter(this, modelListReference);
-        isReset=false;
+        if (isFilterApplied)
+            isReset = false;
+        else
+            isReset = true;
         filterRv.setAdapter(adapter);
-
         resetTxt.setOnClickListener(this);
         applyFilterBtn.setOnClickListener(this);
     }
@@ -103,16 +105,13 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-
-
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         FilterAdapter.cuisineIdList.clear();
-        isReset=false;
+        isReset = true;
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_down);
 
@@ -129,8 +128,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.apply_filter:
                 isPureVegApplied = FilterAdapter.isPureVegApplied;
                 isOfferApplied = FilterAdapter.isOfferApplied;
-                cuisineIdArrayList=new ArrayList<>();
-                CommonClass.cuisineIdArrayList .addAll(FilterAdapter.cuisineIdList);
+                cuisineIdArrayList = new ArrayList<>();
+                CommonClass.cuisineIdArrayList.addAll(FilterAdapter.cuisineIdList);
                 isFilterApplied = false;
                 if (isOfferApplied)
                     isFilterApplied = true;

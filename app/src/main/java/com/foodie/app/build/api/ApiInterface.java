@@ -20,6 +20,7 @@ import com.foodie.app.model.PromotionResponse;
 import com.foodie.app.model.Promotions;
 import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.ResetPassword;
+import com.foodie.app.model.RestaurantsData;
 import com.foodie.app.model.Search;
 import com.foodie.app.model.Shop;
 import com.foodie.app.model.User;
@@ -86,7 +87,7 @@ public interface ApiInterface {
     /*-------------SHOP--------------------*/
 
     @GET("api/user/shops")
-    Call<List<Shop>> getshops(@QueryMap HashMap<String, String> params);
+    Call<RestaurantsData> getshops(@QueryMap HashMap<String, String> params);
 
     @GET("api/user/categories")
     Call<List<Category>> getCategories(@QueryMap HashMap<String, String> params);

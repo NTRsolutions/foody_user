@@ -8,7 +8,7 @@
     tools:ignore="UseCompoundDrawables">
 
     <ImageView
-        android:id="@+id/dishImg"
+        android:id="@+id/banner_img"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="@dimen/_150sdp"
         android:scaleType="centerCrop"

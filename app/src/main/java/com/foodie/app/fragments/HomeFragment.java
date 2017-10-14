@@ -32,17 +32,19 @@ import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.DiscoverAdapter;
-import com.foodie.app.adapter.ImpressiveDishesAdapter;
+import com.foodie.app.adapter.BannerAdapter;
 import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Address;
+import com.foodie.app.model.Banner;
 import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Discover;
 import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
+import com.foodie.app.model.RestaurantsData;
 import com.foodie.app.model.Shop;
 
 import org.json.JSONObject;
@@ -120,6 +122,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     List<Shop> restaurantList;
     RestaurantsAdapter adapterRestaurant;
     public static boolean isFilterApplied = false;
+    BannerAdapter bannerAdapter;
+    List<Banner> bannerList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,36 +160,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         errorLoadingLayout.setVisibility(View.VISIBLE);
 
         getCuisines();
-
-        final ArrayList<ImpressiveDish> list = new ArrayList<>();
-        list.add(new ImpressiveDish("Santhosh1", "Hello"));
-        list.add(new ImpressiveDish("Santhosh2", "Hello"));
-        list.add(new ImpressiveDish("Santhosh3", "Hello"));
-        list.add(new ImpressiveDish("Santhosh4", "Hello"));
-        list.add(new ImpressiveDish("Santhosh5", "Hello"));
-        list.add(new ImpressiveDish("Santhosh6", "Hello"));
-        list.add(new ImpressiveDish("Santhosh7", "Hello"));
-        list.add(new ImpressiveDish("Santhosh8", "Hello"));
-        list.add(new ImpressiveDish("Santhosh9", "Hello"));
-        list.add(new ImpressiveDish("Santhosh10", "Hello"));
-
-
-        ImpressiveDishesAdapter adapter = new ImpressiveDishesAdapter(list, context);
+        bannerList = new ArrayList<>();
+        bannerAdapter = new BannerAdapter(bannerList, context,getActivity());
         impressiveDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         impressiveDishesRv.setItemAnimator(new DefaultItemAnimator());
         skeletonScreen2 = Skeleton.bind(impressiveDishesRv)
-                .adapter(adapter)
+                .adapter(bannerAdapter)
                 .load(R.layout.skeleton_impressive_list_item)
                 .count(3)
                 .show();
 //        impressiveDishesRv.setAdapter(adapter);
-        adapter.setOnItemClickListener(new ImpressiveDishesAdapter.ClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                ImpressiveDish dish = list.get(position);
-                Log.d("Hello", "onItemClick position: " + dish.getName());
-            }
-        });
         HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
         //Spinner
@@ -322,15 +306,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             filterSelectionImage.setVisibility(View.GONE);
         }
         getRestaurant(map);
-
-
     }
 
     private void getRestaurant(HashMap<String, String> map) {
-        Call<List<Shop>> getres = apiInterface.getshops(map);
-        getres.enqueue(new Callback<List<Shop>>() {
+        Call<RestaurantsData> call = apiInterface.getshops(map);
+        call.enqueue(new Callback<RestaurantsData>() {
             @Override
-            public void onResponse(Call<List<Shop>> call, Response<List<Shop>> response) {
+            public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
+                skeletonScreen.hide();
+                skeletonScreen2.hide();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -339,20 +323,24 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    CommonClass.getInstance().shopList = response.body();
+
+                    CommonClass.getInstance().shopList=response.body().getShops();
                     restaurantList.clear();
                     restaurantList.addAll(CommonClass.getInstance().shopList);
+                    bannerList.addAll(response.body().getBanners());
                     restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
                     adapterRestaurant.notifyDataSetChanged();
+                    bannerAdapter.notifyDataSetChanged();
                 }
-
             }
 
             @Override
-            public void onFailure(Call<List<Shop>> call, Throwable t) {
+            public void onFailure(Call<RestaurantsData> call, Throwable t) {
 
             }
         });
+
+
     }
 
 
@@ -412,13 +400,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onStart() {
         super.onStart();
-        restaurantsRv.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                skeletonScreen.hide();
-                skeletonScreen2.hide();
-            }
-        }, 3000);
     }
 
     @Override

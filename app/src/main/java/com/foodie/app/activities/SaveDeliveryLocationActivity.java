@@ -22,6 +22,8 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -121,8 +123,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     CoordinatorLayout coordinatorLayout;
     com.foodie.app.model.Address address = null;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    Animation slide_down, slide_up;
 
     boolean isAddressSave = false;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +134,16 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         setContentView(R.layout.activity_save_delivery_location);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
+        context = SaveDeliveryLocationActivity.this;
         address = new com.foodie.app.model.Address();
         address.setType("other");
         //Intialize Animation line
         initializeAvd();
+        //Load animation
+        slide_down = AnimationUtils.loadAnimation(context,
+                R.anim.slide_down);
+        slide_up = AnimationUtils.loadAnimation(context,
+                R.anim.slide_up);
 
         isAddressSave = getIntent().getBooleanExtra("get_address", false);
 
@@ -161,20 +171,25 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 // React to state change
                 // to collapse to show
-                if (BottomSheetBehavior.STATE_DRAGGING == newState) {
+                if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
+                    dummyImageView.startAnimation(slide_down);
                     dummyImageView.setVisibility(View.GONE);
 
-                } else if (BottomSheetBehavior.STATE_COLLAPSED == newState) {
-                    dummyImageView.setVisibility(View.GONE);
                 } else if (BottomSheetBehavior.STATE_EXPANDED == newState) {
                     dummyImageView.setVisibility(View.VISIBLE);
+                    dummyImageView.startAnimation(slide_up);
+
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // React to dragging events
-
+                Log.e("Slide :", "" + slideOffset);
+                if (slideOffset < 0.9) {
+                    dummyImageView.setVisibility(View.GONE);
+                    dummyImageView.startAnimation(slide_down);
+                }
 
             }
 
@@ -213,7 +228,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     } else if (address.getType().equals("work")) {
                         workRadio.setChecked(true);
                     } else {
-                        otherRadio.setChecked(true);
+                        homeRadio.setChecked(true);
                     }
                 }
             }
@@ -516,6 +531,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 break;
             case R.id.cancel_txt:
                 typeRadiogroup.setVisibility(View.VISIBLE);
+                homeRadio.setChecked(true);
                 break;
             case R.id.save:
                 address.setMapAddress(addressEdit.getText().toString());

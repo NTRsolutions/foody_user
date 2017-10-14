@@ -104,9 +104,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_60sdp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half"
+            android:layout_marginTop="@dimen/activity_vertical_margin_half"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -123,47 +123,48 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/radio_button"
                     android:button="@null"
-                    android:drawableTop="@drawable/ic_home"
+                    android:checked="true"
+                    android:drawableTop="@drawable/home_selector"
                     android:gravity="center"
-                    android:padding="8dp"
+                    android:padding="@dimen/_3sdp"
                     android:text="Home"
-                    android:textAllCaps="true" />
+                    android:textAllCaps="true"
+                    android:textColor="@color/item_tint_selector" />
 
                 <RadioButton
                     android:id="@+id/work_radio"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/radio_button"
                     android:button="@null"
-                    android:drawableTop="@drawable/ic_work"
+                    android:drawableTop="@drawable/work_selector"
                     android:gravity="center"
-                    android:padding="8dp"
+                    android:padding="@dimen/_3sdp"
                     android:text="@string/work"
-                    android:textAllCaps="true" />
+                    android:textAllCaps="true"
+                    android:textColor="@color/item_tint_selector" />
 
                 <RadioButton
                     android:id="@+id/other_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/radio_button"
                     android:button="@null"
-                    android:checked="true"
-                    android:drawableTop="@drawable/ic_pin_locator_1"
+                    android:drawableTop="@drawable/other_selector"
                     android:gravity="center"
-                    android:padding="8dp"
+                    android:padding="@dimen/_3sdp"
                     android:text="@string/other"
-                    android:textAllCaps="true" />
+                    android:textAllCaps="true"
+                    android:textColor="@color/item_tint_selector" />
 
             </RadioGroup>
 
             <RelativeLayout
                 android:id="@+id/other_address_title_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/_5sdp">
 
                 <EditText
                     android:id="@+id/other_address_header_et"

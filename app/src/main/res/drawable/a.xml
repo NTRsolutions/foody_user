@@ -11,7 +11,7 @@
             <solid android:color="@android:color/transparent" />
             <padding android:top="8dp" android:bottom="8dp"/>
             <stroke
-                android:width="3dp"
+                android:width="4dp"
                 android:color="@color/colorAccent" />
         </shape>
     </item>
