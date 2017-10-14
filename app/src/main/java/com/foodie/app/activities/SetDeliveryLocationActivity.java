@@ -4,18 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.DeliveryLocationAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.AddressList;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -43,6 +46,8 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     @BindView(R.id.current_location_ll)
     LinearLayout currentLocationLl;
     LinearLayoutManager manager;
+    @BindView(R.id.animation_line_cart_add)
+    ImageView animationLineCartAdd;
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     @BindView(R.id.find_place_ll)
     LinearLayout findPlaceLl;
@@ -51,6 +56,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     private List<AddressList> modelListReference = new ArrayList<>();
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     List<AddressList> modelList = new ArrayList<>();
+    AnimatedVectorDrawableCompat avdProgress;
 
     public static boolean isAddressSelection = false;
     Activity activity;
@@ -62,6 +68,9 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         activity = SetDeliveryLocationActivity.this;
 
+        //Intialize Animation line
+        initializeAvd();
+
         isAddressSelection = getIntent().getBooleanExtra("get_address", false);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -71,7 +80,12 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        modelListReference.clear();
+        AddressList addressList= new AddressList();
+        addressList.setHeader(getResources().getString(R.string.saved_addresses));
+        addressList.setAddresses(CommonClass.profileModel.getAddresses());
+        modelListReference.clear();
+        modelListReference.add(addressList);
         manager = new LinearLayoutManager(this);
         deliveryLocationRv.setLayoutManager(manager);
         adapter = new DeliveryLocationAdapter(this, activity, modelListReference);
@@ -86,6 +100,15 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
 
     }
 
+
+    private void initializeAvd() {
+        avdProgress = AnimatedVectorDrawableCompat.create(getApplicationContext(), R.drawable.avd_line);
+        animationLineCartAdd.setBackground(avdProgress);
+        animationLineCartAdd.setVisibility(View.VISIBLE);
+        avdProgress.start();
+    }
+
+
     private void getAddress() {
         Call<List<Address>> getres = apiInterface.getAddresses();
         getres.enqueue(new Callback<List<Address>>() {
@@ -93,6 +116,8 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                 if (response.isSuccessful()) {
 
+                    animationLineCartAdd.setVisibility(View.GONE);
+                    avdProgress.stop();
                     AddressList model = new AddressList();
                     model.setHeader(getResources().getString(R.string.saved_addresses));
                     model.setAddresses(response.body());

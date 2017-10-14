@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.foodie.app.fragments.RestaurantSearchFragment">
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/restaurants_rv"
         android:layout_width="match_parent"

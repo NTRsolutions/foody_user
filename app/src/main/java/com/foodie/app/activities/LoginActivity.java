@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.foodie.app.CountryPicker.Country;
 import com.foodie.app.CountryPicker.CountryPicker;
 import com.foodie.app.CountryPicker.CountryPickerListener;
@@ -21,6 +23,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.AddCart;
@@ -28,6 +31,7 @@ import com.foodie.app.model.AddressList;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.User;
 import com.foodie.app.utils.TextUtils;
+import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -46,7 +50,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
 
-
     @BindView(R.id.app_logo)
     ImageView appLogo;
     @BindView(R.id.ed_mobile_number)
@@ -63,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
     ImageView facebookLogin;
     @BindView(R.id.google_login)
     ImageView googleLogin;
-
     String mobile, password;
     String GRANT_TYPE = "password";
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
@@ -81,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
     ImageView eyeImg;
     private CountryPicker mCountryPicker;
     String country_code = "+91";
+    ConnectionHelper connectionHelper;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         context = LoginActivity.this;
+        activity = LoginActivity.this;
+        connectionHelper = new ConnectionHelper(context);
 
         mCountryPicker = CountryPicker.newInstance("Select Country");
         // You can limit the displayed countries
@@ -148,18 +154,21 @@ public class LoginActivity extends AppCompatActivity {
                 mCountryPicker.dismiss();
             }
         });
+
         countryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
             }
         });
+
         countryNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
             }
         });
+
         getUserCountryInfo();
     }
 
@@ -204,7 +213,13 @@ public class LoginActivity extends AppCompatActivity {
             map.put("grant_type", GRANT_TYPE);
             map.put("client_id", BuildConfigure.CLIENT_ID);
             map.put("client_secret", BuildConfigure.CLIENT_SECRET);
-            login(map);
+
+            if(connectionHelper.isConnectingToInternet()){
+                login(map);
+            }else {
+                Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+            }
+
         }
     }
 

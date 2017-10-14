@@ -48,10 +48,24 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#eee" />
+        android:layout_height="@dimen/_2sdp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eee" />
+
+        <ImageView
+            android:id="@+id/animation_line_cart_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="@dimen/_2sdp"
+            android:paddingRight="@dimen/_2sdp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 
     <android.support.v4.widget.NestedScrollView
@@ -62,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <include layout="@layout/current_location_header" />
 
             <android.support.v7.widget.RecyclerView

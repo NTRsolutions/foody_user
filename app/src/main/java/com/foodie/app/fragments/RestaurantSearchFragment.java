@@ -17,10 +17,8 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.R;
 import com.foodie.app.adapter.RestaurantsAdapter;
-import com.foodie.app.model.Shop;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,13 +31,13 @@ import static com.foodie.app.fragments.SearchFragment.shopList;
  */
 public class RestaurantSearchFragment extends Fragment {
 
-    public  static RestaurantsAdapter restaurantsAdapter;
+    public static RestaurantsAdapter restaurantsAdapter;
 
     Unbinder unbinder;
-    @BindView(R.id.restaurants_rv)
-    RecyclerView restaurantsRv;
     Context context;
     public static SkeletonScreen skeletonScreen;
+    @BindView(R.id.restaurants_rv)
+    RecyclerView restaurantsRv;
 
     public RestaurantSearchFragment() {
         // Required empty public constructor
@@ -52,7 +50,7 @@ public class RestaurantSearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
         unbinder = ButterKnife.bind(this, view);
-        context=getActivity();
+        context = getActivity();
 
         return view;
     }
@@ -65,7 +63,7 @@ public class RestaurantSearchFragment extends Fragment {
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
-        shopList=new ArrayList<>();
+        shopList = new ArrayList<>();
         restaurantsAdapter = new RestaurantsAdapter(shopList, context, getActivity());
         skeletonScreen = Skeleton.bind(restaurantsRv)
                 .adapter(restaurantsAdapter)

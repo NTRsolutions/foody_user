@@ -38,6 +38,7 @@ import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Banner;
 import com.foodie.app.model.Cuisine;
@@ -46,6 +47,7 @@ import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.model.RestaurantsData;
 import com.foodie.app.model.Shop;
+import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -91,7 +93,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     TextView restaurantCountTxt;
     @BindView(R.id.offer_title_header)
     TextView offerTitleHeader;
-    private SkeletonScreen skeletonScreen, skeletonScreen2;
+    private SkeletonScreen skeletonScreen, skeletonScreen2, skeletonText1, skeletonText2, skeletonSpinner;
     private TextView addressLabel;
     private TextView addressTxt;
     private LinearLayout locationAddressLayout;
@@ -102,7 +104,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @BindView(R.id.restaurants_offer_rv)
     RecyclerView restaurantsOfferRv;
     @BindView(R.id.impressive_dishes_rv)
-    RecyclerView impressiveDishesRv;
+    RecyclerView bannerRv;
     @BindView(R.id.restaurants_rv)
     RecyclerView restaurantsRv;
     @BindView(R.id.discover_rv)
@@ -114,7 +116,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private ViewGroup toolbar;
     private View toolbarLayout;
     AnimatedVectorDrawableCompat avdProgress;
-    public static ArrayList<Integer> cuisineSelectedList=null;
+    public static ArrayList<Integer> cuisineSelectedList = null;
 
     String[] catagoery = {"Relevance", "Cost for Two", "Delivery Time", "Rating"};
 
@@ -124,20 +126,22 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public static boolean isFilterApplied = false;
     BannerAdapter bannerAdapter;
     List<Banner> bannerList;
+    ConnectionHelper connectionHelper;
+    Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = getContext();
+        activity = getActivity();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-
         return view;
-
 
     }
 
@@ -146,8 +150,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         System.out.println("HomeFragment");
-
-
+        connectionHelper= new ConnectionHelper(context);
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_home, toolbar, false);
@@ -159,17 +162,29 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         locationAddressLayout.setVisibility(View.INVISIBLE);
         errorLoadingLayout.setVisibility(View.VISIBLE);
 
-        getCuisines();
+
         bannerList = new ArrayList<>();
-        bannerAdapter = new BannerAdapter(bannerList, context,getActivity());
-        impressiveDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        impressiveDishesRv.setItemAnimator(new DefaultItemAnimator());
-        skeletonScreen2 = Skeleton.bind(impressiveDishesRv)
+        bannerAdapter = new BannerAdapter(bannerList, context, getActivity());
+        bannerRv.setHasFixedSize(true);
+        bannerRv.setItemViewCacheSize(20);
+        bannerRv.setDrawingCacheEnabled(true);
+        bannerRv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        bannerRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        bannerRv.setItemAnimator(new DefaultItemAnimator());
+        skeletonScreen2 = Skeleton.bind(bannerRv)
                 .adapter(bannerAdapter)
                 .load(R.layout.skeleton_impressive_list_item)
                 .count(3)
                 .show();
-//        impressiveDishesRv.setAdapter(adapter);
+        skeletonText1 = Skeleton.bind(offerTitleHeader)
+                .load(R.layout.skeleton_label)
+                .show();
+        skeletonText2 = Skeleton.bind(restaurantCountTxt)
+                .load(R.layout.skeleton_label)
+                .show();
+        skeletonSpinner = Skeleton.bind(catagoerySpinner)
+                .load(R.layout.skeleton_label)
+                .show();
         HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
 
         //Spinner
@@ -280,6 +295,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         toolbar.addView(toolbarLayout);
         //intialize image line
         initializeAvd();
+
+//Get cuisine values
+        if (connectionHelper.isConnectingToInternet()) {
+            getCuisines();
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+        }
+
+
     }
 
     private void findRestaurant() {
@@ -305,7 +329,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         } else {
             filterSelectionImage.setVisibility(View.GONE);
         }
-        getRestaurant(map);
+
+        if (connectionHelper.isConnectingToInternet()) {
+            getRestaurant(map);
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+        }
+
     }
 
     private void getRestaurant(HashMap<String, String> map) {
@@ -315,6 +345,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
                 skeletonScreen.hide();
                 skeletonScreen2.hide();
+                skeletonText1.hide();
+                skeletonText2.hide();
+                skeletonSpinner.hide();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -324,7 +357,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     }
                 } else if (response.isSuccessful()) {
 
-                    CommonClass.getInstance().shopList=response.body().getShops();
+                    CommonClass.getInstance().shopList = response.body().getShops();
                     restaurantList.clear();
                     restaurantList.addAll(CommonClass.getInstance().shopList);
                     bannerList.addAll(response.body().getBanners());
@@ -453,7 +486,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         if (requestCode == FILTER_APPLIED_CHECK && resultCode == Activity.RESULT_OK) {
             System.out.print("HomeFragment : Filter Success");
-                findRestaurant();
+            findRestaurant();
 
 
         } else if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_CANCELED) {

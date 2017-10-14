@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.ViewSkeletonScreen;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
@@ -34,10 +36,12 @@ import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Cart;
 import com.foodie.app.model.Order;
+import com.foodie.app.utils.Utils;
 import com.robinhood.ticker.TickerUtils;
 
 import org.json.JSONObject;
@@ -136,13 +140,17 @@ public class CartFragment extends Fragment {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ViewCartAdapter viewCartAdapter;
     CustomDialog customDialog;
+    NumberFormat numberFormat = CommonClass.getNumberFormat();
+    ViewSkeletonScreen skeleton;
+    ConnectionHelper connectionHelper;
+    Activity activity;
 
-    NumberFormat numberFormat=CommonClass.getNumberFormat();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = getContext();
+        this.activity = getActivity();
 
     }
 
@@ -150,6 +158,7 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         ButterKnife.bind(this, view);
+        connectionHelper = new ConnectionHelper(context);
 
       /*  Intialize Global Values*/
         itemTotalAmount = (TextView) view.findViewById(R.id.item_total_amount);
@@ -167,12 +176,18 @@ public class CartFragment extends Fragment {
             errorLayout.setVisibility(View.VISIBLE);
             errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
         } else {
+            skeleton = Skeleton.bind(dataLayout)
+                    .load(R.layout.skeleton_fragment_cart)
+                    .show();
             dataLayout.setVisibility(View.VISIBLE);
             errorLayout.setVisibility(View.GONE);
             errorLayoutDescription.setText(getResources().getString(R.string.cart_error_description));
-            getViewCart();
+            if (connectionHelper.isConnectingToInternet()) {
+                getViewCart();
+            } else {
+                Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+            }
         }
-
 
         viewCartItemList = new ArrayList<>();
         //Offer Restaurant Adapter
@@ -212,17 +227,15 @@ public class CartFragment extends Fragment {
     }
 
     private void getViewCart() {
-        customDialog.show();
         Call<AddCart> call = apiInterface.getViewCart();
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                skeleton.hide();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
                     errorLayout.setVisibility(View.VISIBLE);
                     dataLayout.setVisibility(View.GONE);
                     try {
-
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
@@ -283,10 +296,10 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        int money=CommonClass.profileModel.getWalletBalance();
-        if(money>0){
+        int money = CommonClass.profileModel.getWalletBalance();
+        if (money > 0) {
             amountTxt.setText(numberFormat.format(money));
-        }else{
+        } else {
             walletLayout.setVisibility(View.GONE);
         }
     }
@@ -372,7 +385,11 @@ public class CartFragment extends Fragment {
 
             case R.id.proceed_to_pay_btn:
                 /**  If address is filled */
-                checkOut(CommonClass.getInstance().selectedAddress.getId());
+                if (connectionHelper.isConnectingToInternet()) {
+                    checkOut(CommonClass.getInstance().selectedAddress.getId());
+                } else {
+                    Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+                }
                 break;
 
         }

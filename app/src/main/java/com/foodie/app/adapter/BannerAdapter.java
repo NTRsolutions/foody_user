@@ -3,6 +3,7 @@ package com.foodie.app.adapter;
 import android.app.Activity;
 import android.content.Context;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
+import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Banner;
 import com.foodie.app.model.ImpressiveDish;
@@ -53,6 +55,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 Banner banner = list.get(position);
+                context.startActivity(new Intent(context, HotelViewActivity.class));
                 CommonClass.getInstance().selectedShop = banner.getShop();
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 Log.d("Hello", "onItemClick position: " + banner.getShop().getName());
@@ -76,7 +79,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
         public MyViewHolder(View view) {
             super(view);
             bannerImg = (ImageView) view.findViewById(R.id.banner_img);
-
 
         }
 

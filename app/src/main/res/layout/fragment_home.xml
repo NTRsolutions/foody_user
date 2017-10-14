@@ -21,6 +21,7 @@
             android:background="@drawable/avd_line" />
 
         <LinearLayout
+            android:id="@+id/root_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -28,6 +29,9 @@
             <!--    Imprssive Dish-->
 
             <LinearLayout
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
@@ -38,9 +42,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:paddingLeft="@dimen/activity_vertical_margin"
-                    android:paddingRight="@dimen/activity_vertical_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
                     android:text="@string/let_impress_you"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_tiny" />
@@ -79,6 +80,7 @@
                     android:typeface="sans" />
 
                 <Spinner
+
                     android:id="@+id/catagoery_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

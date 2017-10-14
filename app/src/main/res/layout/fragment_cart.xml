@@ -36,8 +36,8 @@
 
                     <ImageView
                         android:id="@+id/restaurant_image"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="@dimen/_70sdp"
                         android:contentDescription="@string/restaurant"
                         android:scaleType="centerCrop"
                         android:src="@drawable/login_pic" />

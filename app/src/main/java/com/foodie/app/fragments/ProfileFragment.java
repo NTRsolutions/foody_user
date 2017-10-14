@@ -1,8 +1,12 @@
 package com.foodie.app.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -114,6 +118,8 @@ public class ProfileFragment extends Fragment {
             //set Error Layout
             errorLayout.setVisibility(View.VISIBLE);
         }
+
+
         return view;
     }
 
@@ -190,6 +196,12 @@ public class ProfileFragment extends Fragment {
             userName.setText(CommonClass.getInstance().profileModel.getName());
             userEmail.setText(" - " + CommonClass.getInstance().profileModel.getEmail());
             Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
+            userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(context, EditAccountActivity.class));
+                }
+            });
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -226,10 +238,7 @@ public class ProfileFragment extends Fragment {
                 }
                 break;
             case R.id.logout:
-                SharedHelper.putKey(context, "logged", "false");
-                startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                CommonClass.getInstance().profileModel = null;
-                getActivity().finish();
+                alertDialog();
                 break;
             case R.id.login_btn:
                 SharedHelper.putKey(context, "logged", "false");
@@ -288,5 +297,33 @@ public class ProfileFragment extends Fragment {
         v.startAnimation(a);
     }
 
+
+    public void alertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure you want to logout?")
+                .setPositiveButton(getResources().getString(R.string.logout), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        SharedHelper.putKey(context, "logged", "false");
+                        startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        CommonClass.getInstance().profileModel = null;
+                        getActivity().finish();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(getResources().getColor(R.color.theme));
+        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.theme));
+        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+    }
 
 }

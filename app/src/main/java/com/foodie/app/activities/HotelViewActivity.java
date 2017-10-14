@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -28,16 +29,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.ViewSkeletonScreen;
 import com.foodie.app.HeaderView;
 import com.foodie.app.R;
 import com.foodie.app.adapter.HotelCatagoeryAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.Favorite;
 import com.foodie.app.model.Shop;
+import com.foodie.app.utils.Utils;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -95,14 +100,13 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     TextView rating;
     @BindView(R.id.delivery_time)
     TextView deliveryTime;
+    @BindView(R.id.root_layout)
+    CoordinatorLayout rootLayout;
     private boolean isHideToolbarView = false;
     @BindView(R.id.toolbar_header_view)
     HeaderView toolbarHeaderView;
     @BindView(R.id.float_header_view)
     HeaderView floatHeaderView;
-
-
-    Activity activity;
     int restaurantPosition = 0;
     boolean isShopIsChanged = true;
     int priceAmount = 0;
@@ -112,12 +116,14 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
 
     Context context;
+    ConnectionHelper connectionHelper;
+    Activity activity;
     public static Shop shops;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     List<Category> categoryList;
     HotelCatagoeryAdapter catagoeryAdapter;
-
+    ViewSkeletonScreen skeleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +131,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         setContentView(R.layout.activity_hotel_view);
         ButterKnife.bind(this);
         context = HotelViewActivity.this;
+        activity = HotelViewActivity.this;
+        connectionHelper=new ConnectionHelper(context);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -300,15 +308,24 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onCheckedChanged(View view, boolean checked) {
                 Log.e("HeartButton", "click " + checked);
-                if (checked) {
-                    doFavorite(shops.getId());
+
+                if (connectionHelper.isConnectingToInternet()) {
+                    if (checked) {
+                        doFavorite(shops.getId());
+                    } else {
+                        deleteFavorite(shops.getId());
+                    }
                 } else {
-                    deleteFavorite(shops.getId());
+                    Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
+
 
             }
         });
 
+        skeleton = Skeleton.bind(rootLayout)
+                .load(R.layout.skeleton_hotel_view)
+                .show();
 
     }
 
@@ -400,6 +417,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(@NonNull Call<List<Category>> call, Response<List<Category>> response) {
                 categoryList = response.body();
+                skeleton.hide();
                 CommonClass.getInstance().categoryList = categoryList;
                 CommonClass.getInstance().selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);

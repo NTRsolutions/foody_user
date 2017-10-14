@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.AddressList;
@@ -34,6 +36,8 @@ public class SplashActivity extends AppCompatActivity {
 
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    ConnectionHelper connectionHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         context = SplashActivity.this;
+        connectionHelper = new ConnectionHelper(context);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -50,7 +55,12 @@ public class SplashActivity extends AppCompatActivity {
                 //Do something after 3000ms
                 if (SharedHelper.getKey(context, "logged").equalsIgnoreCase("true") && SharedHelper.getKey(context, "logged") != null) {
                     CommonClass.getInstance().accessToken = SharedHelper.getKey(context, "access_token");
-                    getProfile();
+                    if(connectionHelper.isConnectingToInternet()){
+                        getProfile();
+                    }else {
+                        displayMessage(getString(R.string.oops_connect_your_internet));
+                    }
+
                 } else {
                     startActivity(new Intent(SplashActivity.this, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
@@ -99,5 +109,18 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void displayMessage(String toastString) {
+        try {
+            Snackbar.make(getCurrentFocus(), toastString, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }catch (Exception e){
+            try{
+                Toast.makeText(context,""+toastString,Toast.LENGTH_SHORT).show();
+            }catch (Exception ee){
+                ee.printStackTrace();
+            }
+        }
     }
 }

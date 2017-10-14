@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.AddCart;
@@ -27,6 +29,7 @@ import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.User;
 import com.foodie.app.utils.TextUtils;
+import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -67,7 +70,8 @@ public class SignUpActivity extends AppCompatActivity {
     ImageView passwordEyeImg;
     @BindView(R.id.confirm_password_eye_img)
     ImageView confirmPasswordEyeImg;
-
+    ConnectionHelper connectionHelper;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,8 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
         context = SignUpActivity.this;
+        activity = SignUpActivity.this;
+        connectionHelper= new ConnectionHelper(context);
         customDialog = new CustomDialog(context);
         passwordEyeImg.setTag(1);
         confirmPasswordEyeImg.setTag(1);
@@ -200,7 +206,11 @@ public class SignUpActivity extends AppCompatActivity {
             map.put("phone", CommonClass.getInstance().mobile);
             map.put("password", password);
             map.put("password_confirmation", strConfirmPassword);
-            signup(map);
+            if(connectionHelper.isConnectingToInternet()){
+                signup(map);
+            }else {
+                Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+            }
         }
 
     }

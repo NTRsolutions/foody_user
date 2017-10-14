@@ -29,8 +29,10 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.User;
+import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -65,23 +67,33 @@ public class EditAccountActivity extends AppCompatActivity {
     CircleImageView userProfileImg;
     @BindView(R.id.edit_user_profile)
     ImageView editUserProfileImg;
-
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Context context;
     private int PICK_IMAGE_REQUEST = 1;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0;
     File imgFile;
     CustomDialog customDialog;
+    ConnectionHelper connectionHelper;
+    Activity activity;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-
         customDialog = new CustomDialog(this);
         context = EditAccountActivity.this;
+        activity = EditAccountActivity.this;
         initProfile();
+
+        if(connectionHelper.isConnectingToInternet()){
+            getProfile();
+        }else {
+            Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+        }
+
         getProfile();
 
         setSupportActionBar(toolbar);
@@ -125,16 +137,13 @@ public class EditAccountActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter required Field", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (customDialog != null)
             customDialog.show();
-
 
         HashMap<String, RequestBody> map = new HashMap<>();
         map.put("name", RequestBody.create(MediaType.parse("text/plain"), name.getText().toString()));
         map.put("email", RequestBody.create(MediaType.parse("text/plain"), email.getText().toString()));
         MultipartBody.Part filePart = null;
-
         if (imgFile != null)
             filePart = MultipartBody.Part.createFormData("avatar", imgFile.getName(), RequestBody.create(MediaType.parse("image/*"), imgFile));
 
@@ -213,7 +222,11 @@ public class EditAccountActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.update:
-                updateProfile();
+                if(connectionHelper.isConnectingToInternet()){
+                    updateProfile();
+                }else {
+                    Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+                }
                 break;
         }
     }
