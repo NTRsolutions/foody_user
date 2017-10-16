@@ -171,7 +171,7 @@ public class CartFragment extends Fragment {
 
         HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
-        if (GlobalData.getInstance().profileModel == null) {
+        if (GlobalData.getInstance().profileModel ==null) {
             dataLayout.setVisibility(View.GONE);
             errorLayout.setVisibility(View.VISIBLE);
             errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
@@ -296,13 +296,17 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        int money = GlobalData.profileModel.getWalletBalance();
-        if (money > 0) {
-            amountTxt.setText(numberFormat.format(money));
-            walletLayout.setVisibility(View.VISIBLE);
-        } else {
-            walletLayout.setVisibility(View.INVISIBLE);
+
+        if(GlobalData.profileModel!=null){
+            int money = GlobalData.profileModel.getWalletBalance();
+            if (money > 0) {
+                amountTxt.setText(numberFormat.format(money));
+                walletLayout.setVisibility(View.VISIBLE);
+            } else {
+                walletLayout.setVisibility(View.INVISIBLE);
+            }
         }
+
     }
 
     @Override
