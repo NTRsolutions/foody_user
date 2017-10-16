@@ -36,7 +36,7 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -218,8 +218,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             }
 
             if (isEdit != null && isEdit.equals("yes")) {
-                if (CommonClass.selectedAddress != null) {
-                    address = CommonClass.selectedAddress;
+                if (GlobalData.selectedAddress != null) {
+                    address = GlobalData.selectedAddress;
                     addressEdit.setText(address.getMapAddress());
                     flatNoEdit.setText(address.getBuilding());
                     landmark.setText(address.getLandmark());
@@ -440,11 +440,11 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                         if (isAddressSave) {
                             //select the address data and set to address in Cart fargment page
                             Intent returnIntent = new Intent();
-                            CommonClass.getInstance().selectedAddress = response.body();
+                            GlobalData.getInstance().selectedAddress = response.body();
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         } else {
-                            CommonClass.selectedAddress = response.body();
+                            GlobalData.selectedAddress = response.body();
                             finish();
                         }
 
@@ -474,7 +474,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             Toast.makeText(SaveDeliveryLocationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     } else if (response != null && response.isSuccessful()) {
-                        CommonClass.selectedAddress = response.body();
+                        GlobalData.selectedAddress = response.body();
                         finish();
                     }
                 }

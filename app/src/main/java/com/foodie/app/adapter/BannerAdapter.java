@@ -16,9 +16,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Banner;
-import com.foodie.app.model.ImpressiveDish;
 
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
             public void onClick(View v) {
                 Banner banner = list.get(position);
                 context.startActivity(new Intent(context, HotelViewActivity.class));
-                CommonClass.getInstance().selectedShop = banner.getShop();
+                GlobalData.getInstance().selectedShop = banner.getShop();
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 Log.d("Hello", "onItemClick position: " + banner.getShop().getName());
             }

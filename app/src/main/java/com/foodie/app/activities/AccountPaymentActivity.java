@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.AccountPaymentAdapter;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.PaymentMethod;
 
 import java.text.NumberFormat;
@@ -23,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.foodie.app.helper.GlobalData.currencySymbol;
 
 public class AccountPaymentActivity extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class AccountPaymentActivity extends AppCompatActivity {
     @BindView(R.id.wallet_layout)
     RelativeLayout walletLayout;
 
-    NumberFormat numberFormat = CommonClass.getNumberFormat();
+    NumberFormat numberFormat = GlobalData.getNumberFormat();
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.title)
@@ -77,10 +79,8 @@ public class AccountPaymentActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int walletMoney = CommonClass.profileModel.getWalletBalance();
-        if (walletMoney > 0) {
-            walletAmtTxt.setText(numberFormat.format(walletMoney));
-        }
+        int walletMoney = GlobalData.profileModel.getWalletBalance();
+        walletAmtTxt.setText(currencySymbol+" "+String.valueOf(walletMoney));
     }
 
     @OnClick(R.id.back)

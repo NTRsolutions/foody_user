@@ -8,15 +8,10 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
-import com.foodie.app.R;
-import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 
@@ -29,9 +24,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.CommonClass.isSelectedOrder;
-import static com.foodie.app.helper.CommonClass.onGoingOrderList;
-import static com.foodie.app.helper.CommonClass.pastOrderList;
+import static com.foodie.app.helper.GlobalData.isSelectedOrder;
+import static com.foodie.app.helper.GlobalData.onGoingOrderList;
+import static com.foodie.app.helper.GlobalData.pastOrderList;
 
 /**
  * Created by Tamil on 10/10/2017.

@@ -62,8 +62,8 @@
                             android:layout_gravity="center"
                             android:layout_marginRight="35dp"
                             app:btn_color="#e7e8e9"
-                            app:btn_fill_color="#f26d7d"
-                            app:siShape="@raw/heart" />
+                            app:btn_fill_color="@color/colorRed"
+                            app:siShape="@raw/icc_heart" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -456,6 +456,7 @@
     <!-- View cart Layout-->
 
     <RelativeLayout
+        android:layout_gravity="bottom"
         android:id="@+id/view_cart_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_45sdp"
@@ -467,7 +468,7 @@
         android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingTop="@dimen/_5sdp"
         android:visibility="gone"
-        app:layout_behavior="@string/bottom_sheet_behavior">
+      >
 
         <RelativeLayout
             android:layout_width="wrap_content"

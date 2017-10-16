@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Shop;
 
 import java.math.BigDecimal;
@@ -116,7 +116,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
                 context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position", getAdapterPosition()));
-                CommonClass.getInstance().selectedShop = list.get(getAdapterPosition());
+                GlobalData.getInstance().selectedShop = list.get(getAdapterPosition());
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 list.get(getAdapterPosition()).getCuisines();
 

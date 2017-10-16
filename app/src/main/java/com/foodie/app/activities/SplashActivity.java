@@ -13,24 +13,21 @@ import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.AddressList;
-import com.foodie.app.model.Cart;
 import com.foodie.app.model.User;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.CommonClass.addCart;
+import static com.foodie.app.helper.GlobalData.addCart;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -54,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 //Do something after 3000ms
                 if (SharedHelper.getKey(context, "logged").equalsIgnoreCase("true") && SharedHelper.getKey(context, "logged") != null) {
-                    CommonClass.getInstance().accessToken = SharedHelper.getKey(context, "access_token");
+                    GlobalData.getInstance().accessToken = SharedHelper.getKey(context, "access_token");
                     if(connectionHelper.isConnectingToInternet()){
                         getProfile();
                     }else {
@@ -89,13 +86,13 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 } else if (response.isSuccessful()) {
                     SharedHelper.putKey(context, "logged", "true");
-                    CommonClass.getInstance().profileModel = response.body();
+                    GlobalData.getInstance().profileModel = response.body();
                     addCart = new AddCart();
                     addCart.setProductList(response.body().getCart());
-                    CommonClass.getInstance().addressList = new AddressList();
-                    CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
+                    GlobalData.getInstance().addressList = new AddressList();
+                    GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
                     if (addCart.getProductList() != null && addCart.getProductList().size() != 0)
-                        CommonClass.getInstance().addCartShopId = addCart.getProductList().get(0).getProduct().getShopId();
+                        GlobalData.getInstance().addCartShopId = addCart.getProductList().get(0).getProduct().getShopId();
                     startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 }

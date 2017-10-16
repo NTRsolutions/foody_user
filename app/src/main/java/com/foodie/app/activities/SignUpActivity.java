@@ -18,13 +18,12 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.AddressList;
-import com.foodie.app.model.Cart;
 import com.foodie.app.model.LoginModel;
 import com.foodie.app.model.RegisterModel;
 import com.foodie.app.model.User;
@@ -33,7 +32,6 @@ import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
@@ -131,7 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
                 if (response.body() != null) {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("username", CommonClass.getInstance().mobile);
+                    map.put("username", GlobalData.getInstance().mobile);
                     map.put("password", password);
                     map.put("grant_type", GRANT_TYPE);
                     map.put("client_id", BuildConfigure.CLIENT_ID);
@@ -166,7 +164,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                 if (response.body() != null) {
                     SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
-                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
+                    GlobalData.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     //Get Profile data
                     getProfile();
 
@@ -203,7 +201,7 @@ public class SignUpActivity extends AppCompatActivity {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", name);
             map.put("email", email);
-            map.put("phone", CommonClass.getInstance().mobile);
+            map.put("phone", GlobalData.getInstance().mobile);
             map.put("password", password);
             map.put("password_confirmation", strConfirmPassword);
             if(connectionHelper.isConnectingToInternet()){
@@ -236,11 +234,11 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 } else if (response.isSuccessful()) {
                     SharedHelper.putKey(context, "logged", "true");
-                    CommonClass.getInstance().profileModel = response.body();
-                    CommonClass.getInstance().addCart=new AddCart();
-                    CommonClass.getInstance().addCart.setProductList(response.body().getCart());
-                    CommonClass.getInstance().addressList=new AddressList();
-                    CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
+                    GlobalData.getInstance().profileModel = response.body();
+                    GlobalData.getInstance().addCart=new AddCart();
+                    GlobalData.getInstance().addCart.setProductList(response.body().getCart());
+                    GlobalData.getInstance().addressList=new AddressList();
+                    GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
                     startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 }

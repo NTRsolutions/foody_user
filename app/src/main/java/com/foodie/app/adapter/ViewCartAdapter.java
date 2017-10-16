@@ -18,7 +18,7 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.CartFragment;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Product;
 import com.foodie.app.model.Cart;
@@ -35,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.CommonClass.categoryList;
+import static com.foodie.app.helper.GlobalData.categoryList;
 
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
@@ -56,7 +56,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     AnimatedVectorDrawableCompat avdProgress;
     Dialog dialog;
     Runnable action;
-    Shop selectedShop = CommonClass.getInstance().selectedShop;
+    Shop selectedShop = GlobalData.getInstance().selectedShop;
 
 
     //Animation number
@@ -102,15 +102,15 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         } else {
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
         }
-        for (int i = 0; i < CommonClass.getInstance().shopList.size(); i++) {
-            if (list.get(0).getProduct().getShopId().equals(CommonClass.getInstance().shopList.get(i).getId()))
-                selectedShop = CommonClass.getInstance().shopList.get(i);
+        for (int i = 0; i < GlobalData.getInstance().shopList.size(); i++) {
+            if (list.get(0).getProduct().getShopId().equals(GlobalData.getInstance().shopList.get(i).getId()))
+                selectedShop = GlobalData.getInstance().shopList.get(i);
         }
 
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("access_token2", CommonClass.getInstance().accessToken);
+                Log.e("access_token2", GlobalData.getInstance().accessToken);
                 /** Intilaize Animation View Image */
                 holder.animationLineCartAdd.setVisibility(View.VISIBLE);
                 //Intialize
@@ -269,7 +269,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.empty_dialog);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dataResponse = false;
         dialog.show();
         Call<AddCart> call = apiInterface.postAddCart(map);
@@ -289,7 +289,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
-                    CommonClass.getInstance().addCart = response.body();
+                    GlobalData.getInstance().addCart = response.body();
                     priceAmount = 0;
                     discount = 0;
                     itemQuantity = 0;
@@ -306,8 +306,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             discount = discount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getDiscount());
                         }
 
-                        CommonClass.getInstance().notificationCount = itemQuantity;
-//                        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+                        GlobalData.getInstance().notificationCount = itemQuantity;
+//                        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
 
                         //Set Payment details
                         String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
@@ -317,8 +317,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         CartFragment.payAmount.setText(currency + "" + payAmount);
 
                     } else {
-                        CommonClass.getInstance().notificationCount = itemQuantity;
-//                        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+                        GlobalData.getInstance().notificationCount = itemQuantity;
+//                        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
                         CartFragment.errorLayout.setVisibility(View.VISIBLE);
                         CartFragment.dataLayout.setVisibility(View.GONE);
                         Toast.makeText(context, "Cart is empty", Toast.LENGTH_SHORT).show();

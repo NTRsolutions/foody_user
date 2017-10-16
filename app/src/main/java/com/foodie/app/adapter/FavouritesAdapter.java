@@ -1,6 +1,5 @@
 package com.foodie.app.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,7 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Available;
 import com.foodie.app.model.FavListModel;
 
@@ -88,7 +87,7 @@ public class FavouritesAdapter extends SectionedRecyclerViewAdapter<FavouritesAd
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonClass.selectedShop = object.getShop();
+                GlobalData.selectedShop = object.getShop();
                 context.startActivity(new Intent(context, HotelViewActivity.class));
             }
         });

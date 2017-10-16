@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.fragments.OrderViewFragment;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Order;
 
 import java.text.ParseException;
@@ -25,7 +25,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.foodie.app.helper.CommonClass.isSelectedOrder;
+import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 
 public class PastOrderDetailActivity extends AppCompatActivity {
 
@@ -93,7 +93,7 @@ public class PastOrderDetailActivity extends AppCompatActivity {
         });
 
         if (isSelectedOrder != null) {
-            Order order = CommonClass.getInstance().isSelectedOrder;
+            Order order = GlobalData.getInstance().isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
             priceAmount = order.getInvoice().getNet();

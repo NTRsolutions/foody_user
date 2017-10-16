@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.AddressList;
 
@@ -93,7 +93,7 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
                 if (SetDeliveryLocationActivity.isAddressSelection) {
                     //select the address data and set to address in Cart fargment page
                     Intent returnIntent = new Intent();
-                    CommonClass.getInstance().selectedAddress = object;
+                    GlobalData.getInstance().selectedAddress = object;
                     activity.setResult(Activity.RESULT_OK, returnIntent);
                     activity.finish();
                 }

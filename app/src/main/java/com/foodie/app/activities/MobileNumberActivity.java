@@ -17,7 +17,7 @@ import com.foodie.app.CountryPicker.CountryPickerListener;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.ForgotPassword;
 import com.foodie.app.model.Otp;
@@ -115,8 +115,8 @@ public class MobileNumberActivity extends AppCompatActivity {
                     }
                 } else if (response.isSuccessful()) {
                     customDialog.dismiss();
-                    CommonClass.profileModel = response.body().getUser();
-                    CommonClass.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
+                    GlobalData.profileModel = response.body().getUser();
+                    GlobalData.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
                     startActivity(new Intent(context, OtpActivity.class).putExtra("signup", false));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                     finish();
@@ -153,7 +153,7 @@ public class MobileNumberActivity extends AppCompatActivity {
                 } else if (response.isSuccessful()) {
                     customDialog.dismiss();
                     Toast.makeText(MobileNumberActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    CommonClass.getInstance().otpValue = response.body().getOtp();
+                    GlobalData.getInstance().otpValue = response.body().getOtp();
                     startActivity(new Intent(MobileNumberActivity.this, OtpActivity.class));
                     finish();
                 }
@@ -219,7 +219,7 @@ public class MobileNumberActivity extends AppCompatActivity {
                 break;
             case R.id.next_btn:
                 String mobileNumber = country_code + etMobileNumber.getText().toString();
-                CommonClass.getInstance().mobile = mobileNumber;
+                GlobalData.getInstance().mobile = mobileNumber;
                 if (TextUtils.isEmpty(mobileNumber)) {
 
                 } else {

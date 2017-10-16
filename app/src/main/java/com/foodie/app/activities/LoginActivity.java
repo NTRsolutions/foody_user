@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.foodie.app.CountryPicker.Country;
 import com.foodie.app.CountryPicker.CountryPicker;
 import com.foodie.app.CountryPicker.CountryPickerListener;
@@ -22,7 +21,7 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.build.configure.BuildConfigure;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
@@ -243,7 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (response.isSuccessful()) {
                     //Get Profile data
                     SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
-                    CommonClass.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
+                    GlobalData.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     getProfile();
                 }
 
@@ -264,11 +263,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
-                CommonClass.getInstance().profileModel = response.body();
-                CommonClass.getInstance().addCart=new AddCart();
-                CommonClass.getInstance().addCart.setProductList(response.body().getCart());
-                CommonClass.getInstance().addressList=new AddressList();
-                CommonClass.getInstance().addressList.setAddresses(response.body().getAddresses());
+                GlobalData.getInstance().profileModel = response.body();
+                GlobalData.getInstance().addCart=new AddCart();
+                GlobalData.getInstance().addCart.setProductList(response.body().getCart());
+                GlobalData.getInstance().addressList=new AddressList();
+                GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }

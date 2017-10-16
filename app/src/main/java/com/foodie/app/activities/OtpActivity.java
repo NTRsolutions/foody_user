@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +55,7 @@ public class OtpActivity extends AppCompatActivity {
         if (bundle != null) {
             isSignUp = bundle.getBoolean("signup");
         }
-        mobileNumberTxt.setText(CommonClass.getInstance().mobile+"\n"+"OTP : "+CommonClass.getInstance().otpValue);
+        mobileNumberTxt.setText(GlobalData.getInstance().mobile+"\n"+"OTP : "+ GlobalData.getInstance().otpValue);
 
     }
 
@@ -67,8 +67,8 @@ public class OtpActivity extends AppCompatActivity {
 
     @OnClick(R.id.otp_continue)
     public void onViewClicked() {
-        Log.d("OtpData", otpValue1.getText().toString() + " = " + CommonClass.getInstance().otpValue);
-        if (otpValue1.getText().toString().equals("" + CommonClass.getInstance().otpValue)) {
+        Log.d("OtpData", otpValue1.getText().toString() + " = " + GlobalData.getInstance().otpValue);
+        if (otpValue1.getText().toString().equals("" + GlobalData.getInstance().otpValue)) {
             if (isSignUp) {
                 startActivity(new Intent(OtpActivity.this, SignUpActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);

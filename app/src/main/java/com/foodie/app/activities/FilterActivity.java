@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.FilterAdapter;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.FilterModel;
 
@@ -28,9 +28,9 @@ import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.fragments.HomeFragment.isFilterApplied;
-import static com.foodie.app.helper.CommonClass.cuisineIdArrayList;
-import static com.foodie.app.helper.CommonClass.isOfferApplied;
-import static com.foodie.app.helper.CommonClass.isPureVegApplied;
+import static com.foodie.app.helper.GlobalData.cuisineIdArrayList;
+import static com.foodie.app.helper.GlobalData.isOfferApplied;
+import static com.foodie.app.helper.GlobalData.isPureVegApplied;
 
 public class FilterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -79,7 +79,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         model.setCuisines(cuisineList1);
         modelList.add(model);
         filters = new ArrayList<>();
-        List<Cuisine> cuisineList2 = CommonClass.cuisineList;
+        List<Cuisine> cuisineList2 = GlobalData.cuisineList;
 
         for (int i = 0; i < cuisineList2.size(); i++) {
             filters.add(cuisineList2.get(i).getName());
@@ -129,7 +129,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 isPureVegApplied = FilterAdapter.isPureVegApplied;
                 isOfferApplied = FilterAdapter.isOfferApplied;
                 cuisineIdArrayList = new ArrayList<>();
-                CommonClass.cuisineIdArrayList.addAll(FilterAdapter.cuisineIdList);
+                GlobalData.cuisineIdArrayList.addAll(FilterAdapter.cuisineIdList);
                 isFilterApplied = false;
                 if (isOfferApplied)
                     isFilterApplied = true;

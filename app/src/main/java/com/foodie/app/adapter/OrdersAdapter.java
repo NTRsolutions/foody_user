@@ -3,8 +3,6 @@ package com.foodie.app.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,7 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.PastOrderDetailActivity;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Item;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
@@ -117,7 +115,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             holder.dividerLine.setVisibility(View.VISIBLE);
         }
 
-        holder.totalAmount.setText(CommonClass.getInstance().currencySymbol + object.getInvoice().getNet().toString());
+        holder.totalAmount.setText(GlobalData.getInstance().currencySymbol + object.getInvoice().getNet().toString());
         //set Item List Values
         itemList = new ArrayList<>();
         itemList.addAll(object.getItems());
@@ -136,10 +134,10 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             @Override
             public void onClick(View v) {
                 if (list.get(section).getHeader().equalsIgnoreCase("Current Orders")) {
-                    CommonClass.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
+                    GlobalData.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
                     context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class).putExtra("is_order_page",true));
                 } else {
-                    CommonClass.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
+                    GlobalData.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
                     context1.startActivity(new Intent(context1, PastOrderDetailActivity.class));
                 }
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);

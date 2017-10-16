@@ -35,7 +35,7 @@ import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -55,7 +55,7 @@ import java.util.Locale;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.foodie.app.helper.CommonClass.notificationCount;
+import static com.foodie.app.helper.GlobalData.notificationCount;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -112,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             buildGoogleApiClient();
         }
 
-        if (CommonClass.getInstance().profileModel != null)
+        if (GlobalData.getInstance().profileModel != null)
             getNotificationItemCount();
 
         fragmentManager = getSupportFragmentManager();
@@ -194,8 +194,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (mLastLocation != null) {
                     latitude = mLastLocation.getLatitude();
                     longitude = mLastLocation.getLongitude();
-                    CommonClass.getInstance().latitude = mLastLocation.getLatitude();
-                    CommonClass.getInstance().longitude = mLastLocation.getLongitude();
+                    GlobalData.getInstance().latitude = mLastLocation.getLatitude();
+                    GlobalData.getInstance().longitude = mLastLocation.getLongitude();
                     getAddress();
 
                 } else {
@@ -238,7 +238,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
             if (!TextUtils.isEmpty(address)) {
                 currentLocation = address;
-                CommonClass.getInstance().addressHeader = address;
+                GlobalData.getInstance().addressHeader = address;
 
                 if (!TextUtils.isEmpty(address1))
                     currentLocation += "\n" + address1;
@@ -259,7 +259,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (!TextUtils.isEmpty(country))
                     currentLocation += "\n" + country;
 
-                CommonClass.getInstance().address = currentLocation;
+                GlobalData.getInstance().address = currentLocation;
                 Log.e("Current_location", currentLocation);
 
 
@@ -372,15 +372,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public void getNotificationItemCount() {
-        if (CommonClass.getInstance().addCart != null && CommonClass.getInstance().addCart.getProductList().size() != 0) {
-            itemCount = CommonClass.getInstance().addCart.getProductList().size();
+        if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
+            itemCount = GlobalData.getInstance().addCart.getProductList().size();
             int itemQuantity = 0;
             for (int i = 0; i < itemCount; i++) {
                 //Get Total item Quantity
-                itemQuantity = itemQuantity + CommonClass.getInstance().addCart.getProductList().get(i).getQuantity();
+                itemQuantity = itemQuantity + GlobalData.getInstance().addCart.getProductList().get(i).getQuantity();
                 //Get product price
             }
-            CommonClass.getInstance().notificationCount = itemQuantity;
+            GlobalData.getInstance().notificationCount = itemQuantity;
         }
     }
 

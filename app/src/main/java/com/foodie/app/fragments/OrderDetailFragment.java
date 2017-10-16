@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.OrderDetailAdapter;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Item;
 import com.foodie.app.model.Order;
 
@@ -69,7 +69,7 @@ public class OrderDetailFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
 
-        Order order = CommonClass.getInstance().isSelectedOrder;
+        Order order = GlobalData.getInstance().isSelectedOrder;
         //set Item List Values
         itemList = new ArrayList<>();
         itemList.addAll(order.getItems());

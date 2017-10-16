@@ -90,7 +90,7 @@ public class OrderHelpFragment extends Fragment {
 //                startActivity(new Intent(context, OrdersActivity.class));
 //                break;
             case 3:
-                startActivity(new Intent(context, OtherHelpActivity.class));
+                startActivity(new Intent(context, OtherHelpActivity.class).putExtra("type","Others"));
                 break;
             default:
 

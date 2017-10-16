@@ -35,7 +35,7 @@ import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.AddCart;
@@ -140,7 +140,7 @@ public class CartFragment extends Fragment {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ViewCartAdapter viewCartAdapter;
     CustomDialog customDialog;
-    NumberFormat numberFormat = CommonClass.getNumberFormat();
+    NumberFormat numberFormat = GlobalData.getNumberFormat();
     ViewSkeletonScreen skeleton;
     ConnectionHelper connectionHelper;
     Activity activity;
@@ -171,7 +171,7 @@ public class CartFragment extends Fragment {
 
         HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
-        if (CommonClass.getInstance().profileModel == null) {
+        if (GlobalData.getInstance().profileModel == null) {
             dataLayout.setVisibility(View.GONE);
             errorLayout.setVisibility(View.VISIBLE);
             errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
@@ -197,26 +197,26 @@ public class CartFragment extends Fragment {
         orderItemRv.setNestedScrollingEnabled(false);
 
         //Intialize address Value
-        if (CommonClass.getInstance().selectedAddress != null) {
-            if (CommonClass.getInstance().addressList.getAddresses().size() == 1)
+        if (GlobalData.getInstance().selectedAddress != null) {
+            if (GlobalData.getInstance().addressList.getAddresses().size() == 1)
                 addAddressTxt.setText(getString(R.string.add_address));
             else
                 addAddressTxt.setText(getString(R.string.change_address));
             addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
             addAddressBtn.setText(getResources().getString(R.string.proceed_to_pay));
-            addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
-            addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
+            addressHeader.setText(GlobalData.getInstance().selectedAddress.getType());
+            addressDetail.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
             if (viewCartItemList != null && viewCartItemList.size() != 0)
                 addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");
-        } else if (CommonClass.getInstance().addressList != null) {
+        } else if (GlobalData.getInstance().addressList != null) {
             addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
             addAddressBtn.setText(getResources().getString(R.string.add_address));
-            locationErrorSubTitle.setText(CommonClass.getInstance().addressHeader);
+            locationErrorSubTitle.setText(GlobalData.getInstance().addressHeader);
             selectedAddressBtn.setVisibility(View.VISIBLE);
             locationErrorLayout.setVisibility(View.VISIBLE);
             locationInfoLayout.setVisibility(View.GONE);
         } else {
-            locationErrorSubTitle.setText(CommonClass.getInstance().addressHeader);
+            locationErrorSubTitle.setText(GlobalData.getInstance().addressHeader);
             locationErrorLayout.setVisibility(View.VISIBLE);
             selectedAddressBtn.setVisibility(View.GONE);
             locationInfoLayout.setVisibility(View.GONE);
@@ -259,7 +259,7 @@ public class CartFragment extends Fragment {
                                 priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
                             discount = discount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getDiscount());
                         }
-                        CommonClass.getInstance().addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
+                        GlobalData.getInstance().addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
                         //Set Payment details
                         String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
                         itemTotalAmount.setText(currency + "" + priceAmount);
@@ -296,11 +296,12 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        int money = CommonClass.profileModel.getWalletBalance();
+        int money = GlobalData.profileModel.getWalletBalance();
         if (money > 0) {
             amountTxt.setText(numberFormat.format(money));
+            walletLayout.setVisibility(View.VISIBLE);
         } else {
-            walletLayout.setVisibility(View.GONE);
+            walletLayout.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -386,7 +387,7 @@ public class CartFragment extends Fragment {
             case R.id.proceed_to_pay_btn:
                 /**  If address is filled */
                 if (connectionHelper.isConnectingToInternet()) {
-                    checkOut(CommonClass.getInstance().selectedAddress.getId());
+                    checkOut(GlobalData.getInstance().selectedAddress.getId());
                 } else {
                     Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
@@ -411,11 +412,11 @@ public class CartFragment extends Fragment {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    CommonClass.getInstance().addCart = null;
-                    CommonClass.getInstance().notificationCount = 0;
-                    CommonClass.getInstance().selectedShop = null;
-                    CommonClass.getInstance().isSelectedOrder = new Order();
-                    CommonClass.getInstance().isSelectedOrder = response.body();
+                    GlobalData.getInstance().addCart = null;
+                    GlobalData.getInstance().notificationCount = 0;
+                    GlobalData.getInstance().selectedShop = null;
+                    GlobalData.getInstance().isSelectedOrder = new Order();
+                    GlobalData.getInstance().isSelectedOrder = response.body();
                     startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     getActivity().finish();
                 }
@@ -433,11 +434,11 @@ public class CartFragment extends Fragment {
         System.out.print("CartFragment");
         if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_OK) {
             System.out.print("CartFragment : Success");
-            if (CommonClass.getInstance().selectedAddress != null) {
+            if (GlobalData.getInstance().selectedAddress != null) {
                 locationErrorLayout.setVisibility(View.GONE);
                 locationInfoLayout.setVisibility(View.VISIBLE);
-                addressHeader.setText(CommonClass.getInstance().selectedAddress.getType());
-                addressDetail.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
+                addressHeader.setText(GlobalData.getInstance().selectedAddress.getType());
+                addressDetail.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
                 addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");
             } else {
                 locationErrorLayout.setVisibility(View.VISIBLE);

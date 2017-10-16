@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.WalletHistory;
 
 import java.text.ParseException;
@@ -38,7 +38,7 @@ public class WalletHistoryAdapter extends RecyclerView.Adapter<WalletHistoryAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         WalletHistory walletHistory = list.get(position);
-        holder.amountTxt.setText(CommonClass.currencySymbol+" "+walletHistory.getAmount());
+        holder.amountTxt.setText(GlobalData.currencySymbol+" "+walletHistory.getAmount());
         holder.timeTxt.setText(getFormatTime(walletHistory.getCreatedAt()));
         holder.statusTxt.setText(walletHistory.getStatus());
     }

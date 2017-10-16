@@ -16,11 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.AccountPaymentAdapter;
 import com.foodie.app.adapter.WalletHistoryAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.WalletHistory;
 
@@ -37,6 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.foodie.app.helper.GlobalData.currencySymbol;
 
 public class WalletActivity extends AppCompatActivity {
 
@@ -59,7 +60,7 @@ public class WalletActivity extends AppCompatActivity {
     @BindView(R.id.title)
     TextView title;
 
-    NumberFormat numberFormat = CommonClass.getNumberFormat();
+    NumberFormat numberFormat = GlobalData.getNumberFormat();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +84,8 @@ public class WalletActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int walletMoney = CommonClass.profileModel.getWalletBalance();
-        if (walletMoney > 0) {
-            walletAmountTxt.setText(numberFormat.format(walletMoney));
-        }
+        int walletMoney = GlobalData.profileModel.getWalletBalance();
+        walletAmountTxt.setText(currencySymbol+" "+String.valueOf(walletMoney));
         getWalletHistory();
     }
 

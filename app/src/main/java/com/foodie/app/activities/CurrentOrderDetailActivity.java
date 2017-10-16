@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,15 +33,13 @@ import android.widget.Toast;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.adapter.OrderFlowAdapter;
-import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.OrderViewFragment;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderFlow;
-import com.foodie.app.model.OrderModel;
 import com.foodie.app.service.OrderStatusService;
 
 import java.text.ParseException;
@@ -58,10 +55,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.CommonClass.ORDER_STATUS;
-import static com.foodie.app.helper.CommonClass.isSelectedOrder;
-import static com.foodie.app.helper.CommonClass.onGoingOrderList;
-import static com.foodie.app.helper.CommonClass.pastOrderList;
+import static com.foodie.app.helper.GlobalData.ORDER_STATUS;
+import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 
 public class CurrentOrderDetailActivity extends AppCompatActivity {
 
@@ -142,8 +137,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         orderFlowRv.scheduleLayoutAnimation();
 
 
-        if (CommonClass.getInstance().isSelectedOrder != null) {
-            Order order = CommonClass.getInstance().isSelectedOrder;
+        if (GlobalData.getInstance().isSelectedOrder != null) {
+            Order order = GlobalData.getInstance().isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
             priceAmount = order.getInvoice().getNet();
@@ -253,9 +248,9 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
             feedbackSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (CommonClass.isSelectedOrder != null && CommonClass.isSelectedOrder.getId() != null) {
+                    if (GlobalData.isSelectedOrder != null && GlobalData.isSelectedOrder.getId() != null) {
                         HashMap<String, String> map = new HashMap<>();
-                        map.put("order_id", String.valueOf(CommonClass.isSelectedOrder.getId()));
+                        map.put("order_id", String.valueOf(GlobalData.isSelectedOrder.getId()));
                         map.put("rating", String.valueOf(rating[0]));
                         map.put("comment", comment.getText().toString());
                         map.put("type", "transporter");

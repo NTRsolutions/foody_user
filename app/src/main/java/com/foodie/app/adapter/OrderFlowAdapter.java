@@ -6,19 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
-import com.foodie.app.helper.CommonClass;
-import com.foodie.app.model.NotificationItem;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.OrderFlow;
-import com.foodie.app.model.Restaurant;
 
 import java.util.List;
 
-import static com.foodie.app.helper.CommonClass.isSelectedOrder;
+import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
@@ -65,7 +62,7 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
         }else {
             holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorSecondaryText));
         }
-        if(isSelectedOrder.getStatus().equals(CommonClass.ORDER_STATUS.get(CommonClass.ORDER_STATUS.size() - 1))){
+        if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(GlobalData.ORDER_STATUS.size() - 1))){
             ((CurrentOrderDetailActivity)context).rate();
         }
 

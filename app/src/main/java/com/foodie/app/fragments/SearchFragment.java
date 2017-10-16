@@ -21,7 +21,7 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.ViewPagerAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Product;
 import com.foodie.app.model.Search;
 import com.foodie.app.model.Shop;
@@ -33,7 +33,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,7 +85,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
     }
 
     @Override
@@ -153,7 +152,7 @@ public class SearchFragment extends Fragment {
         });
 
         toolbar.addView(toolbarLayout);
-        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
         searchCloseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

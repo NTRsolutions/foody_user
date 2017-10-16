@@ -18,7 +18,7 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.PromotionsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.PromotionResponse;
 import com.foodie.app.model.Promotions;
@@ -150,7 +150,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
                             Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     } else if (response.isSuccessful()) {
-                        CommonClass.profileModel.setWalletBalance(response.body().getWalletMoney());
+                        GlobalData.profileModel.setWalletBalance(response.body().getWalletMoney());
                         gotoFlow();
                     }
                 } else {

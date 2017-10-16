@@ -24,11 +24,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.User;
@@ -87,6 +86,7 @@ public class EditAccountActivity extends AppCompatActivity {
         context = EditAccountActivity.this;
         activity = EditAccountActivity.this;
         initProfile();
+        connectionHelper= new ConnectionHelper(context);
 
         if(connectionHelper.isConnectingToInternet()){
             getProfile();
@@ -107,11 +107,11 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     private void initProfile() {
-        if (CommonClass.profileModel != null) {
-            name.setText(CommonClass.profileModel.getName());
-            email.setText(CommonClass.profileModel.getEmail());
-            phone.setText(CommonClass.profileModel.getPhone());
-            Glide.with(context).load(CommonClass.profileModel.getAvatar()).into(userProfileImg);
+        if (GlobalData.profileModel != null) {
+            name.setText(GlobalData.profileModel.getName());
+            email.setText(GlobalData.profileModel.getEmail());
+            phone.setText(GlobalData.profileModel.getPhone());
+            Glide.with(context).load(GlobalData.profileModel.getAvatar()).into(userProfileImg);
         }
     }
 
@@ -121,7 +121,7 @@ public class EditAccountActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if(response.isSuccessful()){
-                    CommonClass.profileModel = response.body();
+                    GlobalData.profileModel = response.body();
                 }
             }
 
@@ -160,7 +160,7 @@ public class EditAccountActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    CommonClass.profileModel = response.body();
+                    GlobalData.profileModel = response.body();
                     finish();
                     Toast.makeText(context, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
                 }

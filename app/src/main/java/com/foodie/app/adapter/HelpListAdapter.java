@@ -1,6 +1,7 @@
 package com.foodie.app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.OtherHelpActivity;
 
 import java.util.List;
 
@@ -54,15 +56,14 @@ public class HelpListAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.help_list_item, null);
         }
 
-//        ImageView setting_icon = (ImageView) convertView.findViewById(R.id.setting_icon);
-        TextView tv = (TextView) convertView.findViewById(R.id.setting_label);
-//        setting_icon.setImageResource(listIcon.get(position));
+        final TextView tv = (TextView) convertView.findViewById(R.id.setting_label);
         tv.setText(items.get(position));
-
-//        //Load the animation from the xml file and set it to the row
-//        Animation animation = AnimationUtils.loadAnimation(context_, R.anim.anim_push_left_in);
-//        animation.setDuration(500);
-//        convertView.startAnimation(animation);
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context_.startActivity(new Intent(context_, OtherHelpActivity.class).putExtra("type", tv.getText().toString()));
+            }
+        });
 
         return convertView;
     }

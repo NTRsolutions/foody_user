@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,13 +36,12 @@ import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Banner;
 import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Discover;
-import com.foodie.app.model.ImpressiveDish;
 import com.foodie.app.model.Restaurant;
 import com.foodie.app.model.RestaurantsData;
 import com.foodie.app.model.Shop;
@@ -63,14 +61,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.CommonClass.addressList;
-import static com.foodie.app.helper.CommonClass.cuisineIdArrayList;
-import static com.foodie.app.helper.CommonClass.cuisineList;
-import static com.foodie.app.helper.CommonClass.isOfferApplied;
-import static com.foodie.app.helper.CommonClass.isPureVegApplied;
-import static com.foodie.app.helper.CommonClass.latitude;
-import static com.foodie.app.helper.CommonClass.longitude;
-import static com.foodie.app.helper.CommonClass.selectedAddress;
+import static com.foodie.app.helper.GlobalData.addressList;
+import static com.foodie.app.helper.GlobalData.cuisineIdArrayList;
+import static com.foodie.app.helper.GlobalData.cuisineList;
+import static com.foodie.app.helper.GlobalData.isOfferApplied;
+import static com.foodie.app.helper.GlobalData.isPureVegApplied;
+import static com.foodie.app.helper.GlobalData.latitude;
+import static com.foodie.app.helper.GlobalData.longitude;
+import static com.foodie.app.helper.GlobalData.selectedAddress;
 
 
 /**
@@ -185,7 +183,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         skeletonSpinner = Skeleton.bind(catagoerySpinner)
                 .load(R.layout.skeleton_label)
                 .show();
-        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
 
         //Spinner
         //Creating the ArrayAdapter instance having the country shopList
@@ -256,21 +254,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Address address1 = addressList.getAddresses().get(i);
                         if (getDoubleThreeDigits(latitude) == getDoubleThreeDigits(address1.getLatitude()) && getDoubleThreeDigits(longitude) == getDoubleThreeDigits(address1.getLongitude())) {
                             selectedAddress = address1;
-                            addressLabel.setText(CommonClass.getInstance().addressHeader);
-                            addressTxt.setText(CommonClass.getInstance().address);
-                            addressLabel.setText(CommonClass.getInstance().selectedAddress.getType());
-                            addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
-                            latitude = CommonClass.getInstance().selectedAddress.getLatitude();
-                            longitude = CommonClass.getInstance().selectedAddress.getLongitude();
+                            addressLabel.setText(GlobalData.getInstance().addressHeader);
+                            addressTxt.setText(GlobalData.getInstance().address);
+                            addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
+                            addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
+                            latitude = GlobalData.getInstance().selectedAddress.getLatitude();
+                            longitude = GlobalData.getInstance().selectedAddress.getLongitude();
                             break;
                         } else {
-                            addressLabel.setText(CommonClass.getInstance().addressHeader);
-                            addressTxt.setText(CommonClass.getInstance().address);
+                            addressLabel.setText(GlobalData.getInstance().addressHeader);
+                            addressTxt.setText(GlobalData.getInstance().address);
                         }
                     }
                 } else {
-                    addressLabel.setText(CommonClass.getInstance().addressHeader);
-                    addressTxt.setText(CommonClass.getInstance().address);
+                    addressLabel.setText(GlobalData.getInstance().addressHeader);
+                    addressTxt.setText(GlobalData.getInstance().address);
                 }
 
             }
@@ -311,8 +309,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         map.put("latitude", String.valueOf(latitude));
         map.put("longitude", String.valueOf(longitude));
         //get User Profile Data
-        if (CommonClass.getInstance().profileModel != null) {
-            map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
+        if (GlobalData.getInstance().profileModel != null) {
+            map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
         }
         if (isFilterApplied) {
             filterSelectionImage.setVisibility(View.VISIBLE);
@@ -357,9 +355,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     }
                 } else if (response.isSuccessful()) {
 
-                    CommonClass.getInstance().shopList = response.body().getShops();
+                    GlobalData.getInstance().shopList = response.body().getShops();
                     restaurantList.clear();
-                    restaurantList.addAll(CommonClass.getInstance().shopList);
+                    restaurantList.addAll(GlobalData.getInstance().shopList);
                     bannerList.addAll(response.body().getBanners());
                     restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
                     adapterRestaurant.notifyDataSetChanged();
@@ -438,7 +436,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
 
     }
 
@@ -467,13 +465,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 //        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_OK) {
             System.out.print("HomeFragment : Success");
-            if (CommonClass.getInstance().selectedAddress != null) {
-                addressLabel.setText(CommonClass.getInstance().addressHeader);
-                addressTxt.setText(CommonClass.getInstance().address);
-                addressLabel.setText(CommonClass.getInstance().selectedAddress.getType());
-                addressTxt.setText(CommonClass.getInstance().selectedAddress.getMapAddress());
-                latitude = CommonClass.getInstance().selectedAddress.getLatitude();
-                longitude = CommonClass.getInstance().selectedAddress.getLongitude();
+            if (GlobalData.getInstance().selectedAddress != null) {
+                addressLabel.setText(GlobalData.getInstance().addressHeader);
+                addressTxt.setText(GlobalData.getInstance().address);
+                addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
+                addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
+                latitude = GlobalData.getInstance().selectedAddress.getLatitude();
+                longitude = GlobalData.getInstance().selectedAddress.getLongitude();
                 findRestaurant();
 
             } else {

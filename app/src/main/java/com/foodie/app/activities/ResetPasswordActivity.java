@@ -17,7 +17,7 @@ import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.ResetPassword;
 import com.foodie.app.utils.TextUtils;
@@ -57,6 +57,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     ImageView passwordEyeImg;
     @BindView(R.id.confirm_password_eye_img)
     ImageView confirmPasswordEyeImg;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +131,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         } else {
 
             HashMap<String, String> map = new HashMap<>();
-            map.put("id", String.valueOf(CommonClass.profileModel.getId()));
+            map.put("id", String.valueOf(GlobalData.profileModel.getId()));
             map.put("password", strNewPassword);
             map.put("password_confirmation", strConfirmPassword);
             resetPassword(map);
@@ -139,10 +140,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
     }
 
     private void resetPassword(HashMap<String, String> map) {
+        customDialog.show();
         Call<ResetPassword> call = apiInterface.resetPassword(map);
         call.enqueue(new Callback<ResetPassword>() {
             @Override
             public void onResponse(Call<ResetPassword> call, Response<ResetPassword> response) {
+                customDialog.dismiss();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());

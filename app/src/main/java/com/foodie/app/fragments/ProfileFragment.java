@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -36,7 +35,7 @@ import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.activities.PromotionActivity;
 import com.foodie.app.activities.WelcomeScreenActivity;
 import com.foodie.app.adapter.ProfileSettingsAdapter;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.utils.ListViewSizeHelper;
 
@@ -91,7 +90,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
 
-        if (CommonClass.getInstance().profileModel != null) {
+        if (GlobalData.getInstance().profileModel != null) {
             errorLayout.setVisibility(View.GONE);
             final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
             List<Integer> listIcons = new ArrayList<>();
@@ -113,7 +112,7 @@ public class ProfileFragment extends Fragment {
             });
             arrowImage.setTag(true);
 //            collapse(listLayout);
-            HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+            HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
         } else {
             //set Error Layout
             errorLayout.setVisibility(View.VISIBLE);
@@ -127,7 +126,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context, CommonClass.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
     }
 
     @Override
@@ -183,18 +182,18 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         System.out.println("ProfileFragment");
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
-        if (CommonClass.getInstance().profileModel != null) {
+        if (GlobalData.getInstance().profileModel != null) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
             ImageView userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
             TextView userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
             TextView userPhone = (TextView) toolbarLayout.findViewById(R.id.user_phone);
             TextView userEmail = (TextView) toolbarLayout.findViewById(R.id.user_mail);
-            Glide.with(context).load(CommonClass.getInstance().profileModel.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
+            Glide.with(context).load(GlobalData.getInstance().profileModel.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
                     .error(R.drawable.item1).into(userImage);
-            userPhone.setText(CommonClass.getInstance().profileModel.getPhone());
-            userName.setText(CommonClass.getInstance().profileModel.getName());
-            userEmail.setText(" - " + CommonClass.getInstance().profileModel.getEmail());
+            userPhone.setText(GlobalData.getInstance().profileModel.getPhone());
+            userName.setText(GlobalData.getInstance().profileModel.getName());
+            userEmail.setText(" - " + GlobalData.getInstance().profileModel.getEmail());
             Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
             userImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -306,7 +305,7 @@ public class ProfileFragment extends Fragment {
                         // continue with delete
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        CommonClass.getInstance().profileModel = null;
+                        GlobalData.getInstance().profileModel = null;
                         getActivity().finish();
                     }
                 })

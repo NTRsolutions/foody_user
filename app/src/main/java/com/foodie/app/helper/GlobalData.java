@@ -1,12 +1,10 @@
 package com.foodie.app.helper;
 
-import android.content.Intent;
 import android.location.Location;
 
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.AddressList;
-import com.foodie.app.model.Cart;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.Order;
@@ -26,7 +24,7 @@ import java.util.Locale;
  * Created by Tamil on 9/22/2017.
  */
 
-public class CommonClass {
+public class GlobalData {
 
     public Otp otpModel = null;
 
@@ -67,9 +65,9 @@ public class CommonClass {
     public static ArrayList<HashMap<String, String>> foodCart;
     public static String accessToken = "";
 
-    private static final CommonClass ourInstance = new CommonClass();
+    private static final GlobalData ourInstance = new GlobalData();
 
-    public static CommonClass getInstance() {
+    public static GlobalData getInstance() {
         return ourInstance;
     }
 
@@ -80,6 +78,6 @@ public class CommonClass {
         return numberFormat;
     }
 
-    private CommonClass() {
+    private GlobalData() {
     }
 }

@@ -1,7 +1,6 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,11 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.ChangePassword;
 import com.foodie.app.utils.TextUtils;

@@ -84,6 +84,10 @@ public interface ApiInterface {
     @POST("api/user/profile/password")
     Call<ChangePassword> changePassword(@FieldMap HashMap<String, String> params);
 
+
+    @GET("api/user/notification")
+    Call<FavoriteList> getNotification();
+
     /*-------------SHOP--------------------*/
 
     @GET("api/user/shops")

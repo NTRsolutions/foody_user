@@ -36,7 +36,7 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.HotelCatagoeryAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.model.AddCart;
 import com.foodie.app.model.Category;
@@ -158,14 +158,14 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             restaurantPosition = bundle.getInt("position");
 
         }
-        shops = CommonClass.getInstance().selectedShop;
-//        CommonClass.getInstance().selectedShop = CommonClass.getInstance().shopList.get(restaurantPosition);
+        shops = GlobalData.getInstance().selectedShop;
+//        GlobalData.getInstance().selectedShop = GlobalData.getInstance().shopList.get(restaurantPosition);
 
         //get User Profile Data
-        if (CommonClass.getInstance().profileModel != null) {
+        if (GlobalData.getInstance().profileModel != null) {
             HashMap<String, String> map = new HashMap<>();
             map.put("shop", String.valueOf(shops.getId()));
-            map.put("user_id", String.valueOf(CommonClass.getInstance().profileModel.getId()));
+            map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
             getCategories(map);
 
         } else {
@@ -375,15 +375,15 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
         }
-        CommonClass.getInstance().notificationCount = itemQuantity;
+        GlobalData.getInstance().notificationCount = itemQuantity;
         if (itemQuantity == 0) {
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
             // Start animation
             viewCartLayout.startAnimation(slide_down);
         } else if (itemQuantity == 1) {
-            if (shops.getId() == CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+            if (shops.getId() == GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
             String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
@@ -394,9 +394,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 viewCartLayout.startAnimation(slide_up);
             }
         } else {
-            if (shops.getId() != CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+            if (shops.getId() != GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + CommonClass.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
 
@@ -418,14 +418,14 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             public void onResponse(@NonNull Call<List<Category>> call, Response<List<Category>> response) {
                 categoryList = response.body();
                 skeleton.hide();
-                CommonClass.getInstance().categoryList = categoryList;
-                CommonClass.getInstance().selectedShop.setCategories(categoryList);
+                GlobalData.getInstance().categoryList = categoryList;
+                GlobalData.getInstance().selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
                 accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                 accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
                 accompanimentDishesRv.setAdapter(catagoeryAdapter);
-                if (CommonClass.getInstance().addCart != null && CommonClass.getInstance().addCart.getProductList().size() != 0) {
-                    setViewcartBottomLayout(CommonClass.getInstance().addCart);
+                if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
+                    setViewcartBottomLayout(GlobalData.getInstance().addCart);
                 }
             }
 
@@ -446,12 +446,12 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     @Override
     protected void onResume() {
         super.onResume();
-        if (CommonClass.getInstance().shopList != null) {
-            List<Shop> shopList = CommonClass.getInstance().shopList;
+        if (GlobalData.getInstance().shopList != null) {
+            List<Shop> shopList = GlobalData.getInstance().shopList;
             for (int i = 0; i < shopList.size(); i++) {
                 if (shopList.get(i).getId().equals(shops.getId())) {
                     shops = shopList.get(i);
-                    categoryList = CommonClass.getInstance().categoryList;
+                    categoryList = GlobalData.getInstance().categoryList;
                     catagoeryAdapter.notifyDataSetChanged();
                 }
             }

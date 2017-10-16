@@ -17,7 +17,7 @@ import com.foodie.app.R;
 import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.Message;
 
@@ -102,7 +102,7 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (v.getId() == editBtn.getId()) {
-                CommonClass.selectedAddress = list.get(position);
+                GlobalData.selectedAddress = list.get(position);
                 Intent intent = new Intent(context, SaveDeliveryLocationActivity.class);
                 intent.putExtra("edit", "yes");
                 context.startActivity(intent);

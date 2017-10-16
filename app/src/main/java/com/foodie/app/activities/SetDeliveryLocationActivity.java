@@ -18,7 +18,7 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.DeliveryLocationAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Address;
 import com.foodie.app.model.AddressList;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -83,7 +83,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         modelListReference.clear();
         AddressList addressList= new AddressList();
         addressList.setHeader(getResources().getString(R.string.saved_addresses));
-        addressList.setAddresses(CommonClass.profileModel.getAddresses());
+        addressList.setAddresses(GlobalData.profileModel.getAddresses());
         modelListReference.clear();
         modelListReference.add(addressList);
         manager = new LinearLayoutManager(this);

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +23,7 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.CommonClass;
 import com.foodie.app.model.Order;
-import com.foodie.app.model.OrderFlow;
 import com.foodie.app.model.OrderModel;
 import com.foodie.app.service.OrderStatusService;
 
@@ -41,8 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.CommonClass.onGoingOrderList;
-import static com.foodie.app.helper.CommonClass.pastOrderList;
+import static com.foodie.app.helper.GlobalData.onGoingOrderList;
+import static com.foodie.app.helper.GlobalData.pastOrderList;
 
 public class OrdersActivity extends AppCompatActivity {
 

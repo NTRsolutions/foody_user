@@ -73,6 +73,7 @@
                 android:layout_height="200dp" />
 
             <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="@dimen/activity_vertical_margin_half"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 android:id="@+id/order_flow_rv"

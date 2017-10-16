@@ -13,8 +13,7 @@ import android.widget.TextView;
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
-import com.foodie.app.fragments.HomeFragment;
-import com.foodie.app.helper.CommonClass;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.model.Cuisine;
 import com.foodie.app.model.FilterModel;
 
@@ -102,8 +101,8 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
             cuisineIdList.clear();
         } else {
             //Check if applied or not
-            if (CommonClass.cuisineIdArrayList != null)
-                cuisineIdList.addAll(CommonClass.cuisineIdArrayList);
+            if (GlobalData.cuisineIdArrayList != null)
+                cuisineIdList.addAll(GlobalData.cuisineIdArrayList);
             if (list.get(section).getHeader().equalsIgnoreCase("Cuisines")) {
                 if (cuisineIdList.size() != 0) {
                     Cuisine cuisine = list.get(section).getCuisines().get(relativePosition);

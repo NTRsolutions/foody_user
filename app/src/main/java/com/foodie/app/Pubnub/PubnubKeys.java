@@ -1,4 +1,4 @@
-package com.foodie.app.pubnub.callback.keys;
+package com.foodie.app.Pubnub;
 
 /**
  * Created by Anjith Sasindran
