@@ -277,8 +277,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         locationAddressLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
-                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                if(GlobalData.profileModel!=null){
+                    startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                }else {
+                    Toast.makeText(context, "Please login", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         filterBtn = (Button) toolbarLayout.findViewById(R.id.filter);

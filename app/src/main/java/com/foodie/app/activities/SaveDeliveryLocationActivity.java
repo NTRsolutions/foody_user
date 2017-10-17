@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -128,6 +129,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     boolean isAddressSave = false;
     Context context;
 
+    CustomDialog customDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +139,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         ButterKnife.bind(this);
         context = SaveDeliveryLocationActivity.this;
         address = new com.foodie.app.model.Address();
+        customDialog=new CustomDialog(context);
         address.setType("other");
         //Intialize Animation line
         initializeAvd();
@@ -420,14 +424,17 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void saveAddress() {
+
         if (address.getType().equalsIgnoreCase("other")) {
             address.setType(otherAddressHeaderEt.getText().toString());
         }
         if (address != null && address.getMapAddress() != null && validate()) {
+            customDialog.show();
             Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
                 public void onResponse(Call<com.foodie.app.model.Address> call, Response<com.foodie.app.model.Address> response) {
+                    customDialog.dismiss();
                     if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                         try {
                             JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -454,6 +461,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 @Override
                 public void onFailure(Call<com.foodie.app.model.Address> call, Throwable t) {
                     Log.e(TAG, t.toString());
+                    customDialog.dismiss();
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
             });
@@ -462,10 +470,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
     private void updateAddress() {
         if (address != null && address.getId() != null && validate()) {
+            customDialog.show();
             Call<com.foodie.app.model.Address> call = apiInterface.updateAddress(address.getId(), address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
                 public void onResponse(Call<com.foodie.app.model.Address> call, Response<com.foodie.app.model.Address> response) {
+                    customDialog.dismiss();
                     if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                         try {
                             JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -482,6 +492,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 @Override
                 public void onFailure(Call<com.foodie.app.model.Address> call, Throwable t) {
                     Log.e(TAG, t.toString());
+                    customDialog.dismiss();
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
             });
