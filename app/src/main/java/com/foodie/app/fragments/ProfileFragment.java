@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,6 +57,8 @@ import butterknife.OnClick;
 public class ProfileFragment extends Fragment {
     @BindView(R.id.text_line)
     TextView textLine;
+    @BindView(R.id.app_version)
+    TextView appVersion;
     @BindView(R.id.view_line)
     View viewLine;
     @BindView(R.id.logout)
@@ -77,7 +81,8 @@ public class ProfileFragment extends Fragment {
 
     private ViewGroup toolbar;
     private View toolbarLayout;
-
+    ImageView userImage;
+    TextView userName, userPhone, userEmail;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +124,14 @@ public class ProfileFragment extends Fragment {
         }
 
 
+        try {
+            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            int version = pInfo.versionCode;
+            appVersion.setText("Version "+version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         return view;
     }
 
@@ -127,6 +140,7 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+        initView();
     }
 
     @Override
@@ -185,15 +199,11 @@ public class ProfileFragment extends Fragment {
         if (GlobalData.getInstance().profileModel != null) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
-            ImageView userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
-            TextView userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
-            TextView userPhone = (TextView) toolbarLayout.findViewById(R.id.user_phone);
-            TextView userEmail = (TextView) toolbarLayout.findViewById(R.id.user_mail);
-            Glide.with(context).load(GlobalData.getInstance().profileModel.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
-                    .error(R.drawable.item1).into(userImage);
-            userPhone.setText(GlobalData.getInstance().profileModel.getPhone());
-            userName.setText(GlobalData.getInstance().profileModel.getName());
-            userEmail.setText(" - " + GlobalData.getInstance().profileModel.getEmail());
+            userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
+            userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
+            userPhone = (TextView) toolbarLayout.findViewById(R.id.user_phone);
+            userEmail = (TextView) toolbarLayout.findViewById(R.id.user_mail);
+            initView();
             Button editBtn = (Button) toolbarLayout.findViewById(R.id.edit);
             userImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -213,6 +223,14 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    private void initView(){
+        if (GlobalData.profileModel != null) {
+            Glide.with(getContext()).load(GlobalData.profileModel.getAvatar()).into(userImage);
+            userPhone.setText(GlobalData.profileModel.getPhone());
+            userName.setText(GlobalData.profileModel.getName());
+            userEmail.setText(" - " + GlobalData.profileModel.getEmail());
+        }
+    }
 
     @OnClick({R.id.arrow_image, R.id.logout, R.id.myaccount_layout, R.id.login_btn})
     public void onViewClicked(View view) {

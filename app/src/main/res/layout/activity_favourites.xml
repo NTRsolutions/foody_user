@@ -29,10 +29,10 @@
         android:layout_height="1dp"
         android:background="#eee" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/favorites_Rv"
@@ -40,7 +40,47 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/error_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="8dp"
+                android:src="@drawable/empty_fav" />
+
+            <TextView
+                fontPath="fonts/Nunito-Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:text="What is the Love"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="22sp"
+                android:gravity="center"
+                tools:ignore="MissingPrefix" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:layout_marginTop="8sp"
+                android:text="Once your favorite a restaurant, it will appear here."
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="14sp"
+                android:gravity="center"
+                tools:ignore="MissingPrefix" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 
 </LinearLayout>

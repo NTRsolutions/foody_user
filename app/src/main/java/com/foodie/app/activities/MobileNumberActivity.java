@@ -3,10 +3,13 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,9 +54,9 @@ public class MobileNumberActivity extends AppCompatActivity {
     @BindView(R.id.connect_with)
     TextView connectWith;
     @BindView(R.id.facebook_login)
-    ImageView facebookLogin;
+    ImageButton facebookLogin;
     @BindView(R.id.google_login)
-    ImageView googleLogin;
+    ImageButton googleLogin;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     @BindView(R.id.countryImage)
     ImageView mCountryFlagImageView;
@@ -140,7 +144,7 @@ public class MobileNumberActivity extends AppCompatActivity {
         Call<Otp> call = apiInterface.postOtp(mobile);
         call.enqueue(new Callback<Otp>() {
             @Override
-            public void onResponse(Call<Otp> call, Response<Otp> response) {
+            public void onResponse(@NonNull Call<Otp> call,@NonNull  Response<Otp> response) {
 
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     customDialog.dismiss();
@@ -161,7 +165,7 @@ public class MobileNumberActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Otp> call, Throwable t) {
+            public void onFailure(@NonNull Call<Otp> call,@NonNull Throwable t) {
 
             }
         });
@@ -206,7 +210,7 @@ public class MobileNumberActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.back_img, R.id.next_btn, R.id.already_have_aacount_txt})
+    @OnClick({R.id.back_img, R.id.next_btn, R.id.already_have_aacount_txt, R.id.facebook_login, R.id.google_login})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_img:
@@ -217,18 +221,33 @@ public class MobileNumberActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 finish();
                 break;
+            case R.id.facebook_login:
+                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.coming_soon), Snackbar.LENGTH_SHORT).show();
+                break;
+            case R.id.google_login:
+                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.coming_soon), Snackbar.LENGTH_SHORT).show();
+                break;
             case R.id.next_btn:
                 String mobileNumber = country_code + etMobileNumber.getText().toString();
-                GlobalData.getInstance().mobile = mobileNumber;
-                if (TextUtils.isEmpty(mobileNumber)) {
+                if (isValidMobile(mobileNumber)) {
 
-                } else {
+                    GlobalData.mobile = mobileNumber;
                     if (isSignUp)
                         getOtpVerification(mobileNumber);
                     else
                         forgotPassord(mobileNumber);
+                } else {
+                    Toast.makeText(this, "Please enter valid mobile number", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    private boolean isValidMobile(String phone) {
+        if (phone == null || phone.length() < 6 || phone.length() > 13) {
+            return false;
+        } else {
+            return android.util.Patterns.PHONE.matcher(phone).matches();
         }
     }
 

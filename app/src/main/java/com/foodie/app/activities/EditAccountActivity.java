@@ -111,7 +111,8 @@ public class EditAccountActivity extends AppCompatActivity {
             name.setText(GlobalData.profileModel.getName());
             email.setText(GlobalData.profileModel.getEmail());
             phone.setText(GlobalData.profileModel.getPhone());
-            Glide.with(context).load(GlobalData.profileModel.getAvatar()).into(userProfileImg);
+            System.out.println(GlobalData.profileModel.getAvatar());
+            Glide.with(getApplicationContext()).load(GlobalData.profileModel.getAvatar()).into(userProfileImg);
         }
     }
 
@@ -133,7 +134,7 @@ public class EditAccountActivity extends AppCompatActivity {
 
     private void updateProfile() {
 
-        if (name.getText().toString().isEmpty() && email.getText().toString().isEmpty()) {
+        if (name.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
             Toast.makeText(this, "Enter required Field", Toast.LENGTH_SHORT).show();
             return;
         }

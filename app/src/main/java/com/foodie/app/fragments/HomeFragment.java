@@ -77,7 +77,6 @@ import static com.foodie.app.helper.GlobalData.selectedAddress;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-
     @BindView(R.id.animation_line_image)
     ImageView animationLineImage;
     Context context;

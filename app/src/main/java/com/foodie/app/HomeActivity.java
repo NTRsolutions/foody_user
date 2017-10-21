@@ -194,8 +194,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (mLastLocation != null) {
                     latitude = mLastLocation.getLatitude();
                     longitude = mLastLocation.getLongitude();
-                    GlobalData.getInstance().latitude = mLastLocation.getLatitude();
-                    GlobalData.getInstance().longitude = mLastLocation.getLongitude();
+                    GlobalData.latitude = mLastLocation.getLatitude();
+                    GlobalData.longitude = mLastLocation.getLongitude();
                     getAddress();
 
                 } else {
@@ -205,9 +205,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public Address getAddress(double latitude, double longitude) {
+        System.out.println(latitude + " | "+ longitude);
         Geocoder geocoder;
         List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
+        geocoder = new Geocoder(getBaseContext(), Locale.ENGLISH);
 
         try {
             addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5

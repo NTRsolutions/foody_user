@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,28 +81,24 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
         Call<List<Promotions>> call = apiInterface.getWalletPromoCode();
         call.enqueue(new Callback<List<Promotions>>() {
             @Override
-            public void onResponse(Call<List<Promotions>> call, Response<List<Promotions>> response) {
+            public void onResponse(@NonNull Call<List<Promotions>> call, @NonNull Response<List<Promotions>> response) {
                 customDialog.dismiss();
-                if (response != null) {
-                    if (!response.isSuccessful() && response.errorBody() != null) {
-                        try {
-                            JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else if (response.isSuccessful()) {
-                        Log.e("onResponse: ", response.toString());
-                        promotionsModelArrayList.addAll(response.body());
-                        promotionsRv.getAdapter().notifyDataSetChanged();
+                if (response.isSuccessful()) {
+                    Log.e("onResponse: ", response.toString());
+                    promotionsModelArrayList.addAll(response.body());
+                    promotionsRv.getAdapter().notifyDataSetChanged();
+                }else{
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().toString());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else {
-
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Promotions>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Promotions>> call, @NonNull Throwable t) {
                 customDialog.dismiss();
             }
         });
@@ -139,27 +136,23 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
         Call<PromotionResponse> call = apiInterface.applyWalletPromoCode(String.valueOf(promotions.getId()));
         call.enqueue(new Callback<PromotionResponse>() {
             @Override
-            public void onResponse(Call<PromotionResponse> call, Response<PromotionResponse> response) {
+            public void onResponse(@NonNull Call<PromotionResponse> call, @NonNull Response<PromotionResponse> response) {
                 customDialog.dismiss();
-                if (response != null) {
-                    if (!response.isSuccessful() && response.errorBody() != null) {
-                        try {
-                            JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else if (response.isSuccessful()) {
-                        GlobalData.profileModel.setWalletBalance(response.body().getWalletMoney());
-                        gotoFlow();
-                    }
+                if (response.isSuccessful()) {
+                    GlobalData.profileModel.setWalletBalance(response.body().getWalletMoney());
+                    gotoFlow();
                 } else {
-
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<PromotionResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<PromotionResponse> call,@NonNull Throwable t) {
                 customDialog.dismiss();
             }
         });

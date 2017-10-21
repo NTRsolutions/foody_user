@@ -29,9 +29,6 @@
             <!--    Imprssive Dish-->
 
             <LinearLayout
-                android:paddingLeft="@dimen/activity_vertical_margin"
-                android:paddingRight="@dimen/activity_vertical_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
@@ -42,6 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:padding="@dimen/_8sdp"
+                    fontPath="fonts/Nunito-Bold.ttf"
                     android:text="@string/let_impress_you"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_tiny" />
@@ -62,8 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_horizontal_margin">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/restaurant_count_txt"
@@ -71,16 +69,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:padding="@dimen/_8sdp"
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:text="@string/hundred_restaurant"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_tiny"
-                    android:typeface="sans" />
+                    android:textSize="@dimen/text_tiny" />
 
                 <Spinner
-
                     android:id="@+id/catagoery_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,7 +85,6 @@
                     android:background="@drawable/bg_spinner"
                     android:gravity="end|center_vertical"
                     android:maxLines="1"
-                    android:text="@string/relevance"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_tiny" />

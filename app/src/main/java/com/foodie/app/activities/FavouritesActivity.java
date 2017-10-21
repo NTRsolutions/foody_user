@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,8 @@ public class FavouritesActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.favorites_Rv)
     RecyclerView favoritesRv;
+    @BindView(R.id.error_layout)
+    LinearLayout errorLayout;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     private FavouritesAdapter adapter;
@@ -77,8 +80,16 @@ public class FavouritesActivity extends AppCompatActivity {
         Call<FavoriteList> call=apiInterface.getFavoriteList();
         call.enqueue(new Callback<FavoriteList>() {
             @Override
-            public void onResponse(Call<FavoriteList> call, Response<FavoriteList> response) {
+            public void onResponse(@NonNull Call<FavoriteList> call, @NonNull Response<FavoriteList> response) {
                 if(response.isSuccessful()){
+
+                    if(response.body().getAvailable().size() == 0 && response.body().getUnAvailable().size() == 0){
+                        errorLayout.setVisibility(View.VISIBLE);
+                        return;
+                    }else {
+                        errorLayout.setVisibility(View.GONE);
+                    }
+
                     FavListModel model = new FavListModel();
                     model.setHeader("available");
                     model.setFav(response.body().getAvailable());
@@ -106,7 +117,7 @@ public class FavouritesActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<FavoriteList> call, Throwable t) {
+            public void onFailure(@NonNull Call<FavoriteList> call, @NonNull Throwable t) {
                 Toast.makeText(FavouritesActivity.this, "Something wrong - getFavorites", Toast.LENGTH_LONG).show();
             }
         });

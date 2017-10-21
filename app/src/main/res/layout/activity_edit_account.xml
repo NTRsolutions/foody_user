@@ -56,7 +56,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginBottom="16dp"
-                    android:src="@drawable/login_pic" />
+                    android:src="@drawable/man" />
 
                 <ImageView
                     android:id="@+id/edit_user_profile"

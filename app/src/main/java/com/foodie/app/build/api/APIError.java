@@ -3,19 +3,24 @@ package com.foodie.app.build.api;
 /**
  * Created by Tamil on 9/25/2017.
  */
-
+import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 public class APIError {
-    private int statusCode;
-    private String message;
+    @SerializedName("type")
+    @Expose
+    private List<String> type = null;
 
-    public APIError() {
+    public List<String> getType() {
+        return type;
     }
 
-    public int status() {
-        return statusCode;
+    public void setType(List<String> type) {
+        this.type = type;
     }
 
-    public String message() {
-        return message;
+    public APIError withType(List<String> type) {
+        this.type = type;
+        return this;
     }
 }

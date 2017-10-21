@@ -128,7 +128,7 @@
                     android:drawableTop="@drawable/home_selector"
                     android:gravity="center"
                     android:padding="@dimen/_3sdp"
-                    android:text="Home"
+                    android:text="@string/home"
                     android:textAllCaps="true"
                     android:textColor="@color/item_tint_selector" />
 

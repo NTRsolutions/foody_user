@@ -34,8 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.build.api.APIError;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.build.api.ErrorUtils;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.google.android.gms.common.ConnectionResult;
@@ -140,7 +142,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         context = SaveDeliveryLocationActivity.this;
         address = new com.foodie.app.model.Address();
         customDialog=new CustomDialog(context);
-        address.setType("other");
+        homeRadio.setChecked(true);
+        address.setType("home");
         //Intialize Animation line
         initializeAvd();
         //Load animation
@@ -199,6 +202,20 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
         });
 
+        typeRadiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
+                if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
+                    otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                    typeRadiogroup.setVisibility(View.GONE);
+                }
+                System.out.println("typeRadiogroup "+radioButton.getText().toString().toLowerCase());
+                address.setType(radioButton.getText().toString().toLowerCase());
+
+            }
+        });
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String id = extras.getString("place_id");
@@ -206,11 +223,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             if (id != null) {
                 Places.GeoDataApi.getPlaceById(mGoogleApiClient, id).setResultCallback(new ResultCallback<PlaceBuffer>() {
                     @Override
-                    public void onResult(PlaceBuffer places) {
+                    public void onResult(@NonNull PlaceBuffer places) {
                         if (places.getStatus().isSuccess() && places.getCount() > 0) {
                             Place place = places.get(0);
                             addressEdit.setText(place.getAddress());
                             LatLng latLng = place.getLatLng();
+                            value = 1;
                             CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(16).build();
                             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         } else {
@@ -232,26 +250,13 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     } else if (address.getType().equals("work")) {
                         workRadio.setChecked(true);
                     } else {
-                        homeRadio.setChecked(true);
+                        otherAddressHeaderEt.setText(address.getType());
+                        otherRadio.setChecked(true);
                     }
                 }
             }
 
         }
-
-        typeRadiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
-                if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
-                    otherAddressTitleLayout.setVisibility(View.VISIBLE);
-                    typeRadiogroup.setVisibility(View.GONE);
-                }
-                address.setType(radioButton.getText().toString().toLowerCase());
-
-            }
-        });
-
 
     }
 
@@ -323,6 +328,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
     @Override
     public void onLocationChanged(Location location) {
+        System.out.println("onLocationChanged " );
         if (value == 0) {
             value = 1;
             if (address.getId() == null) {
@@ -433,16 +439,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
-                public void onResponse(Call<com.foodie.app.model.Address> call, Response<com.foodie.app.model.Address> response) {
+                public void onResponse(@NonNull Call<com.foodie.app.model.Address> call,@NonNull Response<com.foodie.app.model.Address> response) {
                     customDialog.dismiss();
-                    if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                        try {
-                            JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(SaveDeliveryLocationActivity.this, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(SaveDeliveryLocationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else if (response != null && response.isSuccessful()) {
+                    if (response.isSuccessful()) {
 
                         if (isAddressSave) {
                             //select the address data and set to address in Cart fargment page
@@ -455,11 +454,14 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             finish();
                         }
 
+                    } else {
+                        APIError error = ErrorUtils.parseError(response);
+                        Toast.makeText(SaveDeliveryLocationActivity.this, error.getType().get(0), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<com.foodie.app.model.Address> call, Throwable t) {
+                public void onFailure(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Throwable t) {
                     Log.e(TAG, t.toString());
                     customDialog.dismiss();
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -469,28 +471,27 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void updateAddress() {
+        if (address.getType().equalsIgnoreCase("other")) {
+            address.setType(otherAddressHeaderEt.getText().toString());
+        }
         if (address != null && address.getId() != null && validate()) {
             customDialog.show();
             Call<com.foodie.app.model.Address> call = apiInterface.updateAddress(address.getId(), address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
-                public void onResponse(Call<com.foodie.app.model.Address> call, Response<com.foodie.app.model.Address> response) {
+                public void onResponse(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Response<com.foodie.app.model.Address> response) {
                     customDialog.dismiss();
-                    if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                        try {
-                            JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(SaveDeliveryLocationActivity.this, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(SaveDeliveryLocationActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else if (response != null && response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         GlobalData.selectedAddress = response.body();
                         finish();
+                    } else {
+                        APIError error = ErrorUtils.parseError(response);
+                        Toast.makeText(SaveDeliveryLocationActivity.this, error.getType().get(0), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<com.foodie.app.model.Address> call, Throwable t) {
+                public void onFailure(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Throwable t) {
                     Log.e(TAG, t.toString());
                     customDialog.dismiss();
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();

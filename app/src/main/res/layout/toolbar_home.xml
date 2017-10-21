@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:padding="8dp"
             android:text="loading..." />
 
     </RelativeLayout>
@@ -19,8 +20,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
 
         <LinearLayout
@@ -31,6 +31,7 @@
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:padding="4dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:visibility="invisible">
@@ -41,9 +42,11 @@
                 fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
                 android:drawableRight="@drawable/ic_down"
                 android:maxLines="1"
-                android:paddingEnd="@dimen/_8sdp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
                 android:text="Home"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
@@ -53,10 +56,9 @@
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingRight="@dimen/_10sdp"
+                android:padding="2dp"
                 android:text="Washington, DC, Green town west..."
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_tiny" />
@@ -64,23 +66,22 @@
         </LinearLayout>
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/filter_selection_image"
-            android:layout_gravity="center_vertical"
-           android:src="@drawable/circle"
             android:layout_width="@dimen/_6sdp"
-            android:layout_height="@dimen/_6sdp" />
+            android:layout_height="@dimen/_6sdp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/circle"
+            android:visibility="gone" />
 
         <Button
-            android:layout_marginTop="@dimen/_3sdp"
             android:id="@+id/filter"
             fontPath="fonts/Nunito-Bold.ttf"
             android:layout_width="@dimen/_60sdp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_filter"
             android:gravity="center"
+            android:padding="8dp"
             android:text="@string/filter"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryText"
