@@ -5,11 +5,9 @@
     tools:context="com.foodie.app.fragments.OrderHelpFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:layout_marginBottom="8dp"
-        android:scrollbars="none"
-        android:layout_marginTop="8dp"
-        android:id="@+id/help_list_item"
+    <android.support.v7.widget.RecyclerView
+        android:padding="@dimen/activity_vertical_margin_half"
+        android:id="@+id/help_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />

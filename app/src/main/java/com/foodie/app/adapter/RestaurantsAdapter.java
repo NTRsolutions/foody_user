@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.GlobalData;
@@ -58,9 +59,12 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Shop shops = list.get(position);
-
-        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
-                .error(R.drawable.item1).into(holder.dishImg);
+        Glide.with(context).load(shops.getAvatar())
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error((R.drawable.item1))
+                .into(holder.dishImg);
         holder.restaurantName.setText(shops.getName());
         holder.category.setText(shops.getDescription());
         if (shops.getOfferPercent() == null) {

@@ -23,9 +23,12 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.ConnectionHelper;
+import com.foodie.app.model.DisputeMessage;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 import com.foodie.app.service.OrderStatusService;
+import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -38,6 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.helper.GlobalData.disputeMessageList;
 import static com.foodie.app.helper.GlobalData.onGoingOrderList;
 import static com.foodie.app.helper.GlobalData.pastOrderList;
 
@@ -57,10 +61,7 @@ public class OrdersActivity extends AppCompatActivity {
     List<OrderModel> modelList = new ArrayList<>();
     Handler handler;
     Intent orderIntent;
-
-    int ONGOING_ORDER_LIST_SIZE=0;
-    int PAST_ORDER_LIST_SIZE=0;
-    private BroadcastReceiver mReceiver;
+    ConnectionHelper connectionHelper;
 
 
     @Override
@@ -68,10 +69,10 @@ public class OrdersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ButterKnife.bind(this);
-
-        setSupportActionBar(toolbar);
         context=OrdersActivity.this;
+        ButterKnife.bind(this);
+        connectionHelper= new ConnectionHelper(context);
+        setSupportActionBar(toolbar);
 
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("ONGOING"));
@@ -95,11 +96,16 @@ public class OrdersActivity extends AppCompatActivity {
         orderIntent.putExtra("type", "ORDER_LIST");
         startService(orderIntent);
         handler = new Handler();
-        getOngoingOrders();
-
+        //Get Ongoing Order list
+        if (connectionHelper.isConnectingToInternet()) {
+            getOngoingOrders();
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+        }
 
 
     }
+
 
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -124,39 +130,7 @@ public class OrdersActivity extends AppCompatActivity {
             Log.d("receiver", "Success");
         }
     };
-//    private  void  runHandler(){
-//        Runnable orderStatusRunnable = new Runnable() {
-//            public void run() {
-//                if (onGoingOrderList != null && pastOrderList != null) {
-////                    if( ONGOING_ORDER_LIST_SIZE!=onGoingOrderList.size()){
-//                        ONGOING_ORDER_LIST_SIZE=onGoingOrderList.size();
-//                        PAST_ORDER_LIST_SIZE=pastOrderList.size();
-//                        modelList.clear();
-//                        OrderModel onGoingOrderModel = new OrderModel();
-//                        onGoingOrderModel.setHeader("Current Orders");
-//                        onGoingOrderModel.setOrders(onGoingOrderList);
-//                        modelList.add(onGoingOrderModel);
-//                        OrderModel pastOrderModel = new OrderModel();
-//                        pastOrderModel.setHeader("Past Orders");
-//                        pastOrderModel.setOrders(pastOrderList);
-//                        modelList.add(pastOrderModel);
-//                        modelListReference.clear();
-//                        modelListReference.addAll(modelList);
-//                        runOnUiThread(new Runnable() {
-//                            public void run() {
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                        });
-//
-////                    }
-//                }
-//                handler.postDelayed(this, 2000);
-//
-//
-//            }
-//        };
-//        handler.postDelayed(orderStatusRunnable, 2000);
-//    }
+
     private void getPastOrders() {
         Call<List<Order>> call = apiInterface.getPastOders();
         call.enqueue(new Callback<List<Order>>() {

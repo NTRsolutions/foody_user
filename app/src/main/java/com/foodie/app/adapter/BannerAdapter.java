@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.GlobalData;
@@ -48,8 +49,13 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         Banner banner = list.get(position);
-        Glide.with(context).load(banner.getUrl()).placeholder(R.drawable.item1).dontAnimate()
-                .error(R.drawable.item1).into(holder.bannerImg);
+
+        Glide.with(context).load(banner.getUrl())
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error((R.drawable.item1))
+                .into(holder.bannerImg);
         holder.bannerImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +73,6 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
     public int getItemCount() {
         return list.size();
     }
-
-
 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

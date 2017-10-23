@@ -66,7 +66,6 @@ public class OrderStatusService extends IntentService {
             } else if (type.equalsIgnoreCase("ORDER_LIST")) {
                 id = 0;
             }
-
         } else {
 
         }

@@ -24,6 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.foodie.app.BuildConfig;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
@@ -83,6 +85,7 @@ public class ProfileFragment extends Fragment {
     private View toolbarLayout;
     ImageView userImage;
     TextView userName, userPhone, userEmail;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,14 +126,10 @@ public class ProfileFragment extends Fragment {
             errorLayout.setVisibility(View.VISIBLE);
         }
 
+        String VERSION_NAME = BuildConfig.VERSION_NAME;
+        int versionCode = BuildConfig.VERSION_CODE;
+        appVersion.setText("Version " + VERSION_NAME + " ("+String.valueOf(versionCode)+ ")");
 
-        try {
-            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            int version = pInfo.versionCode;
-            appVersion.setText("Version "+version);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
 
         return view;
     }
@@ -211,6 +210,7 @@ public class ProfileFragment extends Fragment {
                     startActivity(new Intent(context, EditAccountActivity.class));
                 }
             });
+
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -223,9 +223,14 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    private void initView(){
+    private void initView() {
         if (GlobalData.profileModel != null) {
-            Glide.with(getContext()).load(GlobalData.profileModel.getAvatar()).into(userImage);
+            Glide.with(context).load(GlobalData.profileModel.getAvatar())
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error((R.drawable.item1))
+                    .into(userImage);
             userPhone.setText(GlobalData.profileModel.getPhone());
             userName.setText(GlobalData.profileModel.getName());
             userEmail.setText(" - " + GlobalData.profileModel.getEmail());

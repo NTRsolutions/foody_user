@@ -9,6 +9,7 @@ import com.foodie.app.model.Address;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.ChangePassword;
 import com.foodie.app.model.Cuisine;
+import com.foodie.app.model.DisputeMessage;
 import com.foodie.app.model.Favorite;
 import com.foodie.app.model.FavoriteList;
 import com.foodie.app.model.ForgotPassword;
@@ -157,6 +158,12 @@ public interface ApiInterface {
     Call<Message> rate(@FieldMap HashMap<String, String> params);
 
 
+     /*-------------DISPUTE--------------------*/
+
+    @GET("api/user/disputehelp")
+    Call<List<DisputeMessage>> getDisputeList();
+
+
     /*-------------SEARCH--------------------*/
     @GET("api/user/search")
     Call<Search> getSearch(@Query("name") String search);
@@ -171,4 +178,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("api/user/wallet/promocode")
     Call<PromotionResponse> applyWalletPromoCode(@Field("promocode_id") String id);
+
+
+
+
 }

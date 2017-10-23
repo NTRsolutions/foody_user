@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
@@ -112,7 +113,12 @@ public class EditAccountActivity extends AppCompatActivity {
             email.setText(GlobalData.profileModel.getEmail());
             phone.setText(GlobalData.profileModel.getPhone());
             System.out.println(GlobalData.profileModel.getAvatar());
-            Glide.with(getApplicationContext()).load(GlobalData.profileModel.getAvatar()).into(userProfileImg);
+            Glide.with(context).load(GlobalData.profileModel.getAvatar())
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error((R.drawable.item1))
+                    .into(userProfileImg);
         }
     }
 

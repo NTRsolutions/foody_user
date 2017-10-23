@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,10 +39,6 @@ public class AccountPaymentActivity extends AppCompatActivity {
     RelativeLayout walletLayout;
 
     NumberFormat numberFormat = GlobalData.getNumberFormat();
-    @BindView(R.id.back)
-    ImageView back;
-    @BindView(R.id.title)
-    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,15 @@ public class AccountPaymentActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        title.setText(getResources().getString(R.string.payment));
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
         ArrayList<PaymentMethod> list = new ArrayList<>();
         list.add(new PaymentMethod("5431-XXXX-XXXX-4242", 0));
@@ -83,8 +88,4 @@ public class AccountPaymentActivity extends AppCompatActivity {
         walletAmtTxt.setText(currencySymbol+" "+String.valueOf(walletMoney));
     }
 
-    @OnClick(R.id.back)
-    public void onBackClicked() {
-        onBackPressed();
-    }
 }

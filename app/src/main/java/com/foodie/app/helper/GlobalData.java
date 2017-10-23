@@ -7,6 +7,7 @@ import com.foodie.app.model.Address;
 import com.foodie.app.model.AddressList;
 import com.foodie.app.model.Category;
 import com.foodie.app.model.Cuisine;
+import com.foodie.app.model.DisputeMessage;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.User;
 import com.foodie.app.model.Otp;
@@ -51,6 +52,7 @@ public class GlobalData {
     public static List<Cuisine> cuisineList;
     public static List<Category> categoryList=null;
     public static List<Order> onGoingOrderList;
+    public static List<DisputeMessage> disputeMessageList;
     public static List<Order> pastOrderList;
     public static AddressList addressList=null;
     public static List<String> ORDER_STATUS = Arrays.asList("ORDERED", "RECEIVED", "ASSIGNED", "PROCESSING", "REACHED", "PICKEDUP", "ARRIVED", "COMPLETED");

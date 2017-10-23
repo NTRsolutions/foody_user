@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,10 +50,6 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     Context context = PromotionActivity.this;
     CustomDialog customDialog;
 
-    @BindView(R.id.back)
-    ImageView back;
-    @BindView(R.id.title)
-    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +58,14 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        title.setText(context.getResources().getString(R.string.promocode));
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         promotionsModelArrayList = new ArrayList<>();
         customDialog = new CustomDialog(context);
@@ -125,10 +129,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick(R.id.back)
-    public void onViewClicked() {
-        onBackPressed();
-    }
+
 
     @Override
     public void onApplyBtnClick(Promotions promotions) {

@@ -37,6 +37,7 @@ import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
+import com.foodie.app.model.DisputeMessage;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,12 +50,19 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.foodie.app.helper.GlobalData.disputeMessageList;
 import static com.foodie.app.helper.GlobalData.notificationCount;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -177,6 +185,36 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 return true;
             }
         });
+
+        getDisputeMessage();
+    }
+
+    private void getDisputeMessage() {
+        Call<List<DisputeMessage>> call= apiInterface.getDisputeList();
+        call.enqueue(new Callback<List<DisputeMessage>>() {
+            @Override
+            public void onResponse(Call<List<DisputeMessage>> call, Response<List<DisputeMessage>> response) {
+                if (response.isSuccessful()) {
+                    Log.e("Dispute List : ", response.toString());
+                    disputeMessageList= new ArrayList<DisputeMessage>();
+                    disputeMessageList.addAll(response.body());
+                }else{
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().toString());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DisputeMessage>> call, Throwable t) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
 
     }
 
