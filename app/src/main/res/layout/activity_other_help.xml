@@ -12,74 +12,101 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:titleTextColor="@color/colorTextBlack"
-        android:title="OTHER"
         android:elevation="1dp"
         android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ToolBarStyle"
        >
 
-        <TextView
-            android:id="@+id/title"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="16sp"
-            android:textAllCaps="true"
-            android:text="Other"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/order_id_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Order #1001"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/order_item_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="1item, $250"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/text_tiny" />
+
+        </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 
+    <View
+        android:layout_below="@+id/toolbar"
+        android:background="#eee"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
+
+    </View>
 
 
     <LinearLayout
-        android:layout_below="@+id/toolbar"
-        android:padding="@dimen/activity_vertical_margin"
-        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_1sdp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_vertical_margin">
 
         <TextView
             android:id="@+id/reason_title"
-            android:textColor="@color/colorTextBlack"
-            android:textSize="@dimen/text_medium"
-            android:text="Reason"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Reason"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="@dimen/text_medium" />
 
         <TextView
             android:id="@+id/reason_description"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="@dimen/text_small"
-            android:text="Are you facing any issue which we can assist with? Please reach out to us we will be happy to help !"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        
-        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin_half"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:orientation="horizontal"
+            android:text="Are you facing any issue which we can assist with? Please reach out to us we will be happy to help !"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/dispute"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginRight="@dimen/activity_vertical_margin_half"
+                android:layout_weight="1"
+                android:background="@drawable/button_border_theme_color"
+                android:text="@string/dispute"
+                android:textColor="@color/theme" />
 
             <Button
                 android:id="@+id/chat_us"
-                android:text="Chat us"
-                android:textColor="@color/theme"
-                android:background="@drawable/button_border_theme_color"
-                android:layout_marginRight="8dp"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_35sdp" />
-
-            <Button
-                android:visibility="gone"
-                android:id="@+id/call_us"
-                android:text="Call us"
-                android:textColor="@color/theme"
-                android:background="@drawable/button_border_theme_color"
-                android:layout_marginLeft="8dp"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
+                android:background="@drawable/button_border_theme_color"
+                android:text="Chat us"
+                android:textColor="@color/theme" />
+
 
         </LinearLayout>
 
@@ -88,13 +115,12 @@
 
 
     <FrameLayout
-        android:layout_below="@+id/toolbar"
         android:id="@+id/chat_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
 
     </FrameLayout>
-
 
 
 </RelativeLayout>

@@ -153,6 +153,9 @@ public interface ApiInterface {
     @GET("api/user/order")
     Call<List<Order>> getPastOders();
 
+    @DELETE("api/user/order/{id}")
+    Call<Order> cancelOrder(@Path("id") int id, @Query("reason") String reason);
+
     @FormUrlEncoded
     @POST("api/user/rating")
     Call<Message> rate(@FieldMap HashMap<String, String> params);

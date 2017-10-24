@@ -130,6 +130,7 @@
     <string name="order_processed">Order Processed</string>
     <string name="order_pickedup">Order Pickedup</string>
     <string name="order_delivered">Order Delivered</string>
+    <string name="order_cancelled">Order Cancelled</string>
 
     <!--Order Flow Description-->
     <string name="description_1">We have recieved your order</string>
@@ -162,6 +163,7 @@
     <string name="use_wallet">Use wallet</string>
     <string name="oops_connect_your_internet">Oops ! Connect your Internet.</string>
     <string name="coming_soon">coming soon please check back shortly</string>
+    <string name="dispute">Dispute</string>
 
 
 </resources>

@@ -86,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Landmark"
                     android:inputType="textPostalAddress"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 

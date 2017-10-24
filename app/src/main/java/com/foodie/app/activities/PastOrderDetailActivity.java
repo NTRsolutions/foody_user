@@ -81,7 +81,6 @@ public class PastOrderDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
         ButterKnife.bind(this);
-
         //Toolbar
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -91,13 +90,20 @@ public class PastOrderDetailActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
         if (isSelectedOrder != null) {
             Order order = GlobalData.getInstance().isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
             priceAmount = order.getInvoice().getNet();
-            orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on)+getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
+            if(order.getStatus().equalsIgnoreCase("CANCELLED")){
+                orderStatusTxt.setText(getResources().getString(R.string.order_cancelled));
+                orderSucceessImage.setVisibility(View.GONE);
+                orderStatusTxt.setTextColor(getResources().getColor(R.color.colorRed));
+            }else{
+                orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on)+getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
+                orderStatusTxt.setTextColor(getResources().getColor(R.color.colorGreen));
+                orderSucceessImage.setVisibility(View.VISIBLE);
+            }
             currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
             if (itemQuantity == 1)
                 orderItemTxt.setText(String.valueOf(itemQuantity) + " Item, " + currency + String.valueOf(priceAmount));

@@ -226,6 +226,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
                 priceAmount = quantity * product.getPrices().getPrice();
                 holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
+
+
             }
         });
 
@@ -308,14 +310,13 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         }
 
                         GlobalData.getInstance().notificationCount = itemQuantity;
-//                        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
-
                         //Set Payment details
                         String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
                         CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
                         CartFragment.discountAmount.setText("- " + currency + "" + discount);
-                        int payAmount = priceAmount - discount;
-                        CartFragment.payAmount.setText(currency + "" + payAmount);
+                        int topPayAmount = priceAmount - discount;
+                        topPayAmount = topPayAmount+ response.body().getDeliveryCharges()+response.body().getTaxPercentage();
+                        CartFragment.payAmount.setText(currency + "" + topPayAmount);
 
                     } else {
                         GlobalData.getInstance().notificationCount = itemQuantity;

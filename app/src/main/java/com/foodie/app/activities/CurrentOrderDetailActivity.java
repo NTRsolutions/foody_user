@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
@@ -36,11 +38,15 @@ import com.foodie.app.adapter.OrderFlowAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.OrderViewFragment;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderFlow;
 import com.foodie.app.service.OrderStatusService;
+
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,6 +89,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     @BindView(R.id.order_flow_rv)
     RecyclerView orderFlowRv;
 
+    public static TextView orderCancelTxt;
+
     Context context;
     Intent orderIntent;
     OrderFlowAdapter adapter;
@@ -90,20 +98,20 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
+    CustomDialog customDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_order_detail);
         ButterKnife.bind(this);
-
         context = CurrentOrderDetailActivity.this;
         orderIntent = new Intent(context, OrderStatusService.class);
         orderIntent.putExtra("type", "SINGLE_ORDER");
-        if(isSelectedOrder!=null)
-        orderIntent.putExtra("order_id", isSelectedOrder.getId());
+        if (isSelectedOrder != null)
+            orderIntent.putExtra("order_id", isSelectedOrder.getId());
         startService(orderIntent);
         isOrderPage = getIntent().getBooleanExtra("is_order_page", false);
-
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("SINGLE_ORDER"));
 
@@ -118,6 +126,15 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         });
         toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
         toolbar.setContentInsetsAbsolute(0, 0);
+
+        orderCancelTxt = (TextView) findViewById(R.id.order_cancel);
+        orderCancelTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+
 
         List<OrderFlow> orderFlowList = new ArrayList<>();
         orderFlowList.add(new OrderFlow(getString(R.string.order_placed), getString(R.string.description_1), R.drawable.ic_order_placed, ORDER_STATUS.get(0)));
@@ -161,6 +178,73 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
 
     }
 
+    private void showDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.order_cancel_dialog, null);
+        dialogBuilder.setView(dialogView);
+        final EditText edt = (EditText) dialogView.findViewById(R.id.reason_edit);
+        dialogBuilder.setTitle(orderIdTxt.getText().toString());
+        dialogBuilder.setMessage("Are you sure want to cancel this order ?");
+        dialogBuilder.setPositiveButton("Submit", null);
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (edt.getText().toString().equalsIgnoreCase("")) {
+                            Toast.makeText(context, "Please enter reason", Toast.LENGTH_SHORT).show();
+                        } else {
+                            dialog.dismiss();
+                            cancelOrder(edt.getText().toString());
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+
+    }
+
+    private void cancelOrder(String reason) {
+        customDialog = new CustomDialog(context);
+        customDialog.setCancelable(false);
+        Call<Order> call = apiInterface.cancelOrder(isSelectedOrder.getId(), reason);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    customDialog.dismiss();
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    onBackPressed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                customDialog.dismiss();
+                Toast.makeText(CurrentOrderDetailActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -171,6 +255,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
         }
     }
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

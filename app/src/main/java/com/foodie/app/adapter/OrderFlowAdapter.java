@@ -62,6 +62,9 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
             if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(GlobalData.ORDER_STATUS.size() - 1))){
                 ((CurrentOrderDetailActivity)context).rate();
             }
+            if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(0))){
+               CurrentOrderDetailActivity.orderCancelTxt.setVisibility(View.VISIBLE);
+            }
         }else {
             holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorSecondaryText));
         }

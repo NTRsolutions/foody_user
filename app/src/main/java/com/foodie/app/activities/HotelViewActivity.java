@@ -159,6 +159,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         }
         shops = GlobalData.getInstance().selectedShop;
+
+
+
 //        GlobalData.getInstance().selectedShop = GlobalData.getInstance().shopList.get(restaurantPosition);
 
         //get User Profile Data
@@ -288,14 +291,17 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         //Heart Animation Button
         if (heartBtn != null)
             heartBtn.init(this);
+        if(shops.getFavorite()!=null){
+            heartBtn.setChecked(true);
+            heartBtn.setTag(1);
+        }else
+            heartBtn.setTag(0);
         heartBtn.setShineDistanceMultiple(1.8f);
-        heartBtn.setTag(0);
         heartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (heartBtn.getTag().equals(0)) {
                     heartBtn.setTag(1);
-
                     heartBtn.setShapeResource(R.raw.heart);
                 } else {
                     heartBtn.setTag(0);
@@ -308,7 +314,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onCheckedChanged(View view, boolean checked) {
                 Log.e("HeartButton", "click " + checked);
-
                 if (connectionHelper.isConnectingToInternet()) {
                     if (checked) {
                         doFavorite(shops.getId());

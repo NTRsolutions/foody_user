@@ -59,7 +59,6 @@ public class OrdersActivity extends AppCompatActivity {
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     List<OrderModel> modelList = new ArrayList<>();
-    Handler handler;
     Intent orderIntent;
     ConnectionHelper connectionHelper;
 
@@ -95,18 +94,9 @@ public class OrdersActivity extends AppCompatActivity {
         orderIntent = new Intent(context, OrderStatusService.class);
         orderIntent.putExtra("type", "ORDER_LIST");
         startService(orderIntent);
-        handler = new Handler();
-        //Get Ongoing Order list
-        if (connectionHelper.isConnectingToInternet()) {
-            getOngoingOrders();
-        } else {
-            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
-        }
 
 
     }
-
-
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -152,14 +142,12 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-                    LayoutAnimationController controller =
-                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-                    ordersRv.setLayoutAnimation(controller);
-                    ordersRv.scheduleLayoutAnimation();
+//                    LayoutAnimationController controller =
+//                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+//                    ordersRv.setLayoutAnimation(controller);
+//                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
 //                    runHandler();
-
-
                 }
             }
 
@@ -219,6 +207,12 @@ public class OrdersActivity extends AppCompatActivity {
         startService(orderIntent);
         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
                 new IntentFilter("ONGOING"));
+        //Get Ongoing Order list
+        if (connectionHelper.isConnectingToInternet()) {
+            getOngoingOrders();
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+        }
 
     }
 

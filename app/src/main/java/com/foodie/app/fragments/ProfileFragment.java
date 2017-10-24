@@ -229,7 +229,7 @@ public class ProfileFragment extends Fragment {
                     .thumbnail(0.5f)
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .error((R.drawable.item1))
+                    .error((R.drawable.man))
                     .into(userImage);
             userPhone.setText(GlobalData.profileModel.getPhone());
             userName.setText(GlobalData.profileModel.getName());

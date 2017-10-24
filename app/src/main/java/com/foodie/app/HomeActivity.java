@@ -429,6 +429,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onResume();
         connectionHelper.isConnectingToInternet();
         updateNotificationCount(context, notificationCount);
+
     }
 
     @Override

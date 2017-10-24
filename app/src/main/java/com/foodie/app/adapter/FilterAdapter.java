@@ -126,6 +126,10 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
         if (isFilterApplied) {
             FilterActivity.applyFilterBtn.setAlpha(1);
             FilterActivity.resetTxt.setAlpha(1);
+            FilterActivity.applyFilterBtn.setClickable(true);
+            FilterActivity.resetTxt.setClickable(true);
+            FilterActivity.applyFilterBtn.setEnabled(true);
+            FilterActivity.resetTxt.setEnabled(true);
         }
 
 
@@ -144,8 +148,10 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
                     }
                     FilterActivity.applyFilterBtn.setAlpha(1);
                     FilterActivity.resetTxt.setAlpha(1);
+                    FilterActivity.applyFilterBtn.setClickable(true);
                     FilterActivity.applyFilterBtn.setEnabled(true);
                     FilterActivity.resetTxt.setEnabled(true);
+                    FilterActivity.resetTxt.setClickable(true);
 
                 } else {
                     if (list.get(section).getHeader().equalsIgnoreCase("Cuisines")) {
@@ -165,13 +171,14 @@ public class FilterAdapter extends SectionedRecyclerViewAdapter<FilterAdapter.Vi
                     if (cuisineIdList.size() == 0 && !isPureVegApplied && !isOfferApplied) {
                         if (!isFilterApplied) {
                             FilterActivity.applyFilterBtn.setAlpha((float) 0.5);
+                            FilterActivity.applyFilterBtn.setClickable(false);
                             FilterActivity.applyFilterBtn.setEnabled(false);
                             FilterActivity.resetTxt.setAlpha((float) 0.5);
+                            FilterActivity.resetTxt.setClickable(false);
                             FilterActivity.resetTxt.setEnabled(false);
                         }
 
                     }
-
 
                 }
             }

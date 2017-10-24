@@ -141,7 +141,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         ButterKnife.bind(this);
         context = SaveDeliveryLocationActivity.this;
         address = new com.foodie.app.model.Address();
-        customDialog=new CustomDialog(context);
+        customDialog = new CustomDialog(context);
         homeRadio.setChecked(true);
         address.setType("home");
         //Intialize Animation line
@@ -210,7 +210,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     otherAddressTitleLayout.setVisibility(View.VISIBLE);
                     typeRadiogroup.setVisibility(View.GONE);
                 }
-                System.out.println("typeRadiogroup "+radioButton.getText().toString().toLowerCase());
+                System.out.println("typeRadiogroup " + radioButton.getText().toString().toLowerCase());
                 address.setType(radioButton.getText().toString().toLowerCase());
 
             }
@@ -328,7 +328,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
     @Override
     public void onLocationChanged(Location location) {
-        System.out.println("onLocationChanged " );
+        System.out.println("onLocationChanged ");
         if (value == 0) {
             value = 1;
             if (address.getId() == null) {
@@ -431,15 +431,13 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
     private void saveAddress() {
 
-        if (address.getType().equalsIgnoreCase("other")) {
-            address.setType(otherAddressHeaderEt.getText().toString());
-        }
+
         if (address != null && address.getMapAddress() != null && validate()) {
             customDialog.show();
             Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
             call.enqueue(new Callback<com.foodie.app.model.Address>() {
                 @Override
-                public void onResponse(@NonNull Call<com.foodie.app.model.Address> call,@NonNull Response<com.foodie.app.model.Address> response) {
+                public void onResponse(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Response<com.foodie.app.model.Address> response) {
                     customDialog.dismiss();
                     if (response.isSuccessful()) {
 
@@ -549,11 +547,20 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 address.setMapAddress(addressEdit.getText().toString());
                 address.setBuilding(flatNoEdit.getText().toString());
                 address.setLandmark(landmark.getText().toString());
-
-                if (address.getId() != null) {
-                    updateAddress();
+                if (address.getType().equalsIgnoreCase("other")||address.getType().equalsIgnoreCase("")) {
+                    address.setType(otherAddressHeaderEt.getText().toString());
+                }
+                if (address.getBuilding().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter House/ flat no ", Toast.LENGTH_SHORT).show();
+                } else if (address.getLandmark().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter landmark ", Toast.LENGTH_SHORT).show();
+                } else if (address.getType().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter address type", Toast.LENGTH_SHORT).show();
                 } else {
-                    saveAddress();
+                    if (address.getId() != null)
+                        updateAddress();
+                    else
+                        saveAddress();
                 }
                 break;
         }

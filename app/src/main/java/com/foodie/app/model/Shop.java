@@ -73,6 +73,10 @@ public class Shop {
     @SerializedName("ratings")
     @Expose
     private Ratings ratings;
+    @SerializedName("favorite")
+    @Expose
+    private Favorite favorite;
+
     @SerializedName("categories")
     @Expose
     private List<Category> categories = null;
@@ -259,6 +263,14 @@ public class Shop {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public Favorite getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Favorite favorite) {
+        this.favorite = favorite;
     }
 
 }
