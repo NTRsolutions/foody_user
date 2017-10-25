@@ -3,6 +3,10 @@ package com.foodie.app.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
+import com.fenchtose.tooltip.Tooltip;
+import com.fenchtose.tooltip.TooltipAnimation;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.PastOrderDetailActivity;
@@ -41,11 +47,14 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
     int lastPosition = -1;
     List<Item> itemList;
 
+
     public OrdersAdapter(Context context, Activity activity, List<OrderModel> list) {
         this.context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
         this.activity = activity;
+
+
     }
 
     @Override
@@ -115,6 +124,23 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             holder.dividerLine.setVisibility(View.VISIBLE);
         }
 
+        if(object.getDispute()!=null){
+            holder.disputeTxt.setVisibility(View.VISIBLE);
+            holder.disputeTxt.setText(object.getDispute());
+        }
+        else {
+            holder.disputeTxt.setVisibility(View.GONE);
+        }
+        holder.disputeTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                showTooltip(v, R.string.dispute_created, Tooltip.BOTTOM, true,
+//                        TooltipAnimation.SCALE,
+//                        tooltipSize,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        });
+
         holder.totalAmount.setText(GlobalData.getInstance().currencySymbol + object.getInvoice().getNet().toString());
         //set Item List Values
         itemList = new ArrayList<>();
@@ -128,8 +154,6 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         }
         holder.dishNameTxt.setText(dishNameValue);
         holder.dateTimeTxt.setText(getTimeFromString(object.getInvoice().getCreatedAt()));
-
-
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,12 +174,10 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
-        TextView restaurantNameTxt, restaurantAddressTxt, totalAmount, dishNameTxt, dateTimeTxt;
+        TextView restaurantNameTxt,disputeTxt, restaurantAddressTxt, totalAmount, dishNameTxt, dateTimeTxt;
         Button reorderBtn;
         View dividerLine;
         LinearLayout itemLayout;
-
-
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
             if (isHeader) {
@@ -163,6 +185,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             } else {
                 itemLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
                 restaurantNameTxt = (TextView) itemView.findViewById(R.id.restaurant_name);
+                disputeTxt = (TextView) itemView.findViewById(R.id.dispute_txt);
                 restaurantAddressTxt = (TextView) itemView.findViewById(R.id.restaurant_address);
                 totalAmount = (TextView) itemView.findViewById(R.id.total_amount);
                 reorderBtn = (Button) itemView.findViewById(R.id.reorder);
@@ -194,4 +217,6 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         }
         return value;
     }
+
+
 }

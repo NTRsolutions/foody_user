@@ -37,6 +37,7 @@ public class GlobalData {
     /*------------Filter--------*/
     public static boolean isPureVegApplied=false;
     public static boolean isOfferApplied=false;
+    public static boolean shouldContinueService=false;
     public static ArrayList<Integer> cuisineIdArrayList=null;
 
 

@@ -1,22 +1,42 @@
 package com.foodie.app.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.Pubnub.ChatFragment;
 import com.foodie.app.R;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.Order;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OtherHelpActivity extends AppCompatActivity {
 
@@ -38,8 +58,16 @@ public class OtherHelpActivity extends AppCompatActivity {
     TextView orderItemTxt;
 
     int priceAmount = 0;
+    int DISPUTE_ID = 0;
     int itemQuantity = 0;
     String currency = "";
+    String reason;
+    Context context;
+    CustomDialog customDialog;
+    String disputeType;
+    Integer DISPUTE_HELP_ID = 0;
+
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
 
     @Override
@@ -47,8 +75,11 @@ public class OtherHelpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_help);
         ButterKnife.bind(this);
+        context = OtherHelpActivity.this;
+        customDialog = new CustomDialog(context);
         fragmentManager = getSupportFragmentManager();
-        String reason = getIntent().getExtras().getString("type");
+        reason = getIntent().getExtras().getString("type");
+        DISPUTE_HELP_ID = getIntent().getExtras().getInt("id");
         Order order = GlobalData.getInstance().isSelectedOrder;
         itemQuantity = order.getInvoice().getQuantity();
         priceAmount = order.getInvoice().getNet();
@@ -71,6 +102,103 @@ public class OtherHelpActivity extends AppCompatActivity {
 
     }
 
+    private void showDialog() {
+
+        final String[] disputeArrayList = {"COMPLAINED", "CANCELED", "REFUND"};
+        disputeType = "COMPLAINED";
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dispute_dialog, null);
+        dialogBuilder.setView(dialogView);
+        final EditText edt = (EditText) dialogView.findViewById(R.id.reason_edit);
+        final Spinner disputeTypeSpinner = (Spinner) dialogView.findViewById(R.id.dispute_type);
+        //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, disputeArrayList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        disputeTypeSpinner.setAdapter(arrayAdapter);
+        disputeTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                disputeType = disputeArrayList[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        dialogBuilder.setTitle(orderIdTxt.getText().toString());
+        dialogBuilder.setMessage(reason);
+        dialogBuilder.setPositiveButton("Submit", null);
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (edt.getText().toString().equalsIgnoreCase("")) {
+                            Toast.makeText(context, "Please enter reason", Toast.LENGTH_SHORT).show();
+                        } else {
+                            dialog.dismiss();
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("order_id", GlobalData.isSelectedOrder.getId().toString());
+                            map.put("status", "CREATED");
+                            map.put("description", edt.getText().toString());
+                            map.put("dispute_type", disputeType);
+                            map.put("created_by", "user");
+                            map.put("created_to", "user");
+                            if (!disputeType.equalsIgnoreCase("others"))
+                                map.put("disputehelp_id", DISPUTE_HELP_ID.toString());
+                            postDispute(map);
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+
+    }
+
+    private void postDispute(HashMap map) {
+        customDialog.show();
+        Call<Order> call = apiInterface.postDispute(map);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    customDialog.dismiss();
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    customDialog.dismiss();
+                    Toast.makeText(OtherHelpActivity.this, "Dispute create successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
     @OnClick({R.id.chat_us, R.id.dispute})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -81,6 +209,7 @@ public class OtherHelpActivity extends AppCompatActivity {
 
                 break;
             case R.id.dispute:
+                showDialog();
                 break;
         }
     }

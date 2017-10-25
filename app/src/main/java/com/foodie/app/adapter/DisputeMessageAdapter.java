@@ -1,5 +1,6 @@
 package com.foodie.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -24,10 +25,12 @@ import java.util.List;
 public class DisputeMessageAdapter extends RecyclerView.Adapter<DisputeMessageAdapter.MyViewHolder> {
     private List<DisputeMessage> list;
     private Context context;
+    private Activity activity;
 
-    public DisputeMessageAdapter(List<DisputeMessage> list, Context con) {
+    public DisputeMessageAdapter(List<DisputeMessage> list, Context con, Activity activity) {
         this.list = list;
         this.context = con;
+        this.activity = activity;
     }
 
     @Override
@@ -51,8 +54,17 @@ public class DisputeMessageAdapter extends RecyclerView.Adapter<DisputeMessageAd
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        DisputeMessage disputeMessage = list.get(position);
+        final DisputeMessage disputeMessage = list.get(position);
         holder.diputeMessageTxt.setText(disputeMessage.getName());
+        holder.rootLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, OtherHelpActivity.class).putExtra("type", disputeMessage.getName())
+                        .putExtra("id",disputeMessage.getId()));
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+
+            }
+        });
     }
 
     @Override
@@ -61,7 +73,7 @@ public class DisputeMessageAdapter extends RecyclerView.Adapter<DisputeMessageAd
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout rootLayout;
         private TextView diputeMessageTxt;
 
@@ -70,14 +82,9 @@ public class DisputeMessageAdapter extends RecyclerView.Adapter<DisputeMessageAd
             super(view);
             rootLayout = (LinearLayout) view.findViewById(R.id.root_layout);
             diputeMessageTxt = (TextView) view.findViewById(R.id.dispute_message);
-            rootLayout.setOnClickListener(this);
+
         }
 
-        public void onClick(View v) {
-            if (v.getId() == rootLayout.getId()) {
-         context.startActivity(new Intent(context, OtherHelpActivity.class).putExtra("type", diputeMessageTxt.getText().toString()));
-            }
-        }
 
     }
 

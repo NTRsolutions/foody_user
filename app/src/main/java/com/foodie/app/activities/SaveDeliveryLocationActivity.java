@@ -306,13 +306,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             mMap.getUiSettings().setTiltGesturesEnabled(false);
         }
 
-        /*LatLng sydney = new LatLng(13.080703, 80.200733);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        }*/
     }
 
 

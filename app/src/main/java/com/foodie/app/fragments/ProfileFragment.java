@@ -128,7 +128,7 @@ public class ProfileFragment extends Fragment {
 
         String VERSION_NAME = BuildConfig.VERSION_NAME;
         int versionCode = BuildConfig.VERSION_CODE;
-        appVersion.setText("Version " + VERSION_NAME + " ("+String.valueOf(versionCode)+ ")");
+        appVersion.setText("App version " + VERSION_NAME + " ("+String.valueOf(versionCode)+ ")");
 
 
         return view;

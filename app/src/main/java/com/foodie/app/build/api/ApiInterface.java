@@ -166,6 +166,10 @@ public interface ApiInterface {
     @GET("api/user/disputehelp")
     Call<List<DisputeMessage>> getDisputeList();
 
+    @FormUrlEncoded
+    @POST("api/user/dispute")
+    Call<Order> postDispute(@FieldMap HashMap<String, String> params);
+
 
     /*-------------SEARCH--------------------*/
     @GET("api/user/search")

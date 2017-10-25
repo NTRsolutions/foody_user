@@ -90,14 +90,13 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         deliveryLocationRv.setLayoutManager(manager);
         adapter = new DeliveryLocationAdapter(this, activity, modelListReference);
         deliveryLocationRv.setAdapter(adapter);
-        getAddress();
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-
+        getAddress();
     }
 
 
@@ -115,7 +114,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                 if (response.isSuccessful()) {
-
+                    modelList.clear();
                     animationLineCartAdd.setVisibility(View.GONE);
                     avdProgress.stop();
                     AddressList model = new AddressList();

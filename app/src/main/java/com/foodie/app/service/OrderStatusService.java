@@ -1,3 +1,4 @@
+/*
 package com.foodie.app.service;
 
 import android.app.IntentService;
@@ -27,17 +28,22 @@ import retrofit2.Response;
 import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 import static com.foodie.app.helper.GlobalData.onGoingOrderList;
 import static com.foodie.app.helper.GlobalData.pastOrderList;
+import static com.foodie.app.helper.GlobalData.shouldContinueService;
 
+*/
 /**
  * Created by Tamil on 10/10/2017.
- */
+ *//*
+
 
 public class OrderStatusService extends IntentService {
-    /**
+    */
+/**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * @param name Used to name the worker thread, important only for debugging.
-     */
+     *//*
+
 
     Handler handler;
     Context context;
@@ -48,9 +54,11 @@ public class OrderStatusService extends IntentService {
     int ONGOING_ORDER_LIST_SIZE = 0;
     String previousStatus = "";
 
-    /**
+    */
+/**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     */
+     *//*
+
     public OrderStatusService() {
         super("Tamil");
     }
@@ -58,6 +66,7 @@ public class OrderStatusService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+
         if (intent != null) {
             Bundle extras = intent.getExtras();
             type = extras.getString("type");
@@ -73,18 +82,29 @@ public class OrderStatusService extends IntentService {
 
     }
 
+    private void doStuff() {
+        // check the condition
+        if (shouldContinueService == false) {
+            stopSelf();
+            handler.removeCallbacks(null);
+            return;
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        context=this;
         handler = new Handler();
         Runnable orderStatusRunnable = new Runnable() {
             public void run() {
-                if (type.equalsIgnoreCase("ORDER_LIST"))
-                    getOngoingOrders();
-                else if (type.equalsIgnoreCase("SINGLE_ORDER"))
-                    getParticularOrders(id);
-
+                doStuff();
+                if(shouldContinueService){
+                    if (type.equalsIgnoreCase("ORDER_LIST"))
+                        getOngoingOrders();
+                    else if (type.equalsIgnoreCase("SINGLE_ORDER"))
+                        getParticularOrders(id);
+                }
                 handler.postDelayed(this, 5000);
             }
         };
@@ -206,4 +226,11 @@ public class OrderStatusService extends IntentService {
         });
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(null);
+    }
 }
+*/

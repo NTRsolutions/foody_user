@@ -164,6 +164,7 @@
     <string name="oops_connect_your_internet">Oops ! Connect your Internet.</string>
     <string name="coming_soon">coming soon please check back shortly</string>
     <string name="dispute">Dispute</string>
+    <string name="dispute_created">Dispute Created</string>
 
 
 </resources>

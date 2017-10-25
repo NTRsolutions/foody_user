@@ -40,6 +40,7 @@ public class OrderHelpFragment extends Fragment {
     @BindView(R.id.help_rv)
     RecyclerView helpRv;
 
+
     public OrderHelpFragment() {
         // Required empty public constructor
     }
@@ -60,7 +61,7 @@ public class OrderHelpFragment extends Fragment {
         helpRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         helpRv.setItemAnimator(new DefaultItemAnimator());
         helpRv.setHasFixedSize(true);
-        disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context);
+        disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context,getActivity());
         helpRv.setAdapter(disputeMessageAdapter);
         return view;
     }

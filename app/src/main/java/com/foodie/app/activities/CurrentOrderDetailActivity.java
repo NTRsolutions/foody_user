@@ -1,16 +1,27 @@
 package com.foodie.app.activities;
 
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -39,15 +50,40 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.OrderViewFragment;
 import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.helper.DataParser;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.model.Message;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderFlow;
-import com.foodie.app.service.OrderStatusService;
+import com.foodie.app.utils.Utils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +100,9 @@ import retrofit2.Response;
 import static com.foodie.app.helper.GlobalData.ORDER_STATUS;
 import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 
-public class CurrentOrderDetailActivity extends AppCompatActivity {
+public class CurrentOrderDetailActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener,
+        GoogleMap.OnMarkerDragListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraMoveListener {
 
     @BindView(R.id.order_id_txt)
     TextView orderIdTxt;
@@ -89,6 +127,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     @BindView(R.id.order_flow_rv)
     RecyclerView orderFlowRv;
 
+    SupportMapFragment mapFragment;
     public static TextView orderCancelTxt;
 
     Context context;
@@ -97,8 +136,19 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     boolean isOrderPage = false;
     private BroadcastReceiver mReceiver;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-
+    Handler handler;
+    Runnable orderStatusRunnable;
+    String previousStatus = "";
     CustomDialog customDialog;
+    GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
+
+
+    private Marker sourceMarker;
+    private Marker destinationMarker;
+    private Marker providerMarker;
+    private LatLng sourceLatLng;
+    private LatLng destLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,14 +156,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_current_order_detail);
         ButterKnife.bind(this);
         context = CurrentOrderDetailActivity.this;
-        orderIntent = new Intent(context, OrderStatusService.class);
-        orderIntent.putExtra("type", "SINGLE_ORDER");
-        if (isSelectedOrder != null)
-            orderIntent.putExtra("order_id", isSelectedOrder.getId());
-        startService(orderIntent);
+
         isOrderPage = getIntent().getBooleanExtra("is_order_page", false);
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("SINGLE_ORDER"));
 
         //set Toolbar
         setSupportActionBar(toolbar);
@@ -126,7 +170,6 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         });
         toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
         toolbar.setContentInsetsAbsolute(0, 0);
-
         orderCancelTxt = (TextView) findViewById(R.id.order_cancel);
         orderCancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +178,13 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
             }
         });
 
-
+        handler = new Handler();
+        orderStatusRunnable = new Runnable() {
+            public void run() {
+                getParticularOrders(isSelectedOrder.getId());
+                handler.postDelayed(this, 5000);
+            }
+        };
         List<OrderFlow> orderFlowList = new ArrayList<>();
         orderFlowList.add(new OrderFlow(getString(R.string.order_placed), getString(R.string.description_1), R.drawable.ic_order_placed, ORDER_STATUS.get(0)));
         orderFlowList.add(new OrderFlow(getString(R.string.order_confirmed), getString(R.string.description_2), R.drawable.ic_order_confirmed, ORDER_STATUS.get(1) + ORDER_STATUS.get(2)));
@@ -148,11 +197,10 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         adapter = new OrderFlowAdapter(orderFlowList, this);
         orderFlowRv.setAdapter(adapter);
         orderFlowRv.setHasFixedSize(false);
-        LayoutAnimationController controller =
+        final LayoutAnimationController controller =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.item_animation_slide_right);
         orderFlowRv.setLayoutAnimation(controller);
         orderFlowRv.scheduleLayoutAnimation();
-
 
         if (GlobalData.getInstance().isSelectedOrder != null) {
             Order order = GlobalData.getInstance().isSelectedOrder;
@@ -173,9 +221,315 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
             fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.order_detail_fargment, orderFullViewFragment).commit();
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    buildGoogleApiClient();
+                } else {
+                    //Request Location Permission
+                }
+            } else {
+                buildGoogleApiClient();
+            }
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+
+
+
         }
 
 
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onCameraMove() {
+
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        try {
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            context, R.raw.style_json));
+            if (!success) {
+               Log.i("Map:Style", "Style parsing failed.");
+            } else {
+                Log.i("Map:Style", "Style Applied.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.i("Map:Style", "Can't find style. Error: ");
+        }
+
+        mMap = googleMap;
+        setupMap();
+
+    }
+    void setupMap() {
+        if (mMap != null) {
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.setBuildingsEnabled(true);
+            mMap.setMyLocationEnabled(false);
+            mMap.setOnMarkerDragListener(this);
+            mMap.setOnCameraMoveListener(this);
+            mMap.getUiSettings().setRotateGesturesEnabled(false);
+            mMap.getUiSettings().setTiltGesturesEnabled(false);
+
+            //Map
+            String url = getUrl(isSelectedOrder.getAddress().getLatitude(),isSelectedOrder.getAddress().getLongitude()
+                    , isSelectedOrder.getShop().getLatitude(), isSelectedOrder.getShop().getLongitude());
+            FetchUrl fetchUrl = new FetchUrl();
+            fetchUrl.execute(url);
+        }
+
+    }
+
+    // Fetches data from url passed
+    private class FetchUrl extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+            // For storing data from web service
+            String data = "";
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+                Log.d("Background Task data", data.toString());
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                JSONObject jsonObj = new JSONObject(result);
+                if (!jsonObj.optString("status").equalsIgnoreCase("ZERO_RESULTS")){
+                    ParserTask parserTask = new ParserTask();
+                    // Invokes the thread for parsing the JSON data
+                    parserTask.execute(result);
+                }else{
+                    Toast.makeText(context, "No Route", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            Log.d("downloadUrl", data.toString());
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                Log.d("ParserTask", jsonData[0].toString());
+                DataParser parser = new DataParser();
+                Log.d("ParserTask", parser.toString());
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+                Log.d("ParserTask", "Executing routes");
+                Log.d("ParserTask", routes.toString());
+
+            } catch (Exception e) {
+                Log.d("ParserTask", e.toString());
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        // Executes in UI thread, after the parsing process
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+
+            if (result != null){
+                // Traversing through all the routes
+                if (result.size() > 0){
+                    for (int i = 0; i < result.size(); i++) {
+                        points = new ArrayList<>();
+                        lineOptions = new PolylineOptions();
+
+                        // Fetching i-th route
+                        List<HashMap<String, String>> path = result.get(i);
+
+                        // Fetching all the points in i-th route
+                        for (int j = 0; j < path.size(); j++) {
+                            HashMap<String, String> point = path.get(j);
+
+                            double lat = Double.parseDouble(point.get("lat"));
+                            double lng = Double.parseDouble(point.get("lng"));
+                            LatLng position = new LatLng(lat, lng);
+
+                            points.add(position);
+                        }
+
+                            LatLng location = new LatLng(isSelectedOrder.getAddress().getLatitude(),isSelectedOrder.getAddress().getLongitude());
+                            MarkerOptions markerOptions = new MarkerOptions()
+                                    .position(location).title("Source").draggable(true)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_locator));
+                            sourceMarker = mMap.addMarker(markerOptions);
+
+                            destLatLng = new LatLng(isSelectedOrder.getShop().getLatitude(), isSelectedOrder.getShop().getLongitude());
+                            if (destinationMarker != null)
+                                destinationMarker.remove();
+                            MarkerOptions destMarker = new MarkerOptions()
+                                    .position(destLatLng).title("Destination").draggable(true)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_locator));
+                            destinationMarker = mMap.addMarker(destMarker);
+                            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                            builder.include(sourceMarker.getPosition());
+                            builder.include(destinationMarker.getPosition());
+                            LatLngBounds bounds = builder.build();
+                            int padding = 150; // offset from edges of the map in pixels
+                            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                            mMap.moveCamera(cu);
+                        // Adding all the points in the route to LineOptions
+                        lineOptions.addAll(points);
+                        lineOptions.width(5);
+                        lineOptions.color(Color.BLACK);
+
+                        Log.d("onPostExecute", "onPostExecute lineoptions decoded");
+
+                    }
+                }else{
+                    mMap.clear();
+
+                }
+
+            }
+
+            // Drawing polyline in the Google Map for the i-th route
+            if (lineOptions != null && points != null) {
+                mMap.addPolyline(lineOptions);
+
+            } else {
+                Log.d("onPostExecute", "without Polylines drawn");
+            }
+        }
+    }
+
+
+    private String getUrl(double source_latitude, double source_longitude, double dest_latitude, double dest_longitude) {
+
+        // Origin of route
+        String str_origin = "origin=" + source_latitude + "," + source_longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest_latitude + "," + dest_longitude;
+
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+
+        return url;
     }
 
     private void showDialog() {
@@ -256,13 +610,35 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
         }
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            adapter.notifyDataSetChanged();
-            Log.d("receiver", "Success");
-        }
-    };
+    private void getParticularOrders(int order_id) {
+        Call<Order> call = apiInterface.getParticularOrders(order_id);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    isSelectedOrder = response.body();
+                    Log.i("isSelectedOrder : ", isSelectedOrder.toString());
+                    if (!isSelectedOrder.getStatus().equalsIgnoreCase(previousStatus)) {
+                        previousStatus = isSelectedOrder.getStatus();
+                        adapter.notifyDataSetChanged();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+
+            }
+        });
+    }
 
     private String getTimeFromString(String time) {
         System.out.println("Time : " + time);
@@ -295,6 +671,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
                     Message message = response.body();
                     Toast.makeText(context, message.getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
+                    startActivity(new Intent(context, OrdersActivity.class));
                 }
             }
 
@@ -302,6 +679,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Something wrong - rateTransporter", Toast.LENGTH_SHORT).show();
                 finish();
+                startActivity(new Intent(context, OrdersActivity.class));
             }
         });
     }
@@ -355,22 +733,18 @@ public class CurrentOrderDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(orderIntent);
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+        handler.removeCallbacks(orderStatusRunnable);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startService(orderIntent);
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("SINGLE_ORDER"));
+        handler.postDelayed(orderStatusRunnable, 500);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopService(orderIntent);
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+        handler.removeCallbacks(orderStatusRunnable);
     }
 }

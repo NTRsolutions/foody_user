@@ -24,10 +24,8 @@ import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.ConnectionHelper;
-import com.foodie.app.model.DisputeMessage;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
-import com.foodie.app.service.OrderStatusService;
 import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
@@ -41,7 +39,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.helper.GlobalData.disputeMessageList;
 import static com.foodie.app.helper.GlobalData.onGoingOrderList;
 import static com.foodie.app.helper.GlobalData.pastOrderList;
 
@@ -61,6 +58,8 @@ public class OrdersActivity extends AppCompatActivity {
     List<OrderModel> modelList = new ArrayList<>();
     Intent orderIntent;
     ConnectionHelper connectionHelper;
+    Handler handler;
+    Runnable orderStatusRunnable;
 
 
     @Override
@@ -68,13 +67,10 @@ public class OrdersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        context=OrdersActivity.this;
+        context = OrdersActivity.this;
         ButterKnife.bind(this);
-        connectionHelper= new ConnectionHelper(context);
+        connectionHelper = new ConnectionHelper(context);
         setSupportActionBar(toolbar);
-
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("ONGOING"));
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,42 +80,29 @@ public class OrdersActivity extends AppCompatActivity {
         });
         toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
         toolbar.setContentInsetsAbsolute(0, 0);
-
+        handler = new Handler();
+        orderStatusRunnable = new Runnable() {
+            public void run() {
+                getOngoingOrders();
+                handler.postDelayed(this, 5000);
+            }
+        };
+        handler.postDelayed(orderStatusRunnable, 5000);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         ordersRv.setLayoutManager(manager);
         modelListReference.clear();
         adapter = new OrdersAdapter(this, activity, modelListReference);
         ordersRv.setAdapter(adapter);
         ordersRv.setHasFixedSize(false);
-        orderIntent = new Intent(context, OrderStatusService.class);
-        orderIntent.putExtra("type", "ORDER_LIST");
-        startService(orderIntent);
-
+        onGoingOrderList = new ArrayList<Order>();
+        if (connectionHelper.isConnectingToInternet()) {
+            getOngoingOrders();
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+        }
 
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            modelList.clear();
-            OrderModel onGoingOrderModel = new OrderModel();
-            onGoingOrderModel.setHeader("Current Orders");
-            onGoingOrderModel.setOrders(onGoingOrderList);
-            modelList.add(onGoingOrderModel);
-            OrderModel pastOrderModel = new OrderModel();
-            pastOrderModel.setHeader("Past Orders");
-            pastOrderModel.setOrders(pastOrderList);
-            modelList.add(pastOrderModel);
-            modelListReference.clear();
-            modelListReference.addAll(modelList);
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            });
-            Log.d("receiver", "Success");
-        }
-    };
 
     private void getPastOrders() {
         Call<List<Order>> call = apiInterface.getPastOders();
@@ -142,12 +125,11 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-//                    LayoutAnimationController controller =
-//                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-//                    ordersRv.setLayoutAnimation(controller);
-//                    ordersRv.scheduleLayoutAnimation();
+                    LayoutAnimationController controller =
+                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+                    ordersRv.setLayoutAnimation(controller);
+                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
-//                    runHandler();
                 }
             }
 
@@ -173,46 +155,41 @@ public class OrdersActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    onGoingOrderList = new ArrayList<Order>();
-                    onGoingOrderList = response.body();
-                    OrderModel model = new OrderModel();
-                    model.setHeader("Current Orders");
-                    model.setOrders(onGoingOrderList);
-                    modelList.add(model);
-                    modelListReference.clear();
-                    modelListReference.addAll(modelList);
-                    getPastOrders();
+                    if (onGoingOrderList.size() != response.body().size()) {
+                        onGoingOrderList.clear();
+                        onGoingOrderList .addAll(response.body());
+                        OrderModel model = new OrderModel();
+                        model.setHeader("Current Orders");
+                        model.setOrders(onGoingOrderList);
+                        modelList.add(model);
+                        modelListReference.clear();
+                        modelListReference.addAll(modelList);
+                        getPastOrders();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
+                Toast.makeText(OrdersActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 
             }
         });
-
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopService(orderIntent);
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+        handler.removeCallbacks(orderStatusRunnable);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        startService(orderIntent);
-        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                new IntentFilter("ONGOING"));
+        adapter.notifyDataSetChanged();
         //Get Ongoing Order list
-        if (connectionHelper.isConnectingToInternet()) {
-            getOngoingOrders();
-        } else {
-            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
-        }
+        handler.postDelayed(orderStatusRunnable, 5000);
 
     }
 
@@ -226,8 +203,12 @@ public class OrdersActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(orderIntent);
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mMessageReceiver);
+        handler.removeCallbacks(orderStatusRunnable);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(orderStatusRunnable);
+    }
 }

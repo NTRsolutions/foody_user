@@ -33,7 +33,7 @@ public class Order {
     private String routeKey;
     @SerializedName("dispute")
     @Expose
-    private Object dispute;
+    private String dispute;
     @SerializedName("status")
     @Expose
     private String status;
@@ -132,11 +132,11 @@ public class Order {
         this.routeKey = routeKey;
     }
 
-    public Object getDispute() {
+    public String getDispute() {
         return dispute;
     }
 
-    public void setDispute(Object dispute) {
+    public void setDispute(String dispute) {
         this.dispute = dispute;
     }
 
