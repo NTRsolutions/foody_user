@@ -13,15 +13,17 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    google()
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.foodie.app"
         minSdkVersion 19
         targetSdkVersion 25
+        vectorDrawables.useSupportLibrary = true
         versionCode 3
         versionName "1.0"
         multiDexEnabled true

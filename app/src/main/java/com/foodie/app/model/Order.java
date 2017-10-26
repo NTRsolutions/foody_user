@@ -45,7 +45,7 @@ public class Order {
     private User user;
     @SerializedName("transporter")
     @Expose
-    private Object transporter;
+    private Transporter  transporter;
     @SerializedName("vehicles")
     @Expose
     private Object vehicles;
@@ -164,11 +164,11 @@ public class Order {
         this.user = user;
     }
 
-    public Object getTransporter() {
+    public Transporter  getTransporter() {
         return transporter;
     }
 
-    public void setTransporter(Object transporter) {
+    public void setTransporter(Transporter transporter) {
         this.transporter = transporter;
     }
 
