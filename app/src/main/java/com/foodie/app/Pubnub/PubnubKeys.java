@@ -6,8 +6,8 @@ package com.foodie.app.Pubnub;
  */
 public class PubnubKeys {
 
-    public static final String PUBLISH_KEY = "pub-c-8ffe8d44-dfa1-4475-abeb-588b0108029a";
-    public static final String SUBSCRIBE_KEY = "sub-c-e120ed6e-9eb5-11e7-998f-06fa97d246e4";
-    public static final String CHANNEL_NAME = "tamilvasanth";
+    public static final String PUBLISH_KEY = "pub-c-7bce9b6e-c9ec-44ad-98c2-35eafbbcacb1";
+    public static final String SUBSCRIBE_KEY = "sub-c-046e0baa-bb01-11e7-b0ca-ee8767eb9c7d";
+    public static String CHANNEL_NAME = "21";
 
 }

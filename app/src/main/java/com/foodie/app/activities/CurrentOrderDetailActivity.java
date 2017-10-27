@@ -699,7 +699,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(new LatLng(lat, lng))
                     .rotation(rotation)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_locator));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_driver_marker));
             if (providerMarker != null) {
                 animateMarker(targetLocation, providerMarker);
             } else {

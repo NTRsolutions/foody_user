@@ -72,22 +72,24 @@ public class OrderDetailFragment extends Fragment {
         Order order = GlobalData.getInstance().isSelectedOrder;
         //set Item List Values
         itemList = new ArrayList<>();
-        itemList.addAll(order.getItems());
+        if(order!=null){
+            itemList.addAll(order.getItems());
+            //Offer Restaurant Adapter
+            orderRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            orderRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            orderRecyclerView.setHasFixedSize(true);
+            OrderDetailAdapter orderItemListAdapter = new OrderDetailAdapter(itemList, context);
+            orderRecyclerView.setAdapter(orderItemListAdapter);
 
-        //Offer Restaurant Adapter
-        orderRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        orderRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        orderRecyclerView.setHasFixedSize(true);
-        OrderDetailAdapter orderItemListAdapter = new OrderDetailAdapter(itemList, context);
-        orderRecyclerView.setAdapter(orderItemListAdapter);
+            currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
+            itemQuantity = order.getInvoice().getQuantity();
+            itemTotalAmount.setText(currency + order.getInvoice().getGross().toString());
+            serviceTax.setText(currency + order.getInvoice().getTax().toString());
+            deliveryCharges.setText(currency + order.getInvoice().getDeliveryCharge().toString());
+            discountAmount.setText("-"+currency + order.getInvoice().getDiscount().toString());
+            totalAmount.setText(currency + String.valueOf(order.getInvoice().getNet()));
+        }
 
-        currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
-        itemQuantity = order.getInvoice().getQuantity();
-        itemTotalAmount.setText(currency + order.getInvoice().getGross().toString());
-        serviceTax.setText(currency + order.getInvoice().getTax().toString());
-        deliveryCharges.setText(currency + order.getInvoice().getDeliveryCharge().toString());
-        discountAmount.setText("-"+currency + order.getInvoice().getDiscount().toString());
-        totalAmount.setText(currency + String.valueOf(order.getInvoice().getNet()));
 
         return view;
     }

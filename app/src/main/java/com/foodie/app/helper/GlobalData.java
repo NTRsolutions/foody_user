@@ -59,6 +59,7 @@ public class GlobalData {
     public static List<String> ORDER_STATUS = Arrays.asList("ORDERED", "RECEIVED", "ASSIGNED", "PROCESSING", "REACHED", "PICKEDUP", "ARRIVED", "COMPLETED");
 
     public static Shop selectedShop;
+    public static DisputeMessage isSelectedDispute;
 
     public static int otpValue = 0;
     public static String mobile = "";

@@ -24,6 +24,7 @@ import com.foodie.app.adapter.OrdersAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.ConnectionHelper;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.model.Order;
 import com.foodie.app.model.OrderModel;
 import com.foodie.app.utils.Utils;
@@ -60,6 +61,7 @@ public class OrdersActivity extends AppCompatActivity {
     ConnectionHelper connectionHelper;
     Handler handler;
     Runnable orderStatusRunnable;
+    CustomDialog customDialog;
 
 
     @Override
@@ -68,6 +70,7 @@ public class OrdersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_orders);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         context = OrdersActivity.this;
+        customDialog=new CustomDialog(context);
         ButterKnife.bind(this);
         connectionHelper = new ConnectionHelper(context);
         setSupportActionBar(toolbar);
@@ -96,6 +99,7 @@ public class OrdersActivity extends AppCompatActivity {
         ordersRv.setHasFixedSize(false);
         onGoingOrderList = new ArrayList<Order>();
         if (connectionHelper.isConnectingToInternet()) {
+            customDialog.show();
             getOngoingOrders();
         } else {
             Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
@@ -142,10 +146,12 @@ public class OrdersActivity extends AppCompatActivity {
     }
 
     private void getOngoingOrders() {
+
         Call<List<Order>> call = apiInterface.getOngoingOrders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                customDialog.dismiss();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
 
                     try {
@@ -171,6 +177,7 @@ public class OrdersActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
+                customDialog.dismiss();
                 Toast.makeText(OrdersActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 
             }

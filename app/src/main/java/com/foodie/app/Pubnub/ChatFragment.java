@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.helper.GlobalData;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
@@ -73,6 +74,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             PNConfiguration pnConfiguration = new PNConfiguration();
             pnConfiguration.setSubscribeKey(PubnubKeys.SUBSCRIBE_KEY);
             pnConfiguration.setPublishKey(PubnubKeys.PUBLISH_KEY);
+            PubnubKeys.CHANNEL_NAME=GlobalData.isSelectedOrder.getId().toString();
 
             pubnub = new PubNub(pnConfiguration);
 
@@ -101,7 +103,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
                                         MyMessage messageObject = gson.fromJson(message, MyMessage.class);
 
-                                        if (messageObject.getUsername().equals(username)) {
+                                        if (messageObject.getType().equals("user")) {
                                             addToSendMessage(messageObject.getMessage(), 0);
                                         } else {
                                             addToReceiveMessage(messageObject.getMessage(), 0);
@@ -148,15 +150,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                         System.out.println(message.getMessage());
                         try {
                             String mess = message.getMessage().toString();
-                            try {
-                                JSONObject jsonObject = new JSONObject(mess);
-                                mess = jsonObject.optJSONObject("nameValuePairs").toString();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
                             final MyMessage messageObject = gson.fromJson(mess, MyMessage.class);
-                            if (!messageObject.getUsername().equals(username)) {
+                            if (!messageObject.getType().equals("user")) {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -199,15 +194,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             if (myText.length() != 0) {
                 sendMessage(myText);
                 etMessage.setText("");
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("username", username);
-                    json.put("message", myText);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                JsonObject jObj = new JsonObject();
+                jObj.addProperty("type", "user");
+                jObj.addProperty("message", myText);
 
-                pubnub.publish().channel(PubnubKeys.CHANNEL_NAME).message(json).async(new PNCallback<PNPublishResult>() {
+                pubnub.publish().channel(PubnubKeys.CHANNEL_NAME).message(jObj).async(new PNCallback<PNPublishResult>() {
                     @Override
                     public void onResponse(PNPublishResult result, PNStatus status) {
                         // Check whether request successfully completed or not.
