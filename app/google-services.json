@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "547463009938-f8aimp1p2abn284cs0vflphkq11a70jd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foodie.app",
+            "certificate_hash": "c1af8fe6224d4ec2448c56ee1d8d93b3095cb438"
+          }
+        },
+        {
           "client_id": "547463009938-6vo0fomdofg13dp0dialboolp1vnhig7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

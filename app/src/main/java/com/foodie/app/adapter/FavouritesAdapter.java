@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Available;
-import com.foodie.app.model.FavListModel;
+import com.foodie.app.models.Available;
+import com.foodie.app.models.FavListModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,13 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.model.NotificationItem;
-import com.foodie.app.model.Restaurant;
+import com.foodie.app.models.NotificationItem;
+import com.foodie.app.models.Restaurant;
 
 import java.util.List;
 

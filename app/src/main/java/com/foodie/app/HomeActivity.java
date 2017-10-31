@@ -37,7 +37,7 @@ import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
-import com.foodie.app.model.DisputeMessage;
+import com.foodie.app.models.DisputeMessage;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;

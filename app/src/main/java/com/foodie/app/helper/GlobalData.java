@@ -2,16 +2,16 @@ package com.foodie.app.helper;
 
 import android.location.Location;
 
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Address;
-import com.foodie.app.model.AddressList;
-import com.foodie.app.model.Category;
-import com.foodie.app.model.Cuisine;
-import com.foodie.app.model.DisputeMessage;
-import com.foodie.app.model.Order;
-import com.foodie.app.model.User;
-import com.foodie.app.model.Otp;
-import com.foodie.app.model.Shop;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.Address;
+import com.foodie.app.models.AddressList;
+import com.foodie.app.models.Category;
+import com.foodie.app.models.Cuisine;
+import com.foodie.app.models.DisputeMessage;
+import com.foodie.app.models.Order;
+import com.foodie.app.models.User;
+import com.foodie.app.models.Otp;
+import com.foodie.app.models.Shop;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

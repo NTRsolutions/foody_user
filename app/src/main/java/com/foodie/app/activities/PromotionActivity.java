@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
@@ -22,8 +20,8 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.PromotionResponse;
-import com.foodie.app.model.Promotions;
+import com.foodie.app.models.PromotionResponse;
+import com.foodie.app.models.Promotions;
 
 import org.json.JSONObject;
 
@@ -32,7 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

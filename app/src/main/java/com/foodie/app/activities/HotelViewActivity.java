@@ -38,10 +38,10 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Category;
-import com.foodie.app.model.Favorite;
-import com.foodie.app.model.Shop;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.Category;
+import com.foodie.app.models.Favorite;
+import com.foodie.app.models.Shop;
 import com.foodie.app.utils.Utils;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
@@ -333,6 +333,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 .show();
 
     }
+
+
 
     private void deleteFavorite(Integer id) {
         Call<Favorite> call = apiInterface.deleteFavorite(id);

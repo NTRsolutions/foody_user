@@ -57,8 +57,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
-import org.json.JSONObject;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -124,7 +122,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     ImageView backArrow;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-    com.foodie.app.model.Address address = null;
+    com.foodie.app.models.Address address = null;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Animation slide_down, slide_up;
 
@@ -140,7 +138,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
         context = SaveDeliveryLocationActivity.this;
-        address = new com.foodie.app.model.Address();
+        address = new com.foodie.app.models.Address();
         customDialog = new CustomDialog(context);
         homeRadio.setChecked(true);
         address.setType("home");
@@ -428,10 +426,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
         if (address != null && address.getMapAddress() != null && validate()) {
             customDialog.show();
-            Call<com.foodie.app.model.Address> call = apiInterface.saveAddress(address);
-            call.enqueue(new Callback<com.foodie.app.model.Address>() {
+            Call<com.foodie.app.models.Address> call = apiInterface.saveAddress(address);
+            call.enqueue(new Callback<com.foodie.app.models.Address>() {
                 @Override
-                public void onResponse(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Response<com.foodie.app.model.Address> response) {
+                public void onResponse(@NonNull Call<com.foodie.app.models.Address> call, @NonNull Response<com.foodie.app.models.Address> response) {
                     customDialog.dismiss();
                     if (response.isSuccessful()) {
 
@@ -453,7 +451,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<com.foodie.app.models.Address> call, @NonNull Throwable t) {
                     Log.e(TAG, t.toString());
                     customDialog.dismiss();
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -468,10 +466,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
         if (address != null && address.getId() != null && validate()) {
             customDialog.show();
-            Call<com.foodie.app.model.Address> call = apiInterface.updateAddress(address.getId(), address);
-            call.enqueue(new Callback<com.foodie.app.model.Address>() {
+            Call<com.foodie.app.models.Address> call = apiInterface.updateAddress(address.getId(), address);
+            call.enqueue(new Callback<com.foodie.app.models.Address>() {
                 @Override
-                public void onResponse(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Response<com.foodie.app.model.Address> response) {
+                public void onResponse(@NonNull Call<com.foodie.app.models.Address> call, @NonNull Response<com.foodie.app.models.Address> response) {
                     customDialog.dismiss();
                     if (response.isSuccessful()) {
                         GlobalData.selectedAddress = response.body();
@@ -483,7 +481,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<com.foodie.app.model.Address> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<com.foodie.app.models.Address> call, @NonNull Throwable t) {
                     Log.e(TAG, t.toString());
                     customDialog.dismiss();
                     Toast.makeText(SaveDeliveryLocationActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();

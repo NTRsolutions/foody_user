@@ -33,12 +33,13 @@ import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.AddressList;
-import com.foodie.app.model.LoginModel;
-import com.foodie.app.model.User;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.AddressList;
+import com.foodie.app.models.LoginModel;
+import com.foodie.app.models.User;
 import com.foodie.app.utils.TextUtils;
 import com.foodie.app.utils.Utils;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -46,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,6 +94,11 @@ public class LoginActivity extends AppCompatActivity {
     ConnectionHelper connectionHelper;
     Activity activity;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0;
+
+    String device_token, device_UDID;
+    Utils utils= new Utils();
+    String TAG = "Login";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
         context = LoginActivity.this;
         activity = LoginActivity.this;
         connectionHelper = new ConnectionHelper(context);
+        getDeviceToken();
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -129,6 +136,31 @@ public class LoginActivity extends AppCompatActivity {
         eyeImg.setTag(1);
 
 
+    }
+
+    public void getDeviceToken() {
+        try {
+            if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
+                device_token = SharedHelper.getKey(context, "device_token");
+                utils.print(TAG, "GCM Registration Token: " + device_token);
+            } else {
+                device_token = ""+ FirebaseInstanceId.getInstance().getToken();
+                SharedHelper.putKey(context, "device_token",""+FirebaseInstanceId.getInstance().getToken());
+                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+            }
+        } catch (Exception e) {
+            device_token = "COULD NOT GET FCM TOKEN";
+            utils.print(TAG, "Failed to complete token refresh");
+        }
+
+        try {
+            device_UDID = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            utils.print(TAG, "Device UDID:" + device_UDID);
+        } catch (Exception e) {
+            device_UDID = "COULD NOT GET UDID";
+            e.printStackTrace();
+            utils.print(TAG, "Failed to complete device UDID");
+        }
     }
 
     @OnClick({R.id.login_btn, R.id.forgot_password, R.id.donnot_have_account, R.id.back_img, R.id.eye_img, R.id.facebook_login, R.id.google_login})

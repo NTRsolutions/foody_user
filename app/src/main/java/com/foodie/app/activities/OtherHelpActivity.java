@@ -24,8 +24,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.helper.SharedHelper;
-import com.foodie.app.model.Order;
+import com.foodie.app.models.Order;
 
 import org.json.JSONObject;
 

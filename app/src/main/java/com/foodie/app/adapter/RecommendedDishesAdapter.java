@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
-import com.foodie.app.model.RecommendedDish;
+import com.foodie.app.models.RecommendedDish;
 
 import java.util.List;
 

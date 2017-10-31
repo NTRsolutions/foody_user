@@ -4,28 +4,28 @@ package com.foodie.app.build.api;
  * Created by tamil@appoets.com on 30-08-2017.
  */
 
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Address;
-import com.foodie.app.model.Category;
-import com.foodie.app.model.ChangePassword;
-import com.foodie.app.model.Cuisine;
-import com.foodie.app.model.DisputeMessage;
-import com.foodie.app.model.Favorite;
-import com.foodie.app.model.FavoriteList;
-import com.foodie.app.model.ForgotPassword;
-import com.foodie.app.model.LoginModel;
-import com.foodie.app.model.Message;
-import com.foodie.app.model.Order;
-import com.foodie.app.model.Otp;
-import com.foodie.app.model.PromotionResponse;
-import com.foodie.app.model.Promotions;
-import com.foodie.app.model.RegisterModel;
-import com.foodie.app.model.ResetPassword;
-import com.foodie.app.model.RestaurantsData;
-import com.foodie.app.model.Search;
-import com.foodie.app.model.Shop;
-import com.foodie.app.model.User;
-import com.foodie.app.model.WalletHistory;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.Address;
+import com.foodie.app.models.Category;
+import com.foodie.app.models.ChangePassword;
+import com.foodie.app.models.ClearCart;
+import com.foodie.app.models.Cuisine;
+import com.foodie.app.models.DisputeMessage;
+import com.foodie.app.models.Favorite;
+import com.foodie.app.models.FavoriteList;
+import com.foodie.app.models.ForgotPassword;
+import com.foodie.app.models.LoginModel;
+import com.foodie.app.models.Message;
+import com.foodie.app.models.Order;
+import com.foodie.app.models.Otp;
+import com.foodie.app.models.PromotionResponse;
+import com.foodie.app.models.Promotions;
+import com.foodie.app.models.RegisterModel;
+import com.foodie.app.models.ResetPassword;
+import com.foodie.app.models.RestaurantsData;
+import com.foodie.app.models.Search;
+import com.foodie.app.models.User;
+import com.foodie.app.models.WalletHistory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -111,6 +111,9 @@ public interface ApiInterface {
 
     @GET("api/user/cart")
     Call<AddCart> getViewCart();
+
+    @GET("api/user/clear/cart")
+    Call<ClearCart> clearCart();
 
     @FormUrlEncoded
     @POST("api/user/order")

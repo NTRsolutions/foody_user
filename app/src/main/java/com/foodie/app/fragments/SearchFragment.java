@@ -22,9 +22,9 @@ import com.foodie.app.adapter.ViewPagerAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Product;
-import com.foodie.app.model.Search;
-import com.foodie.app.model.Shop;
+import com.foodie.app.models.Product;
+import com.foodie.app.models.Search;
+import com.foodie.app.models.Shop;
 
 import org.json.JSONObject;
 

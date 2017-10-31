@@ -9,20 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.FavouritesAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.model.Available;
-import com.foodie.app.model.FavListModel;
-import com.foodie.app.model.FavoriteList;
-import com.foodie.app.model.UnAvailable;
+import com.foodie.app.models.Available;
+import com.foodie.app.models.FavListModel;
+import com.foodie.app.models.FavoriteList;
+import com.foodie.app.models.UnAvailable;
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

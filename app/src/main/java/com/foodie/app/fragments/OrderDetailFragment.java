@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.foodie.app.R;
 import com.foodie.app.adapter.OrderDetailAdapter;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Item;
-import com.foodie.app.model.Order;
+import com.foodie.app.models.Item;
+import com.foodie.app.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;

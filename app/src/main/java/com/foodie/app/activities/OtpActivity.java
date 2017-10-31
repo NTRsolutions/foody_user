@@ -18,7 +18,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Otp;
+import com.foodie.app.models.Otp;
 
 import org.json.JSONObject;
 

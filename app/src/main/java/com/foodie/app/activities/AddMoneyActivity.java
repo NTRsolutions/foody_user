@@ -21,8 +21,8 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.PaymentMethod;
-import com.foodie.app.model.WalletHistory;
+import com.foodie.app.models.PaymentMethod;
+import com.foodie.app.models.WalletHistory;
 
 import org.json.JSONObject;
 

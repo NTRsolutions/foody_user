@@ -11,9 +11,7 @@ import android.view.View;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.NotificationAdapter;
-import com.foodie.app.adapter.OrderDetailAdapter;
-import com.foodie.app.model.NotificationItem;
-import com.foodie.app.model.OrderItem;
+import com.foodie.app.models.NotificationItem;
 
 import java.util.ArrayList;
 

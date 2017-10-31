@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.model.PaymentMethod;
+import com.foodie.app.models.PaymentMethod;
 
 import java.util.List;
 

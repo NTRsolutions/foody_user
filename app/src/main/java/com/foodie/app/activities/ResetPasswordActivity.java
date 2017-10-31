@@ -19,7 +19,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.ResetPassword;
+import com.foodie.app.models.ResetPassword;
 import com.foodie.app.utils.TextUtils;
 
 import org.json.JSONObject;

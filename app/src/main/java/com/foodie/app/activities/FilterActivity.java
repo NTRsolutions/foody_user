@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.foodie.app.R;
 import com.foodie.app.adapter.FilterAdapter;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Cuisine;
-import com.foodie.app.model.FilterModel;
+import com.foodie.app.models.Cuisine;
+import com.foodie.app.models.FilterModel;
 
 import java.util.ArrayList;
 import java.util.List;

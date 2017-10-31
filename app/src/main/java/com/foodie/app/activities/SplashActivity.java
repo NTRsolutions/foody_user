@@ -16,9 +16,9 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.SharedHelper;
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.AddressList;
-import com.foodie.app.model.User;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.AddressList;
+import com.foodie.app.models.User;
 
 import org.json.JSONObject;
 

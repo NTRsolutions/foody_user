@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.model.Restaurant;
+import com.foodie.app.models.Restaurant;
 
 import java.util.List;
 

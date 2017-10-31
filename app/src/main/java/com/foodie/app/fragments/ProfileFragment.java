@@ -109,6 +109,7 @@ public class ProfileFragment extends Fragment {
             listIcons.add(R.drawable.ic_notifications);
             listIcons.add(R.drawable.ic_promotion_details);
             listIcons.add(R.drawable.padlock);
+            listIcons.add(R.drawable.padlock);
             ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
             profileSettingLv.setAdapter(adbPerson);
             ListViewSizeHelper.getListViewSize(profileSettingLv);

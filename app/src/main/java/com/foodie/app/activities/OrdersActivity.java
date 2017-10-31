@@ -1,22 +1,16 @@
 package com.foodie.app.activities;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 
 import com.foodie.app.R;
@@ -25,8 +19,8 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.Order;
-import com.foodie.app.model.OrderModel;
+import com.foodie.app.models.Order;
+import com.foodie.app.models.OrderModel;
 import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;
@@ -129,10 +123,10 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-                    LayoutAnimationController controller =
-                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-                    ordersRv.setLayoutAnimation(controller);
-                    ordersRv.scheduleLayoutAnimation();
+//                    LayoutAnimationController controller =
+//                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
+//                    ordersRv.setLayoutAnimation(controller);
+//                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
                 }
             }

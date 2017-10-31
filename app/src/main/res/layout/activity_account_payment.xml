@@ -90,6 +90,7 @@
 
 
             <ListView
+
                 android:id="@+id/payment_method_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,6 +125,7 @@
                         android:src="@drawable/ic_add_card" />
 
                     <TextView
+                        android:id="@+id/add_new_cart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"

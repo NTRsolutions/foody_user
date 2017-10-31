@@ -18,8 +18,8 @@ import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Address;
-import com.foodie.app.model.Message;
+import com.foodie.app.models.Address;
+import com.foodie.app.models.Message;
 
 import org.json.JSONObject;
 

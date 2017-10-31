@@ -18,7 +18,7 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.model.Address;
+import com.foodie.app.models.Address;
 
 import java.util.ArrayList;
 import java.util.List;

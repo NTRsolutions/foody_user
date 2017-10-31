@@ -8,7 +8,7 @@ public class BuildConfigure {
 
     /*   Dev Mode*/
     public static String BASE_URL = "http://foodie.appoets.co/";
-    public static String CLIENT_SECRET = "D05WfB9aCBPCel6St5lOl2Cc1hqBwYoudmqxX7Ti";
+    public static String CLIENT_SECRET = "A2Ss6su6ao3C7T5IduOHPsnmt3kwZqoY2tIiX28i";
       /*  Live Mode*/
 //        public static String CLIENT_SECRET = "WME1RiBX1k8v44SeOwtpBLyv5jeljeNzuZh56izP";
 //        public static String BASE_URL = "http://foodie.venturedemos.com/";

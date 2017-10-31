@@ -16,7 +16,7 @@ import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.ChangePassword;
+import com.foodie.app.models.ChangePassword;
 import com.foodie.app.utils.TextUtils;
 
 import org.json.JSONObject;

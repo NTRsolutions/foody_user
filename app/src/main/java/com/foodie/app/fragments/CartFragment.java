@@ -38,9 +38,9 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Cart;
-import com.foodie.app.model.Order;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.Cart;
+import com.foodie.app.models.Order;
 import com.foodie.app.utils.Utils;
 import com.robinhood.ticker.TickerUtils;
 

@@ -22,16 +22,14 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.ForgotPassword;
-import com.foodie.app.model.Otp;
-import com.foodie.app.utils.TextUtils;
+import com.foodie.app.models.ForgotPassword;
+import com.foodie.app.models.Otp;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -11,10 +11,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.RecommendedListAdapter;
-import com.foodie.app.model.RecommendedDish;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

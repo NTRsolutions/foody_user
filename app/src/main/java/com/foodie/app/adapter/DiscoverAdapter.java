@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.model.Discover;
+import com.foodie.app.models.Discover;
 
 import java.util.List;
 

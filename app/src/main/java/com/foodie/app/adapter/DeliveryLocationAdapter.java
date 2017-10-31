@@ -15,8 +15,8 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Address;
-import com.foodie.app.model.AddressList;
+import com.foodie.app.models.Address;
+import com.foodie.app.models.AddressList;
 
 import java.util.ArrayList;
 import java.util.List;

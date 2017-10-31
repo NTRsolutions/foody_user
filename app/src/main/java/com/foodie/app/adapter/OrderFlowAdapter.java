@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.OrderFlow;
+import com.foodie.app.models.OrderFlow;
 
 import java.util.List;
 

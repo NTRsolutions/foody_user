@@ -12,9 +12,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.OtherHelpActivity;
-import com.foodie.app.model.DisputeMessage;
-import com.foodie.app.model.NotificationItem;
-import com.foodie.app.model.Restaurant;
+import com.foodie.app.models.DisputeMessage;
 
 import java.util.List;
 

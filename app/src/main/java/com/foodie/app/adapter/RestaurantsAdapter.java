@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Shop;
+import com.foodie.app.models.Shop;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

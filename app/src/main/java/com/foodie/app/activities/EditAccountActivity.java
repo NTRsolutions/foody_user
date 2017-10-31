@@ -31,7 +31,7 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.model.User;
+import com.foodie.app.models.User;
 import com.foodie.app.utils.Utils;
 
 import org.json.JSONObject;

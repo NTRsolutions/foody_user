@@ -166,5 +166,22 @@
     <string name="dispute">Dispute</string>
     <string name="dispute_created">Dispute Created</string>
 
+    <!--   Braintree  -->
+
+    <string name="loading">Loading....</string>
+    <string name="paypal_billing_agreement">Billing Agreement</string>
+    <string name="nonce">nonce</string>
+
+    <!-- CreateTransactionActivity -->
+    <string name="processing_transaction">Processing Transaction</string>
+    <string name="transaction_failed">Transaction Failed</string>
+    <string name="transaction_complete">Transaction Complete</string>
+
+    <!-- Alert Dialog -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="replace_cart_item">Replace cart item?</string>
+    <string name="do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant">Do you want to discard the selecrion and add dishes form the restautarant</string>
+
 
 </resources>

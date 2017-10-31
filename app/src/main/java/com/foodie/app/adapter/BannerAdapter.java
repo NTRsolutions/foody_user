@@ -18,7 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Banner;
+import com.foodie.app.models.Banner;
 
 import java.util.List;
 

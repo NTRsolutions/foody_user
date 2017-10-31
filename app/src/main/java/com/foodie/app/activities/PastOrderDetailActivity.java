@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.foodie.app.R;
 import com.foodie.app.fragments.OrderViewFragment;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.Order;
+import com.foodie.app.models.Order;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -3,6 +3,7 @@ package com.foodie.app.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -10,6 +11,7 @@ import android.widget.Toast;
  */
 
 public class Utils {
+    public static boolean showLog = true;
 
     public static void displayMessage(Activity activity, Context context, String toastString) {
         try {
@@ -21,6 +23,11 @@ public class Utils {
             }catch (Exception ee){
                 ee.printStackTrace();
             }
+        }
+    }
+    public static void print(String tag, String message) {
+        if(showLog){
+            Log.v(tag,message);
         }
     }
 

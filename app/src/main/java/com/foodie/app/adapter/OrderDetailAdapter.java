@@ -10,11 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
-import com.foodie.app.model.Image;
-import com.foodie.app.model.Item;
-import com.foodie.app.model.OrderItem;
-import com.foodie.app.model.OrderItem;
-import com.foodie.app.model.Restaurant;
+import com.foodie.app.models.Item;
 
 import java.util.List;
 

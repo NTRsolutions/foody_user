@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.foodie.app.R;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.WalletHistory;
+import com.foodie.app.models.WalletHistory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

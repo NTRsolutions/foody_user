@@ -19,10 +19,10 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.model.AddCart;
-import com.foodie.app.model.Product;
-import com.foodie.app.model.Cart;
-import com.foodie.app.model.Shop;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.Product;
+import com.foodie.app.models.Cart;
+import com.foodie.app.models.Shop;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
