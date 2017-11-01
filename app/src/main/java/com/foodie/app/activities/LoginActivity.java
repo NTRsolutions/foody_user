@@ -56,6 +56,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.foodie.app.helper.GlobalData.latitude;
+import static com.foodie.app.helper.GlobalData.longitude;
+
 public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.app_logo)
@@ -96,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0;
 
     String device_token, device_UDID;
-    Utils utils= new Utils();
+    Utils utils = new Utils();
     String TAG = "Login";
 
     @Override
@@ -144,8 +147,8 @@ public class LoginActivity extends AppCompatActivity {
                 device_token = SharedHelper.getKey(context, "device_token");
                 utils.print(TAG, "GCM Registration Token: " + device_token);
             } else {
-                device_token = ""+ FirebaseInstanceId.getInstance().getToken();
-                SharedHelper.putKey(context, "device_token",""+FirebaseInstanceId.getInstance().getToken());
+                device_token = "" + FirebaseInstanceId.getInstance().getToken();
+                SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
                 utils.print(TAG, "Failed to complete token refresh: " + device_token);
             }
         } catch (Exception e) {
@@ -257,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
     public void initValues() {
         mobile = edMobileNumber.getText().toString();
         password = edPassword.getText().toString();
-        if (!isValidMobile(country_code +mobile)) {
+        if (!isValidMobile(country_code + mobile)) {
             Toast.makeText(this, "Please enter valid mobile number 11", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
@@ -270,10 +273,10 @@ public class LoginActivity extends AppCompatActivity {
             map.put("client_id", BuildConfigure.CLIENT_ID);
             map.put("client_secret", BuildConfigure.CLIENT_SECRET);
 
-            if(connectionHelper.isConnectingToInternet()){
+            if (connectionHelper.isConnectingToInternet()) {
                 login(map);
-            }else {
-                Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+            } else {
+                Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
             }
 
         }
@@ -321,16 +324,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getProfile() {
-        Call<User> getprofile = apiInterface.getProfile();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("device_type", "android");
+        map.put("device_id", device_UDID);
+        map.put("device_token", device_token);
+        Call<User> getprofile = apiInterface.getProfile(map);
         getprofile.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
                 GlobalData.getInstance().profileModel = response.body();
-                GlobalData.getInstance().addCart=new AddCart();
+                GlobalData.getInstance().addCart = new AddCart();
                 GlobalData.getInstance().addCart.setProductList(response.body().getCart());
-                GlobalData.getInstance().addressList=new AddressList();
+                GlobalData.getInstance().addressList = new AddressList();
                 GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();

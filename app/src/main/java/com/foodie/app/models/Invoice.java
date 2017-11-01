@@ -20,19 +20,19 @@ public class Invoice {
     private Integer paid;
     @SerializedName("gross")
     @Expose
-    private Integer gross;
+    private Double gross;
     @SerializedName("discount")
     @Expose
-    private Integer discount;
+    private Double discount;
     @SerializedName("delivery_charge")
     @Expose
     private Integer deliveryCharge;
     @SerializedName("tax")
     @Expose
-    private Integer tax;
+    private Double tax;
     @SerializedName("net")
     @Expose
-    private Integer net;
+    private Double net;
     @SerializedName("total_pay")
     @Expose
     private Object totalPay;
@@ -81,19 +81,19 @@ public class Invoice {
         this.paid = paid;
     }
 
-    public Integer getGross() {
+    public Double getGross() {
         return gross;
     }
 
-    public void setGross(Integer gross) {
+    public void setGross(Double gross) {
         this.gross = gross;
     }
 
-    public Integer getDiscount() {
+    public Double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(Double discount) {
         this.discount = discount;
     }
 
@@ -105,19 +105,19 @@ public class Invoice {
         this.deliveryCharge = deliveryCharge;
     }
 
-    public Integer getTax() {
+    public Double getTax() {
         return tax;
     }
 
-    public void setTax(Integer tax) {
+    public void setTax(Double tax) {
         this.tax = tax;
     }
 
-    public Integer getNet() {
+    public Double getNet() {
         return net;
     }
 
-    public void setNet(Integer net) {
+    public void setNet(Double net) {
         this.net = net;
     }
 

@@ -56,7 +56,7 @@ public class OtherHelpActivity extends AppCompatActivity {
     @BindView(R.id.order_item_txt)
     TextView orderItemTxt;
 
-    int priceAmount = 0;
+    Double priceAmount = 0.0;
     int DISPUTE_ID = 0;
     int itemQuantity = 0;
     String currency = "";

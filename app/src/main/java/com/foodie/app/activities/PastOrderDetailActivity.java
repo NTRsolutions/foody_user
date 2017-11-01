@@ -34,7 +34,7 @@ public class PastOrderDetailActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
 
 
-    int priceAmount = 0;
+    Double priceAmount = 0.0;
     int discount = 0;
     int itemCount = 0;
     int itemQuantity = 0;

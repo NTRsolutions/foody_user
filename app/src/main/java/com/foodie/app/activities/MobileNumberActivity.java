@@ -1,11 +1,18 @@
 package com.foodie.app.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,20 +21,45 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.foodie.app.CountryPicker.Country;
 import com.foodie.app.CountryPicker.CountryPicker;
 import com.foodie.app.CountryPicker.CountryPickerListener;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.models.ForgotPassword;
 import com.foodie.app.models.Otp;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -40,7 +72,7 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class MobileNumberActivity extends AppCompatActivity {
+public class MobileNumberActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
 
     @BindView(R.id.app_logo)
@@ -70,14 +102,62 @@ public class MobileNumberActivity extends AppCompatActivity {
     boolean isSignUp = true;
     CustomDialog customDialog;
 
+
+    /*----------Facebook Login---------------*/
+    CallbackManager callbackManager;
+    AccessTokenTracker accessTokenTracker;
+    String UserName,UserEmail,result, FBUserID, FBImageURLString;
+    Button fb_login;
+    JSONObject json;
+    String fb_first_name = "", fb_id = "", profile_img = "", fb_email = "",fb_last_name="";
+    ConnectionHelper helper;
+    Boolean isInternet;
+
+
+    /*----------Google Login---------------*/
+    GoogleApiClient mGoogleApiClient;
+    private static final int RC_SIGN_IN = 100;
+    private static final int REQ_SIGN_IN_REQUIRED = 100;
+    public static int APP_REQUEST_CODE = 99;
+    String accessToken = "";
+    String loginBy = "";
+    String TAG = "ActivitySocialLogin";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_mobile_number);
         ButterKnife.bind(this);
         mCountryPicker = CountryPicker.newInstance("Select Country");
         context = MobileNumberActivity.this;
         customDialog = new CustomDialog(context);
+        helper = new ConnectionHelper(context);
+        isInternet = helper.isConnectingToInternet();
+
+        callbackManager = CallbackManager.Factory.create();
+        if (Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
+
+                    /*----------Google Login---------------*/
+
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                //taken from google api console (Web api client id)
+//                .requestIdToken("795253286119-p5b084skjnl7sll3s24ha310iotin5k4.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        // Build a GoogleApiClient with access to the Google Sign-In API and the
+        // options specified by gso.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
 
         Intent intent = getIntent();
@@ -97,6 +177,117 @@ public class MobileNumberActivity extends AppCompatActivity {
         Collections.reverse(nc);
         mCountryPicker.setCountriesList(nc);
         setListener();
+
+    }
+
+    public  void fbLogin(){
+
+        if (isInternet) {
+            LoginManager.getInstance().logInWithReadPermissions(
+                    MobileNumberActivity.this, Arrays.asList("email"));
+
+            LoginManager.getInstance().registerCallback(callbackManager,
+                    new FacebookCallback<LoginResult>() {
+
+                        public void onSuccess(LoginResult loginResult) {
+                            if (AccessToken.getCurrentAccessToken() != null) {
+                                Log.e("loginresult", "" + loginResult.getAccessToken().getToken());
+                                SharedHelper.putKey(MobileNumberActivity.this,"accessToken",loginResult.getAccessToken().getToken());
+                                RequestData();
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            // App code
+                        }
+
+                        @Override
+                        public void onError(FacebookException exception) {
+                            // App code
+                        }
+                    });
+        } else {
+            //mProgressDialog.dismiss();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Check your Internet").setCancelable(false);
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent NetworkAction = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(NetworkAction);
+
+                }
+            });
+            builder.show();
+        }
+
+    }
+
+    public void RequestData() {
+        if (isInternet) {
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+
+                    Log.e("response", "" + response);
+                    json = response.getJSONObject();
+                    Log.e("FB JSON", "" + json);
+
+                    try {
+                        if (json != null) {
+                            UserName = json.optString("name");
+                            UserEmail = json.optString("email");
+                            com.facebook.Profile profile = com.facebook.Profile.getCurrentProfile();
+                            FBUserID = profile.getId();
+                            Log.e("FBUserID", "" + FBUserID);
+                            URL image_value = new URL("https://graph.facebook.com/" + FBUserID + "/picture?type=large");
+                            FBImageURLString = image_value.toString();
+                            Log.e("Connected FB", "" + UserName);
+                            Log.e("Connected FB", "" + UserEmail);
+                            Log.e("FBUserPhoto FB", FBImageURLString);
+                        } else {
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,link,email,picture");
+            request.setParameters(parameters);
+            request.executeAsync();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Check your Internet").setCancelable(false);
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent NetworkAction = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(NetworkAction);
+
+                }
+            });
+            builder.show();
+        }
+
 
     }
 
@@ -207,6 +398,69 @@ public class MobileNumberActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null) {
+            // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+            if (requestCode == RC_SIGN_IN) {
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleSignInResult(result);
+            }
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        try{
+            Log.d("Beginscreen", "handleSignInResult:" + result.isSuccess());
+            if (result.isSuccess()) {
+                // Signed in successfully, show authenticated UI.
+                GoogleSignInAccount acct = result.getSignInAccount();
+                Log.d("Google", "display_name:" + acct.getDisplayName());
+                Log.d("Google", "mail:" + acct.getEmail());
+                Log.d("Google", "photo:" + acct.getPhotoUrl());
+                new RetrieveTokenTask().execute(acct.getEmail());
+            } else {
+
+                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.google_login), Snackbar.LENGTH_SHORT).show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String accountName = params[0];
+            String scopes = "oauth2:profile email";
+            String token = null;
+            try {
+                token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (UserRecoverableAuthException e) {
+                startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
+            } catch (GoogleAuthException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return token;
+        }
+
+        @Override
+        protected void onPostExecute(String GoogleaccessToken) {
+            super.onPostExecute(GoogleaccessToken);
+            Log.e("Token", GoogleaccessToken);
+            accessToken = GoogleaccessToken;
+            loginBy = "google";
+//            phoneLogin();
+        }
+    }
+
 
     @OnClick({R.id.back_img, R.id.next_btn, R.id.already_have_aacount_txt, R.id.facebook_login, R.id.google_login})
     public void onViewClicked(View view) {
@@ -220,11 +474,15 @@ public class MobileNumberActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.facebook_login:
-                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.coming_soon), Snackbar.LENGTH_SHORT).show();
+                fbLogin();
+//                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.coming_soon), Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.google_login:
-                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.coming_soon), Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.coming_soon), Snackbar.LENGTH_SHORT).show();
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
                 break;
+
             case R.id.next_btn:
                 String mobileNumber = country_code + etMobileNumber.getText().toString();
                 if (isValidMobile(mobileNumber)) {
@@ -254,5 +512,10 @@ public class MobileNumberActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

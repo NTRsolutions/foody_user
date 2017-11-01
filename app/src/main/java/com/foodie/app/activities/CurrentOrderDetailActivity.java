@@ -122,7 +122,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
 
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
-    int priceAmount = 0;
+    Double priceAmount = 0.0;
     int itemQuantity = 0;
     String currency = "";
     @BindView(R.id.order_flow_rv)

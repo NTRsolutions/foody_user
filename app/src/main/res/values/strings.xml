@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Foodie</string>
+
+    <string name="facebook_app_id">208426093002447</string>
+
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="name">Name</string>
@@ -163,6 +166,7 @@
     <string name="use_wallet">Use wallet</string>
     <string name="oops_connect_your_internet">Oops ! Connect your Internet.</string>
     <string name="coming_soon">coming soon please check back shortly</string>
+    <string name="google_login">Google Login</string>
     <string name="dispute">Dispute</string>
     <string name="dispute_created">Dispute Created</string>
 

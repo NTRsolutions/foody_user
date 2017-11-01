@@ -55,7 +55,7 @@ public interface ApiInterface {
     /*-------------USER--------------------*/
 
     @GET("api/user/profile")
-    Call<User> getProfile();
+    Call<User> getProfile(@QueryMap HashMap<String, String> params);
 
     @Multipart
     @POST("api/user/profile")

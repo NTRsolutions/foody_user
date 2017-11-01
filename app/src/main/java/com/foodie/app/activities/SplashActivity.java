@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -19,8 +20,12 @@ import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.AddressList;
 import com.foodie.app.models.User;
+import com.foodie.app.utils.Utils;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
@@ -34,7 +39,9 @@ public class SplashActivity extends AppCompatActivity {
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ConnectionHelper connectionHelper;
-
+    String device_token, device_UDID;
+    Utils utils = new Utils();
+    String TAG = "Login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class SplashActivity extends AppCompatActivity {
 
         context = SplashActivity.this;
         connectionHelper = new ConnectionHelper(context);
+        getDeviceToken();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -67,8 +75,37 @@ public class SplashActivity extends AppCompatActivity {
         }, 3000);
     }
 
+    public void getDeviceToken() {
+        try {
+            if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
+                device_token = SharedHelper.getKey(context, "device_token");
+                utils.print(TAG, "GCM Registration Token: " + device_token);
+            } else {
+                device_token = "" + FirebaseInstanceId.getInstance().getToken();
+                SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
+                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+            }
+        } catch (Exception e) {
+            device_token = "COULD NOT GET FCM TOKEN";
+            utils.print(TAG, "Failed to complete token refresh");
+        }
+
+        try {
+            device_UDID = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            utils.print(TAG, "Device UDID:" + device_UDID);
+        } catch (Exception e) {
+            device_UDID = "COULD NOT GET UDID";
+            e.printStackTrace();
+            utils.print(TAG, "Failed to complete device UDID");
+        }
+    }
+
     private void getProfile() {
-        Call<User> getprofile = apiInterface.getProfile();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("device_type", "android");
+        map.put("device_id", device_UDID);
+        map.put("device_token", device_token);
+        Call<User> getprofile = apiInterface.getProfile(map);
         getprofile.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
