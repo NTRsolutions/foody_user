@@ -205,8 +205,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         });
 
 
-        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.item1).dontAnimate()
-                .error(R.drawable.item1).into(restaurantImage);
+        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
+                .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
 
         //Set Palette color
         Picasso.with(HotelViewActivity.this)

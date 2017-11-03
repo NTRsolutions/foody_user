@@ -54,7 +54,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
                 .thumbnail(0.5f)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error((R.drawable.item1))
+                .error((R.drawable.ic_banner))
                 .into(holder.bannerImg);
         holder.bannerImg.setOnClickListener(new View.OnClickListener() {
             @Override

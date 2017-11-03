@@ -15,7 +15,7 @@
             android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_75sdp"
             android:background="@color/light_transparent"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY"/>
     </LinearLayout>
 
     <LinearLayout

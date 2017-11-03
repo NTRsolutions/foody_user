@@ -12,14 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.PromotionsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.PromotionResponse;
 import com.foodie.app.models.Promotions;
 
@@ -46,6 +47,8 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Context context = PromotionActivity.this;
     CustomDialog customDialog;
+    @BindView(R.id.error_layout)
+    LinearLayout errorLayout;
 
 
     @Override
@@ -86,9 +89,14 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
                     Log.e("onResponse: ", response.toString());
-                    promotionsModelArrayList.addAll(response.body());
-                    promotionsRv.getAdapter().notifyDataSetChanged();
-                }else{
+                    if(promotionsModelArrayList.size()==0){
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        promotionsModelArrayList.addAll(response.body());
+                        promotionsRv.getAdapter().notifyDataSetChanged();
+                    }
+
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().toString());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
@@ -127,7 +135,6 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     }
 
 
-
     @Override
     public void onApplyBtnClick(Promotions promotions) {
         customDialog.show();
@@ -150,7 +157,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
             }
 
             @Override
-            public void onFailure(@NonNull Call<PromotionResponse> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PromotionResponse> call, @NonNull Throwable t) {
                 customDialog.dismiss();
             }
         });

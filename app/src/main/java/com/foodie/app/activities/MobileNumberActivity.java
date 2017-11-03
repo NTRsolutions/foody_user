@@ -61,6 +61,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -106,7 +107,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
     /*----------Facebook Login---------------*/
     CallbackManager callbackManager;
     AccessTokenTracker accessTokenTracker;
-    String UserName,UserEmail,result, FBUserID, FBImageURLString;
+
     Button fb_login;
     JSONObject json;
     String fb_first_name = "", fb_id = "", profile_img = "", fb_email = "",fb_last_name="";
@@ -141,8 +142,6 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
-
                     /*----------Google Login---------------*/
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -181,8 +180,8 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
     }
 
     public  void fbLogin(){
-
         if (isInternet) {
+
             LoginManager.getInstance().logInWithReadPermissions(
                     MobileNumberActivity.this, Arrays.asList("email"));
 
@@ -192,7 +191,8 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                         public void onSuccess(LoginResult loginResult) {
                             if (AccessToken.getCurrentAccessToken() != null) {
                                 Log.e("loginresult", "" + loginResult.getAccessToken().getToken());
-                                SharedHelper.putKey(MobileNumberActivity.this,"accessToken",loginResult.getAccessToken().getToken());
+                                SharedHelper.putKey(MobileNumberActivity.this,"access_token",loginResult.getAccessToken().getToken());
+                                GlobalData.access_token = loginResult.getAccessToken().getToken();
                                 RequestData();
                             }
 
@@ -234,26 +234,32 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
 
     public void RequestData() {
         if (isInternet) {
+            customDialog.show();
             GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
-
                     Log.e("response", "" + response);
                     json = response.getJSONObject();
                     Log.e("FB JSON", "" + json);
-
                     try {
                         if (json != null) {
-                            UserName = json.optString("name");
-                            UserEmail = json.optString("email");
+                            GlobalData.name = json.optString("name");
+                            GlobalData.email  = json.optString("email");
                             com.facebook.Profile profile = com.facebook.Profile.getCurrentProfile();
-                            FBUserID = profile.getId();
+                            String FBUserID = profile.getId();
                             Log.e("FBUserID", "" + FBUserID);
                             URL image_value = new URL("https://graph.facebook.com/" + FBUserID + "/picture?type=large");
-                            FBImageURLString = image_value.toString();
-                            Log.e("Connected FB", "" + UserName);
-                            Log.e("Connected FB", "" + UserEmail);
-                            Log.e("FBUserPhoto FB", FBImageURLString);
+                            GlobalData.imageUrl  = image_value.toString();
+                            Log.e("Connected FB", "" + GlobalData.name );
+                            Log.e("Connected FB", "" +  GlobalData.email );
+                            Log.e("FBUserPhoto FB",     GlobalData.imageUrl);
+                            customDialog.dismiss();
+                            GlobalData.loginBy="facebook";
+                            startActivity(new Intent(context, SignUpActivity.class));
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                            finish();
+
+
                         } else {
 
                         }
@@ -328,9 +334,9 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    public void getOtpVerification(String mobile) {
+    public void getOtpVerification(HashMap<String, String> map) {
         customDialog.show();
-        Call<Otp> call = apiInterface.postOtp(mobile);
+        Call<Otp> call = apiInterface.postOtp(map);
         call.enqueue(new Callback<Otp>() {
             @Override
             public void onResponse(@NonNull Call<Otp> call,@NonNull  Response<Otp> response) {
@@ -401,9 +407,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
         if (data != null) {
             // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
             if (requestCode == RC_SIGN_IN) {
@@ -419,13 +423,15 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             if (result.isSuccess()) {
                 // Signed in successfully, show authenticated UI.
                 GoogleSignInAccount acct = result.getSignInAccount();
+                GlobalData.name=acct.getDisplayName();
+                GlobalData.email=acct.getEmail();
+                GlobalData.imageUrl=""+acct.getPhotoUrl();
                 Log.d("Google", "display_name:" + acct.getDisplayName());
                 Log.d("Google", "mail:" + acct.getEmail());
                 Log.d("Google", "photo:" + acct.getPhotoUrl());
                 new RetrieveTokenTask().execute(acct.getEmail());
             } else {
-
-                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.google_login), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.google_login_failed), Snackbar.LENGTH_SHORT).show();
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -455,9 +461,11 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
         protected void onPostExecute(String GoogleaccessToken) {
             super.onPostExecute(GoogleaccessToken);
             Log.e("Token", GoogleaccessToken);
-            accessToken = GoogleaccessToken;
-            loginBy = "google";
-//            phoneLogin();
+            GlobalData.access_token = GoogleaccessToken;
+            GlobalData.loginBy="google";
+            startActivity(new Intent(context, SignUpActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+            finish();
         }
     }
 
@@ -488,8 +496,13 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                 if (isValidMobile(mobileNumber)) {
 
                     GlobalData.mobile = mobileNumber;
-                    if (isSignUp)
-                        getOtpVerification(mobileNumber);
+                    if (isSignUp){
+                        HashMap<String,String> map = new HashMap();
+                        map.put("phone",mobileNumber);
+                        getOtpVerification(map);
+                    }
+
+
                     else
                         forgotPassord(mobileNumber);
                 } else {

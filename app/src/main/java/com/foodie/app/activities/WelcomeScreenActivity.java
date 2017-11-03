@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 
-import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class WelcomeScreenActivity extends AppCompatActivity {

@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.foodie.app.R;
 import com.foodie.app.fragments.CartFragment;
-import com.foodie.app.fragments.HomeFragment;
 
 public class ViewCartActivity extends AppCompatActivity {
 

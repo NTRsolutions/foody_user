@@ -27,7 +27,7 @@
             android:layout_height="@dimen/_100sdp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_50sdp"
-            android:src="@drawable/logo_signin" />
+            android:src="@drawable/app_icon" />
 
         <!--   Mobile Number Layout-->
 
@@ -43,6 +43,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/mobile_number_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_size"
                 android:background="@drawable/shadow_view">

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.foodie.app.R;
@@ -43,6 +44,8 @@ public class OrdersActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.orders_rv)
     RecyclerView ordersRv;
+    @BindView(R.id.error_layout)
+    LinearLayout errorLayout;
 
     private OrdersAdapter adapter;
     Activity activity = OrdersActivity.this;
@@ -64,7 +67,7 @@ public class OrdersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_orders);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         context = OrdersActivity.this;
-        customDialog=new CustomDialog(context);
+        customDialog = new CustomDialog(context);
         ButterKnife.bind(this);
         connectionHelper = new ConnectionHelper(context);
         setSupportActionBar(toolbar);
@@ -107,6 +110,7 @@ public class OrdersActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                customDialog.dismiss();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -128,12 +132,15 @@ public class OrdersActivity extends AppCompatActivity {
 //                    ordersRv.setLayoutAnimation(controller);
 //                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
+
+
                 }
             }
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-
+                customDialog.dismiss();
+                Toast.makeText(OrdersActivity.this, "Some thing went wrong", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -145,9 +152,8 @@ public class OrdersActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                customDialog.dismiss();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-
+                    getPastOrders();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
@@ -155,15 +161,21 @@ public class OrdersActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    if (onGoingOrderList.size() != response.body().size()) {
+                    if (response.body().size() == 0) {
+                        getPastOrders();
+                    } else if (onGoingOrderList.size() != response.body().size()) {
                         onGoingOrderList.clear();
-                        onGoingOrderList .addAll(response.body());
+                        onGoingOrderList.addAll(response.body());
                         OrderModel model = new OrderModel();
                         model.setHeader("Current Orders");
                         model.setOrders(onGoingOrderList);
                         modelList.add(model);
                         modelListReference.clear();
                         modelListReference.addAll(modelList);
+                        if (onGoingOrderList.size() == 0 && pastOrderList.size() == 0) {
+                            errorLayout.setVisibility(View.VISIBLE);
+                        } else
+                            errorLayout.setVisibility(View.GONE);
                         getPastOrders();
                     }
                 }
@@ -171,9 +183,9 @@ public class OrdersActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-                customDialog.dismiss();
-                Toast.makeText(OrdersActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
 
+                Toast.makeText(OrdersActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                getPastOrders();
             }
         });
 

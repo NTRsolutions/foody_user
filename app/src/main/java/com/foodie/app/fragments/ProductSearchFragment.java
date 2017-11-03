@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.foodie.app.R;
-import com.foodie.app.adapter.HotelCatagoeryAdapter;
 import com.foodie.app.adapter.ProductsAdapter;
 
 import java.util.ArrayList;

@@ -20,8 +20,8 @@
             android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_75sdp"
             android:contentDescription="@string/restaurant"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/login_pic" />
+            android:scaleType="fitXY"
+            />
     </LinearLayout>
 
     <RelativeLayout

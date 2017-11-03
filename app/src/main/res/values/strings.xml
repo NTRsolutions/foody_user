@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Foodie</string>
+    <string name="app_name">Cake Square</string>
 
-    <string name="facebook_app_id">208426093002447</string>
+    <string name="facebook_app_id">290984818086469</string>
 
     <string name="login">Login</string>
     <string name="logout">Logout</string>
@@ -167,6 +167,7 @@
     <string name="oops_connect_your_internet">Oops ! Connect your Internet.</string>
     <string name="coming_soon">coming soon please check back shortly</string>
     <string name="google_login">Google Login</string>
+    <string name="google_login_failed">Google login failed</string>
     <string name="dispute">Dispute</string>
     <string name="dispute_created">Dispute Created</string>
 

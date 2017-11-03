@@ -42,6 +42,8 @@ public class GlobalData {
 
 
 
+    public static String loginBy = "manual";
+   public static String name,email,access_token,mobileNumber,imageUrl;
     public static String address = "";
     public static int addCartShopId =0;
     public static User profileModel = null;

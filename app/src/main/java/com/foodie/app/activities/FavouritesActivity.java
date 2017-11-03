@@ -60,7 +60,6 @@ public class FavouritesActivity extends AppCompatActivity {
             }
         });
 
-
         LinearLayoutManager manager = new LinearLayoutManager(this);
         favoritesRv.setLayoutManager(manager);
         adapter = new FavouritesAdapter(this, modelListReference);

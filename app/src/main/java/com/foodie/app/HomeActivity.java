@@ -37,7 +37,9 @@ import com.foodie.app.fragments.ProfileFragment;
 import com.foodie.app.fragments.SearchFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
+import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.models.DisputeMessage;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -64,6 +66,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.helper.GlobalData.disputeMessageList;
 import static com.foodie.app.helper.GlobalData.notificationCount;
+import static com.foodie.app.helper.GlobalData.profileModel;
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -97,6 +100,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(SharedHelper.getKey(context,"login_by").equals("facebook"))
+            FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
         connectionHelper = new ConnectionHelper(this);
         //startActivity(new Intent(HomeActivity.this, HotelViewActivity.class));
@@ -185,20 +190,20 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 return true;
             }
         });
-
-        getDisputeMessage();
+        if (profileModel != null)
+            getDisputeMessage();
     }
 
     private void getDisputeMessage() {
-        Call<List<DisputeMessage>> call= apiInterface.getDisputeList();
+        Call<List<DisputeMessage>> call = apiInterface.getDisputeList();
         call.enqueue(new Callback<List<DisputeMessage>>() {
             @Override
             public void onResponse(Call<List<DisputeMessage>> call, Response<List<DisputeMessage>> response) {
                 if (response.isSuccessful()) {
                     Log.e("Dispute List : ", response.toString());
-                    disputeMessageList= new ArrayList<DisputeMessage>();
+                    disputeMessageList = new ArrayList<DisputeMessage>();
                     disputeMessageList.addAll(response.body());
-                }else{
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().toString());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
@@ -223,27 +228,27 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
      */
 
     private void getLocation() {
-                try {
-                    mLastLocation = LocationServices.FusedLocationApi
-                            .getLastLocation(mGoogleApiClient);
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-                if (mLastLocation != null) {
-                    latitude = mLastLocation.getLatitude();
-                    longitude = mLastLocation.getLongitude();
-                    GlobalData.latitude = mLastLocation.getLatitude();
-                    GlobalData.longitude = mLastLocation.getLongitude();
-                    getAddress();
+        try {
+            mLastLocation = LocationServices.FusedLocationApi
+                    .getLastLocation(mGoogleApiClient);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        if (mLastLocation != null) {
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+            GlobalData.latitude = mLastLocation.getLatitude();
+            GlobalData.longitude = mLastLocation.getLongitude();
+            getAddress();
 
-                } else {
-                    showToast("Couldn't get the location. Make sure location is enabled on the device");
-                }
+        } else {
+            showToast("Couldn't get the location. Make sure location is enabled on the device");
+        }
 
     }
 
     public Address getAddress(double latitude, double longitude) {
-        System.out.println(latitude + " | "+ longitude);
+        System.out.println(latitude + " | " + longitude);
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(getBaseContext(), Locale.ENGLISH);

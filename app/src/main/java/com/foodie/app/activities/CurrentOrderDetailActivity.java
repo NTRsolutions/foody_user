@@ -196,8 +196,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         };
         List<OrderFlow> orderFlowList = new ArrayList<>();
         orderFlowList.add(new OrderFlow(getString(R.string.order_placed), getString(R.string.description_1), R.drawable.ic_order_placed, ORDER_STATUS.get(0)));
-        orderFlowList.add(new OrderFlow(getString(R.string.order_confirmed), getString(R.string.description_2), R.drawable.ic_order_confirmed, ORDER_STATUS.get(1) + ORDER_STATUS.get(2)));
-        orderFlowList.add(new OrderFlow(getString(R.string.order_processed), getString(R.string.description_3), R.drawable.ic_order_processed, ORDER_STATUS.get(3) + ORDER_STATUS.get(4)));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_confirmed), getString(R.string.description_2), R.drawable.ic_order_confirmed, ORDER_STATUS.get(1) ));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_processed), getString(R.string.description_3), R.drawable.ic_order_processed, ORDER_STATUS.get(2)+ORDER_STATUS.get(3) + ORDER_STATUS.get(4)));
         orderFlowList.add(new OrderFlow(getString(R.string.order_pickedup), getString(R.string.description_4), R.drawable.ic_order_picked_up, ORDER_STATUS.get(5) + ORDER_STATUS.get(6)));
         orderFlowList.add(new OrderFlow(getString(R.string.order_delivered), getString(R.string.description_5), R.drawable.ic_order_delivered, ORDER_STATUS.get(7)));
 
@@ -507,7 +507,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                         LatLng location = new LatLng(isSelectedOrder.getAddress().getLatitude(), isSelectedOrder.getAddress().getLongitude());
                         MarkerOptions markerOptions = new MarkerOptions()
                                 .position(location).title("Source").draggable(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_locator));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hoem_marker));
                         sourceMarker = mMap.addMarker(markerOptions);
 
                         destLatLng = new LatLng(isSelectedOrder.getShop().getLatitude(), isSelectedOrder.getShop().getLongitude());
@@ -515,7 +515,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                             destinationMarker.remove();
                         MarkerOptions destMarker = new MarkerOptions()
                                 .position(destLatLng).title("Destination").draggable(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_locator));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant_marker));
                         destinationMarker = mMap.addMarker(destMarker);
                         LatLngBounds.Builder builder = new LatLngBounds.Builder();
                         builder.include(sourceMarker.getPosition());
@@ -820,8 +820,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                 } else if (response.isSuccessful()) {
                     Message message = response.body();
                     Toast.makeText(context, message.getMessage(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
-                    startActivity(new Intent(context, OrdersActivity.class));
                 }
             }
 

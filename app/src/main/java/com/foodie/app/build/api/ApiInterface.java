@@ -63,7 +63,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("api/user/otp")
-    Call<Otp> postOtp(@Field("phone") String mobile);
+    Call<Otp> postOtp(@FieldMap HashMap<String, String> params);
 
     @FormUrlEncoded
     @POST("api/user/register")
@@ -72,6 +72,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("oauth/token")
     Call<LoginModel> postLogin(@FieldMap HashMap<String, String> params);
+
+    @FormUrlEncoded
+    @POST("api/user/social/login")
+    Call<LoginModel> postSocialLogin(@FieldMap HashMap<String, String> params);
 
     @FormUrlEncoded
     @POST("api/user/forgot/password")

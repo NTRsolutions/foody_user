@@ -5,11 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,12 @@ import com.foodie.app.adapter.ProfileSettingsAdapter;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.utils.ListViewSizeHelper;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,14 +84,14 @@ public class ProfileFragment extends Fragment {
     Button loginBtn;
     private Activity activity;
     private Context context;
-
     @BindView(R.id.profile_setting_lv)
     ListView profileSettingLv;
-
     private ViewGroup toolbar;
     private View toolbarLayout;
     ImageView userImage;
     TextView userName, userPhone, userEmail;
+    private static final int REQUEST_LOCATION = 1450;
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,14 +109,14 @@ public class ProfileFragment extends Fragment {
             errorLayout.setVisibility(View.GONE);
             final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
             List<Integer> listIcons = new ArrayList<>();
-            listIcons.add(R.drawable.home);
+            listIcons.add(R.drawable.ic_home);
             listIcons.add(R.drawable.heart);
             listIcons.add(R.drawable.payment);
             listIcons.add(R.drawable.ic_myorders);
             listIcons.add(R.drawable.ic_notifications);
             listIcons.add(R.drawable.ic_promotion_details);
             listIcons.add(R.drawable.padlock);
-            listIcons.add(R.drawable.padlock);
+//            listIcons.add(R.drawable.padlock);
             ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
             profileSettingLv.setAdapter(adbPerson);
             ListViewSizeHelper.getListViewSize(profileSettingLv);
@@ -321,16 +328,58 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    private void signOut() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                //taken from google api console (Web api client id)
+//                .requestIdToken("795253286119-p5b084skjnl7sll3s24ha310iotin5k4.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+
+//                FirebaseAuth.getInstance().signOut();
+                if(mGoogleApiClient.isConnected()) {
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            if (status.isSuccess()) {
+                                Log.d("MainAct", "Google User Logged out");
+                               /* Intent intent = new Intent(LogoutActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();*/
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+                Log.d("MAin", "Google API Client Connection Suspended");
+            }
+        });
+    }
     public void alertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Are you sure you want to logout?")
                 .setPositiveButton(getResources().getString(R.string.logout), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
+                        if (SharedHelper.getKey(context,"login_by").equals("facebook"))
+                            LoginManager.getInstance().logOut();
+                        if (SharedHelper.getKey(context,"login_by").equals("google"))
+                            signOut();
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         GlobalData.getInstance().profileModel = null;
                         getActivity().finish();
+
+
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {

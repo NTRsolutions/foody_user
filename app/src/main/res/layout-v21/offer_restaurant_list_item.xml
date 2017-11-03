@@ -23,9 +23,9 @@
                 android:id="@+id/dish_img"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:contentDescription="@string/restaurant"
-                app:srcCompat="@drawable/login_pic" />
+              />
         </LinearLayout>
 
         <LinearLayout

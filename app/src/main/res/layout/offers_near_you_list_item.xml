@@ -16,8 +16,8 @@
             android:id="@+id/dishImg"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/login_pic" />
+            android:scaleType="fitXY"
+           />
     </LinearLayout>
 
     <LinearLayout

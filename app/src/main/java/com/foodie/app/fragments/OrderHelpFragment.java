@@ -2,25 +2,19 @@ package com.foodie.app.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.foodie.app.R;
-import com.foodie.app.activities.OtherHelpActivity;
 import com.foodie.app.adapter.DisputeMessageAdapter;
-import com.foodie.app.build.api.ApiClient;
-import com.foodie.app.build.api.ApiInterface;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

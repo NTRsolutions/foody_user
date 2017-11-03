@@ -16,8 +16,8 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/restaurant"
-            android:scaleType="centerCrop"
-            android:src="@drawable/login_pic" />
+            android:scaleType="fitXY"
+            />
 
         <TextView
             android:id="@+id/dish_name"

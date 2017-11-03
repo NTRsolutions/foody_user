@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,11 +21,9 @@ import android.widget.Toast;
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.activities.WelcomeScreenActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.Category;
@@ -205,7 +202,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             @Override
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
-
                 if(isShopIsChanged&& GlobalData.getInstance().addCart!=null){
                     Log.e("IsShopchanged",""+isShopIsChanged);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);

@@ -32,7 +32,7 @@
                     android:layout_height="@dimen/_70sdp"
                     android:background="@color/light_transparent"
                     android:contentDescription="@string/restaurant"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitXY" />
 
                 <View
                     android:id="@+id/restaurant_name"

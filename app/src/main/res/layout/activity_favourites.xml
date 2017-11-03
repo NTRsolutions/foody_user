@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="3"
                 android:layout_marginTop="8sp"
-                android:text="Once your favorite a restaurant, it will appear here."
+                android:text="Once you favorite a restaurant, it will appear here."
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="14sp"
                 android:gravity="center"

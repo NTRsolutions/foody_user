@@ -35,13 +35,13 @@
 
             <ImageView
                 android:id="@+id/app_logo"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_120sdp"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:contentDescription="@string/login"
-                android:src="@drawable/logo_signin" />
+                android:src="@drawable/app_icon" />
 
 
             <EditText
@@ -74,6 +74,50 @@
                 app:theme="@style/MyEditTextTheme" />
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:id="@+id/mobile_number_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_size"
+                android:background="@drawable/shadow_view">
+
+                <ImageView
+                    android:id="@+id/countryImage"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:src="@drawable/flag_in" />
+
+                <TextView
+                    android:id="@+id/countryNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:layout_toRightOf="@+id/countryImage"
+                    android:gravity="center"
+                    android:text="+91"
+                    android:textSize="@dimen/text_normal" />
+
+                <EditText
+                    android:id="@+id/et_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/countryNumber"
+                    android:background="@null"
+                    android:hint="@string/mobile_number"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:textSize="@dimen/text_normal" />
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin">
@@ -106,6 +150,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/confirm_password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin">

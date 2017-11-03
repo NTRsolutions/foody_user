@@ -77,6 +77,7 @@
         app:digitHeight="@dimen/_35sdp"
         app:digitSpacing="@dimen/_10sdp"
         app:digitTextSize="@dimen/_6sdp"
+        app:digitTextColor="@android:color/white"
         app:digitWidth="@dimen/_35sdp"
         app:mask=""
         app:numDigits="6"

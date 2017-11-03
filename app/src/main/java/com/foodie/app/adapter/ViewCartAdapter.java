@@ -306,7 +306,11 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             //Get product price
                             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
-                            discount = discount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getDiscount());
+                        }
+                        if(response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount()<priceAmount){
+                            int offerPercentage=response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
+                            discount = (int) (priceAmount*(offerPercentage*0.01));
+
                         }
 
                         GlobalData.getInstance().notificationCount = itemQuantity;

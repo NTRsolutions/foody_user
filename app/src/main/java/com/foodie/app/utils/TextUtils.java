@@ -1,7 +1,5 @@
 package com.foodie.app.utils;
 
-import android.widget.EditText;
-
 /**
  * Created by Tamil on 9/21/2017.
  */

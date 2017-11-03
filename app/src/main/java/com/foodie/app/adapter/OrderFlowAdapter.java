@@ -1,6 +1,7 @@
 package com.foodie.app.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,15 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
         if(orderFlow.status.contains(isSelectedOrder.getStatus())){
             holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
             if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(GlobalData.ORDER_STATUS.size() - 1))){
-                ((CurrentOrderDetailActivity)context).rate();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something after 100ms
+                        ((CurrentOrderDetailActivity)context).rate();
+                    }
+                }, 2000);
+
             }
             if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(0))){
                CurrentOrderDetailActivity.orderCancelTxt.setVisibility(View.VISIBLE);

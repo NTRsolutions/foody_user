@@ -10,9 +10,9 @@
         android:id="@+id/shop_avatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:contentDescription="@string/restaurant"
-        android:src="@drawable/login_pic" />
+       />
 
     <TextView
         android:id="@+id/shop_name"

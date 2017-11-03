@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://D:\Base APP\Foodie\foodie_android_user\Foodie.iml" filepath="D:\Base APP\Foodie\foodie_android_user\Foodie.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\CakeSquare\cakesquare_foodie_android_user\cakeSquare_android_user.iml" filepath="D:\CakeSquare\cakesquare_foodie_android_user\cakeSquare_android_user.iml" />
       <module fileurl="file://$PROJECT_DIR$/foodie_android_user.iml" filepath="$PROJECT_DIR$/foodie_android_user.iml" />
     </modules>
   </component>

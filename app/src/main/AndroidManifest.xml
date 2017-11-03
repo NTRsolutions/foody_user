@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.foodie.app.MyApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -34,12 +34,12 @@
         <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
 
         <activity
-            android:name=".activities.WelcomeScreenActivity"
+            android:name="com.foodie.app.activities.WelcomeScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.foodie.app.activities.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -49,12 +49,12 @@
             </intent-filter>
         </activity>
         <!-- Firebase Notifications -->
-        <service android:name=".fcm.MyFirebaseMessagingService">
+        <service android:name="com.foodie.app.fcm.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".fcm.MyFirebaseInstanceIDService">
+        <service android:name="com.foodie.app.fcm.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -71,7 +71,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="com.foodie.app.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -84,113 +84,113 @@
             <!--android:exported="false" />-->
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.foodie.app.activities.LoginActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.OtpActivity"
+            android:name="com.foodie.app.activities.OtpActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.MobileNumberActivity"
+            android:name="com.foodie.app.activities.MobileNumberActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name="com.foodie.app.activities.SignUpActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ForgotPasswordActivity"
+            android:name="com.foodie.app.activities.ForgotPasswordActivity"
             android:label="@string/forgot_password"
-            android:parentActivityName=".activities.LoginActivity"
+            android:parentActivityName="com.foodie.app.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.HotelViewActivity"
+            android:name="com.foodie.app.activities.HotelViewActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ChangePasswordActivity"
+            android:name="com.foodie.app.activities.ChangePasswordActivity"
             android:label="Change Password"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.FavouritesActivity"
+            android:name="com.foodie.app.activities.FavouritesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.RecommendedListActivity"
+            android:name="com.foodie.app.activities.RecommendedListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.EditAccountActivity"
+            android:name="com.foodie.app.activities.EditAccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SetDeliveryLocationActivity"
+            android:name="com.foodie.app.activities.SetDeliveryLocationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SaveDeliveryLocationActivity"
+            android:name="com.foodie.app.activities.SaveDeliveryLocationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ManageAddressActivity"
+            android:name="com.foodie.app.activities.ManageAddressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.AccountPaymentActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".activities.OrdersActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.FilterActivity"
+            android:name="com.foodie.app.activities.AccountPaymentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".activities.ViewCartActivity"
+            android:name="com.foodie.app.activities.OrdersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.PastOrderDetailActivity"
+            android:name="com.foodie.app.activities.FilterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.foodie.app.activities.ViewCartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.foodie.app.activities.PastOrderDetailActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.OtherHelpActivity"
+            android:name="com.foodie.app.activities.OtherHelpActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.NotificationActivity"
+            android:name="com.foodie.app.activities.NotificationActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.PromotionActivity"
+            android:name="com.foodie.app.activities.PromotionActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.CurrentOrderDetailActivity"
+            android:name="com.foodie.app.activities.CurrentOrderDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.AddMoneyActivity"
+            android:name="com.foodie.app.activities.AddMoneyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.WalletActivity"
+            android:name="com.foodie.app.activities.WalletActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -199,11 +199,11 @@
             android:value="3aef7a5b05836cf8166f23c95e43c52517bee917" />
 
         <activity
-            android:name=".activities.ResetPasswordActivity"
+            android:name="com.foodie.app.activities.ResetPasswordActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activities.SecretKeyActivity"
+            android:name="com.foodie.app.activities.SecretKeyActivity"
             android:screenOrientation="portrait" />
 
         <provider

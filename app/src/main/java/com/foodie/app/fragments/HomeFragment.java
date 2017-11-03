@@ -153,7 +153,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_home, toolbar, false);
         addressLabel = (TextView) toolbarLayout.findViewById(R.id.address_label);
         addressTxt = (TextView) toolbarLayout.findViewById(R.id.address);
-
         locationAddressLayout = (LinearLayout) toolbarLayout.findViewById(R.id.location_ll);
         errorLoadingLayout = (RelativeLayout) toolbarLayout.findViewById(R.id.error_loading_layout);
         locationAddressLayout.setVisibility(View.INVISIBLE);
