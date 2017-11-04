@@ -427,8 +427,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             longitude = GlobalData.getInstance().selectedAddress.getLongitude();
                             break;
                         } else {
-                            addressLabel.setText(GlobalData.getInstance().addressHeader);
-                            addressTxt.setText(GlobalData.getInstance().address);
+                            if (GlobalData.getInstance().selectedAddress != null) {
+                                addressLabel.setText(GlobalData.getInstance().addressHeader);
+                                addressTxt.setText(GlobalData.getInstance().address);
+                                addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
+                                addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
+                                latitude = GlobalData.getInstance().selectedAddress.getLatitude();
+                                longitude = GlobalData.getInstance().selectedAddress.getLongitude();
+                                findRestaurant();
+
+                            } else {
+                                addressLabel.setText(GlobalData.getInstance().addressHeader);
+                                addressTxt.setText(GlobalData.getInstance().address);
+                            }
+
                         }
                     }
                 } else {

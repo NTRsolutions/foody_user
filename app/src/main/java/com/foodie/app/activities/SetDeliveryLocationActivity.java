@@ -82,8 +82,10 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         });
         modelListReference.clear();
         AddressList addressList= new AddressList();
-        addressList.setHeader(getResources().getString(R.string.saved_addresses));
-        addressList.setAddresses(GlobalData.profileModel.getAddresses());
+        if(GlobalData.profileModel!=null){
+            addressList.setHeader(getResources().getString(R.string.saved_addresses));
+            addressList.setAddresses(GlobalData.profileModel.getAddresses());
+        }
         modelListReference.clear();
         modelListReference.add(addressList);
         manager = new LinearLayoutManager(this);
@@ -120,6 +122,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
                     AddressList model = new AddressList();
                     model.setHeader(getResources().getString(R.string.saved_addresses));
                     model.setAddresses(response.body());
+                    GlobalData.profileModel.setAddresses(response.body());
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);

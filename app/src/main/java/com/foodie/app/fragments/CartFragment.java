@@ -124,7 +124,7 @@ public class CartFragment extends Fragment {
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
-    public static TextView itemTotalAmount, deliveryCharges, promoCodeApply, discountAmount,serviceTax, payAmount;
+    public static TextView itemTotalAmount, deliveryCharges, promoCodeApply, discountAmount, serviceTax, payAmount;
 
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
@@ -133,8 +133,8 @@ public class CartFragment extends Fragment {
 
     int priceAmount = 0;
     int discount = 0;
-    public  static int deliveryChargeValue= 0;
-    public  static int tax = 0;
+    public static int deliveryChargeValue = 0;
+    public static int tax = 0;
     int itemCount = 0;
     int itemQuantity = 0;
     int ADDRESS_SELECTION = 1;
@@ -146,7 +146,6 @@ public class CartFragment extends Fragment {
     ViewSkeletonScreen skeleton;
     ConnectionHelper connectionHelper;
     Activity activity;
-
 
 
     @Override
@@ -175,7 +174,7 @@ public class CartFragment extends Fragment {
 
         HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
-        if (GlobalData.getInstance().profileModel ==null) {
+        if (GlobalData.getInstance().profileModel == null) {
             dataLayout.setVisibility(View.GONE);
             errorLayout.setVisibility(View.VISIBLE);
             errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
@@ -201,7 +200,7 @@ public class CartFragment extends Fragment {
         orderItemRv.setNestedScrollingEnabled(false);
 
         //Intialize address Value
-        if (GlobalData.getInstance().selectedAddress != null) {
+        if (GlobalData.getInstance().selectedAddress != null && GlobalData.getInstance().selectedAddress.getLandmark() != null) {
             if (GlobalData.getInstance().addressList.getAddresses().size() == 1)
                 addAddressTxt.setText(getString(R.string.add_address));
             else
@@ -220,7 +219,10 @@ public class CartFragment extends Fragment {
             locationErrorLayout.setVisibility(View.VISIBLE);
             locationInfoLayout.setVisibility(View.GONE);
         } else {
-            locationErrorSubTitle.setText(GlobalData.getInstance().addressHeader);
+            if (GlobalData.getInstance().selectedAddress != null)
+                locationErrorSubTitle.setText(GlobalData.selectedAddress.getMapAddress());
+            else
+                locationErrorSubTitle.setText(GlobalData.getInstance().addressHeader);
             locationErrorLayout.setVisibility(View.VISIBLE);
             selectedAddressBtn.setVisibility(View.GONE);
             locationInfoLayout.setVisibility(View.GONE);
@@ -266,14 +268,15 @@ public class CartFragment extends Fragment {
                         //Set Payment details
                         String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
                         itemTotalAmount.setText(currency + "" + priceAmount);
-                        if(response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount()<priceAmount){
-                            int offerPercentage=response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
-                            discount = (int) (priceAmount*(offerPercentage*0.01));
+                        if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() < priceAmount) {
+                            int offerPercentage = response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
+                            discount = (int) (priceAmount * (offerPercentage * 0.01));
                         }
                         discountAmount.setText("- " + currency + "" + discount);
                         serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getTaxPercentage().toString());
                         int topPayAmount = priceAmount - discount;
-                         topPayAmount = topPayAmount+ response.body().getDeliveryCharges()+response.body().getTaxPercentage();;
+                        topPayAmount = topPayAmount + response.body().getDeliveryCharges() + response.body().getTaxPercentage();
+                        ;
                         payAmount.setText(currency + "" + topPayAmount);
                         //Set Restaurant Details
                         restaurantName.setText(response.body().getProductList().get(0).getProduct().getShop().getName());
@@ -281,8 +284,8 @@ public class CartFragment extends Fragment {
                         String image_url = response.body().getProductList().get(0).getProduct().getShop().getAvatar();
                         Glide.with(context).load(image_url).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
                                 .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
-                        deliveryChargeValue=response.body().getDeliveryCharges();
-                        tax=response.body().getTaxPercentage();
+                        deliveryChargeValue = response.body().getDeliveryCharges();
+                        tax = response.body().getTaxPercentage();
                         deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
                         viewCartItemList.addAll(response.body().getProductList());
                         viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);
@@ -306,7 +309,7 @@ public class CartFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if(GlobalData.profileModel!=null){
+        if (GlobalData.profileModel != null) {
             int money = GlobalData.profileModel.getWalletBalance();
             if (money > 0) {
                 amountTxt.setText(numberFormat.format(money));

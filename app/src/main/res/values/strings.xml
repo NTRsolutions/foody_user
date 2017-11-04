@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cake Square</string>
+    <string name="app_name">Foodie</string>
 
     <string name="facebook_app_id">290984818086469</string>
 
@@ -60,7 +60,6 @@
 
     <string name="large_text">
         "Material is the metaphor.\n\n"
-
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic.\n"

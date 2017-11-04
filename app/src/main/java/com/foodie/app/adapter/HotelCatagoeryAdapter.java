@@ -298,7 +298,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     selectedShop = HotelViewActivity.shops;
                     GlobalData.getInstance().addCart.getProductList().clear();
 

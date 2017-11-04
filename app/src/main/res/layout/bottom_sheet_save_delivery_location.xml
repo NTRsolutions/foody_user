@@ -27,13 +27,35 @@
             android:paddingLeft="2dp"
             android:paddingRight="2dp" />
 
-        <TextView
-            fontPath="fonts/Nunito-Bold.ttf"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save delivery location"
-            android:textColor="@color/colorTextBlack"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                fontPath="fonts/Nunito-Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save delivery location"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="18sp" />
+
+            <TextView
+                android:alpha="0.5"
+                android:id="@+id/skip_txt"
+                fontPath="fonts/Nunito-Bold.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="Skip"
+                android:textAllCaps="true"
+                android:textColor="@color/theme"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,8 +107,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Landmark"
-                    android:inputType="textPostalAddress"
                     android:imeOptions="actionDone"
+                    android:inputType="textPostalAddress"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 

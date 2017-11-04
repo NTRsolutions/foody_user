@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.build.api.APIError;
 import com.foodie.app.build.api.ApiClient;
@@ -105,8 +106,11 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     TextView cancelTxt;
     @BindView(R.id.other_address_title_layout)
     RelativeLayout otherAddressTitleLayout;
+    @BindView(R.id.skip_txt)
+    TextView skipTxt;
 
     private String TAG = "SaveDelivery";
+    private String addressHeader = "";
     private BottomSheetBehavior behavior;
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -151,6 +155,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 R.anim.slide_up);
 
         isAddressSave = getIntent().getBooleanExtra("get_address", false);
+        if (!isAddressSave)
+            skipTxt.setVisibility(View.VISIBLE);
+        else
+            skipTxt.setVisibility(View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -355,13 +363,13 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 }
                 addressEdit.setText(strReturnedAddress.toString());
                 Address obj = addresses.get(0);
-
                 address.setCity(obj.getLocality());
                 address.setState(obj.getAdminArea());
                 address.setCountry(obj.getCountryName());
                 address.setLatitude(obj.getLatitude());
                 address.setLongitude(obj.getLongitude());
                 address.setPincode(obj.getPostalCode());
+                addressHeader=obj.getFeatureName();
                 //SharedHelper.putKey(context, "pickup_address", strReturnedAddress.toString());
             }
         } catch (Exception e) {
@@ -379,7 +387,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             //Intialize animation line
             initializeAvd();
             getAddress(srcLat, srcLng);
-
+            skipTxt.setAlpha(1);
+            skipTxt.setClickable(true);
+            skipTxt.setEnabled(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -391,6 +401,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         dummyImageView.setVisibility(View.GONE);
         addressEdit.setText(this.getResources().getString(R.string.getting_address));
         animationLineCartAdd.setVisibility(View.VISIBLE);
+        skipTxt.setAlpha((float) 0.5);
+        skipTxt.setClickable(false);
+        skipTxt.setEnabled(false);
     }
 
     @Override
@@ -422,8 +435,6 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     }
 
     private void saveAddress() {
-
-
         if (address != null && address.getMapAddress() != null && validate()) {
             customDialog.show();
             Call<com.foodie.app.models.Address> call = apiInterface.saveAddress(address);
@@ -432,7 +443,6 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 public void onResponse(@NonNull Call<com.foodie.app.models.Address> call, @NonNull Response<com.foodie.app.models.Address> response) {
                     customDialog.dismiss();
                     if (response.isSuccessful()) {
-
                         if (isAddressSave) {
                             //select the address data and set to address in Cart fargment page
                             Intent returnIntent = new Intent();
@@ -518,7 +528,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick({R.id.backArrow, R.id.save, R.id.imgCurrentLoc, R.id.cancel_txt})
+    @OnClick({R.id.backArrow, R.id.save, R.id.imgCurrentLoc, R.id.cancel_txt, R.id.skip_txt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.backArrow:
@@ -539,7 +549,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 address.setMapAddress(addressEdit.getText().toString());
                 address.setBuilding(flatNoEdit.getText().toString());
                 address.setLandmark(landmark.getText().toString());
-                if (address.getType().equalsIgnoreCase("other")||address.getType().equalsIgnoreCase("")) {
+                if (address.getType().equalsIgnoreCase("other") || address.getType().equalsIgnoreCase("")) {
                     address.setType(otherAddressHeaderEt.getText().toString());
                 }
                 if (address.getBuilding().equalsIgnoreCase("")) {
@@ -555,6 +565,17 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                         saveAddress();
                 }
                 break;
+            case R.id.skip_txt:
+                address.setMapAddress(addressEdit.getText().toString());
+                address.setType(addressHeader);
+                GlobalData.selectedAddress = address;
+                startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
+                break;
+
+
         }
     }
+
+
 }

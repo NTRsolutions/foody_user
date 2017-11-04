@@ -13,11 +13,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.Address;
 
 import java.util.ArrayList;
@@ -87,9 +89,9 @@ public class ManageAddressActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     locations.clear();
                     locations.addAll(response.body());
+                    GlobalData.profileModel.setAddresses(response.body());
                     if (locations.size() == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
-
                     } else {
                         errorLayout.setVisibility(View.GONE);
                         adapter.notifyDataSetChanged();
@@ -100,7 +102,7 @@ public class ManageAddressActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Address>> call, Throwable t) {
-
+                Toast.makeText(ManageAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
     }
