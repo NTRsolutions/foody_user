@@ -67,7 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private int getNotificationIcon(NotificationCompat.Builder notificationBuilder) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            return R.drawable.logo_signin;
+            return R.mipmap.ic_launcher;
         }else {
             return R.drawable.ic_push_notification;
         }

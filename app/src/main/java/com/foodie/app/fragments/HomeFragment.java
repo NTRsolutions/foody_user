@@ -411,7 +411,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void run() {
                 //Do something after 5000ms
-                findRestaurant();
+
                 errorLoadingLayout.setVisibility(View.GONE);
                 locationAddressLayout.setVisibility(View.VISIBLE);
                 if (addressList != null && addressList.getAddresses().size() != 0) {
@@ -428,14 +428,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             break;
                         } else {
                             if (GlobalData.getInstance().selectedAddress != null) {
-                                addressLabel.setText(GlobalData.getInstance().addressHeader);
-                                addressTxt.setText(GlobalData.getInstance().address);
                                 addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
                                 addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
                                 latitude = GlobalData.getInstance().selectedAddress.getLatitude();
                                 longitude = GlobalData.getInstance().selectedAddress.getLongitude();
-                                findRestaurant();
-
+                                GlobalData.getInstance().addressHeader=GlobalData.getInstance().selectedAddress.getMapAddress();
                             } else {
                                 addressLabel.setText(GlobalData.getInstance().addressHeader);
                                 addressTxt.setText(GlobalData.getInstance().address);
@@ -447,6 +444,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     addressLabel.setText(GlobalData.getInstance().addressHeader);
                     addressTxt.setText(GlobalData.getInstance().address);
                 }
+
+                findRestaurant();
 
             }
         }, 3000);

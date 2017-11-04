@@ -144,8 +144,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         context = SaveDeliveryLocationActivity.this;
         address = new com.foodie.app.models.Address();
         customDialog = new CustomDialog(context);
-        homeRadio.setChecked(true);
-        address.setType("home");
+
+        otherRadio.setChecked(true);
+        address.setType("other");
         //Intialize Animation line
         initializeAvd();
         //Load animation
@@ -212,10 +213,16 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton radioButton = (RadioButton) radioGroup.findViewById(i);
-                if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
+                if (radioButton.getText().toString().toLowerCase().equals("home"))
+                    currentLocImg.setBackgroundResource(R.drawable.ic_hoem_marker);
+                else if (radioButton.getText().toString().toLowerCase().equals("work"))
+                    currentLocImg.setBackgroundResource(R.drawable.ic_work_marker);
+                else if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
+                    currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
                     otherAddressTitleLayout.setVisibility(View.VISIBLE);
                     typeRadiogroup.setVisibility(View.GONE);
                 }
+
                 System.out.println("typeRadiogroup " + radioButton.getText().toString().toLowerCase());
                 address.setType(radioButton.getText().toString().toLowerCase());
 
@@ -369,7 +376,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 address.setLatitude(obj.getLatitude());
                 address.setLongitude(obj.getLongitude());
                 address.setPincode(obj.getPostalCode());
-                addressHeader=obj.getFeatureName();
+                addressHeader = obj.getFeatureName();
                 //SharedHelper.putKey(context, "pickup_address", strReturnedAddress.toString());
             }
         } catch (Exception e) {
@@ -543,7 +550,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 break;
             case R.id.cancel_txt:
                 typeRadiogroup.setVisibility(View.VISIBLE);
-                homeRadio.setChecked(true);
+                otherRadio.setChecked(true);
                 break;
             case R.id.save:
                 address.setMapAddress(addressEdit.getText().toString());
@@ -556,9 +563,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     Toast.makeText(context, "Please enter House/ flat no ", Toast.LENGTH_SHORT).show();
                 } else if (address.getLandmark().equalsIgnoreCase("")) {
                     Toast.makeText(context, "Please enter landmark ", Toast.LENGTH_SHORT).show();
-                } else if (address.getType().equalsIgnoreCase("")) {
-                    Toast.makeText(context, "Please enter address type", Toast.LENGTH_SHORT).show();
                 } else {
+                    if (address.getType().equalsIgnoreCase(""))
+                        address.setType("other");
+
                     if (address.getId() != null)
                         updateAddress();
                     else
