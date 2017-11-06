@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.foodie.app">
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -85,6 +84,11 @@
 
         <activity
             android:name="com.foodie.app.activities.LoginActivity"
+            android:label=" "
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.foodie.app.activities.AddCardActivity"
             android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

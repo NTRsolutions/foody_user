@@ -13,10 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.braintreepayments.api.AndroidPay;
 import com.braintreepayments.api.BraintreeFragment;
@@ -40,27 +43,37 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.AccountPaymentAdapter;
 import com.foodie.app.braintree.CreateTransactionActivity;
 import com.foodie.app.braintree.Settings;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
+import com.foodie.app.models.Card;
+import com.foodie.app.models.Message;
 import com.google.android.gms.identity.intents.model.CountrySpecification;
 import com.google.android.gms.identity.intents.model.UserAddress;
 import com.google.android.gms.wallet.Cart;
-import com.foodie.app.models.PaymentMethod;
 import com.google.android.gms.wallet.LineItem;
+
+import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.foodie.app.helper.GlobalData.currencySymbol;
 
-public class AccountPaymentActivity extends AppCompatActivity  implements PaymentMethodNonceCreatedListener,
+public class AccountPaymentActivity extends AppCompatActivity implements PaymentMethodNonceCreatedListener,
         BraintreeCancelListener, BraintreeErrorListener, DropInResult.DropInResultListener {
 
     @BindView(R.id.toolbar)
@@ -75,14 +88,15 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
     @BindView(R.id.add_new_cart)
     TextView addNewCart;
 
-
     //Braintree integration
     private static final String KEY_AUTHORIZATION = "com.braintreepayments.demo.KEY_AUTHORIZATION";
-    protected String mAuthorization="sandbox_8hsjt2ms_p4rvqdnmvxcqdm76";
+    protected String mAuthorization = "sandbox_8hsjt2ms_p4rvqdnmvxcqdm76";
     protected String mCustomerId;
     protected BraintreeFragment mBraintreeFragment;
     private static final int DROP_IN_REQUEST = 100;
     private static final String KEY_NONCE = "nonce";
+    @BindView(R.id.cash_check_box)
+    CheckBox cashCheckBox;
 
     private PaymentMethodType mPaymentMethodType;
     private PaymentMethodNonce mNonce;
@@ -101,7 +115,16 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
 
     private boolean mShouldMakePurchase = false;
     private boolean mPurchased = false;
-
+    public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    public static CustomDialog customDialog;
+    public static Context context;
+    ArrayList<Card> cardArrayList;
+    AccountPaymentAdapter accountPaymentAdapter;
+    public static LinearLayout cashPaymentLayout;
+    public static LinearLayout walletPaymentLayout;
+    public static Button proceedToPayBtn;
+    boolean isWalletVisible = false;
+    boolean isCashVisible = false;
 
 
     @Override
@@ -110,6 +133,11 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
         setContentView(R.layout.activity_account_payment);
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        context = AccountPaymentActivity.this;
+        customDialog = new CustomDialog(context);
+        cashPaymentLayout = (LinearLayout) findViewById(R.id.cash_payment_layout);
+        walletPaymentLayout = (LinearLayout) findViewById(R.id.wallet_payment_layout);
+        proceedToPayBtn = (Button) findViewById(R.id.proceed_to_pay_btn);
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -119,16 +147,97 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
                 onBackPressed();
             }
         });
-        ArrayList<PaymentMethod> list = new ArrayList<>();
-        list.add(new PaymentMethod("5431-XXXX-XXXX-4242", 0));
-        AccountPaymentAdapter adbPerson = new AccountPaymentAdapter(AccountPaymentActivity.this, list);
-        paymentMethodLv.setAdapter(adbPerson);
+
+        isWalletVisible = getIntent().getBooleanExtra("is_show_wallet", false);
+        isCashVisible = getIntent().getBooleanExtra("is_show_cash", false);
+
+
+        cardArrayList = new ArrayList<>();
+        accountPaymentAdapter = new AccountPaymentAdapter(AccountPaymentActivity.this, cardArrayList, !isCashVisible);
+        paymentMethodLv.setAdapter(accountPaymentAdapter);
+
+        if (isWalletVisible)
+            walletPaymentLayout.setVisibility(VISIBLE);
+        else
+            walletPaymentLayout.setVisibility(GONE);
+        if (isCashVisible)
+            cashPaymentLayout.setVisibility(VISIBLE);
+        else
+            cashPaymentLayout.setVisibility(GONE);
+
+        cashPaymentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cashCheckBox.setChecked(true);
+                proceedToPayBtn.setVisibility(VISIBLE);
+            }
+        });
+
+
+
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(KEY_NONCE)) {
                 mNonce = savedInstanceState.getParcelable(KEY_NONCE);
             }
         }
+    }
+
+    private void getCardList() {
+        customDialog.show();
+        Call<List<Card>> call = apiInterface.getCardList();
+        call.enqueue(new Callback<List<Card>>() {
+            @Override
+            public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    cardArrayList.clear();
+                    cardArrayList.addAll(response.body());
+                    accountPaymentAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Card>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public static void deleteCard(int id) {
+        customDialog.show();
+        Call<Message> call = apiInterface.deleteCard(id);
+        call.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                customDialog.dismiss();
+            }
+        });
+
+
     }
 
     @Override
@@ -176,7 +285,6 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
     }
 
 
-
     protected void showDialog(String message) {
         new AlertDialog.Builder(this)
                 .setMessage(message)
@@ -188,6 +296,7 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
                 })
                 .show();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -217,6 +326,7 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
         super.onResume();
         int walletMoney = GlobalData.profileModel.getWalletBalance();
         walletAmtTxt.setText(currencySymbol + " " + String.valueOf(walletMoney));
+        getCardList();
         if (mPurchased) {
             mPurchased = false;
             clearNonce();
@@ -242,7 +352,8 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
                 finish();
                 break;
             case R.id.add_new_cart:
-              launchDropIn(view);
+//              launchDropIn(view);
+                startActivity(new Intent(AccountPaymentActivity.this, AddCardActivity.class));
                 break;
         }
     }
@@ -289,7 +400,7 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
     public void purchase(View v) {
         if (mPaymentMethodType == PaymentMethodType.ANDROID_PAY && mNonce == null) {
             ArrayList<CountrySpecification> countries = new ArrayList<>();
-            for(String countryCode : Settings.getAndroidPayAllowedCountriesForShipping(this)) {
+            for (String countryCode : Settings.getAndroidPayAllowedCountriesForShipping(this)) {
                 countries.add(new CountrySpecification(countryCode));
             }
 
@@ -306,6 +417,7 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
             mPurchased = true;
         }
     }
+
     private void displayResult(PaymentMethodNonce paymentMethodNonce, String deviceData) {
         mNonce = paymentMethodNonce;
         mPaymentMethodType = PaymentMethodType.forType(mNonce);
@@ -374,7 +486,7 @@ public class AccountPaymentActivity extends AppCompatActivity  implements Paymen
     }
 
     private String formatAddress(UserAddress address) {
-        if(address == null) {
+        if (address == null) {
             return "null";
         }
         return address.getName() + " " + address.getAddress1() + " " + address.getAddress2() + " " +

@@ -18,6 +18,27 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="Mytheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimaryText</item>
+    <item name="android:textAppearance">@color/colorPrimaryDark</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="android:windowBackground">@color/colorWhite</item>
+    <item name="colorAccent">@color/colorPrimaryText</item>
+    <item name="colorControlNormal">#c5c5c5 </item>
+    <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    <item name="colorControlHighlight">@color/colorAccent</item>
+    <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+    </style>
+
+
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:listPreferredItemHeightSmall">@dimen/_40sdp</item>
+    </style>
+
+
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

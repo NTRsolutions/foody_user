@@ -34,7 +34,7 @@ public class RestaurantSearchFragment extends Fragment {
 
     Unbinder unbinder;
     Context context;
-    public static SkeletonScreen skeletonScreen;
+//    public static SkeletonScreen skeletonScreen;
     @BindView(R.id.restaurants_rv)
     RecyclerView restaurantsRv;
 
@@ -50,6 +50,11 @@ public class RestaurantSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getActivity();
+//        skeletonScreen = Skeleton.bind(restaurantsRv)
+//                .adapter(restaurantsAdapter)
+//                .load(R.layout.skeleton_restaurant_list_item)
+//                .count(6)
+//                .show();
 
         return view;
     }
@@ -57,19 +62,14 @@ public class RestaurantSearchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         //Restaurant Adapter
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
         shopList = new ArrayList<>();
         restaurantsAdapter = new RestaurantsAdapter(shopList, context, getActivity());
-        skeletonScreen = Skeleton.bind(restaurantsRv)
-                .adapter(restaurantsAdapter)
-                .load(R.layout.skeleton_restaurant_list_item)
-                .count(6)
-                .show();
-        skeletonScreen.hide();
+        restaurantsRv.setAdapter(restaurantsAdapter);
+//        skeletonScreen.hide();
 
     }
 

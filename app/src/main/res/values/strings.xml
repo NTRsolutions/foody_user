@@ -185,7 +185,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="replace_cart_item">Replace cart item?</string>
-    <string name="do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant">Do you want to discard the selecrion and add dishes form the restautarant</string>
+    <string name="do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant">Do you want to discard the selecrion and add dishes form this restautarant</string>
+    <string name="add_payments">Add Card</string>
+    <string name="enter_card_details">Card details not valid</string>
+    <string name="add_card">Add card</string>
 
 
 </resources>

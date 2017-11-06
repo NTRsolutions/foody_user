@@ -6,6 +6,8 @@ package com.foodie.app.build.api;
 
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Address;
+import com.foodie.app.models.Card;
+import com.foodie.app.models.Message;
 import com.foodie.app.models.Category;
 import com.foodie.app.models.ChangePassword;
 import com.foodie.app.models.ClearCart;
@@ -15,7 +17,6 @@ import com.foodie.app.models.Favorite;
 import com.foodie.app.models.FavoriteList;
 import com.foodie.app.models.ForgotPassword;
 import com.foodie.app.models.LoginModel;
-import com.foodie.app.models.Message;
 import com.foodie.app.models.Order;
 import com.foodie.app.models.Otp;
 import com.foodie.app.models.PromotionResponse;
@@ -193,6 +194,19 @@ public interface ApiInterface {
     @POST("api/user/wallet/promocode")
     Call<PromotionResponse> applyWalletPromoCode(@Field("promocode_id") String id);
 
+
+
+
+    /*-------------PAYMENT--------------------*/
+    @GET("api/user/card")
+    Call<List<Card>> getCardList();
+
+    @FormUrlEncoded
+    @POST("api/user/card")
+    Call<Message> addCard(@Field("stripe_token") String stripeToken);
+
+    @DELETE("api/user/card/{id}")
+    Call<Message> deleteCard(@Path("id") int id);
 
 
 

@@ -99,6 +99,48 @@
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical" />
 
+            <LinearLayout
+                android:id="@+id/error_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_restaurant_place_holder" />
+
+                <TextView
+                    fontPath="fonts/Nunito-Bold.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="No restaurant found"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="22sp"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8sp"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:text="In you location based restaurant showed so please change your location!"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textSize="14sp"
+                    tools:ignore="MissingPrefix" />
+
+            </LinearLayout>
+
             <!--   Extra Features-->
 
             <LinearLayout

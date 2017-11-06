@@ -69,6 +69,8 @@ dependencies {
 
     //Braintree
     compile 'com.braintreepayments.api:drop-in:3.+'
+    compile 'com.stripe:stripe-android:2.0.2'
+    compile 'com.braintreepayments:card-form:3.0.3'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.lukekorth:mailable_log:0.1.6'
     compile 'com.squareup.retrofit:retrofit:1.9.0'

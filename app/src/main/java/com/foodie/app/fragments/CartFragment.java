@@ -29,6 +29,7 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.ViewSkeletonScreen;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.activities.AccountPaymentActivity;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
@@ -403,7 +404,9 @@ public class CartFragment extends Fragment {
             case R.id.proceed_to_pay_btn:
                 /**  If address is filled */
                 if (connectionHelper.isConnectingToInternet()) {
-                    checkOut(GlobalData.getInstance().selectedAddress.getId());
+//                    checkOut(GlobalData.getInstance().selectedAddress.getId());
+                    startActivity(new Intent(context, AccountPaymentActivity.class).putExtra("is_show_wallet",false).putExtra("is_show_cash",true));
+                    activity.overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
                 } else {
                     Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }

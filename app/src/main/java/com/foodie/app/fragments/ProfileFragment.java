@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(context, FavouritesActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(context, AccountPaymentActivity.class));
+                startActivity(new Intent(context, AccountPaymentActivity.class).putExtra("is_show_wallet",true).putExtra("is_show_cash",false));
                 break;
             case 3:
                 startActivity(new Intent(context, OrdersActivity.class));

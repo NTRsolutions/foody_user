@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.foodie.app.fragments.RestaurantSearchFragment.skeletonScreen;
 
 
 /**
@@ -58,6 +58,8 @@ public class SearchFragment extends Fragment {
     EditText searchEt;
     ProgressBar progressBar;
     ImageView searchCloseImg;
+    @BindView(R.id.root_layout)
+    RelativeLayout rootLayout;
     private Context context;
     private ViewGroup toolbar;
     private View toolbarLayout;
@@ -116,14 +118,23 @@ public class SearchFragment extends Fragment {
         productList = new ArrayList<>();
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
+        rootLayout.setVisibility(View.GONE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_search, toolbar, false);
         searchEt = (EditText) toolbarLayout.findViewById(R.id.search_et);
-        progressBar=(ProgressBar)toolbarLayout.findViewById(R.id.progress_bar);
-        searchCloseImg=(ImageView) toolbarLayout.findViewById(R.id.search_close_img);
+        progressBar = (ProgressBar) toolbarLayout.findViewById(R.id.progress_bar);
+        searchCloseImg = (ImageView) toolbarLayout.findViewById(R.id.search_close_img);
+        //ViewPager Adapter
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter.addFragment(new RestaurantSearchFragment(), "RESTAURANT");
+        adapter.addFragment(new ProductSearchFragment(), "DISHES");
+        viewPager.setAdapter(adapter);
+        //set ViewPager
+        tabLayout.setupWithViewPager(viewPager);
         searchEt.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
+
             }
 
             @Override
@@ -137,14 +148,16 @@ public class SearchFragment extends Fragment {
                 if (s.length() != 0) {
                     getSearch(s);
                     searchCloseImg.setVisibility(View.VISIBLE);
-                    relatedTxt.setText("Related to \"" + s.toString()+"\"");
+                    rootLayout.setVisibility(View.VISIBLE);
+                    relatedTxt.setText("Related to \"" + s.toString() + "\"");
                 } else if (s.length() == 0) {
                     relatedTxt.setText("Related to ");
                     searchCloseImg.setVisibility(View.GONE);
+                    rootLayout.setVisibility(View.GONE);
                     shopList.clear();
                     productList.clear();
                     relatedTxt.setText(s.toString());
-                    skeletonScreen.hide();
+//                    skeletonScreen.hide();
                     RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
                 }
 
@@ -163,18 +176,12 @@ public class SearchFragment extends Fragment {
                 RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
             }
         });
-        //ViewPager Adapter
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new RestaurantSearchFragment(), "RESTAURANT");
-        adapter.addFragment(new ProductSearchFragment(), "DISHES");
-        viewPager.setAdapter(adapter);
-        //set ViewPager
-        tabLayout.setupWithViewPager(viewPager);
+
 
     }
 
     private void getSearch(final CharSequence s) {
-        skeletonScreen.show();
+//        skeletonScreen.show();
         progressBar.setVisibility(View.VISIBLE);
         Call<Search> call = apiInterface.getSearch(s.toString());
         call.enqueue(new Callback<Search>() {
@@ -195,7 +202,7 @@ public class SearchFragment extends Fragment {
                     productList.clear();
                     shopList.addAll(response.body().getShops());
                     productList.addAll(response.body().getProducts());
-                    skeletonScreen.hide();
+//                    skeletonScreen.hide();
                     ProductSearchFragment.productsAdapter.notifyDataSetChanged();
                     RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
 
@@ -205,6 +212,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onFailure(Call<Search> call, Throwable t) {
 
+                progressBar.setVisibility(View.GONE);
             }
         });
 

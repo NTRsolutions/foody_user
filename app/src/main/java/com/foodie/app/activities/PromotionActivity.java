@@ -164,7 +164,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     }
 
     private void gotoFlow() {
-        startActivity(new Intent(this, AccountPaymentActivity.class));
+        startActivity(new Intent(this, AccountPaymentActivity.class).putExtra("is_show_wallet",true).putExtra("is_show_cash",false));
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
         finish();
     }

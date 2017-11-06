@@ -30,14 +30,14 @@ import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.FilterActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
-import com.foodie.app.adapter.DiscoverAdapter;
 import com.foodie.app.adapter.BannerAdapter;
+import com.foodie.app.adapter.DiscoverAdapter;
 import com.foodie.app.adapter.OfferRestaurantAdapter;
 import com.foodie.app.adapter.RestaurantsAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.ConnectionHelper;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.Address;
 import com.foodie.app.models.Banner;
 import com.foodie.app.models.Cuisine;
@@ -90,6 +90,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     TextView restaurantCountTxt;
     @BindView(R.id.offer_title_header)
     TextView offerTitleHeader;
+    @BindView(R.id.error_layout)
+    LinearLayout errorLayout;
     private SkeletonScreen skeletonScreen, skeletonScreen2, skeletonText1, skeletonText2, skeletonSpinner;
     private TextView addressLabel;
     private TextView addressTxt;
@@ -147,7 +149,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         System.out.println("HomeFragment");
-        connectionHelper= new ConnectionHelper(context);
+        connectionHelper = new ConnectionHelper(context);
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_home, toolbar, false);
@@ -242,10 +244,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         locationAddressLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(GlobalData.profileModel!=null){
+                if (GlobalData.profileModel != null) {
                     startActivityForResult(new Intent(getActivity(), SetDeliveryLocationActivity.class).putExtra("get_address", true), ADDRESS_SELECTION);
                     getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                }else {
+                } else {
                     Toast.makeText(context, "Please login", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -323,7 +325,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-
                     GlobalData.getInstance().shopList = response.body().getShops();
                     restaurantList.clear();
                     restaurantList.addAll(GlobalData.getInstance().shopList);
@@ -331,11 +332,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
                     adapterRestaurant.notifyDataSetChanged();
                     bannerAdapter.notifyDataSetChanged();
+                    if (restaurantList.size() == 0)
+                        errorLayout.setVisibility(View.VISIBLE);
+                    else
+                        errorLayout.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<RestaurantsData> call, Throwable t) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -432,7 +438,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                 addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
                                 latitude = GlobalData.getInstance().selectedAddress.getLatitude();
                                 longitude = GlobalData.getInstance().selectedAddress.getLongitude();
-                                GlobalData.getInstance().addressHeader=GlobalData.getInstance().selectedAddress.getMapAddress();
+                                GlobalData.getInstance().addressHeader = GlobalData.getInstance().selectedAddress.getMapAddress();
                             } else {
                                 addressLabel.setText(GlobalData.getInstance().addressHeader);
                                 addressTxt.setText(GlobalData.getInstance().address);
@@ -469,6 +475,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (toolbar != null) {
             toolbar.removeView(toolbarLayout);
         }
+
     }
 
 

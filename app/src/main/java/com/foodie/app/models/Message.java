@@ -1,11 +1,13 @@
 package com.foodie.app.models;
 
 /**
- * Created by santhosh@appoets.com on 04-10-2017.
+ * Created by Tamil on 11/6/2017.
  */
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 public class Message {
+
     @SerializedName("message")
     @Expose
     private String message;
@@ -18,8 +20,4 @@ public class Message {
         this.message = message;
     }
 
-    public Message withMessage(String message) {
-        this.message = message;
-        return this;
-    }
 }

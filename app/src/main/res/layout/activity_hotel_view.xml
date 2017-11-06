@@ -449,7 +449,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/header_view_end_margin_right"
-        app:layout_behavior="com.foodie.app.ViewBehavior" />
+        app:layout_behavior=".ViewBehavior" />
 
 
     <!-- View cart Layout-->

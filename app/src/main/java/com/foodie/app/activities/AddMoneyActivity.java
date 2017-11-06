@@ -21,6 +21,7 @@ import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.models.Card;
 import com.foodie.app.models.PaymentMethod;
 import com.foodie.app.models.WalletHistory;
 
@@ -59,6 +60,8 @@ public class AddMoneyActivity extends AppCompatActivity {
     EditText amountTxt;
     @BindView(R.id.pay_btn)
     Button payBtn;
+    ArrayList<Card> cardArrayList;
+    AccountPaymentAdapter accountPaymentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,47 +72,46 @@ public class AddMoneyActivity extends AppCompatActivity {
 
         customDialog = new CustomDialog(context);
         title.setText(context.getResources().getString(R.string.add_money));
-
-        ArrayList<PaymentMethod> list = new ArrayList<>();
-        list.add(new PaymentMethod("5431-XXXX-XXXX-4242", 0));
-        AccountPaymentAdapter adbPerson = new AccountPaymentAdapter(this, list);
-        paymentMethodLv.setAdapter(adbPerson);
-
+        cardArrayList = new ArrayList<>();
+        accountPaymentAdapter = new AccountPaymentAdapter(context, cardArrayList,false);
+        paymentMethodLv.setAdapter(accountPaymentAdapter);
         amountTxt.setHint(numberFormat.getCurrency().getSymbol());
 
-        //getCardList();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCardList();
+    }
 
     //TODO update getCards API and the recyclerview
     private void getCardList() {
         customDialog.show();
-        Call<List<WalletHistory>> call = apiInterface.getWalletHistory();
-        call.enqueue(new Callback<List<WalletHistory>>() {
+        Call<List<Card>> call= apiInterface.getCardList();
+        call.enqueue(new Callback<List<Card>>() {
             @Override
-            public void onResponse(Call<List<WalletHistory>> call, Response<List<WalletHistory>> response) {
+            public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
                 customDialog.dismiss();
-                if (response != null) {
-                    if (!response.isSuccessful() && response.errorBody() != null) {
-                        try {
-                            JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else if (response.isSuccessful()) {
-                        Log.e("onResponse: ", response.toString());
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else {
-
+                } else if (response.isSuccessful()) {
+                    cardArrayList.addAll(response.body());
+                    accountPaymentAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<WalletHistory>> call, Throwable t) {
-                customDialog.dismiss();
+            public void onFailure(Call<List<Card>> call, Throwable t) {
+
             }
         });
+
     }
 
     @Override
