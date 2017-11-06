@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -148,6 +149,7 @@ public class CartFragment extends Fragment {
     ConnectionHelper connectionHelper;
     Activity activity;
 
+    public static HashMap<String,String> checkoutMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -405,6 +407,12 @@ public class CartFragment extends Fragment {
                 /**  If address is filled */
                 if (connectionHelper.isConnectingToInternet()) {
 //                    checkOut(GlobalData.getInstance().selectedAddress.getId());
+                    checkoutMap= new HashMap<>();
+                    checkoutMap.put("user_address_id",""+GlobalData.getInstance().selectedAddress.getId());
+                    if(useWalletChkBox.isChecked())
+                    checkoutMap.put("wallet","1");
+                    else
+                    checkoutMap.put("wallet","0");
                     startActivity(new Intent(context, AccountPaymentActivity.class).putExtra("is_show_wallet",false).putExtra("is_show_cash",true));
                     activity.overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
                 } else {
@@ -415,38 +423,7 @@ public class CartFragment extends Fragment {
         }
     }
 
-    private void checkOut(Integer id) {
-        customDialog.show();
-        Call<Order> call = apiInterface.postCheckout(id);
-        call.enqueue(new Callback<Order>() {
-            @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    try {
 
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
-                    GlobalData.getInstance().addCart = null;
-                    GlobalData.getInstance().notificationCount = 0;
-                    GlobalData.getInstance().selectedShop = null;
-                    GlobalData.getInstance().isSelectedOrder = new Order();
-                    GlobalData.getInstance().isSelectedOrder = response.body();
-                    startActivity(new Intent(getActivity(), CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    getActivity().finish();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Order> call, Throwable t) {
-
-            }
-        });
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

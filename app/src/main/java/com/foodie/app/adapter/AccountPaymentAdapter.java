@@ -30,6 +30,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 
+import static com.foodie.app.activities.AccountPaymentActivity.cardArrayList;
+
 /**
  * Created by santhosh@appoets.com on 30-08-2017.
  */
@@ -40,7 +42,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
     private List<Card> list;
     private boolean isDeleteAvailable;
 
-    public AccountPaymentAdapter(Context context, List<Card> list,boolean isDeleteAvailable) {
+    public AccountPaymentAdapter(Context context, List<Card> list, boolean isDeleteAvailable) {
         this.context_ = context;
         this.list = list;
         this.isDeleteAvailable = isDeleteAvailable;
@@ -63,7 +65,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         final Card obj = list.get(position);
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();
@@ -73,19 +75,29 @@ public class AccountPaymentAdapter extends BaseAdapter {
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
-        if(isDeleteAvailable){
-            holder.paymentLabel.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        if (isDeleteAvailable) {
+            holder.paymentLabel.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             holder.deleteTxt.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             holder.deleteTxt.setVisibility(View.GONE);
         }
 
-        holder.paymentLabel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.paymentLabel.setChecked(obj.isChecked());
+        holder.paymentLabel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(!isDeleteAvailable&&b){
+            public void onClick(View view) {
+                if (!isDeleteAvailable && holder.paymentLabel.isChecked()) {
+                    for (int i = 0; i < cardArrayList.size(); i++) {
+                        if (cardArrayList.get(i).getCardId().equals(obj.getCardId()))
+                            cardArrayList.get(i).setChecked(true);
+                        else
+                            cardArrayList.get(i).setChecked(false);
+                    }
+
                     AccountPaymentActivity.proceedToPayBtn.setVisibility(View.VISIBLE);
+                    AccountPaymentActivity.cashCheckBox.setChecked(false);
+                    AccountPaymentActivity.isCardChecked=true;
+                    AccountPaymentActivity.accountPaymentAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -120,7 +132,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
             }
         });
 
-        holder.paymentLabel.setText("XXXX-XXXX-XXXX"+obj.getLastFour());
+        holder.paymentLabel.setText("XXXX-XXXX-XXXX" + obj.getLastFour());
 //        setIcon(holder.icon, obj.icon_id);
         holder.icon.setImageResource(R.drawable.ic_debit_card);
         return convertView;

@@ -241,7 +241,7 @@
                         android:layout_height="wrap_content">
 
                         <CheckBox
-
+                            android:checked="false"
                             android:scaleX="0.80"
                             android:scaleY="0.80"
                             android:textSize="@dimen/text_small"

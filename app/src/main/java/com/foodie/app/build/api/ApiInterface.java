@@ -122,7 +122,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("api/user/order")
-    Call<Order> postCheckout(@Field("user_address_id") Integer id);
+    Call<Order> postCheckout(@FieldMap HashMap<String, String> params);
 
     /*-------------ADDRESS--------------------*/
 

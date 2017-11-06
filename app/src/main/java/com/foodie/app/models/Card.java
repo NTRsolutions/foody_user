@@ -28,6 +28,8 @@ public class Card {
     @Expose
     private Integer isDefault;
 
+    private boolean isChecked=false;
+
     public Integer getId() {
         return id;
     }
@@ -62,6 +64,14 @@ public class Card {
 
     public String getBrand() {
         return brand;
+    }
+
+    public void setChecked(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
     }
 
     public void setBrand(String brand) {

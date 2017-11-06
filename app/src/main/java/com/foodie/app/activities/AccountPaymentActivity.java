@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,10 +46,12 @@ import com.foodie.app.braintree.CreateTransactionActivity;
 import com.foodie.app.braintree.Settings;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.Card;
 import com.foodie.app.models.Message;
+import com.foodie.app.models.Order;
 import com.google.android.gms.identity.intents.model.CountrySpecification;
 import com.google.android.gms.identity.intents.model.UserAddress;
 import com.google.android.gms.wallet.Cart;
@@ -59,6 +62,7 @@ import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -95,8 +99,6 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
     protected BraintreeFragment mBraintreeFragment;
     private static final int DROP_IN_REQUEST = 100;
     private static final String KEY_NONCE = "nonce";
-    @BindView(R.id.cash_check_box)
-    CheckBox cashCheckBox;
 
     private PaymentMethodType mPaymentMethodType;
     private PaymentMethodNonce mNonce;
@@ -118,11 +120,13 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
     public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     public static CustomDialog customDialog;
     public static Context context;
-    ArrayList<Card> cardArrayList;
-    AccountPaymentAdapter accountPaymentAdapter;
+    public static ArrayList<Card> cardArrayList;
+    public static AccountPaymentAdapter accountPaymentAdapter;
     public static LinearLayout cashPaymentLayout;
     public static LinearLayout walletPaymentLayout;
+    public static RadioButton cashCheckBox;
     public static Button proceedToPayBtn;
+    public static boolean isCardChecked = false;
     boolean isWalletVisible = false;
     boolean isCashVisible = false;
 
@@ -138,6 +142,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         cashPaymentLayout = (LinearLayout) findViewById(R.id.cash_payment_layout);
         walletPaymentLayout = (LinearLayout) findViewById(R.id.wallet_payment_layout);
         proceedToPayBtn = (Button) findViewById(R.id.proceed_to_pay_btn);
+        cashCheckBox = (RadioButton) findViewById(R.id.cash_check_box);
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -147,7 +152,6 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                 onBackPressed();
             }
         });
-
         isWalletVisible = getIntent().getBooleanExtra("is_show_wallet", false);
         isCashVisible = getIntent().getBooleanExtra("is_show_cash", false);
 
@@ -169,11 +173,38 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
             @Override
             public void onClick(View view) {
                 cashCheckBox.setChecked(true);
+                isCardChecked=false;
+                accountPaymentAdapter.notifyDataSetChanged();
                 proceedToPayBtn.setVisibility(VISIBLE);
+                for (int i = 0; i < cardArrayList.size(); i++) {
+                    cardArrayList.get(i).setChecked(false);
+                }
+                accountPaymentAdapter.notifyDataSetChanged();
             }
         });
 
+        proceedToPayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isCardChecked) {
+                    for (int i = 0; i < cardArrayList.size(); i++) {
+                        if (cardArrayList.get(i).isChecked()) {
+                            Card card = cardArrayList.get(i);
+                            CartFragment.checkoutMap.put("payment_mode", "stripe");
+                            CartFragment.checkoutMap.put("card_id", card.getCardId());
+                            checkOut(CartFragment.checkoutMap);
+                            return;
+                        }
+                    }
+                } else if (cashCheckBox.isChecked()) {
+                    CartFragment.checkoutMap.put("payment_mode", "cash");
+                    checkOut(CartFragment.checkoutMap);
+                } else {
+                    Toast.makeText(context, "Please select payment mode", Toast.LENGTH_SHORT).show();
+                }
 
+            }
+        });
 
 
         if (savedInstanceState != null) {
@@ -181,6 +212,39 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                 mNonce = savedInstanceState.getParcelable(KEY_NONCE);
             }
         }
+    }
+
+    private void checkOut(HashMap map) {
+        customDialog.show();
+        Call<Order> call = apiInterface.postCheckout(map);
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    GlobalData.getInstance().addCart = null;
+                    GlobalData.getInstance().notificationCount = 0;
+                    GlobalData.getInstance().selectedShop = null;
+                    GlobalData.getInstance().isSelectedOrder = new Order();
+                    GlobalData.getInstance().isSelectedOrder = response.body();
+                    startActivity(new Intent(context, CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+
+            }
+        });
     }
 
     private void getCardList() {
