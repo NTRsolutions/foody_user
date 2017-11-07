@@ -5,6 +5,7 @@ import android.location.Location;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Address;
 import com.foodie.app.models.AddressList;
+import com.foodie.app.models.Card;
 import com.foodie.app.models.Category;
 import com.foodie.app.models.Cuisine;
 import com.foodie.app.models.DisputeMessage;
@@ -31,7 +32,7 @@ public class GlobalData {
 
     public static double latitude ;
     public static double longitude ;
-    public static String addressHeader = "";
+    public static String addressHeader ="";
     public static Location CURRENT_LOCATION = null;
 
     /*------------Filter--------*/
@@ -39,8 +40,7 @@ public class GlobalData {
     public static boolean isOfferApplied=false;
     public static boolean shouldContinueService=false;
     public static ArrayList<Integer> cuisineIdArrayList=null;
-
-
+    public static ArrayList<Card> cardArrayList;
 
     public static String loginBy = "manual";
    public static String name,email,access_token,mobileNumber,imageUrl;
@@ -65,7 +65,7 @@ public class GlobalData {
 
     public static int otpValue = 0;
     public static String mobile = "";
-    public static String currencySymbol = "₹";
+    public static String currencySymbol = "$";
     public static int notificationCount = 0;
 
     public static ArrayList<HashMap<String, String>> foodCart;

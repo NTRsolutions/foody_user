@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -55,7 +56,7 @@ public class SearchFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.related_txt)
     TextView relatedTxt;
-    EditText searchEt;
+   public static EditText searchEt;
     ProgressBar progressBar;
     ImageView searchCloseImg;
     @BindView(R.id.root_layout)
@@ -123,6 +124,8 @@ public class SearchFragment extends Fragment {
         searchEt = (EditText) toolbarLayout.findViewById(R.id.search_et);
         progressBar = (ProgressBar) toolbarLayout.findViewById(R.id.progress_bar);
         searchCloseImg = (ImageView) toolbarLayout.findViewById(R.id.search_close_img);
+//        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.showSoftInput(searchEt, InputMethodManager.SHOW_IMPLICIT);
         //ViewPager Adapter
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new RestaurantSearchFragment(), "RESTAURANT");

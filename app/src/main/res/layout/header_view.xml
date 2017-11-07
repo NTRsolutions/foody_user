@@ -9,6 +9,7 @@
 
     <!-- Title -->
     <TextView
+        android:singleLine="true"
         android:id="@+id/header_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,6 +19,7 @@
 
     <!-- Subtitle -->
     <TextView
+        android:singleLine="true"
         android:id="@+id/header_view_sub_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

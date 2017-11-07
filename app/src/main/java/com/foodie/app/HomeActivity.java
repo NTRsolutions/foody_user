@@ -18,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -31,6 +32,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
@@ -46,12 +48,17 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -59,16 +66,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.helper.GlobalData.disputeMessageList;
 import static com.foodie.app.helper.GlobalData.notificationCount;
 import static com.foodie.app.helper.GlobalData.profileModel;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class HomeActivity extends AppCompatActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final int TIME_DELAY = 2000;
@@ -90,6 +100,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public static double latitude;
     public static double longitude;
+    LocationRequest mLocationRequest;
 
     int itemCount = 0;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
@@ -97,26 +108,67 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public static AHNotification notification;
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0;
 
+    FusedLocationProviderClient mFusedLocationClient;
+    Retrofit retrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(SharedHelper.getKey(context,"login_by").equals("facebook"))
+        if (SharedHelper.getKey(context, "login_by").equals("facebook"))
             FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
         connectionHelper = new ConnectionHelper(this);
-        //startActivity(new Intent(HomeActivity.this, HotelViewActivity.class));
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                getLocation();
+                mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                // Got last known location. In some rare situations this can be null.
+                                if (location != null) {
+                                    // Logic to handle location object
+                                    latitude = location.getLatitude();
+                                    longitude = location.getLongitude();
+                                    GlobalData.latitude = location.getLatitude();
+                                    GlobalData.longitude = location.getLongitude();
+                                    Log.e("latitude3", "" + location.getLatitude());
+                                    Log.e("longitude3", "" + location.getLongitude());
+                                    Log.e("GlobalData.latitude3", "" + GlobalData.latitude);
+                                    Log.e("GlobalData.longitude3 ", "" + GlobalData.longitude);
+                                    getAddress();
+                                }
+                            }
+                        });
 
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
             }
         } else {
-//            getLocation();
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                                GlobalData.latitude = location.getLatitude();
+                                GlobalData.longitude = location.getLongitude();
+                                Log.e("latitude3", "" + location.getLatitude());
+                                Log.e("longitude3", "" + location.getLongitude());
+                                Log.e("GlobalData.latitude3", "" + GlobalData.latitude);
+                                Log.e("GlobalData.longitude3 ", "" + GlobalData.longitude);
+                                getAddress();
+                            }
+                        }
+                    });
         }
 
         // check availability of play services
@@ -229,89 +281,166 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void getLocation() {
         try {
-            mLastLocation = LocationServices.FusedLocationApi
+                mLastLocation = LocationServices.FusedLocationApi
                     .getLastLocation(mGoogleApiClient);
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-        if (mLastLocation != null) {
+        if (mLastLocation == null) {
+            mLocationRequest = new LocationRequest();
+            mLocationRequest = new LocationRequest();
+            mLocationRequest.setInterval(1000);
+            mLocationRequest.setFastestInterval(1000);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+            }
+        } else {
             latitude = mLastLocation.getLatitude();
             longitude = mLastLocation.getLongitude();
             GlobalData.latitude = mLastLocation.getLatitude();
             GlobalData.longitude = mLastLocation.getLongitude();
+            Log.e("latitude", "" + mLastLocation.getLatitude());
+            Log.e("longitude", "" + mLastLocation.getLongitude());
+            Log.e("GlobalData.latitude", "" + GlobalData.latitude);
+            Log.e("GlobalData.longitude ", "" + GlobalData.longitude);
+
             getAddress();
 
-        } else {
-            showToast("Couldn't get the location. Make sure location is enabled on the device");
         }
 
     }
 
-    public Address getAddress(double latitude, double longitude) {
-        System.out.println(latitude + " | " + longitude);
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(getBaseContext(), Locale.ENGLISH);
+//    public Address getAddress(double latitude, double longitude) {
+//        System.out.println(latitude + " | " + longitude);
+//        Geocoder geocoder;
+//        List<Address> addresses;
+//        geocoder = new Geocoder(getBaseContext(), Locale.ENGLISH);
+//
+//        try {
+//            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+//            return addresses.get(0);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//
+//    }
 
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            return addresses.get(0);
+    public void getAddress(){
+         retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/api/geocode/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+         apiInterface=retrofit.create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getResponse(latitude+","+longitude,
+                context.getResources().getString(R.string.google_api_key));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("sUCESS","SUCESS"+response.body());
+                if (response.body() != null){
+                    //BroadCast Listner
+                    Intent intent = new Intent("location");
+                    // You can also include some extra data.
+                    intent.putExtra("message", "This is my message!");
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    try {
+                        String bodyString = new String(response.body().bytes());
+                        Log.e("sUCESS","bodyString"+bodyString);
+                        JSONObject jsonObj = null;
+                        try {
+                            jsonObj = new JSONObject(bodyString);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        JSONArray jsonArray = jsonObj.optJSONArray("results");
+                        if (jsonArray.length() > 0){
+                            if(GlobalData.addressHeader.equalsIgnoreCase("")){
+                                GlobalData.addressHeader = jsonArray.optJSONObject(0).optString("formatted_address");
+                                GlobalData.address = jsonArray.optJSONObject(0).optString("formatted_address");
+                                Log.v("Formatted Address", ""+ GlobalData.addressHeader );
+                            }
 
-        return null;
+                        }else{
+                            if(GlobalData.addressHeader.equalsIgnoreCase("")){
+                                GlobalData.addressHeader=""+latitude+""+longitude;
+                                GlobalData.address=""+latitude+""+longitude;
+                            }
 
-    }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
 
-
-    public void getAddress() {
-
-        Address locationAddress = getAddress(latitude, longitude);
-
-        if (locationAddress != null) {
-            String address = locationAddress.getAddressLine(0);
-            String address1 = locationAddress.getAddressLine(1);
-            String city = locationAddress.getLocality();
-            String state = locationAddress.getAdminArea();
-            String country = locationAddress.getCountryName();
-            String postalCode = locationAddress.getPostalCode();
-
-            String currentLocation;
-
-            if (!TextUtils.isEmpty(address)) {
-                currentLocation = address;
-                GlobalData.getInstance().addressHeader = address;
-
-                if (!TextUtils.isEmpty(address1))
-                    currentLocation += "\n" + address1;
-
-                if (!TextUtils.isEmpty(city)) {
-                    currentLocation += "\n" + city;
-
-                    if (!TextUtils.isEmpty(postalCode))
-                        currentLocation += " - " + postalCode;
-                } else {
-                    if (!TextUtils.isEmpty(postalCode))
-                        currentLocation += "\n" + postalCode;
+                    }
+                }else{
+                    GlobalData.addressHeader=""+latitude+""+longitude;
+                    GlobalData.address=""+latitude+""+longitude;
                 }
-
-                if (!TextUtils.isEmpty(state))
-                    currentLocation += "\n" + state;
-
-                if (!TextUtils.isEmpty(country))
-                    currentLocation += "\n" + country;
-
-                GlobalData.getInstance().address = currentLocation;
-                Log.e("Current_location", currentLocation);
-
-
             }
 
-        }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("onFailure","onFailure"+call.request().url());
+
+            }
+        });
 
     }
+
+
+//    public void getAddress() {
+//
+//        Address locationAddress = getAddress(latitude, longitude);
+//        if (locationAddress != null) {
+//            String address = locationAddress.getAddressLine(0);
+//            String address1 = locationAddress.getAddressLine(1);
+//            String city = locationAddress.getLocality();
+//            String state = locationAddress.getAdminArea();
+//            String country = locationAddress.getCountryName();
+//            String postalCode = locationAddress.getPostalCode();
+//
+//            String currentLocation;
+//
+//            if (!TextUtils.isEmpty(address)) {
+//                currentLocation = address;
+//                GlobalData.getInstance().addressHeader = address;
+//
+//                if (!TextUtils.isEmpty(address1))
+//                    currentLocation += "\n" + address1;
+//
+//                if (!TextUtils.isEmpty(city)) {
+//                    currentLocation += "\n" + city;
+//
+//                    if (!TextUtils.isEmpty(postalCode))
+//                        currentLocation += " - " + postalCode;
+//                } else {
+//                    if (!TextUtils.isEmpty(postalCode))
+//                        currentLocation += "\n" + postalCode;
+//                }
+//
+//                if (!TextUtils.isEmpty(state))
+//                    currentLocation += "\n" + state;
+//
+//                if (!TextUtils.isEmpty(country))
+//                    currentLocation += "\n" + country;
+//
+//                GlobalData.getInstance().address = currentLocation;
+//                Log.e("Current_location", currentLocation);
+//
+//
+//            }
+//
+//        }
+//
+//    }
 
     /**
      * Creating google api client object
@@ -345,7 +474,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         // All location settings are satisfied. The client can initialize location requests here
-//                        getLocation();
+                        getLocation();
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
@@ -517,4 +646,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        latitude = mLastLocation.getLatitude();
+        longitude = mLastLocation.getLongitude();
+        GlobalData.latitude = mLastLocation.getLatitude();
+        GlobalData.longitude = mLastLocation.getLongitude();
+        Log.e("latitude2", "" + mLastLocation.getLatitude());
+        Log.e("longitude2", "" + mLastLocation.getLongitude());
+        Log.e("GlobalData.latitude2", "" + GlobalData.latitude);
+        Log.e("GlobalData.longitude2 ", "" + GlobalData.longitude);
+        getAddress();
+    }
 }

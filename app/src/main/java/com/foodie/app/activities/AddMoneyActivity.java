@@ -39,6 +39,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.foodie.app.helper.GlobalData.cardArrayList;
+
 public class AddMoneyActivity extends AppCompatActivity {
 
     public static final String TAG = "AddMoneyActivity";
@@ -60,8 +62,8 @@ public class AddMoneyActivity extends AppCompatActivity {
     EditText amountTxt;
     @BindView(R.id.pay_btn)
     Button payBtn;
-    ArrayList<Card> cardArrayList;
-    AccountPaymentAdapter accountPaymentAdapter;
+
+    public  static AccountPaymentAdapter accountPaymentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
+                    cardArrayList.clear();
                     cardArrayList.addAll(response.body());
                     accountPaymentAdapter.notifyDataSetChanged();
                 }

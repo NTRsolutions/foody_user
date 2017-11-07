@@ -133,19 +133,23 @@ public class OtpActivity extends AppCompatActivity {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if(jObjError.optString("error")!=null)
-                            Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                        if(jObjError.has("phone"))
+                            Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                        else if(jObjError.has("email"))
+                            Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
                         else
-                        Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<RegisterModel> call, Throwable t) {
-
+                Toast.makeText(OtpActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                customDialog.dismiss();
             }
         });
 

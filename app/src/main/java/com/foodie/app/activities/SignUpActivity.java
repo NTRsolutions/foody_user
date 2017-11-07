@@ -296,7 +296,12 @@ public class SignUpActivity extends AppCompatActivity {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                        if(jObjError.optString("email")!=null)
+                            Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
+                        else if(jObjError.optString("error")!=null)
+                            Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -369,12 +374,11 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
-
     public void initValues() {
         name = nameEdit.getText().toString();
         email = emailEdit.getText().toString();
         strConfirmPassword = confirmPassword.getText().toString();
+        if(!GlobalData.loginBy.equals("manual"))
         GlobalData.mobile = country_code + etMobileNumber.getText().toString();
         password = passwordEdit.getText().toString();
         if (TextUtils.isEmpty(name)) {
@@ -383,7 +387,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter your mail", Toast.LENGTH_SHORT).show();
         } else if (!TextUtils.isValidEmail(email)) {
             Toast.makeText(this, "Please enter valid mail", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty( GlobalData.mobile)&&!GlobalData.loginBy.equals("manual")) {
+        } else if (TextUtils.isEmpty(etMobileNumber.getText().toString())&&!GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, "Please enter mobile number", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password)&&GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
@@ -395,7 +399,7 @@ public class SignUpActivity extends AppCompatActivity {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", name);
             map.put("email", email);
-            map.put("phone", GlobalData.getInstance().mobile);
+            map.put("phone", GlobalData.mobile);
             map.put("password", password);
             map.put("password_confirmation", strConfirmPassword);
             if (connectionHelper.isConnectingToInternet()) {
@@ -425,10 +429,12 @@ public class SignUpActivity extends AppCompatActivity {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if(jObjError.optString("error")!=null)
-                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
-                        else if(jObjError.optString("phone")!=null)
+                        if(jObjError.has("phone"))
                             Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                        else if(jObjError.has("email"))
+                            Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }

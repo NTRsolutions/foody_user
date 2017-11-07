@@ -14,13 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
-import com.facebook.login.LoginManager;
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
-import com.foodie.app.activities.WelcomeScreenActivity;
-import com.foodie.app.helper.GlobalData;
-import com.foodie.app.helper.SharedHelper;
+import com.foodie.app.activities.AddMoneyActivity;
 import com.foodie.app.models.Card;
 
 
@@ -28,9 +24,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
 
-import static com.foodie.app.activities.AccountPaymentActivity.cardArrayList;
+import static com.foodie.app.helper.GlobalData.cardArrayList;
+
 
 /**
  * Created by santhosh@appoets.com on 30-08-2017.
@@ -94,10 +90,15 @@ public class AccountPaymentAdapter extends BaseAdapter {
                             cardArrayList.get(i).setChecked(false);
                     }
 
-                    AccountPaymentActivity.proceedToPayBtn.setVisibility(View.VISIBLE);
-                    AccountPaymentActivity.cashCheckBox.setChecked(false);
-                    AccountPaymentActivity.isCardChecked=true;
-                    AccountPaymentActivity.accountPaymentAdapter.notifyDataSetChanged();
+                    if(AccountPaymentActivity.accountPaymentAdapter!=null){
+                        AccountPaymentActivity.proceedToPayBtn.setVisibility(View.VISIBLE);
+                        AccountPaymentActivity.cashCheckBox.setChecked(false);
+                        AccountPaymentActivity.isCardChecked=true;
+                        AccountPaymentActivity.accountPaymentAdapter.notifyDataSetChanged();
+                    }
+
+                    if(AddMoneyActivity.accountPaymentAdapter!=null)
+                    AddMoneyActivity.accountPaymentAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -134,7 +135,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
 
         holder.paymentLabel.setText("XXXX-XXXX-XXXX" + obj.getLastFour());
 //        setIcon(holder.icon, obj.icon_id);
-        holder.icon.setImageResource(R.drawable.ic_debit_card);
+        holder.icon.setImageResource(R.drawable.bt_ic_vaulted_visa);
         return convertView;
     }
 

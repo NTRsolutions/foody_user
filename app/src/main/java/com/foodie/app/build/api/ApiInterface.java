@@ -34,6 +34,7 @@ import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -195,7 +196,8 @@ public interface ApiInterface {
     Call<PromotionResponse> applyWalletPromoCode(@Field("promocode_id") String id);
 
 
-
+    @GET("json?")
+    Call<ResponseBody> getResponse(@Query("latlng") String param1, @Query("key") String param2);
 
     /*-------------PAYMENT--------------------*/
     @GET("api/user/card")

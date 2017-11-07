@@ -50,12 +50,14 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         Banner banner = list.get(position);
 
-        Glide.with(context).load(banner.getUrl())
-                .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error((R.drawable.ic_banner))
-                .into(holder.bannerImg);
+        Glide.with(context).load(banner.getUrl()).placeholder(R.drawable.ic_banner).dontAnimate()
+                .error(R.drawable.ic_banner).into(holder.bannerImg);
+//        Glide.with(context).load(banner.getUrl())
+//                .thumbnail(0.5f)
+//                .crossFade()
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .error((R.drawable.ic_banner))
+//                .into(holder.bannerImg);
         holder.bannerImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

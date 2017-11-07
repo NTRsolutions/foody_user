@@ -345,7 +345,12 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                        if(jObjError.has("phone"))
+                            Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                        else if(jObjError.has("email"))
+                            Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -494,15 +499,13 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             case R.id.next_btn:
                 String mobileNumber = country_code + etMobileNumber.getText().toString();
                 if (isValidMobile(mobileNumber)) {
-
                     GlobalData.mobile = mobileNumber;
+                    GlobalData.loginBy="manual";
                     if (isSignUp){
                         HashMap<String,String> map = new HashMap();
                         map.put("phone",mobileNumber);
                         getOtpVerification(map);
                     }
-
-
                     else
                         forgotPassord(mobileNumber);
                 } else {

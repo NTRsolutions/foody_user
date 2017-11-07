@@ -59,6 +59,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
     AnimatedVectorDrawableCompat avdProgress;
 
     public static boolean isAddressSelection = false;
+    public static boolean isHomePage = false;
     Activity activity;
 
     @Override
@@ -72,6 +73,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         initializeAvd();
 
         isAddressSelection = getIntent().getBooleanExtra("get_address", false);
+        isHomePage = getIntent().getBooleanExtra("home_page", false);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -143,6 +145,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Intent intent = new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class);
+                intent.putExtra("skip_visible", isHomePage);
                 intent.putExtra("place_id", place.getId());
                 startActivity(intent);
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -163,7 +166,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
                 findPlace();
                 break;
             case R.id.current_location_ll:
-                startActivity(new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class));
+                startActivity(new Intent(SetDeliveryLocationActivity.this, SaveDeliveryLocationActivity.class).putExtra("skip_visible", isHomePage));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 break;
         }

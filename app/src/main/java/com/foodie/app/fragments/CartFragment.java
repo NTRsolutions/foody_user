@@ -315,7 +315,8 @@ public class CartFragment extends Fragment {
         if (GlobalData.profileModel != null) {
             int money = GlobalData.profileModel.getWalletBalance();
             if (money > 0) {
-                amountTxt.setText(numberFormat.format(money));
+//                amountTxt.setText(numberFormat.format(money));
+                amountTxt.setText(GlobalData.currencySymbol+" "+money);
                 walletLayout.setVisibility(View.VISIBLE);
             } else {
                 walletLayout.setVisibility(View.INVISIBLE);

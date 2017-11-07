@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.ManageAddressActivity;
 import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
@@ -55,7 +56,6 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Address obj = list.get(position);
-
         holder.addressLabelTxt.setText(obj.getType());
         holder.addressTxt.setText(obj.getMapAddress());
         setIcon(holder.iconImg, obj.getType());
@@ -134,6 +134,10 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
                                             Message message = response.body();
                                             Toast.makeText(context, message.getMessage(), Toast.LENGTH_LONG).show();
                                             list.remove(position);
+                                            if(list.size()==0)
+                                                ManageAddressActivity.errorLayout.setVisibility(View.VISIBLE);
+                                            else
+                                                ManageAddressActivity.errorLayout.setVisibility(View.GONE);
                                             notifyItemRemoved(position);
                                             notifyItemRangeChanged(position, list.size());
                                         }

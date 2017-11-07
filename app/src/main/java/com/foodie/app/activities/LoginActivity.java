@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -63,6 +64,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
@@ -156,6 +159,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         helper = new ConnectionHelper(context);
         isInternet = helper.isConnectingToInternet();
         getDeviceToken();
+        signOut();
 
         callbackManager = CallbackManager.Factory.create();
         if (Build.VERSION.SDK_INT > 9) {
@@ -229,6 +233,43 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             e.printStackTrace();
             utils.print(TAG, "Failed to complete device UDID");
         }
+    }
+
+    private void signOut() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                //taken from google api console (Web api client id)
+//                .requestIdToken("795253286119-p5b084skjnl7sll3s24ha310iotin5k4.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+
+//                FirebaseAuth.getInstance().signOut();
+                if(mGoogleApiClient.isConnected()) {
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            if (status.isSuccess()) {
+                                Log.d("MainAct", "Google User Logged out");
+                               /* Intent intent = new Intent(LogoutActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();*/
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+                Log.d("MAin", "Google API Client Connection Suspended");
+            }
+        });
     }
 
     @OnClick({R.id.login_btn, R.id.forgot_password, R.id.donnot_have_account, R.id.back_img, R.id.eye_img, R.id.facebook_login, R.id.google_login})
@@ -326,6 +367,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     public void initValues() {
+        GlobalData.loginBy="manual";
         mobile = edMobileNumber.getText().toString();
         password = edPassword.getText().toString();
         if (!isValidMobile(country_code + mobile)) {
@@ -340,7 +382,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             map.put("grant_type", GRANT_TYPE);
             map.put("client_id", BuildConfigure.CLIENT_ID);
             map.put("client_secret", BuildConfigure.CLIENT_SECRET);
-
             if (helper.isConnectingToInternet()) {
                 login(map);
             } else {
@@ -377,6 +418,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                        signOut();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }

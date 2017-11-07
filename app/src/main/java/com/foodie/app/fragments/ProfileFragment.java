@@ -113,7 +113,7 @@ public class ProfileFragment extends Fragment {
             listIcons.add(R.drawable.heart);
             listIcons.add(R.drawable.payment);
             listIcons.add(R.drawable.ic_myorders);
-            listIcons.add(R.drawable.ic_notifications);
+//            listIcons.add(R.drawable.ic_notifications);
             listIcons.add(R.drawable.ic_promotion_details);
             listIcons.add(R.drawable.padlock);
 //            listIcons.add(R.drawable.padlock);
@@ -185,14 +185,20 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(context, OrdersActivity.class));
                 break;
             case 4:
-                startActivity(new Intent(context, NotificationActivity.class));
-                break;
-            case 5:
                 startActivity(new Intent(context, PromotionActivity.class));
                 break;
-            case 6:
+            case 5:
                 startActivity(new Intent(context, ChangePasswordActivity.class));
                 break;
+//            case 4:
+//                startActivity(new Intent(context, NotificationActivity.class));
+//                break;
+//            case 5:
+//                startActivity(new Intent(context, PromotionActivity.class));
+//                break;
+//            case 6:
+//                startActivity(new Intent(context, ChangePasswordActivity.class));
+//                break;
             default:
         }
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);

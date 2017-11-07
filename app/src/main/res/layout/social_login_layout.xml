@@ -27,9 +27,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:layout_marginRight="40dp" />
+                 />
 
             <ImageButton
+                android:visibility="gone"
                 android:src="@drawable/ic_google_login"
                 android:id="@+id/google_login"
                 android:background="@null"

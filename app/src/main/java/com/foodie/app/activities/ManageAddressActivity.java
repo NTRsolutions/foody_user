@@ -48,8 +48,7 @@ public class ManageAddressActivity extends AppCompatActivity {
     boolean isSuccessDelete = false;
     @BindView(R.id.error_layout_description)
     TextView errorLayoutDescription;
-    @BindView(R.id.error_layout)
-    RelativeLayout errorLayout;
+   public static RelativeLayout errorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +66,7 @@ public class ManageAddressActivity extends AppCompatActivity {
             }
         });
 
+        errorLayout=(RelativeLayout)findViewById(R.id.error_layout);
         locations = new ArrayList<>();
         adapter = new ManageAddressAdapter(locations, ManageAddressActivity.this);
         manageAddressRv.setLayoutManager(new LinearLayoutManager(this));

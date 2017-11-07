@@ -132,7 +132,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         ButterKnife.bind(this);
         context = HotelViewActivity.this;
         activity = HotelViewActivity.this;
-        connectionHelper=new ConnectionHelper(context);
+        connectionHelper = new ConnectionHelper(context);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -159,7 +159,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         }
         shops = GlobalData.getInstance().selectedShop;
-
 
 
 //        GlobalData.getInstance().selectedShop = GlobalData.getInstance().shopList.get(restaurantPosition);
@@ -222,17 +221,28 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                                     public void onGenerated(Palette palette) {
                                         Palette.Swatch textSwatch = palette.getDarkMutedSwatch();
                                         if (textSwatch == null) {
-//                                            Toast.makeText(HotelViewActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
-                                            return;
+                                            textSwatch = palette.getMutedSwatch();
+                                            if (textSwatch != null) {
+                                                collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                    Window window = getWindow();
+                                                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                                                    window.setStatusBarColor(textSwatch.getRgb());
+                                                }
+                                                headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
+                                                headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
+                                            }
+                                        } else {
+                                            collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                Window window = getWindow();
+                                                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                                                window.setStatusBarColor(textSwatch.getRgb());
+                                            }
+                                            headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
+                                            headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
                                         }
-                                        collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                            Window window = getWindow();
-                                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                                            window.setStatusBarColor(textSwatch.getRgb());
-                                        }
-                                        headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
-                                        headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
+
                                     }
                                 });
 
@@ -291,10 +301,10 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         //Heart Animation Button
         if (heartBtn != null)
             heartBtn.init(this);
-        if(shops.getFavorite()!=null){
+        if (shops.getFavorite() != null) {
             heartBtn.setChecked(true);
             heartBtn.setTag(1);
-        }else
+        } else
             heartBtn.setTag(0);
         heartBtn.setShineDistanceMultiple(1.8f);
         heartBtn.setOnClickListener(new View.OnClickListener() {
@@ -316,7 +326,12 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 Log.e("HeartButton", "click " + checked);
                 if (connectionHelper.isConnectingToInternet()) {
                     if (checked) {
-                        doFavorite(shops.getId());
+                        if (GlobalData.profileModel != null)
+                            doFavorite(shops.getId());
+                        else
+                            startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                        finish();
                     } else {
                         deleteFavorite(shops.getId());
                     }
@@ -333,7 +348,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 .show();
 
     }
-
 
 
     private void deleteFavorite(Integer id) {

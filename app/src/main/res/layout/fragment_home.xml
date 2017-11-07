@@ -29,6 +29,7 @@
             <!--    Imprssive Dish-->
 
             <LinearLayout
+                android:id="@+id/impressive_dishes_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
@@ -36,11 +37,11 @@
 
                 <TextView
                     android:id="@+id/offer_title_header"
+                    fontPath="fonts/Nunito-Bold.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:padding="@dimen/_8sdp"
-                    fontPath="fonts/Nunito-Bold.ttf"
                     android:text="@string/let_impress_you"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_tiny" />
@@ -56,6 +57,7 @@
 
             <!--Restaurant Layout-->
 
+
             <LinearLayout
                 android:id="@+id/title"
                 android:layout_width="match_parent"
@@ -69,9 +71,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:padding="@dimen/_8sdp"
                     android:gravity="center_vertical"
                     android:maxLines="1"
+                    android:padding="@dimen/_8sdp"
                     android:text="@string/hundred_restaurant"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
@@ -87,9 +89,9 @@
                     android:maxLines="1"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_tiny" />
+                    android:textSize="@dimen/text_tiny"
+                    android:visibility="invisible" />
             </LinearLayout>
-
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/restaurants_rv"
@@ -99,13 +101,13 @@
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical" />
 
+
             <LinearLayout
                 android:id="@+id/error_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -134,7 +136,7 @@
                     android:layout_marginTop="8sp"
                     android:gravity="center"
                     android:maxLines="3"
-                    android:text="In you location based restaurant showed so please change your location!"
+                    android:text="No results found based on filter/location"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="14sp"
                     tools:ignore="MissingPrefix" />

@@ -75,6 +75,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.foodie.app.helper.GlobalData.cardArrayList;
 import static com.foodie.app.helper.GlobalData.currencySymbol;
 
 public class AccountPaymentActivity extends AppCompatActivity implements PaymentMethodNonceCreatedListener,
@@ -120,7 +121,6 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
     public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     public static CustomDialog customDialog;
     public static Context context;
-    public static ArrayList<Card> cardArrayList;
     public static AccountPaymentAdapter accountPaymentAdapter;
     public static LinearLayout cashPaymentLayout;
     public static LinearLayout walletPaymentLayout;
@@ -242,7 +242,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-
+                Toast.makeText(AccountPaymentActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
     }

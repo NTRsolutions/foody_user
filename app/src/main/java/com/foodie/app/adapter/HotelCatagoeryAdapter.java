@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
+import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
@@ -271,6 +273,9 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                       }
 
                 } else {
+                    activity.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                    activity.finish();
                     Toast.makeText(context, context.getResources().getString(R.string.please_login_and_order_dishes), Toast.LENGTH_SHORT).show();
                 }
 

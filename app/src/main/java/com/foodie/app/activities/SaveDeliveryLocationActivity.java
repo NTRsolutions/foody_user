@@ -131,6 +131,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     Animation slide_down, slide_up;
 
     boolean isAddressSave = false;
+    boolean isSkipVisible = false;
     Context context;
 
     CustomDialog customDialog;
@@ -144,8 +145,6 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         context = SaveDeliveryLocationActivity.this;
         address = new com.foodie.app.models.Address();
         customDialog = new CustomDialog(context);
-
-        otherRadio.setChecked(true);
         address.setType("other");
         //Intialize Animation line
         initializeAvd();
@@ -156,7 +155,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 R.anim.slide_up);
 
         isAddressSave = getIntent().getBooleanExtra("get_address", false);
-        if (!isAddressSave)
+        isSkipVisible = getIntent().getBooleanExtra("skip_visible", false);
+        if (isSkipVisible)
             skipTxt.setVisibility(View.VISIBLE);
         else
             skipTxt.setVisibility(View.GONE);
@@ -207,6 +207,15 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
             }
 
+        });
+
+        otherRadio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
+                otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                typeRadiogroup.setVisibility(View.GONE);
+            }
         });
 
         typeRadiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

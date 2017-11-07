@@ -88,6 +88,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
             public void onResponse(@NonNull Call<List<Promotions>> call, @NonNull Response<List<Promotions>> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
+                    promotionsModelArrayList.addAll(response.body());
                     Log.e("onResponse: ", response.toString());
                     if(promotionsModelArrayList.size()==0){
                         errorLayout.setVisibility(View.VISIBLE);

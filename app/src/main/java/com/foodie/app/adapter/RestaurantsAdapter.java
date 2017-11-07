@@ -119,7 +119,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
-                context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position", getAdapterPosition()));
+                context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position", getAdapterPosition()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 GlobalData.getInstance().selectedShop = list.get(getAdapterPosition());
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 list.get(getAdapterPosition()).getCuisines();
