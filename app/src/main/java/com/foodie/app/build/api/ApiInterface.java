@@ -5,6 +5,7 @@ package com.foodie.app.build.api;
  */
 
 import com.foodie.app.models.AddCart;
+import com.foodie.app.models.AddMoney;
 import com.foodie.app.models.Address;
 import com.foodie.app.models.Card;
 import com.foodie.app.models.Message;
@@ -206,6 +207,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("api/user/card")
     Call<Message> addCard(@Field("stripe_token") String stripeToken);
+
+    @FormUrlEncoded
+    @POST("api/user/add/money")
+    Call<AddMoney> addMoney(@FieldMap HashMap<String, String> params);
 
     @DELETE("api/user/card/{id}")
     Call<Message> deleteCard(@Path("id") int id);

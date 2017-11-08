@@ -18,6 +18,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,7 @@ import com.foodie.app.helper.GlobalData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -57,16 +59,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SaveDeliveryLocationActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -121,6 +132,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     private Double srcLat;
     private Double srcLng;
     AnimatedVectorDrawableCompat avdProgress;
+    FusedLocationProviderClient mFusedLocationClient;
 
     @BindView(R.id.backArrow)
     ImageView backArrow;
@@ -135,6 +147,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     Context context;
 
     CustomDialog customDialog;
+    Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +163,10 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         //Intialize Animation line
         initializeAvd();
         //Load animation
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
         slide_down = AnimationUtils.loadAnimation(context,
                 R.anim.slide_down);
         slide_up = AnimationUtils.loadAnimation(context,
@@ -164,11 +182,35 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
+                mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                // Got last known location. In some rare situations this can be null.
+                                if (location != null) {
+                                    // Logic to handle location object
+                                    getAddress( location.getLatitude(), location.getLongitude());
+//                                    getAddress(context, location.getLatitude(), location.getLongitude());
+                                }
+                            }
+                        });
             } else {
                 //Request Location Permission
             }
         } else {
             buildGoogleApiClient();
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                getAddress( location.getLatitude(), location.getLongitude());
+//                                getAddress(context, location.getLatitude(), location.getLongitude());
+                            }
+                        }
+                    });
         }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -356,7 +398,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(loc).zoom(16).build();
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
-            //getAddress(location.getLatitude(), location.getLongitude());
+//            getAddress( location.getLatitude(), location.getLongitude());
+            getAddress(location.getLatitude(), location.getLongitude());
         }
         crtLat = location.getLatitude();
         crtLng = location.getLongitude();
@@ -388,9 +431,76 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 addressHeader = obj.getFeatureName();
                 //SharedHelper.putKey(context, "pickup_address", strReturnedAddress.toString());
             }
+            else {
+                getAddress(context,latitude,longitude);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            getAddress(context,latitude,longitude);
         }
+    }
+
+    public void getAddress(final Context context, final double latitude, final double longitude) {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/api/geocode/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiInterface = retrofit.create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getResponse(latitude + "," + longitude,
+                context.getResources().getString(R.string.google_api_key));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("sUCESS", "SUCESS" + response.body());
+                if (response.body() != null) {
+                    try {
+                        String bodyString = new String(response.body().bytes());
+                        Log.e("sUCESS", "bodyString" + bodyString);
+                        JSONObject jsonObj = new JSONObject(bodyString);
+                        JSONArray jsonArray = jsonObj.optJSONArray("results");
+                        if (jsonArray.length() > 0) {
+
+                            JSONArray addressArray = jsonArray.optJSONObject(0).optJSONArray("address_components");
+                            addressArray.optJSONObject(0).optString("long_name");
+                            address.setCity(addressArray.optJSONObject(2).optString("long_name"));
+                            address.setState(addressArray.optJSONObject(3).optString("long_name"));
+                            address.setCountry(addressArray.optJSONObject(4).optString("long_name"));
+                            address.setLatitude(latitude);
+                            address.setLongitude(longitude);
+                            address.setPincode(addressArray.optJSONObject(5).optString("long_name"));
+                            addressHeader = addressArray.optJSONObject(0).optString("long_name");
+                            String address = jsonArray.optJSONObject(0).optString("formatted_address");
+                            addressEdit.setText(address.toString());
+                            addressHeader = address;
+                            Log.v("Formatted Address", "" + GlobalData.addressHeader);
+                        } else {
+                            addressHeader = "" + latitude + "" + longitude;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    addressHeader = "" + latitude + "" + longitude;
+                }
+                //BroadCast Listner
+                Intent intent = new Intent("location");
+                // You can also include some extra data.
+                intent.putExtra("message", "This is my message!");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("onFailure", "onFailure" + call.request().url());
+                addressHeader = "" + latitude + "" + longitude;
+
+            }
+        });
+
+
     }
 
     @Override
@@ -403,6 +513,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             //Intialize animation line
             initializeAvd();
             getAddress(srcLat, srcLng);
+//            getAddress(context, srcLat, srcLng);
             skipTxt.setAlpha(1);
             skipTxt.setClickable(true);
             skipTxt.setEnabled(true);

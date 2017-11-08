@@ -328,10 +328,11 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                     if (checked) {
                         if (GlobalData.profileModel != null)
                             doFavorite(shops.getId());
-                        else
+                        else{
                             startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
-                        finish();
+                            overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                            finish();
+                        }
                     } else {
                         deleteFavorite(shops.getId());
                     }

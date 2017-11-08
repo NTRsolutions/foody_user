@@ -29,10 +29,8 @@ import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 
 public class PastOrderDetailActivity extends AppCompatActivity {
 
-
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
-
 
     Double priceAmount = 0.0;
     int discount = 0;
@@ -53,8 +51,6 @@ public class PastOrderDetailActivity extends AppCompatActivity {
     TextView restaurantAddress;
     @BindView(R.id.source_layout)
     RelativeLayout sourceLayout;
-    @BindView(R.id.dot_line)
-    View dotLine;
     @BindView(R.id.destination_image)
     ImageView destinationImage;
     @BindView(R.id.user_address_title)
@@ -75,6 +71,8 @@ public class PastOrderDetailActivity extends AppCompatActivity {
     FrameLayout orderDetailFargment;
     @BindView(R.id.nested_scroll_view)
     NestedScrollView nestedScrollView;
+    @BindView(R.id.dot_line_img)
+    ImageView dotLineImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,14 +93,16 @@ public class PastOrderDetailActivity extends AppCompatActivity {
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
             priceAmount = order.getInvoice().getNet();
-            if(order.getStatus().equalsIgnoreCase("CANCELLED")){
+            if (order.getStatus().equalsIgnoreCase("CANCELLED")) {
                 orderStatusTxt.setText(getResources().getString(R.string.order_cancelled));
-                orderSucceessImage.setVisibility(View.GONE);
+                orderSucceessImage.setImageResource(R.drawable.ic_circle_tick);
+                dotLineImg.setImageResource(R.drawable.ic_line);
                 orderStatusTxt.setTextColor(getResources().getColor(R.color.colorRed));
-            }else{
-                orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on)+getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
+            } else {
+                orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on) + getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
                 orderStatusTxt.setTextColor(getResources().getColor(R.color.colorGreen));
-                orderSucceessImage.setVisibility(View.VISIBLE);
+                orderSucceessImage.setImageResource(R.drawable.order_cancelled_img);
+                dotLineImg.setImageResource(R.drawable.order_cancelled_line);
             }
             currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
             if (itemQuantity == 1)

@@ -57,16 +57,16 @@
 
         </RelativeLayout>
 
-        <View
-            android:id="@+id/dot_line"
-            android:layout_width="0.5dp"
+        <ImageView
+            android:id="@+id/dot_line_img"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_below="@+id/source_layout"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:background="@color/colorSecondaryText"
-            android:layerType="software" />
+            android:background="@drawable/ic_line"
+         />
 
         <!--  Deliery Address-->
 
@@ -74,7 +74,7 @@
             android:id="@+id/destination_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dot_line">
+            android:layout_below="@+id/dot_line_img">
 
             <ImageView
                 android:id="@+id/destination_image"

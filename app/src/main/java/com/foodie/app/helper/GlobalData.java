@@ -10,6 +10,7 @@ import com.foodie.app.models.Category;
 import com.foodie.app.models.Cuisine;
 import com.foodie.app.models.DisputeMessage;
 import com.foodie.app.models.Order;
+import com.foodie.app.models.Product;
 import com.foodie.app.models.User;
 import com.foodie.app.models.Otp;
 import com.foodie.app.models.Shop;
@@ -41,7 +42,7 @@ public class GlobalData {
     public static boolean shouldContinueService=false;
     public static ArrayList<Integer> cuisineIdArrayList=null;
     public static ArrayList<Card> cardArrayList;
-
+    public static boolean isCardChecked = false;
     public static String loginBy = "manual";
    public static String name,email,access_token,mobileNumber,imageUrl;
     public static String address = "";
@@ -49,6 +50,7 @@ public class GlobalData {
     public static User profileModel = null;
     public static Address selectedAddress = null;
     public static Order isSelectedOrder = null;
+    public static Product isSelectedProduct = null;
     public static AddCart addCart = null;
 
     public static List<Shop> shopList;

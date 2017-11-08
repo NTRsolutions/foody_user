@@ -23,6 +23,7 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.LoginActivity;
+import com.foodie.app.activities.ProductDetailActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
@@ -138,6 +139,14 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             holder.cardTextValueTicker.setText(String.valueOf(1));
             holder.cardTextValue.setText(String.valueOf(1));
         }
+
+        holder.rootLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalData.isSelectedProduct=product;
+                context.startActivity(new Intent(context, ProductDetailActivity.class));
+            }
+        });
 
         holder.priceTxt.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
 
@@ -409,7 +418,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
         private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock;
         TickerView cardTextValueTicker;
-        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout,rootLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
@@ -424,6 +433,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
              /*    Add card Button Layout*/
                 cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);
+                rootLayout = (RelativeLayout) itemView.findViewById(R.id.root_layout);
                 cardAddTextLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_text_layout);
                 cardInfoLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_info_layout);
                 cardAddInfoText = (TextView) itemView.findViewById(R.id.avialablity_time);

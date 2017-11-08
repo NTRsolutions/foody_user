@@ -308,30 +308,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
             Log.e("longitude", "" + mLastLocation.getLongitude());
             Log.e("GlobalData.latitude", "" + GlobalData.latitude);
             Log.e("GlobalData.longitude ", "" + GlobalData.longitude);
-
             getAddress();
-
         }
 
     }
-
-//    public Address getAddress(double latitude, double longitude) {
-//        System.out.println(latitude + " | " + longitude);
-//        Geocoder geocoder;
-//        List<Address> addresses;
-//        geocoder = new Geocoder(getBaseContext(), Locale.ENGLISH);
-//
-//        try {
-//            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-//            return addresses.get(0);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//
-//    }
 
     public void getAddress(){
          retrofit = new Retrofit.Builder()
@@ -394,53 +374,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         });
 
     }
-
-
-//    public void getAddress() {
-//
-//        Address locationAddress = getAddress(latitude, longitude);
-//        if (locationAddress != null) {
-//            String address = locationAddress.getAddressLine(0);
-//            String address1 = locationAddress.getAddressLine(1);
-//            String city = locationAddress.getLocality();
-//            String state = locationAddress.getAdminArea();
-//            String country = locationAddress.getCountryName();
-//            String postalCode = locationAddress.getPostalCode();
-//
-//            String currentLocation;
-//
-//            if (!TextUtils.isEmpty(address)) {
-//                currentLocation = address;
-//                GlobalData.getInstance().addressHeader = address;
-//
-//                if (!TextUtils.isEmpty(address1))
-//                    currentLocation += "\n" + address1;
-//
-//                if (!TextUtils.isEmpty(city)) {
-//                    currentLocation += "\n" + city;
-//
-//                    if (!TextUtils.isEmpty(postalCode))
-//                        currentLocation += " - " + postalCode;
-//                } else {
-//                    if (!TextUtils.isEmpty(postalCode))
-//                        currentLocation += "\n" + postalCode;
-//                }
-//
-//                if (!TextUtils.isEmpty(state))
-//                    currentLocation += "\n" + state;
-//
-//                if (!TextUtils.isEmpty(country))
-//                    currentLocation += "\n" + country;
-//
-//                GlobalData.getInstance().address = currentLocation;
-//                Log.e("Current_location", currentLocation);
-//
-//
-//            }
-//
-//        }
-//
-//    }
 
     /**
      * Creating google api client object

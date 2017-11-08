@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
 import com.foodie.app.activities.AddMoneyActivity;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.Card;
 
 
@@ -93,7 +94,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
                     if(AccountPaymentActivity.accountPaymentAdapter!=null){
                         AccountPaymentActivity.proceedToPayBtn.setVisibility(View.VISIBLE);
                         AccountPaymentActivity.cashCheckBox.setChecked(false);
-                        AccountPaymentActivity.isCardChecked=true;
+                        GlobalData.isCardChecked=true;
                         AccountPaymentActivity.accountPaymentAdapter.notifyDataSetChanged();
                     }
 

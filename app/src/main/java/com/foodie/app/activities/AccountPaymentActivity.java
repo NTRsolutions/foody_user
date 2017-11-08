@@ -77,6 +77,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.foodie.app.helper.GlobalData.cardArrayList;
 import static com.foodie.app.helper.GlobalData.currencySymbol;
+import static com.foodie.app.helper.GlobalData.isCardChecked;
 
 public class AccountPaymentActivity extends AppCompatActivity implements PaymentMethodNonceCreatedListener,
         BraintreeCancelListener, BraintreeErrorListener, DropInResult.DropInResultListener {
@@ -126,7 +127,6 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
     public static LinearLayout walletPaymentLayout;
     public static RadioButton cashCheckBox;
     public static Button proceedToPayBtn;
-    public static boolean isCardChecked = false;
     boolean isWalletVisible = false;
     boolean isCashVisible = false;
 
@@ -196,7 +196,8 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                             return;
                         }
                     }
-                } else if (cashCheckBox.isChecked()) {
+                }
+                else if (cashCheckBox.isChecked()) {
                     CartFragment.checkoutMap.put("payment_mode", "cash");
                     checkOut(CartFragment.checkoutMap);
                 } else {
@@ -270,6 +271,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
 
             @Override
             public void onFailure(Call<List<Card>> call, Throwable t) {
+                customDialog.dismiss();
 
             }
         });
@@ -450,10 +452,8 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
 
     @Override
     public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-
         displayResult(paymentMethodNonce, null);
         safelyCloseLoadingView();
-
         if (mShouldMakePurchase) {
             purchase(null);
         }

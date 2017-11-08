@@ -1,7 +1,10 @@
 package com.foodie.app.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,12 +18,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.foodie.app.R;
 import com.foodie.app.adapter.AccountPaymentAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.helper.SharedHelper;
+import com.foodie.app.models.AddMoney;
 import com.foodie.app.models.Card;
 import com.foodie.app.models.PaymentMethod;
 import com.foodie.app.models.WalletHistory;
@@ -29,6 +36,7 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,6 +48,7 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.helper.GlobalData.cardArrayList;
+import static com.foodie.app.helper.GlobalData.isCardChecked;
 
 public class AddMoneyActivity extends AppCompatActivity {
 
@@ -63,7 +72,8 @@ public class AddMoneyActivity extends AppCompatActivity {
     @BindView(R.id.pay_btn)
     Button payBtn;
 
-    public  static AccountPaymentAdapter accountPaymentAdapter;
+
+    public static AccountPaymentAdapter accountPaymentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +81,10 @@ public class AddMoneyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_amount);
         ButterKnife.bind(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         customDialog = new CustomDialog(context);
         title.setText(context.getResources().getString(R.string.add_money));
         cardArrayList = new ArrayList<>();
-        accountPaymentAdapter = new AccountPaymentAdapter(context, cardArrayList,false);
+        accountPaymentAdapter = new AccountPaymentAdapter(context, cardArrayList, false);
         paymentMethodLv.setAdapter(accountPaymentAdapter);
         amountTxt.setHint(numberFormat.getCurrency().getSymbol());
 
@@ -90,7 +99,7 @@ public class AddMoneyActivity extends AppCompatActivity {
     //TODO update getCards API and the recyclerview
     private void getCardList() {
         customDialog.show();
-        Call<List<Card>> call= apiInterface.getCardList();
+        Call<List<Card>> call = apiInterface.getCardList();
         call.enqueue(new Callback<List<Card>>() {
             @Override
             public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
@@ -120,7 +129,7 @@ public class AddMoneyActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this,WalletActivity.class));
+        startActivity(new Intent(this, WalletActivity.class));
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
@@ -130,16 +139,93 @@ public class AddMoneyActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @OnClick({R.id.back, R.id.promo_layout})
+    @OnClick({R.id.back, R.id.promo_layout, R.id.pay_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 onBackPressed();
                 break;
+            case R.id.pay_btn:
+                if (amountTxt.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please enter amount", Toast.LENGTH_SHORT).show();
+                } else if (isCardChecked) {
+                    for (int i = 0; i < cardArrayList.size(); i++) {
+                        if (cardArrayList.get(i).isChecked()) {
+                            Card card = cardArrayList.get(i);
+                            HashMap<String, String> map = new HashMap();
+                            map.put("amount", ""+amountTxt.getText().toString());
+                            map.put("card_id", card.getCardId());
+                            addMoney(map);
+                            return;
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "Please select your card", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
             case R.id.promo_layout:
-                startActivity(new Intent(this, PromotionActivity.class).putExtra("tag",TAG ));
+                startActivity(new Intent(this, PromotionActivity.class).putExtra("tag", TAG));
                 finish();
                 break;
         }
+    }
+
+    public void alertDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setPositiveButton(getResources().getString(R.string.okay), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(context, AccountPaymentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+                });
+//                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // do nothing
+//                        dialog.dismiss();
+//                    }
+//                });
+        AlertDialog alert = builder.create();
+        alert.show();
+//        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+//        nbutton.setTextColor(getResources().getColor(R.color.theme));
+//        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.theme));
+        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+    }
+
+    private void addMoney(HashMap<String, String> map) {
+        customDialog.show();
+        Call<AddMoney> call = apiInterface.addMoney(map);
+        call.enqueue(new Callback<AddMoney>() {
+            @Override
+            public void onResponse(Call<AddMoney> call, Response<AddMoney> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("card_id"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    Toast.makeText(AddMoneyActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    GlobalData.profileModel.setWalletBalance(response.body().getUser().getWalletBalance());
+                    finish();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AddMoney> call, Throwable t) {
+                customDialog.dismiss();
+                Toast.makeText(AddMoneyActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 }
