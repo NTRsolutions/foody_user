@@ -9,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.R;
 import com.foodie.app.adapter.FavouritesAdapter;
 import com.foodie.app.build.api.ApiClient;
@@ -41,9 +44,13 @@ public class FavouritesActivity extends AppCompatActivity {
     LinearLayout errorLayout;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    @BindView(R.id.root_view)
+    RelativeLayout rootView;
     private FavouritesAdapter adapter;
     private List<FavListModel> modelListReference = new ArrayList<>();
     List<FavListModel> modelList = new ArrayList<>();
+
+    private SkeletonScreen skeletonScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +79,22 @@ public class FavouritesActivity extends AppCompatActivity {
 
     private void getFavorites() {
 
+        skeletonScreen = Skeleton.bind(rootView)
+                .load(R.layout.skeleton_favorite_list_item)
+                .color(R.color.shimmer_color)
+                .angle(0)
+                .show();
 
-        Call<FavoriteList> call=apiInterface.getFavoriteList();
+        Call<FavoriteList> call = apiInterface.getFavoriteList();
         call.enqueue(new Callback<FavoriteList>() {
             @Override
             public void onResponse(@NonNull Call<FavoriteList> call, @NonNull Response<FavoriteList> response) {
-                if(response.isSuccessful()){
-
-                    if(response.body().getAvailable().size() == 0 && response.body().getUnAvailable().size() == 0){
+                skeletonScreen.hide();
+                if (response.isSuccessful()) {
+                    if (response.body().getAvailable().size() == 0 && response.body().getUnAvailable().size() == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
                         return;
-                    }else {
+                    } else {
                         errorLayout.setVisibility(View.GONE);
                     }
 
@@ -93,7 +105,6 @@ public class FavouritesActivity extends AppCompatActivity {
 
                     model = new FavListModel();
                     model.setHeader("un available");
-
 
 
                     List<Available> list = new ArrayList<>();
@@ -114,6 +125,7 @@ public class FavouritesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<FavoriteList> call, @NonNull Throwable t) {
+                skeletonScreen.hide();
                 Toast.makeText(FavouritesActivity.this, "Something wrong - getFavorites", Toast.LENGTH_LONG).show();
             }
         });
