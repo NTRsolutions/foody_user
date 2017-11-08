@@ -8,17 +8,15 @@
     tools:context="com.foodie.app.activities.ManageAddressActivity">
 
 
-
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-      >
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="1dp"
             android:background="@color/colorWhite"
             android:minHeight="?attr/actionBarSize"
             app:theme="@style/ToolBarStyle">
@@ -33,18 +31,12 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <View
-            android:layout_below="@+id/toolbar"
-            android:id="@+id/line_view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eee" />
-
 
         <ScrollView
-            android:layout_below="@+id/line_view"
+            android:id="@+id/root_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
             android:layout_marginBottom="@dimen/_70sdp"
             android:fillViewport="true">
 
@@ -75,12 +67,12 @@
         </ScrollView>
 
         <RelativeLayout
-            android:visibility="gone"
-            android:layout_below="@+id/line_view"
             android:id="@+id/error_layout"
-            android:background="#eee"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/line_view"
+            android:background="#eee"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,9 +120,6 @@
         android:background="@drawable/button_corner_radius"
         android:text="Add New Address"
         android:textColor="@color/theme" />
-
-
-
 
 
 </RelativeLayout>

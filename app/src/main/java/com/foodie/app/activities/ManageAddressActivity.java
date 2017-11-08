@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,9 +13,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.R;
 import com.foodie.app.adapter.ManageAddressAdapter;
 import com.foodie.app.build.api.ApiClient;
@@ -48,8 +52,11 @@ public class ManageAddressActivity extends AppCompatActivity {
     boolean isSuccessDelete = false;
     @BindView(R.id.error_layout_description)
     TextView errorLayoutDescription;
-   public static RelativeLayout errorLayout;
+    public static RelativeLayout errorLayout;
+    @BindView(R.id.root_view)
+    ScrollView rootView;
 
+    private SkeletonScreen skeletonScreen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +73,7 @@ public class ManageAddressActivity extends AppCompatActivity {
             }
         });
 
-        errorLayout=(RelativeLayout)findViewById(R.id.error_layout);
+        errorLayout = (RelativeLayout) findViewById(R.id.error_layout);
         locations = new ArrayList<>();
         adapter = new ManageAddressAdapter(locations, ManageAddressActivity.this);
         manageAddressRv.setLayoutManager(new LinearLayoutManager(this));
@@ -82,10 +89,17 @@ public class ManageAddressActivity extends AppCompatActivity {
     }
 
     private void getAddress() {
+        skeletonScreen = Skeleton.bind(rootView)
+                .load(R.layout.skeloton_address_list_item)
+                .color(R.color.shimmer_color)
+                .angle(0)
+                .show();
+
         Call<List<Address>> getres = apiInterface.getAddresses();
         getres.enqueue(new Callback<List<Address>>() {
             @Override
-            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+            public void onResponse(@NonNull Call<List<Address>> call, @NonNull Response<List<Address>> response) {
+                skeletonScreen.hide();
                 if (response.isSuccessful()) {
                     locations.clear();
                     locations.addAll(response.body());
@@ -101,7 +115,8 @@ public class ManageAddressActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Address>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Address>> call, @NonNull Throwable t) {
+                skeletonScreen.hide();
                 Toast.makeText(ManageAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
