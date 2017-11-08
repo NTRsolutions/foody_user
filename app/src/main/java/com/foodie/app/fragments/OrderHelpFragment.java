@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.DisputeMessageAdapter;
@@ -33,6 +35,12 @@ public class OrderHelpFragment extends Fragment {
     DisputeMessageAdapter disputeMessageAdapter;
     @BindView(R.id.help_rv)
     RecyclerView helpRv;
+    @BindView(R.id.other_help_layout)
+    LinearLayout otherHelpLayout;
+    @BindView(R.id.dispute)
+    Button dispute;
+    @BindView(R.id.chat_us)
+    Button chatUs;
 
 
     public OrderHelpFragment() {
@@ -57,6 +65,13 @@ public class OrderHelpFragment extends Fragment {
         helpRv.setHasFixedSize(true);
         disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context,getActivity());
         helpRv.setAdapter(disputeMessageAdapter);
+
+        if(disputeMessageList.size() > 0){
+            otherHelpLayout.setVisibility(View.GONE);
+        }else{
+            otherHelpLayout.setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
 
