@@ -88,12 +88,12 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
             public void onResponse(@NonNull Call<List<Promotions>> call, @NonNull Response<List<Promotions>> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
-                    promotionsModelArrayList.addAll(response.body());
+                    promotionsModelArrayList.clear();
                     Log.e("onResponse: ", response.toString());
+                    promotionsModelArrayList.addAll(response.body());
                     if(promotionsModelArrayList.size()==0){
                         errorLayout.setVisibility(View.VISIBLE);
                     }else {
-                        promotionsModelArrayList.addAll(response.body());
                         promotionsRv.getAdapter().notifyDataSetChanged();
                     }
 
@@ -145,6 +145,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
             public void onResponse(@NonNull Call<PromotionResponse> call, @NonNull Response<PromotionResponse> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
+                    Toast.makeText(PromotionActivity.this,getResources().getString(R.string.promo_code_apply_successfully), Toast.LENGTH_SHORT).show();
                     GlobalData.profileModel.setWalletBalance(response.body().getWalletMoney());
                     gotoFlow();
                 } else {

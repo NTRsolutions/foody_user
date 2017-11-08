@@ -44,7 +44,7 @@ android {
         javaMaxHeapSize "4g"
     }
 
-    lintOptions{
+    lintOptions {
         abortOnError false
     }
 }

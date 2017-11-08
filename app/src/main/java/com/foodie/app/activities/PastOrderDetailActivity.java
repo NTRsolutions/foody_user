@@ -95,14 +95,14 @@ public class PastOrderDetailActivity extends AppCompatActivity {
             priceAmount = order.getInvoice().getNet();
             if (order.getStatus().equalsIgnoreCase("CANCELLED")) {
                 orderStatusTxt.setText(getResources().getString(R.string.order_cancelled));
-                orderSucceessImage.setImageResource(R.drawable.ic_circle_tick);
-                dotLineImg.setImageResource(R.drawable.ic_line);
+                orderSucceessImage.setImageResource(R.drawable.order_cancelled_img);
+                dotLineImg.setBackgroundResource(R.drawable.order_cancelled_line);
                 orderStatusTxt.setTextColor(getResources().getColor(R.color.colorRed));
             } else {
                 orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on) + getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
                 orderStatusTxt.setTextColor(getResources().getColor(R.color.colorGreen));
-                orderSucceessImage.setImageResource(R.drawable.order_cancelled_img);
-                dotLineImg.setImageResource(R.drawable.order_cancelled_line);
+                orderSucceessImage.setImageResource(R.drawable.ic_circle_tick);
+                dotLineImg.setBackgroundResource(R.drawable.ic_line);
             }
             currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
             if (itemQuantity == 1)

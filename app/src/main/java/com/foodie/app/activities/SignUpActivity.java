@@ -382,19 +382,19 @@ public class SignUpActivity extends AppCompatActivity {
         GlobalData.mobile = country_code + etMobileNumber.getText().toString();
         password = passwordEdit.getText().toString();
         if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_username), Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Please enter your mail", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_your_email), Toast.LENGTH_SHORT).show();
         } else if (!TextUtils.isValidEmail(email)) {
-            Toast.makeText(this, "Please enter valid mail", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_valid_email), Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(etMobileNumber.getText().toString())&&!GlobalData.loginBy.equals("manual")) {
-            Toast.makeText(this, "Please enter mobile number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_your_mobile_number), Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password)&&GlobalData.loginBy.equals("manual")) {
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(strConfirmPassword)&&GlobalData.loginBy.equals("manual")) {
-            Toast.makeText(this, "Please confirm password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.please_enter_your_confirm_password), Toast.LENGTH_SHORT).show();
         } else if (!strConfirmPassword.equalsIgnoreCase(password)&&GlobalData.loginBy.equals("manual")) {
-            Toast.makeText(this, "Password and confirm password doesn't match", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.password_and_confirm_password_doesnot_match), Toast.LENGTH_SHORT).show();
         } else {
             HashMap<String, String> map = new HashMap<>();
             map.put("name", name);

@@ -78,7 +78,8 @@
         <activity
             android:name=".HomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustNothing" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -226,7 +227,7 @@
         <activity
             android:name=".activities.ProductDetailActivity"
             android:label="@string/title_activity_product_detail"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

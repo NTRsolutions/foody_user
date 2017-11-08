@@ -192,5 +192,20 @@
     <string name="okay">Okay</string>
     <string name="title_activity_product_detail">ProductDetailActivity</string>
 
+    <!-- PROMOCODE  -->
+
+    <string name="promo_code_apply_successfully">Promocode is applied and offer amount is added to your wallet.</string>
+
+    <!--  SIGN UP  -->
+    <string name="please_enter_username">Please enter your username</string>
+    <string name="please_enter_your_email">Please enter your email</string>
+    <string name="please_enter_valid_email">Please enter valid email</string>
+    <string name="please_enter_your_mobile_number">Please enter your mobile number</string>
+    <string name="please_enter_password">Please enter your password</string>
+    <string name="please_enter_your_confirm_password">Please enter your confirm password</string>
+    <string name="password_and_confirm_password_doesnot_match">Password and confirm password doesn\'t match</string>
+    <string name="profile_updated_successfully">Profile updated successfully.</string>
+    <string name="network_error_toast">Something went wrong</string>
+
 
 </resources>

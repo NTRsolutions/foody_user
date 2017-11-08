@@ -33,6 +33,7 @@ import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.models.User;
+import com.foodie.app.utils.TextUtils;
 import com.foodie.app.utils.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -92,12 +93,12 @@ public class EditAccountActivity extends AppCompatActivity {
         context = EditAccountActivity.this;
         activity = EditAccountActivity.this;
         initProfile();
-        connectionHelper= new ConnectionHelper(context);
+        connectionHelper = new ConnectionHelper(context);
 
-        if(connectionHelper.isConnectingToInternet()){
+        if (connectionHelper.isConnectingToInternet()) {
             getProfile();
-        }else {
-            Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
         }
 
         getProfile();
@@ -152,6 +153,7 @@ public class EditAccountActivity extends AppCompatActivity {
             utils.print(TAG, "Failed to complete device UDID");
         }
     }
+
     private void getProfile() {
         HashMap<String, String> map = new HashMap<>();
         map.put("device_type", "android");
@@ -161,7 +163,7 @@ public class EditAccountActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     GlobalData.profileModel = response.body();
                 }
             }
@@ -174,13 +176,18 @@ public class EditAccountActivity extends AppCompatActivity {
 
     private void updateProfile() {
 
-        if (name.getText().toString().isEmpty() || email.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Enter required Field", Toast.LENGTH_SHORT).show();
+        if (name.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.please_enter_username), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(email.getText().toString())) {
+            Toast.makeText(this, getResources().getString(R.string.please_enter_your_email), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!TextUtils.isValidEmail(email.getText().toString())) {
+            Toast.makeText(this, getResources().getString(R.string.please_enter_valid_email), Toast.LENGTH_SHORT).show();
             return;
         }
         if (customDialog != null)
             customDialog.show();
-
         HashMap<String, RequestBody> map = new HashMap<>();
         map.put("name", RequestBody.create(MediaType.parse("text/plain"), name.getText().toString()));
         map.put("email", RequestBody.create(MediaType.parse("text/plain"), email.getText().toString()));
@@ -203,14 +210,14 @@ public class EditAccountActivity extends AppCompatActivity {
                 } else if (response.isSuccessful()) {
                     GlobalData.profileModel = response.body();
                     finish();
-                    Toast.makeText(context, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getResources().getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 customDialog.cancel();
-                Toast.makeText(context, "Something wrong - updateProfile", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getResources().getString(R.string.network_error_toast), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -226,7 +233,7 @@ public class EditAccountActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             // Get the cursor
             Cursor cursor = getContentResolver().query(selectedImage,
@@ -242,8 +249,8 @@ public class EditAccountActivity extends AppCompatActivity {
             //userAvatar.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
             Glide.with(this).load(imgDecodableString).into(userProfileImg);
             imgFile = new File(imgDecodableString);
-        }else if(resultCode == Activity.RESULT_CANCELED){
-            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_SHORT).show();
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+//            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -263,10 +270,10 @@ public class EditAccountActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.update:
-                if(connectionHelper.isConnectingToInternet()){
+                if (connectionHelper.isConnectingToInternet()) {
                     updateProfile();
-                }else {
-                    Utils.displayMessage(activity,context,getString(R.string.oops_connect_your_internet));
+                } else {
+                    Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
                 break;
         }

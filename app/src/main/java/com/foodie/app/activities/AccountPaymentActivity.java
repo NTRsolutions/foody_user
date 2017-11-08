@@ -173,7 +173,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
             @Override
             public void onClick(View view) {
                 cashCheckBox.setChecked(true);
-                isCardChecked=false;
+                isCardChecked = false;
                 accountPaymentAdapter.notifyDataSetChanged();
                 proceedToPayBtn.setVisibility(VISIBLE);
                 for (int i = 0; i < cardArrayList.size(); i++) {
@@ -196,8 +196,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                             return;
                         }
                     }
-                }
-                else if (cashCheckBox.isChecked()) {
+                } else if (cashCheckBox.isChecked()) {
                     CartFragment.checkoutMap.put("payment_mode", "cash");
                     checkOut(CartFragment.checkoutMap);
                 } else {
@@ -278,7 +277,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
 
     }
 
-    public static void deleteCard(int id) {
+    public static void deleteCard(final int id) {
         customDialog.show();
         Call<Message> call = apiInterface.deleteCard(id);
         call.enqueue(new Callback<Message>() {
@@ -294,11 +293,19 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                     }
                 } else if (response.isSuccessful()) {
                     Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < GlobalData.cardArrayList.size(); i++) {
+                        if (GlobalData.cardArrayList.get(i).getId().equals(id)) {
+                            GlobalData.cardArrayList.remove(i);
+                            accountPaymentAdapter.notifyDataSetChanged();
+                            return;
+                        }
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
                 customDialog.dismiss();
             }
         });

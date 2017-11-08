@@ -67,7 +67,7 @@ public class OtherHelpActivity extends AppCompatActivity {
     Integer DISPUTE_HELP_ID = 0;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-
+    boolean isChat = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,9 @@ public class OtherHelpActivity extends AppCompatActivity {
             orderItemTxt.setText(String.valueOf(itemQuantity) + " Items, " + currency + String.valueOf(priceAmount));
         orderIdTxt.setText("ORDER #000" + order.getId().toString());
         reasonTitle.setText(reason);
+        isChat = getIntent().getBooleanExtra("is_chat", false);
+        if(isChat)
+            chatUs.performClick();
         //Toolbar
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);

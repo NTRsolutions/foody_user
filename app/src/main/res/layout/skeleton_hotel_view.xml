@@ -7,10 +7,9 @@
     android:orientation="vertical"
     tools:context="com.foodie.app.activities.HotelViewActivity">
 
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:background="@color/light_transparent" />
 
 

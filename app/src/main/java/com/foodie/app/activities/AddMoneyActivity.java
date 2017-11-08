@@ -86,7 +86,7 @@ public class AddMoneyActivity extends AppCompatActivity {
         cardArrayList = new ArrayList<>();
         accountPaymentAdapter = new AccountPaymentAdapter(context, cardArrayList, false);
         paymentMethodLv.setAdapter(accountPaymentAdapter);
-        amountTxt.setHint(numberFormat.getCurrency().getSymbol());
+        amountTxt.setHint(GlobalData.currencySymbol);
 
     }
 
@@ -120,6 +120,8 @@ public class AddMoneyActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Card>> call, Throwable t) {
+                customDialog.dismiss();
+                Toast.makeText(AddMoneyActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -146,9 +148,13 @@ public class AddMoneyActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.pay_btn:
-                if (amountTxt.getText().toString().equalsIgnoreCase("")) {
+                String amount=amountTxt.getText().toString();
+                if (amount.equalsIgnoreCase("")) {
                     Toast.makeText(context, "Please enter amount", Toast.LENGTH_SHORT).show();
-                } else if (isCardChecked) {
+                }else if( Integer.parseInt(amount)== 0){
+                    Toast.makeText(context, "Please enter valid amount", Toast.LENGTH_SHORT).show();
+                }
+                else if (isCardChecked) {
                     for (int i = 0; i < cardArrayList.size(); i++) {
                         if (cardArrayList.get(i).isChecked()) {
                             Card card = cardArrayList.get(i);
@@ -214,7 +220,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                 } else if (response.isSuccessful()) {
                     Toast.makeText(AddMoneyActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     GlobalData.profileModel.setWalletBalance(response.body().getUser().getWalletBalance());
-                    finish();
+                    onBackPressed();
                 }
 
             }

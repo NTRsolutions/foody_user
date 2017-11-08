@@ -239,12 +239,8 @@ public class ProfileFragment extends Fragment {
 
     private void initView() {
         if (GlobalData.profileModel != null) {
-            Glide.with(context).load(GlobalData.profileModel.getAvatar())
-                    .thumbnail(0.5f)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .error((R.drawable.man))
-                    .into(userImage);
+            Glide.with(context).load(GlobalData.profileModel.getAvatar()).placeholder(R.drawable.man).dontAnimate()
+                    .error(R.drawable.man).into(userImage);
             userPhone.setText(GlobalData.profileModel.getPhone());
             userName.setText(GlobalData.profileModel.getName());
             userEmail.setText(" - " + GlobalData.profileModel.getEmail());

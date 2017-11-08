@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="calligraphy_tag_id" type="id"/>
+    <item name="promo_code_apply_successfully" type="id">Promocode is applied and offer amount is
+        added to your wallet.
+    </item>
 </resources>

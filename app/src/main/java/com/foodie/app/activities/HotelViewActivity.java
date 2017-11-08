@@ -340,7 +340,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                     Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
 
-
             }
         });
 

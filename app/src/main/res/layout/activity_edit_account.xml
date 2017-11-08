@@ -55,8 +55,10 @@
                     android:id="@+id/user_profile"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@drawable/man" />
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/man"
+                    app:civ_border_color="#FFFFFF "
+                    app:civ_border_width="4dp" />
 
                 <ImageView
                     android:id="@+id/edit_user_profile"
