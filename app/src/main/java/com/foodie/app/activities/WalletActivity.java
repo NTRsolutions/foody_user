@@ -3,15 +3,18 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +22,8 @@ import com.foodie.app.R;
 import com.foodie.app.adapter.WalletHistoryAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
+import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.WalletHistory;
 
 import org.json.JSONObject;
@@ -61,6 +64,8 @@ public class WalletActivity extends AppCompatActivity {
     TextView title;
 
     NumberFormat numberFormat = GlobalData.getNumberFormat();
+    @BindView(R.id.error_layout)
+    LinearLayout errorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +90,7 @@ public class WalletActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         int walletMoney = GlobalData.profileModel.getWalletBalance();
-        walletAmountTxt.setText(currencySymbol+" "+String.valueOf(walletMoney));
+        walletAmountTxt.setText(currencySymbol + " " + String.valueOf(walletMoney));
         getWalletHistory();
     }
 
@@ -94,28 +99,28 @@ public class WalletActivity extends AppCompatActivity {
         Call<List<WalletHistory>> call = apiInterface.getWalletHistory();
         call.enqueue(new Callback<List<WalletHistory>>() {
             @Override
-            public void onResponse(Call<List<WalletHistory>> call, Response<List<WalletHistory>> response) {
+            public void onResponse(@NonNull Call<List<WalletHistory>> call, @NonNull Response<List<WalletHistory>> response) {
                 customDialog.dismiss();
-                if (response != null) {
-                    if (!response.isSuccessful() && response.errorBody() != null) {
-                        try {
-                            JSONObject jObjError = new JSONObject(response.errorBody().string());
-                            Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } else if (response.isSuccessful()) {
-                        Log.e("onResponse: ", response.toString());
+                if (response.isSuccessful()) {
+                    if (response.body() != null && response.body().size() > 0) {
                         walletHistoryHistoryList.addAll(response.body());
                         walletHistoryRecyclerView.getAdapter().notifyDataSetChanged();
+                        errorLayout.setVisibility(View.GONE);
+                    } else {
+                        errorLayout.setVisibility(View.VISIBLE);
                     }
                 } else {
-
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<List<WalletHistory>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<WalletHistory>> call, @NonNull Throwable t) {
                 customDialog.dismiss();
             }
         });
@@ -124,7 +129,7 @@ public class WalletActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this,AccountPaymentActivity.class).putExtra("is_show_wallet",true).putExtra("is_show_cash",false));
+        startActivity(new Intent(this, AccountPaymentActivity.class).putExtra("is_show_wallet", true).putExtra("is_show_cash", false));
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
