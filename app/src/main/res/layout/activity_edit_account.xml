@@ -58,7 +58,12 @@
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/man"
                     app:civ_border_color="#FFFFFF"
+<<<<<<< HEAD
                     app:civ_border_width="4dp" />
+=======
+                    app:civ_border_width="4dp"
+                    tools:ignore="VectorDrawableCompat" />
+>>>>>>> 3aa7c93a2d802f66d14c5619beac7e4b84b852d8
 
                 <ImageView
                     android:id="@+id/edit_user_profile"
