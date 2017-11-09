@@ -124,6 +124,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     List<Category> categoryList;
     HotelCatagoeryAdapter catagoeryAdapter;
     ViewSkeletonScreen skeleton;
+    boolean isFavourite=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +159,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             restaurantPosition = bundle.getInt("position");
 
         }
+        isFavourite = getIntent().getBooleanExtra("is_fav", false);
         shops = GlobalData.getInstance().selectedShop;
 
 
@@ -301,7 +303,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         //Heart Animation Button
         if (heartBtn != null)
             heartBtn.init(this);
-        if (shops.getFavorite() != null) {
+        if (shops.getFavorite() != null||isFavourite) {
             heartBtn.setChecked(true);
             heartBtn.setTag(1);
         } else
@@ -339,10 +341,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 } else {
                     Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
-
             }
         });
-
         skeleton = Skeleton.bind(rootLayout)
                 .load(R.layout.skeleton_hotel_view)
                 .show();

@@ -88,7 +88,7 @@ public class FavouritesAdapter extends SectionedRecyclerViewAdapter<FavouritesAd
             @Override
             public void onClick(View v) {
                 GlobalData.selectedShop = object.getShop();
-                context.startActivity(new Intent(context, HotelViewActivity.class));
+                context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("is_fav", true));
             }
         });
 
