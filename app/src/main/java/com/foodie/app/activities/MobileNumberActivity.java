@@ -162,7 +162,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            isSignUp = bundle.getBoolean("signup");
+            isSignUp = bundle.getBoolean("signup",true);
         }
 
         // You can limit the displayed countries

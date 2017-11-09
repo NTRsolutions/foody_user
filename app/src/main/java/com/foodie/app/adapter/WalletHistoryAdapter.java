@@ -65,7 +65,7 @@ public class WalletHistoryAdapter extends RecyclerView.Adapter<WalletHistoryAdap
         String value = "";
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm aa");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d hh:mm a");
 
             if (time != null) {
                 Date date = df.parse(time);

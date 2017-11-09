@@ -81,7 +81,7 @@ public class OtpActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            isSignUp = bundle.getBoolean("signup");
+            isSignUp = bundle.getBoolean("signup",true);
         }
         mobileNumberTxt.setText(GlobalData.mobile);
         otpValue1.setText(String.valueOf(GlobalData.otpValue));

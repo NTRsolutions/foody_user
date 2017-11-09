@@ -141,7 +141,6 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     com.foodie.app.models.Address address = null;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     Animation slide_down, slide_up;
-
     boolean isAddressSave = false;
     boolean isSkipVisible = false;
     Context context;
@@ -163,10 +162,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         //Intialize Animation line
         initializeAvd();
         //Load animation
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-
         slide_down = AnimationUtils.loadAnimation(context,
                 R.anim.slide_down);
         slide_up = AnimationUtils.loadAnimation(context,
@@ -564,6 +560,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
     private void saveAddress() {
         if (address != null && address.getMapAddress() != null && validate()) {
             customDialog.show();
+            apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
             Call<com.foodie.app.models.Address> call = apiInterface.saveAddress(address);
             call.enqueue(new Callback<com.foodie.app.models.Address>() {
                 @Override
@@ -603,6 +600,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
         }
         if (address != null && address.getId() != null && validate()) {
             customDialog.show();
+            apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
             Call<com.foodie.app.models.Address> call = apiInterface.updateAddress(address.getId(), address);
             call.enqueue(new Callback<com.foodie.app.models.Address>() {
                 @Override

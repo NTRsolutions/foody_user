@@ -116,7 +116,6 @@ public class OrderHelpFragment extends Fragment {
     }
 
     private void showDialog() {
-
         final String[] disputeArrayList = {"COMPLAINED", "CANCELED", "REFUND"};
         disputeType = "COMPLAINED";
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());

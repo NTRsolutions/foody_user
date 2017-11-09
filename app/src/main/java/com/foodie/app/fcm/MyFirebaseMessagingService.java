@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
@@ -67,9 +68,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private int getNotificationIcon(NotificationCompat.Builder notificationBuilder) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            return R.mipmap.ic_launcher;
+            notificationBuilder.setColor(ContextCompat.getColor(getApplicationContext(),R.color.theme));
+            return R.drawable.ic_stat_push;
         }else {
-            return R.drawable.ic_push_notification;
+            return R.mipmap.ic_launcher;
         }
     }
 }

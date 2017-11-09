@@ -669,7 +669,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                     isSelectedOrder = response.body();
                     Log.i("isSelectedOrder : ", isSelectedOrder.toString());
 
-                    if (isSelectedOrder.getStatus().equals("PICKEDUP") || isSelectedOrder.getStatus().equals("ARRIVED")) {
+                    if (isSelectedOrder.getStatus().equals("PICKEDUP") || isSelectedOrder.getStatus().equals("ARRIVED")||isSelectedOrder.getStatus().equals("ASSIGNED")) {
                         liveNavigation(isSelectedOrder.getTransporter().getLatitude(),
                                 isSelectedOrder.getTransporter().getLongitude());
                     }

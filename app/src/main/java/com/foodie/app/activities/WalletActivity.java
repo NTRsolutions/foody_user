@@ -67,6 +67,8 @@ public class WalletActivity extends AppCompatActivity {
     @BindView(R.id.error_layout)
     LinearLayout errorLayout;
 
+    WalletHistoryAdapter walletHistoryAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +84,7 @@ public class WalletActivity extends AppCompatActivity {
         walletHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         walletHistoryRecyclerView.setItemAnimator(new DefaultItemAnimator());
         walletHistoryRecyclerView.setHasFixedSize(true);
-        WalletHistoryAdapter walletHistoryAdapter = new WalletHistoryAdapter(walletHistoryHistoryList);
+        walletHistoryAdapter = new WalletHistoryAdapter(walletHistoryHistoryList);
         walletHistoryRecyclerView.setAdapter(walletHistoryAdapter);
     }
 
