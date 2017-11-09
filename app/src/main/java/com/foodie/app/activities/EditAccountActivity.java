@@ -175,7 +175,6 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     private void updateProfile() {
-
         if (name.getText().toString().isEmpty()) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_username), Toast.LENGTH_SHORT).show();
             return;

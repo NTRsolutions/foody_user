@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -119,11 +120,17 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         }
 
         if(object.getDispute()!=null){
-            holder.disputeTxt.setVisibility(View.VISIBLE);
-            holder.disputeTxt.setText(object.getDispute());
+            holder.disputeLayout.setVisibility(View.VISIBLE);
+            if(object.getDispute().equalsIgnoreCase("CREATED")){
+                holder.disputeStatusImage.setBackgroundResource(R.drawable.dispute);
+                holder.disputeTxt.setText(context1.getResources().getString(R.string.dispute)+" "+object.getDispute());
+            }else {
+                holder.disputeStatusImage.setBackgroundResource(R.drawable.dispute_success);
+                holder.disputeTxt.setText(context1.getResources().getString(R.string.dispute)+" "+object.getDispute());
+            }
         }
         else {
-            holder.disputeTxt.setVisibility(View.GONE);
+            holder.disputeLayout.setVisibility(View.GONE);
         }
         holder.disputeTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,16 +177,20 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         TextView headerTxt;
         TextView restaurantNameTxt,disputeTxt, restaurantAddressTxt, totalAmount, dishNameTxt, dateTimeTxt;
         Button reorderBtn;
+        ImageView disputeStatusImage;
         View dividerLine;
-        LinearLayout itemLayout;
+        LinearLayout itemLayout,disputeLayout;
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
             if (isHeader) {
                 headerTxt = (TextView) itemView.findViewById(R.id.header);
             } else {
+                disputeStatusImage = (ImageView) itemView.findViewById(R.id.dispute_status_image);
+                disputeLayout = (LinearLayout) itemView.findViewById(R.id.dispute_layout);
+                disputeTxt = (TextView) itemView.findViewById(R.id.dispute_txt);
+
                 itemLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
                 restaurantNameTxt = (TextView) itemView.findViewById(R.id.restaurant_name);
-                disputeTxt = (TextView) itemView.findViewById(R.id.dispute_txt);
                 restaurantAddressTxt = (TextView) itemView.findViewById(R.id.restaurant_address);
                 totalAmount = (TextView) itemView.findViewById(R.id.total_amount);
                 reorderBtn = (Button) itemView.findViewById(R.id.reorder);
