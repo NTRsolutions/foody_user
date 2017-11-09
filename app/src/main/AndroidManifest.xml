@@ -226,8 +226,9 @@
 
         <activity
             android:name=".activities.ProductDetailActivity"
-            android:label="@string/title_activity_product_detail"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label=""
+            android:parentActivityName=".activities.HotelViewActivity"/>
     </application>
 
 </manifest>
