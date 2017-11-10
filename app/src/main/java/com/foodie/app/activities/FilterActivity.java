@@ -79,25 +79,25 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         model.setCuisines(cuisineList1);
         modelList.add(model);
         filters = new ArrayList<>();
-        List<Cuisine> cuisineList2 = GlobalData.cuisineList;
-
-        for (int i = 0; i < cuisineList2.size(); i++) {
-            filters.add(cuisineList2.get(i).getName());
+        if(GlobalData.cuisineList!=null){
+            for (Cuisine obj: GlobalData.cuisineList) {
+                filters.add(obj.getName());
+            }
+            model = new FilterModel();
+            model.setHeader("Cuisines");
+            model.setCuisines(GlobalData.cuisineList);
+            modelList.add(model);
+            modelListReference.clear();
+            modelListReference.addAll(modelList);
+            LinearLayoutManager manager = new LinearLayoutManager(this);
+            filterRv.setLayoutManager(manager);
+            adapter = new FilterAdapter(this, modelListReference);
+            if (isFilterApplied)
+                isReset = false;
+            else
+                isReset = true;
+            filterRv.setAdapter(adapter);
         }
-        model = new FilterModel();
-        model.setHeader("Cuisines");
-        model.setCuisines(cuisineList2);
-        modelList.add(model);
-        modelListReference.clear();
-        modelListReference.addAll(modelList);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        filterRv.setLayoutManager(manager);
-        adapter = new FilterAdapter(this, modelListReference);
-        if (isFilterApplied)
-            isReset = false;
-        else
-            isReset = true;
-        filterRv.setAdapter(adapter);
         resetTxt.setOnClickListener(this);
         applyFilterBtn.setOnClickListener(this);
     }

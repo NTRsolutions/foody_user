@@ -143,11 +143,14 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                GlobalData.isSelectedProduct=product;
-//                context.startActivity(new Intent(context, ProductDetailActivity.class));
+                GlobalData.isSelectedProduct=list.get(section).getProducts().get(relativePosition);
+                context.startActivity(new Intent(context, ProductDetailActivity.class));
+                activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+
             }
         });
 
+        if(product.getPrices().getCurrency()!=null)
         holder.priceTxt.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
 
         if (!product.getFoodType().equalsIgnoreCase("veg")) {
@@ -367,7 +370,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         for (int i = 0; i < itemCount; i++) {
             //Get Total item Quantity
             itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
-            //Get product price
+            //Get addon price
             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
         }

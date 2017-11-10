@@ -303,7 +303,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         for (int i = 0; i < itemCount; i++) {
                             //Get Total item Quantity
                             itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
-                            //Get product price
+                            //Get addon price
                             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
                         }

@@ -59,10 +59,10 @@
     <string name="apply_filter">"Apply Filter"</string>
 
     <string name="large_text">
-        "Material is the metaphor.\n\n"
+        "Material is the metaphor.\n"
         <!--"A material metaphor is the unifying theory of a rationalized space and a system of motion."-->
         <!--"The material is grounded in tactile reality, inspired by the study of paper and ink, yet "-->
-        "seams, divides space, and indicates moving parts.\n\n"
+        "seams, divides space, and indicates moving parts."
     </string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="action_settings">Settings</string>
@@ -199,6 +199,10 @@
     <string name="password_and_confirm_password_doesnot_match">Password and confirm password doesn\'t match</string>
     <string name="profile_updated_successfully">Profile updated successfully.</string>
     <string name="network_error_toast">Something went wrong</string>
+    <string name="add_ons">AddOns</string>
+    <string name="custom_notes">Custom Notes</string>
+    <string name="write_something">Write Something</string>
+    <string name="product">Product</string>
 
 
 </resources>

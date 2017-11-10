@@ -227,6 +227,7 @@
         <activity
             android:name=".activities.ProductDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"
             android:label=""
             android:parentActivityName=".activities.HotelViewActivity"/>
     </application>

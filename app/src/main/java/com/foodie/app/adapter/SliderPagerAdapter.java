@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
+import com.foodie.app.models.Image;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class SliderPagerAdapter extends PagerAdapter {
     private Activity activity;
-    private List<String> image_arraylist;
+    private List<Image> image_arraylist;
 
-    public SliderPagerAdapter(Activity activity, List<String> image_arraylist) {
+    public SliderPagerAdapter(Activity activity, List<Image> image_arraylist) {
         this.activity = activity;
         this.image_arraylist = image_arraylist;
     }
@@ -32,7 +33,7 @@ public class SliderPagerAdapter extends PagerAdapter {
 
         View view = layoutInflater.inflate(R.layout.layout_slider, container, false);
         ImageView im_slider = view.findViewById(R.id.im_slider);
-        Glide.with(activity.getApplicationContext()).load(image_arraylist.get(position)).placeholder(R.drawable.ic_restaurant_place_holder).into(im_slider);
+        Glide.with(activity.getApplicationContext()).load(image_arraylist.get(position).getUrl()).placeholder(R.drawable.ic_restaurant_place_holder).into(im_slider);
 
         container.addView(view);
 

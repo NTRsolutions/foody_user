@@ -114,7 +114,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int section, final int relativePosition, final int absolutePosition) {
-//        product = shopList.get(section).getproducts.get(relativePosition);
+//        addon = shopList.get(section).getproducts.get(relativePosition);
         product = list.get(section);
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
@@ -264,7 +264,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     for (int i = 0; i < itemCount; i++) {
                         //Get Total item Quantity
                         itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
-                        //Get product price
+                        //Get addon price
                         if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                             priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
                     }
@@ -290,7 +290,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
 //        for (int i = 0; i < itemCount; i++) {
 //            //Get Total item Quantity
 //            itemQuantity = itemQuantity + addCart.getProductList().get(i).getQuantity();
-//            //Get product price
+//            //Get addon price
 //            if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
 //                priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
 //        }
