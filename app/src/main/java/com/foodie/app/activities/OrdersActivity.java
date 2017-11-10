@@ -132,8 +132,10 @@ public class OrdersActivity extends AppCompatActivity {
 //                    ordersRv.setLayoutAnimation(controller);
 //                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
-
-
+                    if (onGoingOrderList.size() == 0 && pastOrderList.size() == 0) {
+                        errorLayout.setVisibility(View.VISIBLE);
+                    } else
+                        errorLayout.setVisibility(View.GONE);
                 }
             }
 

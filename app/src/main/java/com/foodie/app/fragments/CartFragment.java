@@ -271,9 +271,11 @@ public class CartFragment extends Fragment {
                         //Set Payment details
                         String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
                         itemTotalAmount.setText(currency + "" + priceAmount);
-                        if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() < priceAmount) {
-                            int offerPercentage = response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
-                            discount = (int) (priceAmount * (offerPercentage * 0.01));
+                        if(response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount()!=null){
+                            if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() < priceAmount) {
+                                int offerPercentage = response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
+                                discount = (int) (priceAmount * (offerPercentage * 0.01));
+                            }
                         }
                         discountAmount.setText("- " + currency + "" + discount);
                         serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getTaxPercentage().toString());

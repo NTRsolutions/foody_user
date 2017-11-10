@@ -455,11 +455,11 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                         JSONObject jsonObj = new JSONObject(bodyString);
                         JSONArray jsonArray = jsonObj.optJSONArray("results");
                         if (jsonArray.length() > 0) {
-
                             JSONArray addressArray = jsonArray.optJSONObject(0).optJSONArray("address_components");
                             addressArray.optJSONObject(0).optString("long_name");
                             address.setCity(addressArray.optJSONObject(2).optString("long_name"));
                             address.setState(addressArray.optJSONObject(3).optString("long_name"));
+                            if(addressArray.optJSONObject(4).optString("long_name")!=null)
                             address.setCountry(addressArray.optJSONObject(4).optString("long_name"));
                             address.setLatitude(latitude);
                             address.setLongitude(longitude);
@@ -577,7 +577,6 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             GlobalData.selectedAddress = response.body();
                             finish();
                         }
-
                     } else {
                         APIError error = ErrorUtils.parseError(response);
                         Toast.makeText(SaveDeliveryLocationActivity.this, error.getType().get(0), Toast.LENGTH_SHORT).show();

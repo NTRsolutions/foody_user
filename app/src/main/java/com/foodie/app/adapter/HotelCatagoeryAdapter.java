@@ -143,8 +143,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GlobalData.isSelectedProduct=product;
-                context.startActivity(new Intent(context, ProductDetailActivity.class));
+//                GlobalData.isSelectedProduct=product;
+//                context.startActivity(new Intent(context, ProductDetailActivity.class));
             }
         });
 

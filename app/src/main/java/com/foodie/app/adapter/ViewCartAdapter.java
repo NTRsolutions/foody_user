@@ -102,7 +102,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         } else {
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
         }
-        selectedShop=product.getShop();
+        selectedShop = product.getShop();
 //        for (int i = 0; i < GlobalData.getInstance().shopList.size(); i++) {
 //            if (list.get(0).getProduct().getShopId().equals(GlobalData.getInstance().shopList.get(i).getId()))
 //                selectedShop = GlobalData.getInstance().shopList.get(i);
@@ -307,19 +307,20 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
                         }
-                        if(response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount()<priceAmount){
-                            int offerPercentage=response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
-                            discount = (int) (priceAmount*(offerPercentage*0.01));
+                        if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() != null) {
+                            if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() < priceAmount) {
+                                int offerPercentage = response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
+                                discount = (int) (priceAmount * (offerPercentage * 0.01));
 
+                            }
                         }
-
                         GlobalData.getInstance().notificationCount = itemQuantity;
                         //Set Payment details
                         String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
                         CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
                         CartFragment.discountAmount.setText("- " + currency + "" + discount);
                         int topPayAmount = priceAmount - discount;
-                        topPayAmount = topPayAmount+ response.body().getDeliveryCharges()+response.body().getTaxPercentage();
+                        topPayAmount = topPayAmount + response.body().getDeliveryCharges() + response.body().getTaxPercentage();
                         CartFragment.payAmount.setText(currency + "" + topPayAmount);
 
                     } else {
