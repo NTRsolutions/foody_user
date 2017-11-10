@@ -3,6 +3,7 @@
     android:layout_width="@dimen/_80sdp"
     android:gravity="center"
     android:layout_gravity="center"
+    android:id="@+id/add_button_root_layout"
     android:layout_height="@dimen/_25sdp"
     android:background="@drawable/button_2">
 

@@ -145,7 +145,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             public void onClick(View view) {
                 GlobalData.isSelectedProduct=list.get(section).getProducts().get(relativePosition);
                 context.startActivity(new Intent(context, ProductDetailActivity.class));
-                activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
 
             }
         });

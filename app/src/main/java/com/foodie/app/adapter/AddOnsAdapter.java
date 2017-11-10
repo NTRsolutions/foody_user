@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -103,14 +105,27 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         addon = list.get(position).getAddon();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.addonName.setText(addon.getName() + " " + list.get(position).getPrice());
-        holder.cardTextValue.setText("0");
-        holder.cardTextValueTicker.setText("0");
+        holder.cardTextValue.setText("1");
+        holder.cardTextValueTicker.setText("1");
 //        if (!addon.getFoodType().equalsIgnoreCase("veg")) {
 //            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
 //        } else {
 //            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
 //        }
 //        selectedShop = addon.getShop();
+        holder.addonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if(checked){
+                    holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                    holder.cardAddTextLayout.setVisibility(View.GONE);
+
+                }else {
+                    holder.cardAddDetailLayout.setVisibility(View.GONE);
+                    holder.cardAddTextLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         holder.cardAddTextLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,9 +162,9 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
                 /** Press Add Card Minus button */
                 addon = list.get(position).getAddon();
                 if (holder.cardTextValue.getText().toString().equalsIgnoreCase("1")) {
-                    countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
-                    holder.cardTextValue.setText("" + countMinusValue);
-                    holder.cardTextValueTicker.setText("" + countMinusValue);
+//                    countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
+//                    holder.cardTextValue.setText("" + countMinusValue);
+//                    holder.cardTextValueTicker.setText("" + countMinusValue);
                     holder.cardAddDetailLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
                     holder.addonName.setChecked(false);
@@ -162,14 +177,6 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
 
                 }
 
-
-//                HashMap<String, String> map = new HashMap<String, String>();
-//                map.put("product_id", addon.getId().toString());
-//                map.put("quantity", String.valueOf(countMinusValue));
-//                Log.e("AddCart_Minus", map.toString());
-//                addCart(map);
-//                int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
-//                priceAmount = quantity * addon.getPrices().getPrice();
 
 
             }
@@ -197,16 +204,17 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
         private TextView cardTextValue, cardAddInfoText, cardAddOutOfStock;
         TickerView cardTextValueTicker;
-        RadioButton addonName;
-        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
+        CheckBox addonName;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout,addButtonRootLayout;
 
         private MyViewHolder(View view) {
             super(view);
             foodImageType = (ImageView) itemView.findViewById(R.id.food_type_image);
             animationLineCartAdd = (ImageView) itemView.findViewById(R.id.animation_line_cart_add);
-            addonName = itemView.findViewById(R.id.dish_name_text);
+            addonName = (CheckBox)itemView.findViewById(R.id.dish_name_text);
          /*    Add card Button Layout*/
             cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);
+            addButtonRootLayout = (RelativeLayout) itemView.findViewById(R.id.add_button_root_layout);
             cardAddTextLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_text_layout);
             cardAddInfoText = (TextView) itemView.findViewById(R.id.avialablity_time);
             cardAddOutOfStock = (TextView) itemView.findViewById(R.id.out_of_stock);

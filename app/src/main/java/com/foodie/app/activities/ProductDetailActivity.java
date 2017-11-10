@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
@@ -52,6 +54,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     public static  TextView addOnsTxt;
 
 
+    public static TextView itemText;
+    public static TextView viewCart;
+    public static RelativeLayout viewCartLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,18 +68,27 @@ public class ProductDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context=ProductDetailActivity.this;
 
+        //Intialize
         addOnsTxt=(TextView)findViewById(R.id.add_ons_txt);
+        itemText = (TextView) findViewById(R.id.item_text);
+        viewCart = (TextView) findViewById(R.id.view_cart);
+        viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
 
         product = GlobalData.isSelectedProduct;
         productName.setText(product.getName()+"\n"+product.getPrices().getCurrency()+product.getPrices().getPrice());
+        itemText.setText("1 Item | "+product.getPrices().getCurrency()+product.getPrices().getPrice());
         productDescription.setText(product.getDescription());
         slider_image_list = new ArrayList<>();
         addonList=new ArrayList<>();
         addonList.addAll(product.getAddons());
+        if(addonList.size()==0)
+            addOnsTxt.setVisibility(View.GONE);
+        else
+            addOnsTxt.setVisibility(View.VISIBLE);
 
         //Add ons Adapter
         addOnsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        addOnsRv.setItemAnimator(new DefaultItemAnimator());
+//        addOnsRv.setItemAnimator(new DefaultItemAnimator());
         addOnsRv.setHasFixedSize(false);
         addOnsRv.setNestedScrollingEnabled(false);
 
@@ -118,8 +133,17 @@ public class ProductDetailActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(Color.parseColor("#FFFFFF"));
     }
 
+
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 }

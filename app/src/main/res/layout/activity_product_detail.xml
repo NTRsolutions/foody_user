@@ -31,9 +31,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
 
                 <LinearLayout
                     android:id="@+id/product_slider_dots"
@@ -59,16 +56,66 @@
 
     <include layout="@layout/content_product_detail" />
 
+    <!-- View cart Layout-->
+
+    <RelativeLayout
+        android:id="@+id/view_cart_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/colorGreen"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/_5sdp"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/item_text"
+                fontPath="fonts/Nunito-Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1 Item | $ 100"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="@dimen/text_small_large" />
+
+            <TextView
+                android:id="@+id/view_cart_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_text"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:text="From : Thalapakatti"
+                android:textColor="@color/colorTextWhite"
+                android:textSize="@dimen/text_tiny"
+                android:visibility="gone" />
+        </RelativeLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        android:visibility="gone"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <TextView
+            android:id="@+id/view_cart"
+            fontPath="fonts/Nunito-Bold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:drawableEnd="@drawable/ic_cart_white"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="Add Item"
+            android:textAllCaps="true"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="@dimen/text_small_large" />
+
+    </RelativeLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
