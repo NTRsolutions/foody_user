@@ -68,5 +68,18 @@
             android:textSize="@dimen/text_small" />
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/addons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Full"/>
+    <TextView
+        android:id="@+id/customize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:text="@string/customize"
+        android:textSize="@dimen/text_tiny"
+        android:drawablePadding="8dp"
+        android:drawableEnd="@drawable/ic_down"/>
 </LinearLayout>
