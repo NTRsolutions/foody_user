@@ -22,6 +22,8 @@ public class Addon_ {
     @Expose
     private Object deletedAt;
 
+    private  boolean isChecked=false;
+
     public Integer getId() {
         return id;
     }
@@ -61,6 +63,13 @@ public class Addon_ {
         return this;
     }
 
+    public void setChecked(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    public boolean getChecked() {
+        return isChecked;
+    }
     public Object getDeletedAt() {
         return deletedAt;
     }

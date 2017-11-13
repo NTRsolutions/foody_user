@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.LoginActivity;
+import com.foodie.app.activities.ProductDetailActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.CartFragment;
@@ -47,7 +48,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.foodie.app.helper.GlobalData.categoryList;
+import static com.foodie.app.helper.GlobalData.isSelectedProduct;
 import static com.foodie.app.helper.GlobalData.profileModel;
+import static com.foodie.app.helper.GlobalData.selectedShop;
 
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
@@ -60,7 +63,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
     int discount = 0;
     int itemCount = 0;
     int itemQuantity = 0;
-    Addon_ addon;
+    Addon addon;
     boolean dataResponse = false;
     Cart productList;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
@@ -102,27 +105,27 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.cardAddTextLayout.setVisibility(View.VISIBLE);
         holder.cardAddDetailLayout.setVisibility(View.GONE);
-        addon = list.get(position).getAddon();
+        addon = list.get(position);
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
-        holder.addonName.setText(addon.getName() + " " + list.get(position).getPrice());
+        holder.addonName.setText(addon.getAddon().getName() + " " + GlobalData.currencySymbol + list.get(position).getPrice());
+        addon.setQuantity(1);
         holder.cardTextValue.setText("1");
         holder.cardTextValueTicker.setText("1");
-//        if (!addon.getFoodType().equalsIgnoreCase("veg")) {
-//            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
-//        } else {
-//            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
-//        }
-//        selectedShop = addon.getShop();
         holder.addonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if(checked){
+                if (checked) {
                     holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                     holder.cardAddTextLayout.setVisibility(View.GONE);
-
-                }else {
+                    addon = list.get(position);
+                    addon.getAddon().setChecked(true);
+                    setAddOnsText();
+                } else {
                     holder.cardAddDetailLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
+                    addon.getAddon().setChecked(false);
+                    setAddOnsText();
+
                 }
             }
         });
@@ -131,11 +134,14 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
+                addon = list.get(position);
                 holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                 holder.cardAddTextLayout.setVisibility(View.GONE);
                 holder.cardTextValue.setText("1");
                 holder.cardTextValueTicker.setText("1");
+                addon.setQuantity(1);
                 holder.addonName.setChecked(true);
+                addon.getAddon().setChecked(true);
                 setAddOnsText();
             }
         });
@@ -145,11 +151,13 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             public void onClick(View v) {
                 Log.e("access_token2", GlobalData.getInstance().accessToken);
                 /** Press Add Card Add button */
-                addon = list.get(position).getAddon();
+                addon = list.get(position);
+                addon.getAddon().setChecked(true);
                 int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                 holder.cardTextValue.setText("" + countValue);
                 holder.cardTextValueTicker.setText("" + countValue);
-
+                addon.setQuantity(countValue);
+                setAddOnsText();
             }
         });
 
@@ -157,28 +165,23 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             @Override
             public void onClick(View v) {
 
-
                 int countMinusValue;
                 /** Press Add Card Minus button */
-                addon = list.get(position).getAddon();
+                addon = list.get(position);
                 if (holder.cardTextValue.getText().toString().equalsIgnoreCase("1")) {
-//                    countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
-//                    holder.cardTextValue.setText("" + countMinusValue);
-//                    holder.cardTextValueTicker.setText("" + countMinusValue);
                     holder.cardAddDetailLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
                     holder.addonName.setChecked(false);
-
+                    addon.getAddon().setChecked(false);
 
                 } else {
                     countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
+                    addon.setQuantity(countMinusValue);
 
                 }
-
-
-
+                setAddOnsText();
             }
         });
 
@@ -186,11 +189,43 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
     }
 
     private void setAddOnsText() {
-//        int count=0;
-//        for (int i = 0; i <list.size() ; i++) {
-//            if(list.get(i).)
-//
-//        }
+        int totalAmount = isSelectedProduct.getPrices().getPrice();
+        for (int i = 0; i < list.size(); i++) {
+            Addon addon = list.get(i);
+            if (addon.getAddon().getChecked()) {
+                totalAmount = totalAmount + (addon.getQuantity() * addon.getPrice());
+            }
+        }
+        ProductDetailActivity.itemText.setText("1 Item | " + GlobalData.currencySymbol + totalAmount);
+
+    }
+
+    private void addItem(HashMap<String, String> map) {
+        Call<AddCart> call = apiInterface.postAddCart(map);
+        call.enqueue(new Callback<AddCart>() {
+            @Override
+            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                selectedShop = HotelViewActivity.shops;
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    GlobalData.getInstance().addCartShopId = selectedShop.getId();
+                    addCart = response.body();
+                    GlobalData.getInstance().addCart = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCart> call, Throwable t) {
+
+            }
+        });
+
     }
 
 
@@ -205,13 +240,13 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         private TextView cardTextValue, cardAddInfoText, cardAddOutOfStock;
         TickerView cardTextValueTicker;
         CheckBox addonName;
-        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout,addButtonRootLayout;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout, addButtonRootLayout;
 
         private MyViewHolder(View view) {
             super(view);
             foodImageType = (ImageView) itemView.findViewById(R.id.food_type_image);
             animationLineCartAdd = (ImageView) itemView.findViewById(R.id.animation_line_cart_add);
-            addonName = (CheckBox)itemView.findViewById(R.id.dish_name_text);
+            addonName = (CheckBox) itemView.findViewById(R.id.dish_name_text);
          /*    Add card Button Layout*/
             cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);
             addButtonRootLayout = (RelativeLayout) itemView.findViewById(R.id.add_button_root_layout);

@@ -25,6 +25,8 @@ public class Addon {
     @Expose
     private Addon_ addon;
 
+    private Integer quantity;
+
     public Integer getId() {
         return id;
     }
@@ -47,6 +49,14 @@ public class Addon {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Integer getPrice() {
