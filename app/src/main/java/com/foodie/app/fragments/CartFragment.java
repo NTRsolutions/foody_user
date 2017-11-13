@@ -254,6 +254,7 @@ public class CartFragment extends Fragment {
                     customDialog.dismiss();
                     //get Item Count
                     itemCount = response.body().getProductList().size();
+                    GlobalData.getInstance().notificationCount=response.body().getProductList().size();
                     if (itemCount == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
                         dataLayout.setVisibility(View.GONE);

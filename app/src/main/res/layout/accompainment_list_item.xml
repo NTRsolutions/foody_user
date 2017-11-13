@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/_7sdp"
-    android:paddingTop="@dimen/_7sdp">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <ImageView
         android:id="@+id/food_type_image"
@@ -64,7 +64,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_25sdp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true">
 
         <include layout="@layout/add_card_button_layout" />

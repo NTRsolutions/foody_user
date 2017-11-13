@@ -162,22 +162,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         isFavourite = getIntent().getBooleanExtra("is_fav", false);
         shops = GlobalData.getInstance().selectedShop;
 
-
-//        GlobalData.getInstance().selectedShop = GlobalData.getInstance().shopList.get(restaurantPosition);
-
-        //get User Profile Data
-        if (GlobalData.getInstance().profileModel != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("shop", String.valueOf(shops.getId()));
-            map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
-            getCategories(map);
-
-        } else {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("shop", String.valueOf(shops.getId()));
-            getCategories(map);
-        }
-
         if (shops.getOfferPercent() == null) {
             offer.setVisibility(View.GONE);
         } else {
@@ -373,7 +357,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(Call<Favorite> call, Response<Favorite> response) {
                 Favorite favorite = response.body();
-
             }
 
             @Override
@@ -477,6 +460,18 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                     catagoeryAdapter.notifyDataSetChanged();
                 }
             }
+        }
+        //get User Profile Data
+        if (GlobalData.getInstance().profileModel != null) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("shop", String.valueOf(shops.getId()));
+            map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
+            getCategories(map);
+
+        } else {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("shop", String.valueOf(shops.getId()));
+            getCategories(map);
         }
 
     }

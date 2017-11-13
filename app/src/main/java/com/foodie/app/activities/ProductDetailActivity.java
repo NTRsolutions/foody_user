@@ -68,6 +68,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     public static TextView addOnsTxt;
+    int cartId = 0;
 
 
     public static TextView itemText;
@@ -89,13 +90,32 @@ public class ProductDetailActivity extends AppCompatActivity {
         itemText = (TextView) findViewById(R.id.item_text);
         viewCart = (TextView) findViewById(R.id.view_cart);
         addItemLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
+
+
+        product = GlobalData.isSelectedProduct;
+        if( GlobalData.addCart!=null){
+            if(GlobalData.addCart.getProductList().size()!=0){
+                for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
+                    if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
+                        cartId = GlobalData.addCart.getProductList().get(i).getId();
+                    } else {
+                        cartId = 0;
+                    }
+                }
+            }
+        }
+
         addItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("product_id", product.getId().toString());
-//                map.put("quantity", product.getCart().getQuantity().toString());
                 map.put("quantity","1");
+//                if(cartId!=0) map.put("cart_id", String.valueOf(cartId));
+//                if(product.getCart()==null)
+//                map.put("quantity","1");
+//                else
+//                    map.put("quantity",String.valueOf(product.getCart().getQuantity()+1));
                 for (int i = 0; i < list.size(); i++) {
                     Addon addon = list.get(i);
                     if (addon.getAddon().getChecked()) {
@@ -108,7 +128,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        product = GlobalData.isSelectedProduct;
+
         productName.setText(product.getName() + "\n" + product.getPrices().getCurrency() + product.getPrices().getPrice());
         itemText.setText("1 Item | " + product.getPrices().getCurrency() + product.getPrices().getPrice());
         productDescription.setText(product.getDescription());
@@ -164,8 +184,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    AddCart  addCart = response.body();
-//                    GlobalData.getInstance().addCart = response.body();
+                    GlobalData.getInstance().addCart = response.body();
                     finish();
                 }
             }
