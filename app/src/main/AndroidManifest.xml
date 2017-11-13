@@ -228,7 +228,7 @@
             android:name=".activities.ProductDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"
-            android:label="Foodiel"
+            android:label="@null"
             android:parentActivityName=".activities.HotelViewActivity"/>
     </application>
 
