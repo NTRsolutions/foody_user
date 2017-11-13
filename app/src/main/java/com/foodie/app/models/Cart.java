@@ -24,6 +24,9 @@ public class Cart {
     @SerializedName("product")
     @Expose
     private Product product;
+    @SerializedName("cart_add_ons")
+    @Expose
+    private CartAddon cartAddon;
 
     public Integer getId() {
         return id;
@@ -72,5 +75,14 @@ public class Cart {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public CartAddon getCartAddon() {
+        return cartAddon;
+    }
+
+    public void setCartAddon(CartAddon cartAddon) {
+        this.cartAddon = cartAddon;
+    }
+
 
 }

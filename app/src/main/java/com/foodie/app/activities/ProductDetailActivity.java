@@ -10,26 +10,41 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.AddOnsAdapter;
 import com.foodie.app.adapter.SliderPagerAdapter;
 import com.foodie.app.adapter.ViewCartAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
+import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Addon;
 import com.foodie.app.models.Image;
 import com.foodie.app.models.Product;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+import static com.foodie.app.adapter.AddOnsAdapter.list;
+import static com.foodie.app.helper.GlobalData.cuisineIdArrayList;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -51,12 +66,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     Product product;
     List<Addon> addonList;
     Context context;
-    public static  TextView addOnsTxt;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    public static TextView addOnsTxt;
 
 
     public static TextView itemText;
     public static TextView viewCart;
-    public static RelativeLayout viewCartLayout;
+    public static RelativeLayout addItemLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,22 +82,40 @@ public class ProductDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        context=ProductDetailActivity.this;
+        context = ProductDetailActivity.this;
 
         //Intialize
-        addOnsTxt=(TextView)findViewById(R.id.add_ons_txt);
+        addOnsTxt = (TextView) findViewById(R.id.add_ons_txt);
         itemText = (TextView) findViewById(R.id.item_text);
         viewCart = (TextView) findViewById(R.id.view_cart);
-        viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
+        addItemLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
+        addItemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("product_id", product.getId().toString());
+//                map.put("quantity", product.getCart().getQuantity().toString());
+                map.put("quantity","1");
+                for (int i = 0; i < list.size(); i++) {
+                    Addon addon = list.get(i);
+                    if (addon.getAddon().getChecked()) {
+                        map.put("product_addons[" + "" + i + "]", addon.getId().toString());
+                        map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
+                    }
+                }
+                Log.e("AddCart_add", map.toString());
+                addItem(map);
+            }
+        });
 
         product = GlobalData.isSelectedProduct;
-        productName.setText(product.getName()+"\n"+product.getPrices().getCurrency()+product.getPrices().getPrice());
-        itemText.setText("1 Item | "+product.getPrices().getCurrency()+product.getPrices().getPrice());
+        productName.setText(product.getName() + "\n" + product.getPrices().getCurrency() + product.getPrices().getPrice());
+        itemText.setText("1 Item | " + product.getPrices().getCurrency() + product.getPrices().getPrice());
         productDescription.setText(product.getDescription());
         slider_image_list = new ArrayList<>();
-        addonList=new ArrayList<>();
+        addonList = new ArrayList<>();
         addonList.addAll(product.getAddons());
-        if(addonList.size()==0)
+        if (addonList.size() == 0)
             addOnsTxt.setVisibility(View.GONE);
         else
             addOnsTxt.setVisibility(View.VISIBLE);
@@ -92,7 +126,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         addOnsRv.setHasFixedSize(false);
         addOnsRv.setNestedScrollingEnabled(false);
 
-        AddOnsAdapter  addOnsAdapter = new AddOnsAdapter(addonList, context);
+        AddOnsAdapter addOnsAdapter = new AddOnsAdapter(addonList, context);
         addOnsRv.setAdapter(addOnsAdapter);
 
         slider_image_list.addAll(product.getImages());
@@ -117,6 +151,33 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
     }
 
+    private void addItem(HashMap<String, String> map) {
+        Call<AddCart> call = apiInterface.postAddCart(map);
+        call.enqueue(new Callback<AddCart>() {
+            @Override
+            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    AddCart  addCart = response.body();
+//                    GlobalData.getInstance().addCart = response.body();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCart> call, Throwable t) {
+
+            }
+        });
+
+    }
+
     private void addBottomDots(int currentPage) {
         TextView[] dots = new TextView[slider_image_list.size()];
 
@@ -132,7 +193,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         if (dots.length > 0)
             dots[currentPage].setTextColor(Color.parseColor("#FFFFFF"));
     }
-
 
 
     @Override

@@ -57,7 +57,7 @@ import static com.foodie.app.helper.GlobalData.selectedShop;
  */
 
 public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHolder> {
-    private List<Addon> list;
+    public static List<Addon> list;
     private Context context;
     int priceAmount = 0;
     int discount = 0;
@@ -66,7 +66,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
     Addon addon;
     boolean dataResponse = false;
     Cart productList;
-    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+
     AddCart addCart;
     AnimatedVectorDrawableCompat avdProgress;
     Dialog dialog;
@@ -111,6 +111,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         addon.setQuantity(1);
         holder.cardTextValue.setText("1");
         holder.cardTextValueTicker.setText("1");
+        addon.getAddon().setChecked(false);
         holder.addonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -164,7 +165,6 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         holder.cardMinusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 int countMinusValue;
                 /** Press Add Card Minus button */
                 addon = list.get(position);
@@ -200,33 +200,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
 
     }
 
-    private void addItem(HashMap<String, String> map) {
-        Call<AddCart> call = apiInterface.postAddCart(map);
-        call.enqueue(new Callback<AddCart>() {
-            @Override
-            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
-                selectedShop = HotelViewActivity.shops;
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
-                    GlobalData.getInstance().addCartShopId = selectedShop.getId();
-                    addCart = response.body();
-                    GlobalData.getInstance().addCart = response.body();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<AddCart> call, Throwable t) {
-
-            }
-        });
-
-    }
 
 
     @Override
