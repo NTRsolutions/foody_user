@@ -55,15 +55,21 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
         addOnsRv.setHasFixedSize(false);
         addOnsRv.setNestedScrollingEnabled(false);
 
+
         addonList = new ArrayList<>();
+
         AddOnsAdapter addOnsAdapter = new AddOnsAdapter(addonList, context);
         addOnsRv.setAdapter(addOnsAdapter);
 
         if (GlobalData.isSelectedProduct != null) {
-
-            Product product =  GlobalData.isSelectedProduct;
+            Product product = GlobalData.isSelectedProduct;
             productName.setText(product.getName());
-            productPrice.setText(product.getPrices().getCurrency()+" "+product.getPrices().getPrice());
+            productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
+
+            addonList.clear();
+            addonList.addAll(product.getAddons());
+            addOnsRv.getAdapter().notifyDataSetChanged();
+
         }
 
     }

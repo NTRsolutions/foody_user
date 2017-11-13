@@ -4,11 +4,16 @@ package com.foodie.app.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Cart {
 
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("product_id")
+    @Expose
+    private Integer productId;
     @SerializedName("promocode_id")
     @Expose
     private Object promocodeId;
@@ -18,15 +23,18 @@ public class Cart {
     @SerializedName("quantity")
     @Expose
     private Integer quantity;
+    @SerializedName("note")
+    @Expose
+    private Object note;
     @SerializedName("savedforlater")
     @Expose
     private Integer savedforlater;
     @SerializedName("product")
     @Expose
     private Product product;
-    @SerializedName("cart_add_ons")
+    @SerializedName("cart_addons")
     @Expose
-    private CartAddon cartAddon;
+    private List<CartAddon> cartAddons = null;
 
     public Integer getId() {
         return id;
@@ -34,6 +42,14 @@ public class Cart {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public Object getPromocodeId() {
@@ -60,6 +76,14 @@ public class Cart {
         this.quantity = quantity;
     }
 
+    public Object getNote() {
+        return note;
+    }
+
+    public void setNote(Object note) {
+        this.note = note;
+    }
+
     public Integer getSavedforlater() {
         return savedforlater;
     }
@@ -76,13 +100,12 @@ public class Cart {
         this.product = product;
     }
 
-    public CartAddon getCartAddon() {
-        return cartAddon;
+    public List<CartAddon> getCartAddons() {
+        return cartAddons;
     }
 
-    public void setCartAddon(CartAddon cartAddon) {
-        this.cartAddon = cartAddon;
+    public void setCartAddons(List<CartAddon> cartAddons) {
+        this.cartAddons = cartAddons;
     }
-
 
 }
