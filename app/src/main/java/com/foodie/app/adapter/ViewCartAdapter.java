@@ -22,6 +22,7 @@ import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.AddonBottomSheetFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
+import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Product;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.Shop;
@@ -105,6 +106,19 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
             holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
         }
         selectedShop = product.getShop();
+
+        if(product.getAddons().size() > 0){
+            holder.customize.setVisibility(View.VISIBLE);
+            holder.addons.setVisibility(View.VISIBLE);
+        }else {
+            holder.customize.setVisibility(View.GONE);
+            holder.addons.setVisibility(View.GONE);
+        }
+
+        List<CartAddon> cartAddons = list.get(position).getCartAddons();
+        for (CartAddon cartAddon: cartAddons) {
+            holder.addons.append(cartAddon.getAddonProduct().getAddon().getName()+", ");
+        }
 
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,7 +266,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
-        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customize;
+        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customizableTxt, addons, customize;
         TickerView cardTextValueTicker;
         RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
 
@@ -262,6 +276,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
             animationLineCartAdd = (ImageView) itemView.findViewById(R.id.animation_line_cart_add);
             dishNameTxt = (TextView) itemView.findViewById(R.id.dish_name_text);
             priceTxt = (TextView) itemView.findViewById(R.id.price_text);
+            customizableTxt = (TextView) itemView.findViewById(R.id.customizable_txt);
+            addons = (TextView) itemView.findViewById(R.id.addons);
             customize = (TextView) itemView.findViewById(R.id.customize);
          /*    Add card Button Layout*/
             cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);
