@@ -6,6 +6,8 @@ import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Address;
 import com.foodie.app.models.AddressList;
 import com.foodie.app.models.Card;
+import com.foodie.app.models.Cart;
+import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Category;
 import com.foodie.app.models.Cuisine;
 import com.foodie.app.models.DisputeMessage;
@@ -51,6 +53,8 @@ public class GlobalData {
     public static Address selectedAddress = null;
     public static Order isSelectedOrder = null;
     public static Product isSelectedProduct = null;
+    public static Cart isSelctedCart = null;
+    public static List<CartAddon> cartAddons = null;
     public static AddCart addCart = null;
 
     public static List<Shop> shopList;

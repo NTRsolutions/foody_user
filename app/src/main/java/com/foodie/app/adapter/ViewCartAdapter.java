@@ -232,7 +232,10 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         holder.customize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                productList = list.get(position);
                 GlobalData.isSelectedProduct = product;
+                GlobalData.isSelctedCart = productList;
+                GlobalData.cartAddons = productList.getCartAddons();
                 AddonBottomSheetFragment bottomSheetDialogFragment = new AddonBottomSheetFragment();
                 bottomSheetDialogFragment.show(((AppCompatActivity)context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
             }
