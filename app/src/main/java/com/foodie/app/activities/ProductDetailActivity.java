@@ -83,6 +83,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform whatever you want on back arrow click
+                onBackPressed();
+            }
+        });
         context = ProductDetailActivity.this;
 
         //Intialize
@@ -222,7 +229,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+        finish();
     }
 }

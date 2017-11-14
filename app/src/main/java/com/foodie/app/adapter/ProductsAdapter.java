@@ -123,8 +123,8 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-            holder.cardTextValueTicker.setText(String.valueOf(product.getCart().getQuantity()));
-            holder.cardTextValue.setText(String.valueOf(product.getCart().getQuantity()));
+            holder.cardTextValueTicker.setText(String.valueOf(product.getCart().get(0).getQuantity()));
+            holder.cardTextValue.setText(String.valueOf(product.getCart().get(0).getQuantity()));
         } else {
             holder.cardAddTextLayout.setVisibility(View.VISIBLE);
             holder.cardAddDetailLayout.setVisibility(View.GONE);
@@ -154,7 +154,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 map.put("quantity", holder.cardTextValue.getText().toString());
                 Log.e("AddCart_add", map.toString());
                 addCart(map);
-                product.getCart().setQuantity(countValue);
+                product.getCart().get(0).setQuantity(countValue);
             }
         });
 
@@ -189,7 +189,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     Log.e("AddCart_Minus", map.toString());
                     addCart(map);
                     //Add model values
-                    product.getCart().setQuantity(countMinusValue);
+                    product.getCart().get(0).setQuantity(countMinusValue);
                 }
             }
         });
@@ -222,11 +222,11 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     addCart(map);
 
                     if (product.getCart() != null) {
-                        product.getCart().setQuantity(1);
+                        product.getCart().get(0).setQuantity(1);
                     } else {
                         Cart cart = new Cart();
                         cart.setQuantity(1);
-                        product.setCart(cart);
+                        product.getCart().add(cart);
                     }
 
                 } else {

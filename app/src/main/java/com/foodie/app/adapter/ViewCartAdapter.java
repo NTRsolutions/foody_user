@@ -148,7 +148,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     for (int i = 0; i < categoryList.size(); i++) {
                         for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
                             if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                categoryList.get(i).getProducts().get(j).getCart().setQuantity(countValue);
+                                categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countValue);
                             }
                         }
                     }
@@ -207,7 +207,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         for (int i = 0; i < categoryList.size(); i++) {
                             for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
                                 if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                    categoryList.get(i).getProducts().get(j).getCart().setQuantity(countMinusValue);
+                                    categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countMinusValue);
                                 }
                             }
                         }

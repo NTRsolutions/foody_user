@@ -204,6 +204,9 @@
     <string name="write_something">Write Something</string>
     <string name="product">Product</string>
     <string name="customize">Customize</string>
+    <string name="your_previous_customization">Your previous customization</string>
+    <string name="i_will_choose">I\'ll choose</string>
+    <string name="repeat">Repeat</string>
 
 
 </resources>

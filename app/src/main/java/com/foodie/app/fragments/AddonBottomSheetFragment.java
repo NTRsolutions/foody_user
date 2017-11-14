@@ -1,5 +1,6 @@
 package com.foodie.app.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
 
     @BindView(R.id.add_ons_rv)
     RecyclerView addOnsRv;
-
     Context context;
     List<Addon> addonList;
     @BindView(R.id.food_type)
@@ -42,6 +42,7 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
     @BindView(R.id.product_price)
     TextView productPrice;
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void setupDialog(final Dialog dialog, int style) {
         super.setupDialog(dialog, style);
@@ -49,7 +50,6 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
         dialog.setContentView(contentView);
         ButterKnife.bind(this, contentView);
         context = getContext();
-
         addOnsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         addOnsRv.setItemAnimator(new DefaultItemAnimator());
         addOnsRv.setHasFixedSize(false);

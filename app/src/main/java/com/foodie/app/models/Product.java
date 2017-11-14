@@ -46,7 +46,7 @@ public class Product {
     private List<Addon> addons = null;
     @SerializedName("cart")
     @Expose
-    private Cart cart;
+    private List<Cart> cart;
 
     @SerializedName("shop")
     @Expose
@@ -132,11 +132,11 @@ public class Product {
         this.prices = prices;
     }
 
-    public Cart getCart() {
+    public List<Cart> getCart() {
         return cart;
     }
 
-    public void setCart(Cart cart) {
+    public void setCart(List<Cart> cart) {
         this.cart = cart;
     }
 
