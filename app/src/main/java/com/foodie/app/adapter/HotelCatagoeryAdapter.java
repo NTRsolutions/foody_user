@@ -25,6 +25,7 @@ import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.activities.ProductDetailActivity;
+import com.foodie.app.activities.ViewCartActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.AddonBottomSheetFragment;
@@ -133,7 +134,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         }
 
         //Check if product is already added
-        if (product.getCart() != null) {
+        if (product.getCart()!=null&&product.getCart().size() !=0) {
             GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
@@ -205,12 +206,14 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     map.put("cart_id", String.valueOf(cartId));
                     Log.e("AddCart_add", map.toString());
                     addCart(map);
-                    product.getCart().get(0).setQuantity(countValue);
+//                    product.getCart().get(0).setQuantity(countValue);
                 }
 
 
             }
         });
+        holder.cardAddDetailLayout.setClickable(false);
+        holder.cardAddDetailLayout.setEnabled(false);
 
         holder.cardMinusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,17 +245,45 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     addCart(map);
                     product.setCart(null);
                 } else {
-                    int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
-                    holder.cardTextValue.setText("" + countMinusValue);
-                    holder.cardTextValueTicker.setText("" + countMinusValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity", holder.cardTextValue.getText().toString());
-                    map.put("cart_id", String.valueOf(cartId));
-                    Log.e("AddCart_Minus", map.toString());
-                    addCart(map);
-                    //Add model values
-                    product.getCart().get(0).setQuantity(countMinusValue);
+                    if(product.getCart().size()==1){
+                        int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
+                        holder.cardTextValue.setText("" + countMinusValue);
+                        holder.cardTextValueTicker.setText("" + countMinusValue);
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("product_id", product.getId().toString());
+                        map.put("quantity", holder.cardTextValue.getText().toString());
+                        map.put("cart_id", String.valueOf(cartId));
+                        Log.e("AddCart_Minus", map.toString());
+                        addCart(map);
+                    }else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(context.getResources().getString(R.string.remove_item_from_cart))
+                                .setMessage(context.getResources().getString(R.string.remove_item_from_cart_description))
+                                .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                        context.startActivity(new Intent(context, ViewCartActivity.class));
+                                        activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+
+                                    }
+                                })
+                                .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        nbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+                        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                        pbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+                    }
+
                 }
             }
         });
@@ -289,13 +320,13 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                                         map.put("quantity", holder.cardTextValue.getText().toString());
                                         Log.e("AddCart_Text", map.toString());
                                         addCart(map);
-                                        if (product.getCart() != null) {
-                                            product.getCart().get(0).setQuantity(1);
-                                        } else {
-                                            Cart cart = new Cart();
-                                            cart.setQuantity(1);
-                                            product.getCart().add(cart);
-                                        }
+//                                        if (product.getCart().size()!= 0) {
+//                                            product.getCart().get(0).setQuantity(1);
+//                                        } else {
+//                                            Cart cart = new Cart();
+//                                            cart.setQuantity(1);
+//                                            product.getCart().add(cart);
+//                                        }
                                     }
 
                                 }
@@ -335,13 +366,13 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         map.put("quantity", holder.cardTextValue.getText().toString());
                         Log.e("AddCart_Text", map.toString());
                         addCart(map);
-                        if (product.getCart() != null) {
-                            product.getCart().get(0).setQuantity(1);
-                        } else {
-                            Cart cart = new Cart();
-                            cart.setQuantity(1);
-                            product.getCart().add(cart);
-                        }
+//                        if (product.getCart()!=null&&product.getCart().size() != 0) {
+//                            product.getCart().get(0).setQuantity(1);
+//                        } else {
+//                            Cart cart = new Cart();
+//                            cart.setQuantity(1);
+//                            product.getCart().add(cart);
+//                        }
                     }
 
                 } else {
@@ -440,7 +471,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 }
             }
         }
-
         GlobalData.getInstance().notificationCount = itemQuantity;
         if (itemQuantity == 0) {
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);

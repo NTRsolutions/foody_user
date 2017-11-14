@@ -207,6 +207,8 @@
     <string name="your_previous_customization">Your previous customization</string>
     <string name="i_will_choose">I\'ll choose</string>
     <string name="repeat">Repeat</string>
+    <string name="remove_item_from_cart">Remove item from cart</string>
+    <string name="remove_item_from_cart_description">The item has multiple customiztaions added.Proceed to cart to remove item?</string>
 
 
 </resources>

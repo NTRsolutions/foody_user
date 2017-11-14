@@ -47,7 +47,6 @@ public class Product {
     @SerializedName("cart")
     @Expose
     private List<Cart> cart;
-
     @SerializedName("shop")
     @Expose
     private Shop shop;

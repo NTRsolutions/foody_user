@@ -16,7 +16,7 @@ public class AddCart {
     @SerializedName("tax_percentage")
     @Expose
     private Integer taxPercentage;
-    @SerializedName("products")
+    @SerializedName("carts")
     @Expose
     private List<Cart> products = null;
 
