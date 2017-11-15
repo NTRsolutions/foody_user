@@ -315,13 +315,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                                         map.put("quantity", holder.cardTextValue.getText().toString());
                                         Log.e("AddCart_Text", map.toString());
                                         addCart(map);
-//                                        if (product.getCart().size()!= 0) {
-//                                            product.getCart().get(0).setQuantity(1);
-//                                        } else {
-//                                            Cart cart = new Cart();
-//                                            cart.setQuantity(1);
-//                                            product.getCart().add(cart);
-//                                        }
                                     }
 
                                 }
@@ -445,7 +438,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         });
 
     }
-
     private static void setViewcartBottomLayout(AddCart addCart) {
         priceAmount = 0;
         itemQuantity = 0;
@@ -458,10 +450,10 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             //Get addon price
             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
-            if (addCart.getProductList().get(i).getCartAddons() != null && addCart.getProductList().get(i).getCartAddons().size() != 0) {
+            if (addCart.getProductList().get(i).getCartAddons() != null && !addCart.getProductList().get(i).getCartAddons().isEmpty()) {
                 for (int j = 0; j < addCart.getProductList().get(i).getCartAddons().size(); j++) {
-                    priceAmount = priceAmount + (addCart.getProductList().get(i).getCartAddons().get(j).getQuantity() *
-                            addCart.getProductList().get(i).getCartAddons().get(j).getAddonProduct().getPrice());
+                    priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity()*(addCart.getProductList().get(i).getCartAddons().get(j).getQuantity() *
+                            addCart.getProductList().get(i).getCartAddons().get(j).getAddonProduct().getPrice()));
                 }
             }
         }

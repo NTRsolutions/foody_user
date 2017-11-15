@@ -47,20 +47,20 @@ import static com.foodie.app.helper.GlobalData.categoryList;
 
 public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyViewHolder> {
     private List<Cart> list;
-    private Context context;
-    int priceAmount = 0;
-    int discount = 0;
-    int itemCount = 0;
-    int itemQuantity = 0;
-    Product product;
-    boolean dataResponse = false;
-    Cart productList;
-    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-    AddCart addCart;
-    AnimatedVectorDrawableCompat avdProgress;
-    Dialog dialog;
-    Runnable action;
-    Shop selectedShop = GlobalData.getInstance().selectedShop;
+    public static Context context;
+    public static int priceAmount = 0;
+    public static int discount = 0;
+    public static int itemCount = 0;
+    public static int itemQuantity = 0;
+    public static Product product;
+    public static boolean dataResponse = false;
+    public static Cart productList;
+    public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    public static AddCart addCart;
+    public static AnimatedVectorDrawableCompat avdProgress;
+    public static Dialog dialog;
+    public static Runnable action;
+    public static Shop selectedShop = GlobalData.getInstance().selectedShop;
     public static CartChoiceModeFragment bottomSheetDialogFragment;
 
 
@@ -109,17 +109,17 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         }
         selectedShop = product.getShop();
 
-        if(product.getAddons().size() > 0){
+        if (product.getAddons().size() > 0) {
             holder.customize.setVisibility(View.VISIBLE);
             holder.addons.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.customize.setVisibility(View.GONE);
             holder.addons.setVisibility(View.GONE);
         }
 
         List<CartAddon> cartAddons = list.get(position).getCartAddons();
-        for (CartAddon cartAddon: cartAddons) {
-            holder.addons.append(cartAddon.getAddonProduct().getAddon().getName()+", ");
+        for (CartAddon cartAddon : cartAddons) {
+            holder.addons.append(cartAddon.getAddonProduct().getAddon().getName() + ", ");
         }
 
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
@@ -143,27 +143,26 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                 };
                 holder.animationLineCartAdd.postDelayed(action, 3000);
-
                 /** Press Add Card Add button */
                 product = list.get(position).getProduct();
-//                if (product.getAddons() != null &&! product.getAddons().isEmpty()) {
-//                    GlobalData.isSelectedProduct = product;
-//                    bottomSheetDialogFragment = new CartChoiceModeFragment();
-//                    bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-//                } else {
-                int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
-                holder.cardTextValue.setText("" + countValue);
-                holder.cardTextValueTicker.setText("" + countValue);
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("product_id", product.getId().toString());
-                map.put("quantity", holder.cardTextValue.getText().toString());
-                map.put("cart_id", String.valueOf(list.get(position).getId()));
-                Log.e("AddCart_add", map.toString());
-                addCart(map);
-                int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
-                priceAmount = quantity * product.getPrices().getPrice();
-                holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
-//                }
+                if (product.getAddons() != null && !product.getAddons().isEmpty()) {
+                    GlobalData.isSelectedProduct = product;
+                    bottomSheetDialogFragment = new CartChoiceModeFragment();
+                    bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                } else {
+                    int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
+                    holder.cardTextValue.setText("" + countValue);
+                    holder.cardTextValueTicker.setText("" + countValue);
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("product_id", product.getId().toString());
+                    map.put("quantity", holder.cardTextValue.getText().toString());
+                    map.put("cart_id", String.valueOf(list.get(position).getId()));
+                    Log.e("AddCart_add", map.toString());
+                    addCart(map);
+                    int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
+                    priceAmount = quantity * product.getPrices().getPrice();
+                    holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
+                }
 
 //                //We don't know categories means do nothing,
 //                if (categoryList != null) {
@@ -201,7 +200,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                 };
                 holder.animationLineCartAdd.postDelayed(action, 3000);
-
                 int countMinusValue;
                 /** Press Add Card Minus button */
                 product = list.get(position).getProduct();
@@ -219,7 +217,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             }
                         }
                     }
-
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));
@@ -249,6 +246,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     addCart(map);
                 }
 
+
                 int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
                 priceAmount = quantity * product.getPrices().getPrice();
                 holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
@@ -264,7 +262,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 GlobalData.isSelctedCart = productList;
                 GlobalData.cartAddons = productList.getCartAddons();
                 AddonBottomSheetFragment bottomSheetDialogFragment = new AddonBottomSheetFragment();
-                bottomSheetDialogFragment.show(((AppCompatActivity)context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
             }
         });
 
@@ -307,7 +305,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     }
 
 
-    private void addCart(HashMap<String, String> map) {
+    public static void addCart(HashMap<String, String> map) {
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.empty_dialog);
@@ -321,7 +319,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 avdProgress.stop();
                 dialog.dismiss();
                 dataResponse = true;
-
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());

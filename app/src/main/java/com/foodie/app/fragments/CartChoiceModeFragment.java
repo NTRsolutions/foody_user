@@ -20,6 +20,7 @@ import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.ProductDetailActivity;
 import com.foodie.app.adapter.HotelCatagoeryAdapter;
+import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CustomDialog;
@@ -70,12 +71,13 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
     TextView productName;
     @BindView(R.id.product_price)
     TextView productPrice;
-    String addOnsValue="";
+    String addOnsValue = "";
     List<CartAddon> cartAddonList;
     Cart lastCart;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     CustomDialog customDialog;
     HashMap<String, String> repeatCartMap;
+    public  static  boolean isViewcart=false;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -87,21 +89,27 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
         context = getContext();
         activity = getActivity();
         customDialog = new CustomDialog(context);
-
         if (GlobalData.isSelectedProduct != null) {
             product = GlobalData.isSelectedProduct;
             productName.setText(product.getName());
             productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
-            cartAddonList= new ArrayList<>();
-            if(product.getCart()!=null&&!product.getCart().isEmpty()){
-                cartAddonList=product.getCart().get(product.getCart().size()-1).getCartAddons();
-                addOnsQty.setText(""+cartAddonList.size()+"+ Add on");
-                lastCart=product.getCart().get(product.getCart().size()-1);
-                for (int i = 0; i <cartAddonList.size() ; i++) {
-                    if(i==0)
+            cartAddonList = new ArrayList<>();
+
+            if (GlobalData.addCart != null) {
+                for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
+                    if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
+                        lastCart = GlobalData.addCart.getProductList().get(i);
+                    }
+                }
+            } else if (product.getCart() != null && !product.getCart().isEmpty()) {
+                cartAddonList = product.getCart().get(product.getCart().size() - 1).getCartAddons();
+                addOnsQty.setText("" + cartAddonList.size() + "+ Add on");
+                lastCart = product.getCart().get(product.getCart().size() - 1);
+                for (int i = 0; i < cartAddonList.size(); i++) {
+                    if (i == 0)
                         addOnsItemsTxt.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
                     else
-                        addOnsItemsTxt.append(", "+cartAddonList.get(i).getAddonProduct().getAddon().getName());
+                        addOnsItemsTxt.append(", " + cartAddonList.get(i).getAddonProduct().getAddon().getName());
                 }
             }
 
@@ -126,26 +134,34 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
             case R.id.repeat_btn:
                 repeatCartMap = new HashMap<String, String>();
                 repeatCartMap.put("product_id", product.getId().toString());
-                repeatCartMap.put("quantity", String.valueOf(lastCart.getQuantity()+1));
+                repeatCartMap.put("quantity", String.valueOf(lastCart.getQuantity() + 1));
                 repeatCartMap.put("cart_id", String.valueOf(lastCart.getId()));
                 for (int i = 0; i < cartAddonList.size(); i++) {
                     CartAddon cartAddon = cartAddonList.get(i);
-                        repeatCartMap.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
-                        repeatCartMap.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
+                    repeatCartMap.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
+                    repeatCartMap.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
                 }
-
-                    for (int i = 0; i <HotelViewActivity.categoryList.size() ; i++) {
-                        for (int j = 0; j <HotelViewActivity.categoryList.get(i).getProducts().size() ; j++) {
-                            Product oldProduct=HotelViewActivity.categoryList.get(i).getProducts().get(j);
-                            if(oldProduct.getId().equals(product.getId())){
-                                HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().get( HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().size()-1).setQuantity(lastCart.getQuantity()+1);
+                if (HotelViewActivity.categoryList != null) {
+                    for (int i = 0; i < HotelViewActivity.categoryList.size(); i++) {
+                        for (int j = 0; j < HotelViewActivity.categoryList.get(i).getProducts().size(); j++) {
+                            Product oldProduct = HotelViewActivity.categoryList.get(i).getProducts().get(j);
+                            if (oldProduct.getId().equals(product.getId())) {
+                                HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().get(HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().size() - 1).setQuantity(lastCart.getQuantity() + 1);
                                 HotelViewActivity.catagoeryAdapter.notifyDataSetChanged();
                             }
                         }
                     }
+                }
+                Log.e("Repeat_cart", repeatCartMap.toString());
+                if (isViewcart)
+                {
+                   ViewCartAdapter.addCart(repeatCartMap);
+                }
+                else {
+                    HotelCatagoeryAdapter.addCart(repeatCartMap);
+                }
 
-                Log.e("AddCart_add", repeatCartMap.toString());
-                HotelCatagoeryAdapter.addCart(repeatCartMap);
+
                 dismiss();
                 break;
         }
