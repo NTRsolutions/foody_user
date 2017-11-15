@@ -94,23 +94,23 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
             productName.setText(product.getName());
             productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
             cartAddonList = new ArrayList<>();
-
             if (GlobalData.addCart != null) {
                 for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
                     if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
                         lastCart = GlobalData.addCart.getProductList().get(i);
+                        cartAddonList=lastCart.getCartAddons();
                     }
                 }
             } else if (product.getCart() != null && !product.getCart().isEmpty()) {
                 cartAddonList = product.getCart().get(product.getCart().size() - 1).getCartAddons();
-                addOnsQty.setText("" + cartAddonList.size() + "+ Add on");
                 lastCart = product.getCart().get(product.getCart().size() - 1);
-                for (int i = 0; i < cartAddonList.size(); i++) {
-                    if (i == 0)
-                        addOnsItemsTxt.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
-                    else
-                        addOnsItemsTxt.append(", " + cartAddonList.get(i).getAddonProduct().getAddon().getName());
-                }
+            }
+            addOnsQty.setText("" + cartAddonList.size() + "+ Add on");
+            for (int i = 0; i < cartAddonList.size(); i++) {
+                if (i == 0)
+                    addOnsItemsTxt.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
+                else
+                    addOnsItemsTxt.append(", " + cartAddonList.get(i).getAddonProduct().getAddon().getName());
             }
 
 
@@ -141,17 +141,6 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                     repeatCartMap.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
                     repeatCartMap.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
                 }
-                if (HotelViewActivity.categoryList != null) {
-                    for (int i = 0; i < HotelViewActivity.categoryList.size(); i++) {
-                        for (int j = 0; j < HotelViewActivity.categoryList.get(i).getProducts().size(); j++) {
-                            Product oldProduct = HotelViewActivity.categoryList.get(i).getProducts().get(j);
-                            if (oldProduct.getId().equals(product.getId())) {
-                                HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().get(HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().size() - 1).setQuantity(lastCart.getQuantity() + 1);
-                                HotelViewActivity.catagoeryAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }
                 Log.e("Repeat_cart", repeatCartMap.toString());
                 if (isViewcart)
                 {
@@ -159,9 +148,18 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                 }
                 else {
                     HotelCatagoeryAdapter.addCart(repeatCartMap);
+                    if (HotelViewActivity.categoryList != null) {
+                        for (int i = 0; i < HotelViewActivity.categoryList.size(); i++) {
+                            for (int j = 0; j < HotelViewActivity.categoryList.get(i).getProducts().size(); j++) {
+                                Product oldProduct = HotelViewActivity.categoryList.get(i).getProducts().get(j);
+                                if (oldProduct.getId().equals(product.getId())) {
+                                    HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().get(HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().size() - 1).setQuantity(lastCart.getQuantity() + 1);
+                                    HotelViewActivity.catagoeryAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
                 }
-
-
                 dismiss();
                 break;
         }

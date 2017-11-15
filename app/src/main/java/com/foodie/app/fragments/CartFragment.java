@@ -63,6 +63,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.adapter.ViewCartAdapter.bottomSheetDialogFragment;
+
 
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
@@ -137,7 +139,7 @@ public class CartFragment extends Fragment {
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
     //Orderitem List
-    List<Cart> viewCartItemList;
+    public  static List<Cart> viewCartItemList;
 
     int priceAmount = 0;
     int discount = 0;
@@ -148,7 +150,7 @@ public class CartFragment extends Fragment {
     int ADDRESS_SELECTION = 1;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-    ViewCartAdapter viewCartAdapter;
+    public  static ViewCartAdapter viewCartAdapter;
     CustomDialog customDialog;
     NumberFormat numberFormat = GlobalData.getNumberFormat();
     ViewSkeletonScreen skeleton;
@@ -329,6 +331,8 @@ public class CartFragment extends Fragment {
                 walletLayout.setVisibility(View.INVISIBLE);
             }
         }
+        if(bottomSheetDialogFragment!=null)
+            bottomSheetDialogFragment.dismiss();
 
     }
 

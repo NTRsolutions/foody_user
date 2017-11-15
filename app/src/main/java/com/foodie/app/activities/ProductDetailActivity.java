@@ -103,8 +103,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         itemText = (TextView) findViewById(R.id.item_text);
         viewCart = (TextView) findViewById(R.id.view_cart);
         addItemLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
-
-
         product = GlobalData.isSelectedProduct;
         if( GlobalData.addCart!=null){
             if(GlobalData.addCart.getProductList().size()!=0){
@@ -122,7 +120,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("product_id", product.getId().toString());
-                if(product.getCart().size()==1&&product.getAddons().isEmpty()){
+                if(product.getCart()!=null&&product.getCart().size()==1&&product.getAddons().isEmpty()){
                     map.put("quantity",String.valueOf(product.getCart().get(0).getQuantity()+1));
                     map.put("cart_id",String.valueOf(product.getCart().get(0).getId()));
                 }
@@ -141,7 +139,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 Log.e("AddCart_add", map.toString());
                 addItem(map);
             }

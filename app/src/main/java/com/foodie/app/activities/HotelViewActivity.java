@@ -80,8 +80,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     TextView restaurantTitle2;
     @BindView(R.id.restaurant_subtitle2)
     TextView restaurantSubtitle2;
-    @BindView(R.id.scroll_view)
-    NestedScrollView scrollView;
+//    @BindView(R.id.scroll_view)
+//    NestedScrollView scrollView;
     public static TextView itemText;
     public static TextView viewCartShopName;
     public static TextView viewCart;
@@ -427,6 +427,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(Call<ShopDetail> call, Response<ShopDetail> response) {
                 skeleton.hide();
+                categoryList.clear();
                 Category category=new Category();
                 featureProductList= new ArrayList<>();
                 featureProductList=response.body().getFeaturedProducts();

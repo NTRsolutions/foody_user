@@ -124,7 +124,6 @@
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -147,10 +146,6 @@
                     android:background="#EEE" />
 
 
-                <android.support.v4.widget.NestedScrollView
-                    android:id="@+id/scroll_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -418,8 +413,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
-
                             <android.support.v7.widget.RecyclerView
+                                android:clickable="true"
                                 android:id="@+id/accompaniment_dishes_rv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -434,10 +429,6 @@
                             android:layout_height="30dp"
                             android:orientation="vertical" />
                     </LinearLayout>
-
-
-                </android.support.v4.widget.NestedScrollView>
-
 
             </LinearLayout>
 

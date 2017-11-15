@@ -149,6 +149,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     GlobalData.isSelectedProduct = product;
                     bottomSheetDialogFragment = new CartChoiceModeFragment();
                     bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                    CartChoiceModeFragment.isViewcart=true;
                 } else {
                     int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                     holder.cardTextValue.setText("" + countValue);
@@ -327,6 +328,10 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
                     GlobalData.getInstance().addCart = response.body();
+                    CartFragment.viewCartItemList.clear();
+                    GlobalData.addCart=addCart;
+                    CartFragment.viewCartItemList.addAll(response.body().getProductList());
+                    CartFragment.viewCartAdapter.notifyDataSetChanged();
                     priceAmount = 0;
                     discount = 0;
                     itemQuantity = 0;

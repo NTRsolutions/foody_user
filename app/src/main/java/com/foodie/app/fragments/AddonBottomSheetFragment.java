@@ -86,7 +86,6 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
 
 
         addonList = new ArrayList<>();
-
         CartAddOnsAdapter addOnsAdapter = new CartAddOnsAdapter(addonList, context);
         addOnsRv.setAdapter(addOnsAdapter);
 
