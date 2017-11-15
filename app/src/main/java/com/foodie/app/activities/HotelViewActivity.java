@@ -41,7 +41,9 @@ import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Category;
 import com.foodie.app.models.Favorite;
+import com.foodie.app.models.Product;
 import com.foodie.app.models.Shop;
+import com.foodie.app.models.ShopDetail;
 import com.foodie.app.utils.Utils;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.squareup.picasso.Picasso;
@@ -124,6 +126,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     public  static List<Category> categoryList;
+    public  static List<Product> featureProductList;
     public  static  HotelCatagoeryAdapter catagoeryAdapter;
     ViewSkeletonScreen skeleton;
     boolean isFavourite=false;
@@ -419,12 +422,13 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     }
 
     private void getCategories(HashMap<String, String> map) {
-        Call<List<Category>> call = apiInterface.getCategories(map);
-        call.enqueue(new Callback<List<Category>>() {
+        Call<ShopDetail> call = apiInterface.getCategories(map);
+        call.enqueue(new Callback<ShopDetail>() {
             @Override
-            public void onResponse(@NonNull Call<List<Category>> call, Response<List<Category>> response) {
-                categoryList = response.body();
+            public void onResponse(Call<ShopDetail> call, Response<ShopDetail> response) {
                 skeleton.hide();
+                categoryList=response.body().getCategories();
+                featureProductList=response.body().getFeaturedProducts();
                 GlobalData.getInstance().categoryList = categoryList;
                 GlobalData.getInstance().selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
@@ -438,10 +442,12 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ShopDetail> call, Throwable t) {
 
             }
         });
+
+
 
     }
 

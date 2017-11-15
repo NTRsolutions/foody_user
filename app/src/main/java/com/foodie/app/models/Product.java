@@ -38,6 +38,9 @@ public class Product {
     @SerializedName("prices")
     @Expose
     private Prices prices;
+    @SerializedName("featured_images")
+    @Expose
+    private List<FeaturedImage> featuredImages = null;
     @SerializedName("images")
     @Expose
     private List<Image> images = null;
@@ -129,6 +132,14 @@ public class Product {
 
     public void setPrices(Prices prices) {
         this.prices = prices;
+    }
+
+    public List<FeaturedImage> getFeaturedImages() {
+        return featuredImages;
+    }
+
+    public void setFeaturedImages(List<FeaturedImage> featuredImages) {
+        this.featuredImages = featuredImages;
     }
 
     public List<Cart> getCart() {
