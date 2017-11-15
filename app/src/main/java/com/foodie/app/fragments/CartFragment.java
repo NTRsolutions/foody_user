@@ -162,7 +162,6 @@ public class CartFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getContext();
         this.activity = getActivity();
-
     }
 
     @Override
@@ -310,7 +309,6 @@ public class CartFragment extends Fragment {
 
             @Override
             public void onFailure(Call<AddCart> call, Throwable t) {
-
                 errorLayout.setVisibility(View.VISIBLE);
                 dataLayout.setVisibility(View.GONE);
             }
@@ -321,7 +319,6 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         if (GlobalData.profileModel != null) {
             int money = GlobalData.profileModel.getWalletBalance();
             if (money > 0) {

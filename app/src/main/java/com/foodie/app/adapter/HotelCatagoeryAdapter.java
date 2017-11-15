@@ -16,11 +16,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
+import com.bumptech.glide.Glide;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.LoginActivity;
@@ -127,10 +129,20 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int section, final int relativePosition, int absolutePosition) {
+        Category category=list.get(section);
         product = list.get(section).getProducts().get(relativePosition);
         productList = list.get(section).getProducts();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
+        if(category.getName().equalsIgnoreCase(context.getResources().getString(R.string.featured_products))){
+            holder.featuredImage.setVisibility(View.VISIBLE);
+            Glide.with(context).load(product.getFeaturedImages().get(0).getUrl()).placeholder(R.drawable.ic_banner).dontAnimate()
+                    .error(R.drawable.ic_banner).into(holder.featuredImage);
+
+        }else {
+            holder.featuredImage.setVisibility(View.GONE);
+        }
+
 
         if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
             setViewcartBottomLayout(GlobalData.getInstance().addCart);
@@ -501,10 +513,11 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
-        private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd, addOnsIconImg;
+        private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd, addOnsIconImg,featuredImage;
         private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customizableTxt;
         TickerView cardTextValueTicker;
-        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout, rootLayout;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
+        LinearLayout rootLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
@@ -513,6 +526,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             } else {
                 dishImg = (ImageView) itemView.findViewById(R.id.dishImg);
                 foodImageType = (ImageView) itemView.findViewById(R.id.food_type_image);
+                featuredImage = (ImageView) itemView.findViewById(R.id.featured_image);
                 addOnsIconImg = (ImageView) itemView.findViewById(R.id.add_ons_icon);
                 animationLineCartAdd = (ImageView) itemView.findViewById(R.id.animation_line_cart_add);
                 dishNameTxt = (TextView) itemView.findViewById(R.id.dish_name_text);
@@ -521,7 +535,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
              /*    Add card Button Layout*/
                 cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);
-                rootLayout = (RelativeLayout) itemView.findViewById(R.id.root_layout);
+                rootLayout = (LinearLayout) itemView.findViewById(R.id.root_layout);
                 cardAddTextLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_text_layout);
                 cardInfoLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_info_layout);
                 cardAddInfoText = (TextView) itemView.findViewById(R.id.avialablity_time);

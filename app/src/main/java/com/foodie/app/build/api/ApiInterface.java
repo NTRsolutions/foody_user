@@ -110,7 +110,6 @@ public interface ApiInterface {
     @GET("api/user/cuisines")
     Call<List<Cuisine>> getcuCuisineCall();
 
-
     /*-------------CART--------------------*/
 
     @FormUrlEncoded
