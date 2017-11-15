@@ -119,7 +119,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
         addCart = GlobalData.getInstance().addCart;
-        if (product.getCart() != null) {
+        if (!product.getCart().isEmpty()) {
             GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
@@ -161,7 +161,6 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
         holder.cardMinusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /** Press Add Card Minus button */
                 product = list.get(section);
                 currentShop = list.get(section).getShop();
@@ -220,8 +219,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     map.put("quantity", holder.cardTextValue.getText().toString());
                     Log.e("AddCart_Text", map.toString());
                     addCart(map);
-
-                    if (product.getCart() != null) {
+                    if (!product.getCart().isEmpty()) {
                         product.getCart().get(0).setQuantity(1);
                     } else {
                         Cart cart = new Cart();
@@ -362,7 +360,6 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 cardTextValue = (TextView) itemView.findViewById(R.id.card_value);
                 viewFullMenu = (TextView) itemView.findViewById(R.id.view_full_menu);
                 cardTextValueTicker = (TickerView) itemView.findViewById(R.id.card_value_ticker);
-
 
                 //Load animation
                 slide_down = AnimationUtils.loadAnimation(context,

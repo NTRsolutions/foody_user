@@ -56,7 +56,6 @@ public class ProductSearchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         productList = new ArrayList<>();
         //Set Categoery shopList adapter
         productsAdapter = new ProductsAdapter(getActivity(),getActivity(), productList);

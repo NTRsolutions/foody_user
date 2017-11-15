@@ -18,10 +18,12 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.fragments.CartChoiceModeFragment;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.AddonBottomSheetFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
+import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Product;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.Shop;
@@ -59,6 +61,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     Dialog dialog;
     Runnable action;
     Shop selectedShop = GlobalData.getInstance().selectedShop;
+    public static CartChoiceModeFragment bottomSheetDialogFragment;
 
 
     //Animation number
@@ -106,6 +109,19 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         }
         selectedShop = product.getShop();
 
+        if(product.getAddons().size() > 0){
+            holder.customize.setVisibility(View.VISIBLE);
+            holder.addons.setVisibility(View.VISIBLE);
+        }else {
+            holder.customize.setVisibility(View.GONE);
+            holder.addons.setVisibility(View.GONE);
+        }
+
+        List<CartAddon> cartAddons = list.get(position).getCartAddons();
+        for (CartAddon cartAddon: cartAddons) {
+            holder.addons.append(cartAddon.getAddonProduct().getAddon().getName()+", ");
+        }
+
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,29 +146,36 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
                 /** Press Add Card Add button */
                 product = list.get(position).getProduct();
+//                if (product.getAddons() != null &&! product.getAddons().isEmpty()) {
+//                    GlobalData.isSelectedProduct = product;
+//                    bottomSheetDialogFragment = new CartChoiceModeFragment();
+//                    bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+//                } else {
                 int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                 holder.cardTextValue.setText("" + countValue);
                 holder.cardTextValueTicker.setText("" + countValue);
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("product_id", product.getId().toString());
                 map.put("quantity", holder.cardTextValue.getText().toString());
+                map.put("cart_id", String.valueOf(list.get(position).getId()));
                 Log.e("AddCart_add", map.toString());
                 addCart(map);
                 int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
                 priceAmount = quantity * product.getPrices().getPrice();
                 holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
+//                }
 
-                //We don't know categories means do nothing,
-                if (categoryList != null) {
-                    //we Know category
-                    for (int i = 0; i < categoryList.size(); i++) {
-                        for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
-                            if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countValue);
-                            }
-                        }
-                    }
-                }
+//                //We don't know categories means do nothing,
+//                if (categoryList != null) {
+//                    //we Know category
+//                    for (int i = 0; i < categoryList.size(); i++) {
+//                        for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
+//                            if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
+//                                categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countValue);
+//                            }
+//                        }
+//                    }
+//                }
 
 
             }
@@ -187,8 +210,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
                     productList = list.get(position);
-                    remove(productList);
-
                     if (categoryList != null) {
                         for (int i = 0; i < categoryList.size(); i++) {
                             for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
@@ -198,6 +219,14 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             }
                         }
                     }
+
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("product_id", product.getId().toString());
+                    map.put("quantity", String.valueOf(countMinusValue));
+                    map.put("cart_id", String.valueOf(list.get(position).getId()));
+                    Log.e("AddCart_Minus", map.toString());
+                    addCart(map);
+                    remove(productList);
 
                 } else {
                     countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
@@ -212,19 +241,17 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             }
                         }
                     }
-
-
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("product_id", product.getId().toString());
+                    map.put("quantity", String.valueOf(countMinusValue));
+                    map.put("cart_id", String.valueOf(list.get(position).getId()));
+                    Log.e("AddCart_Minus", map.toString());
+                    addCart(map);
                 }
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("product_id", product.getId().toString());
-                map.put("quantity", String.valueOf(countMinusValue));
-                Log.e("AddCart_Minus", map.toString());
-                addCart(map);
 
                 int quantity = Integer.parseInt(holder.cardTextValue.getText().toString());
                 priceAmount = quantity * product.getPrices().getPrice();
                 holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
-
 
             }
         });
@@ -252,7 +279,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd;
-        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customize;
+        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customizableTxt, addons, customize;
         TickerView cardTextValueTicker;
         RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
 
@@ -262,6 +289,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
             animationLineCartAdd = (ImageView) itemView.findViewById(R.id.animation_line_cart_add);
             dishNameTxt = (TextView) itemView.findViewById(R.id.dish_name_text);
             priceTxt = (TextView) itemView.findViewById(R.id.price_text);
+            customizableTxt = (TextView) itemView.findViewById(R.id.customizable_txt);
+            addons = (TextView) itemView.findViewById(R.id.addons);
             customize = (TextView) itemView.findViewById(R.id.customize);
          /*    Add card Button Layout*/
             cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);

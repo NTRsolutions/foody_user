@@ -7,22 +7,44 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.R;
+import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.ProductDetailActivity;
+import com.foodie.app.adapter.HotelCatagoeryAdapter;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
+import com.foodie.app.models.AddCart;
+import com.foodie.app.models.Addon;
+import com.foodie.app.models.Cart;
+import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Product;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.foodie.app.adapter.AddOnsAdapter.list;
 
 /**
  * Created by santhosh@appoets.com on 13-11-2017.
@@ -49,6 +71,11 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
     @BindView(R.id.product_price)
     TextView productPrice;
     String addOnsValue="";
+    List<CartAddon> cartAddonList;
+    Cart lastCart;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+    CustomDialog customDialog;
+    HashMap<String, String> repeatCartMap;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -59,22 +86,27 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
         ButterKnife.bind(this, contentView);
         context = getContext();
         activity = getActivity();
+        customDialog = new CustomDialog(context);
 
         if (GlobalData.isSelectedProduct != null) {
-            Product product = GlobalData.isSelectedProduct;
+            product = GlobalData.isSelectedProduct;
             productName.setText(product.getName());
             productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
-            for (int i = 0; i <product.getCart().get(0).getCartAddons().size() ; i++) {
-                if(i==0)
-                    addOnsItemsTxt.setText(product.getCart().get(0).getCartAddons().get(i).getAddonProduct().getAddon().getName());
-                else
-                    addOnsItemsTxt.append(", "+product.getCart().get(0).getCartAddons().get(i).getAddonProduct().getAddon().getName());
+            cartAddonList= new ArrayList<>();
+            if(product.getCart()!=null&&!product.getCart().isEmpty()){
+                cartAddonList=product.getCart().get(product.getCart().size()-1).getCartAddons();
+                addOnsQty.setText(""+cartAddonList.size()+"+ Add on");
+                lastCart=product.getCart().get(product.getCart().size()-1);
+                for (int i = 0; i <cartAddonList.size() ; i++) {
+                    if(i==0)
+                        addOnsItemsTxt.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
+                    else
+                        addOnsItemsTxt.append(", "+cartAddonList.get(i).getAddonProduct().getAddon().getName());
+                }
             }
 
+
         }
-
-
-
 
     }
 
@@ -92,8 +124,60 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 break;
             case R.id.repeat_btn:
+                repeatCartMap = new HashMap<String, String>();
+                repeatCartMap.put("product_id", product.getId().toString());
+                repeatCartMap.put("quantity", String.valueOf(lastCart.getQuantity()+1));
+                repeatCartMap.put("cart_id", String.valueOf(lastCart.getId()));
+                for (int i = 0; i < cartAddonList.size(); i++) {
+                    CartAddon cartAddon = cartAddonList.get(i);
+                        repeatCartMap.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
+                        repeatCartMap.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
+                }
 
+                    for (int i = 0; i <HotelViewActivity.categoryList.size() ; i++) {
+                        for (int j = 0; j <HotelViewActivity.categoryList.get(i).getProducts().size() ; j++) {
+                            Product oldProduct=HotelViewActivity.categoryList.get(i).getProducts().get(j);
+                            if(oldProduct.getId().equals(product.getId())){
+                                HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().get( HotelViewActivity.categoryList.get(i).getProducts().get(j).getCart().size()-1).setQuantity(lastCart.getQuantity()+1);
+                                HotelViewActivity.catagoeryAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                Log.e("AddCart_add", repeatCartMap.toString());
+                HotelCatagoeryAdapter.addCart(repeatCartMap);
+                dismiss();
                 break;
         }
+    }
+
+    private void addItem(HashMap<String, String> map) {
+        customDialog.show();
+        Call<AddCart> call = apiInterface.postAddCart(map);
+        call.enqueue(new Callback<AddCart>() {
+            @Override
+            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+                customDialog.dismiss();
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+                    GlobalData.getInstance().addCart = response.body();
+                    dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddCart> call, Throwable t) {
+                customDialog.dismiss();
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                dismiss();
+            }
+        });
+
     }
 }

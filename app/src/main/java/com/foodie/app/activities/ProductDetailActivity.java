@@ -23,6 +23,7 @@ import com.foodie.app.adapter.SliderPagerAdapter;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Addon;
@@ -45,6 +46,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.adapter.AddOnsAdapter.list;
 import static com.foodie.app.helper.GlobalData.cuisineIdArrayList;
+
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -69,7 +71,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     public static TextView addOnsTxt;
     int cartId = 0;
+    int quantity = 0;
 
+    CustomDialog customDialog;
 
     public static TextView itemText;
     public static TextView viewCart;
@@ -105,8 +109,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
                     if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
                         cartId = GlobalData.addCart.getProductList().get(i).getId();
-                    } else {
-                        cartId = 0;
+                        quantity=GlobalData.addCart.getProductList().get(i).getQuantity();
                     }
                 }
             }
@@ -117,19 +120,26 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("product_id", product.getId().toString());
-                map.put("quantity","1");
-//                if(cartId!=0) map.put("cart_id", String.valueOf(cartId));
-//                if(product.getCart()==null)
-//                map.put("quantity","1");
-//                else
-//                    map.put("quantity",String.valueOf(product.getCart().getQuantity()+1));
-                for (int i = 0; i < list.size(); i++) {
-                    Addon addon = list.get(i);
-                    if (addon.getAddon().getChecked()) {
-                        map.put("product_addons[" + "" + i + "]", addon.getId().toString());
-                        map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
+                if(product.getCart().size()==1&&product.getAddons().isEmpty()){
+                    map.put("quantity",String.valueOf(product.getCart().get(0).getQuantity()+1));
+                    map.put("cart_id",String.valueOf(product.getCart().get(0).getId()));
+                }
+                else if(product.getAddons().isEmpty()&&cartId!=0){
+                    map.put("quantity",String.valueOf(quantity+1));
+                    map.put("cart_id",String.valueOf(cartId));
+                } else {
+                    map.put("quantity","1");
+                    if(!list.isEmpty()){
+                        for (int i = 0; i < list.size(); i++) {
+                            Addon addon = list.get(i);
+                            if (addon.getAddon().getChecked()) {
+                                map.put("product_addons[" + "" + i + "]", addon.getId().toString());
+                                map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
+                            }
+                        }
                     }
                 }
+
                 Log.e("AddCart_add", map.toString());
                 addItem(map);
             }

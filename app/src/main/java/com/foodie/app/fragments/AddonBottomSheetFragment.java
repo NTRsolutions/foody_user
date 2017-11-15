@@ -130,6 +130,7 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
             public void onResponse(@Nonnull Call<AddCart> call,@Nonnull Response<AddCart> response) {
                 if (response.isSuccessful()) {
                     GlobalData.addCart = response.body();
+                    dismiss();
                 }else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());

@@ -60,6 +60,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.foodie.app.adapter.HotelCatagoeryAdapter.bottomSheetDialogFragment;
+
 public class HotelViewActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     @BindView(R.id.toolbar)
@@ -121,8 +123,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     public static Shop shops;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
-    List<Category> categoryList;
-    HotelCatagoeryAdapter catagoeryAdapter;
+    public  static List<Category> categoryList;
+    public  static  HotelCatagoeryAdapter catagoeryAdapter;
     ViewSkeletonScreen skeleton;
     boolean isFavourite=false;
 
@@ -432,6 +434,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
                     setViewcartBottomLayout(GlobalData.getInstance().addCart);
                 }
+                catagoeryAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -451,23 +454,24 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     @Override
     protected void onResume() {
         super.onResume();
-        if (GlobalData.getInstance().shopList != null) {
-            List<Shop> shopList = GlobalData.getInstance().shopList;
-            for (int i = 0; i < shopList.size(); i++) {
-                if (shopList.get(i).getId().equals(shops.getId())) {
-                    shops = shopList.get(i);
-                    categoryList = GlobalData.getInstance().categoryList;
-                    catagoeryAdapter.notifyDataSetChanged();
-                }
-            }
-        }
+//        if (GlobalData.getInstance().shopList != null) {
+//            List<Shop> shopList = GlobalData.getInstance().shopList;
+//            for (int i = 0; i < shopList.size(); i++) {
+//                if (shopList.get(i).getId().equals(shops.getId())) {
+//                    shops = shopList.get(i);
+//                    categoryList = GlobalData.getInstance().categoryList;
+//                    catagoeryAdapter.notifyDataSetChanged();
+//                }
+//            }
+//        }
+        if(bottomSheetDialogFragment!=null)
+            bottomSheetDialogFragment.dismiss();
         //get User Profile Data
         if (GlobalData.getInstance().profileModel != null) {
             HashMap<String, String> map = new HashMap<>();
             map.put("shop", String.valueOf(shops.getId()));
             map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
             getCategories(map);
-
         } else {
             HashMap<String, String> map = new HashMap<>();
             map.put("shop", String.valueOf(shops.getId()));

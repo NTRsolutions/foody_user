@@ -1,6 +1,7 @@
 package com.foodie.app.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +19,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,6 +121,8 @@ public class CartFragment extends Fragment {
     CheckBox useWalletChkBox;
     @BindView(R.id.amount_txt)
     TextView amountTxt;
+    @BindView(R.id.custom_notes)
+    TextView customNotes;
     @BindView(R.id.wallet_layout)
     LinearLayout walletLayout;
     private Context context;
@@ -258,6 +264,7 @@ public class CartFragment extends Fragment {
                     if (itemCount == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
                         dataLayout.setVisibility(View.GONE);
+                        GlobalData.addCart=response.body();
                     } else {
                         errorLayout.setVisibility(View.GONE);
                         dataLayout.setVisibility(View.VISIBLE);
@@ -413,6 +420,7 @@ public class CartFragment extends Fragment {
 //                    checkOut(GlobalData.getInstance().selectedAddress.getId());
                     checkoutMap= new HashMap<>();
                     checkoutMap.put("user_address_id",""+GlobalData.getInstance().selectedAddress.getId());
+                    checkoutMap.put("note",""+customNotes.getText());
                     if(useWalletChkBox.isChecked())
                     checkoutMap.put("wallet","1");
                     else
@@ -452,5 +460,34 @@ public class CartFragment extends Fragment {
 
     @OnClick(R.id.wallet_layout)
     public void onViewClicked() {
+    }
+
+    @OnClick(R.id.custom_notes)
+    public void onAddCustomNotesClicked() {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            final FrameLayout frameView = new FrameLayout(getActivity());
+            builder.setView(frameView);
+
+            final AlertDialog alertDialog = builder.create();
+            LayoutInflater inflater = alertDialog.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.custom_note_popup, frameView);
+
+            final EditText notes = (EditText) dialogView.findViewById(R.id.notes);
+            notes.setText(customNotes.getText());
+            Button submit = (Button) dialogView.findViewById(R.id.custom_note_submit);
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customNotes.setText(notes.getText());
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Extra cheese,partha"
-            android:textColor="@color/colorTextBlack"
+            android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/text_small" />
 
         <TextView
