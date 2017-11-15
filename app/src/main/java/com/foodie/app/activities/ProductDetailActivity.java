@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.foodie.app.adapter.SliderPagerAdapter;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.fragments.SliderDialogFragment;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
@@ -167,7 +169,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         addOnsRv.setAdapter(addOnsAdapter);
 
         slider_image_list.addAll(product.getImages());
-        sliderPagerAdapter = new SliderPagerAdapter(this, slider_image_list);
+        sliderPagerAdapter = new SliderPagerAdapter(this, slider_image_list, true);
         productSlider.setAdapter(sliderPagerAdapter);
         addBottomDots(0);
         productSlider.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
