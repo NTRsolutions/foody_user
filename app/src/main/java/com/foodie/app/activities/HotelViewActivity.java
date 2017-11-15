@@ -427,8 +427,13 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(Call<ShopDetail> call, Response<ShopDetail> response) {
                 skeleton.hide();
-                categoryList=response.body().getCategories();
+                Category category=new Category();
+                featureProductList= new ArrayList<>();
                 featureProductList=response.body().getFeaturedProducts();
+                category.setName(getResources().getString(R.string.featured_products));
+                category.setProducts(featureProductList);
+                categoryList.add(category);
+                categoryList=response.body().getCategories();
                 GlobalData.getInstance().categoryList = categoryList;
                 GlobalData.getInstance().selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);

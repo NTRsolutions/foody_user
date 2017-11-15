@@ -210,6 +210,7 @@
     <string name="remove_item_from_cart">Remove item from cart</string>
     <string name="remove_item_from_cart_description">The item has multiple customiztaions added.Proceed to cart to remove item?</string>
     <string name="add_custom_notes">Add Custom Notes</string>
+    <string name="featured_products">Featured Products</string>
 
 
 </resources>

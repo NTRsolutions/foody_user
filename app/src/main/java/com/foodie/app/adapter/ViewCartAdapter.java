@@ -300,8 +300,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
             cardTextValue = (TextView) itemView.findViewById(R.id.card_value);
             cardTextValueTicker = (TickerView) itemView.findViewById(R.id.card_value_ticker);
         }
-
-
     }
 
 
