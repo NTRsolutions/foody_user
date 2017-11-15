@@ -1,8 +1,11 @@
 package com.foodie.app.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +16,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
+import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.activities.PastOrderDetailActivity;
+import com.foodie.app.activities.ViewCartActivity;
+import com.foodie.app.build.api.ApiClient;
+import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
+import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Item;
 import com.foodie.app.models.Order;
 import com.foodie.app.models.OrderModel;
@@ -27,7 +37,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by santhosh@appoets.com on 28-08-2017.
@@ -41,14 +56,15 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
     Activity activity;
     int lastPosition = -1;
     List<Item> itemList;
-
+    CustomDialog customDialog;
+    ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
     public OrdersAdapter(Context context, Activity activity, List<OrderModel> list) {
         this.context1 = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
         this.activity = activity;
-
+        customDialog = new CustomDialog(context);
 
     }
 
@@ -107,7 +123,22 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         holder.reorderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //do something
+                final HashMap<String, String> map = new HashMap<>();
+                map.put("order_id", String.valueOf(object.getId()));
+                if (GlobalData.addCart != null && !GlobalData.addCart.getProductList().isEmpty()) {
+                    String message = String.format(activity.getResources().getString(R.string.reorder_confirm_message), GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName(), object.getShop().getName());
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Reorder")
+                            .setMessage(message)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    Reorder(map);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                } else {
+                    Reorder(map);
+                }
             }
         });
         int lastPostion = relativePosition + 1;
@@ -172,6 +203,27 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
 
     }
 
+    private void Reorder(HashMap<String, String> map) {
+        customDialog.show();
+        System.out.println(map.toString());
+        Call<AddCart> call=apiInterface.reOrder(map);
+        call.enqueue(new Callback<AddCart>() {
+            @Override
+            public void onResponse(@NonNull Call<AddCart> call, @NonNull Response<AddCart> response) {
+                customDialog.dismiss();
+                if(response.isSuccessful()){
+                    GlobalData.addCart=response.body();
+                    activity.startActivity(new Intent(activity, ViewCartActivity.class));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AddCart> call,@NonNull Throwable t) {
+                customDialog.dismiss();
+            }
+        });
+
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
@@ -222,6 +274,5 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
         }
         return value;
     }
-
 
 }
