@@ -1,6 +1,7 @@
 package com.foodie.app.adapter;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.foodie.app.R;
+import com.foodie.app.fragments.SliderDialogFragment;
 import com.foodie.app.models.Image;
 
 import java.util.List;
@@ -21,10 +23,12 @@ import java.util.List;
 public class SliderPagerAdapter extends PagerAdapter {
     private Activity activity;
     private List<Image> image_arraylist;
+    private Boolean isClickable = false;
 
-    public SliderPagerAdapter(Activity activity, List<Image> image_arraylist) {
+    public SliderPagerAdapter(Activity activity, List<Image> image_arraylist, Boolean isClickable) {
         this.activity = activity;
         this.image_arraylist = image_arraylist;
+        this.isClickable = isClickable;
     }
 
     @Override
@@ -34,7 +38,16 @@ public class SliderPagerAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.layout_slider, container, false);
         ImageView im_slider = view.findViewById(R.id.im_slider);
         Glide.with(activity.getApplicationContext()).load(image_arraylist.get(position).getUrl()).placeholder(R.drawable.ic_restaurant_place_holder).into(im_slider);
-
+        if (isClickable) {
+            im_slider.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager manager = activity.getFragmentManager();
+                    SliderDialogFragment sliderDialogFragment = new SliderDialogFragment();
+                    sliderDialogFragment.show(manager, "slider_dialog");
+                }
+            });
+        }
         container.addView(view);
 
         return view;
