@@ -170,6 +170,9 @@ public interface ApiInterface {
     @POST("api/user/rating")
     Call<Message> rate(@FieldMap HashMap<String, String> params);
 
+    @FormUrlEncoded
+    @POST("api/user/reorder")
+    Call <AddCart> reOrder(@FieldMap HashMap<String, String> params);
 
      /*-------------DISPUTE--------------------*/
 
