@@ -273,8 +273,15 @@ public class CartFragment extends Fragment {
                             //Get Total item Quantity
                             itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
                             //Get product price
-                            if (response.body().getProductList().get(i).getProduct().getPrices().getPrice() != null)
+                            AddCart addCart=response.body();
+                            if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
+                            if (addCart.getProductList().get(i).getCartAddons() != null && !addCart.getProductList().get(i).getCartAddons().isEmpty()) {
+                                for (int j = 0; j < addCart.getProductList().get(i).getCartAddons().size(); j++) {
+                                    priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * (addCart.getProductList().get(i).getCartAddons().get(j).getQuantity() *
+                                            addCart.getProductList().get(i).getCartAddons().get(j).getAddonProduct().getPrice()));
+                                }
+                            }
                         }
                         GlobalData.getInstance().addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
                         //Set Payment details
@@ -287,11 +294,7 @@ public class CartFragment extends Fragment {
                             }
                         }
                         discountAmount.setText("- " + currency + "" + discount);
-                        serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getTaxPercentage().toString());
                         int topPayAmount = priceAmount - discount;
-                        topPayAmount = topPayAmount + response.body().getDeliveryCharges() + response.body().getTaxPercentage();
-                        ;
-                        payAmount.setText(currency + "" + topPayAmount);
                         //Set Restaurant Details
                         restaurantName.setText(response.body().getProductList().get(0).getProduct().getShop().getName());
                         restaurantDescription.setText(response.body().getProductList().get(0).getProduct().getShop().getDescription());
@@ -299,7 +302,11 @@ public class CartFragment extends Fragment {
                         Glide.with(context).load(image_url).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
                                 .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
                         deliveryChargeValue = response.body().getDeliveryCharges();
-                        tax = response.body().getTaxPercentage();
+                        tax = (int) (topPayAmount*(response.body().getTaxPercentage()*0.01));
+                        topPayAmount=topPayAmount+tax;
+                        topPayAmount = topPayAmount + response.body().getDeliveryCharges();
+                        payAmount.setText(currency + "" + topPayAmount);
+                        serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + String.valueOf(tax));
                         deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
                         viewCartItemList.addAll(response.body().getProductList());
                         viewCartAdapter = new ViewCartAdapter(viewCartItemList, context);

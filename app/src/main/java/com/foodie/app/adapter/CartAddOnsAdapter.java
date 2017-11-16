@@ -21,6 +21,7 @@ import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Addon;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.CartAddon;
+import com.foodie.app.models.Product;
 import com.foodie.app.models.Shop;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
@@ -92,10 +93,10 @@ public class CartAddOnsAdapter extends RecyclerView.Adapter<CartAddOnsAdapter.My
         holder.addonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                addon = list.get(position);
                 if (checked) {
                     holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                     holder.cardAddTextLayout.setVisibility(View.GONE);
-                    addon = list.get(position);
                     addon.getAddon().setChecked(true);
                     setAddOnsText();
                 } else {
@@ -103,7 +104,6 @@ public class CartAddOnsAdapter extends RecyclerView.Adapter<CartAddOnsAdapter.My
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
                     addon.getAddon().setChecked(false);
                     setAddOnsText();
-
                 }
             }
         });
@@ -164,10 +164,10 @@ public class CartAddOnsAdapter extends RecyclerView.Adapter<CartAddOnsAdapter.My
 
         if (GlobalData.cartAddons != null) {
             List<CartAddon> cartAddons = GlobalData.cartAddons;
-            for (CartAddon cartAddon: cartAddons) {
-                System.out.println("addon "+addon.getAddon().getId() +" =="+ cartAddon.getAddonProduct().getAddon().getId());
-                if(addon.getAddon().getId().equals(cartAddon.getAddonProduct().getAddon().getId())){
-                    System.out.println(addon.getAddon().getId() + " = "+cartAddon.getAddonProduct().getAddon().getId());
+            for (CartAddon cartAddon : cartAddons) {
+                System.out.println("addon " + addon.getAddon().getId() + " ==" + cartAddon.getAddonProduct().getAddon().getId());
+                if (addon.getAddon().getId().equals(cartAddon.getAddonProduct().getAddon().getId())) {
+                    System.out.println(addon.getAddon().getId() + " = " + cartAddon.getAddonProduct().getAddon().getId());
                     holder.addonName.setChecked(true);
                     addon.getAddon().setChecked(true);
                     setAddOnsText();
@@ -178,18 +178,33 @@ public class CartAddOnsAdapter extends RecyclerView.Adapter<CartAddOnsAdapter.My
 
     private void setAddOnsText() {
         AddonBottomSheetFragment.addons.setText("");
-        int totalAmount = isSelectedProduct.getPrices().getPrice();
-        for (Addon addon: list) {
-            if (addon.getAddon().getChecked()) {
-                totalAmount = totalAmount + (addon.getQuantity() * addon.getPrice());
-                AddonBottomSheetFragment.addons.append(addon.getAddon().getName()+", ");
+        if (AddonBottomSheetFragment.selectedCart != null) {
+            Product product = AddonBottomSheetFragment.selectedCart.getProduct();
+            int quantity = AddonBottomSheetFragment.selectedCart.getQuantity();
+            priceAmount = AddonBottomSheetFragment.selectedCart.getQuantity() * product.getPrices().getPrice();
+            if (AddonBottomSheetFragment.selectedCart.getCartAddons() != null && !AddonBottomSheetFragment.selectedCart.getCartAddons().isEmpty()) {
+                for (int j = 0; j < AddonBottomSheetFragment.selectedCart.getCartAddons().size(); j++) {
+                    priceAmount = priceAmount + (AddonBottomSheetFragment.selectedCart.getQuantity() * (AddonBottomSheetFragment.selectedCart.getCartAddons().get(j).getQuantity() *
+                            AddonBottomSheetFragment.selectedCart.getCartAddons().get(j).getAddonProduct().getPrice()));
+                }
             }
+            if (quantity == 0)
+                AddonBottomSheetFragment.price.setText(String.valueOf(quantity) + " Item | " + GlobalData.currencySymbol + priceAmount);
+            else
+                AddonBottomSheetFragment.price.setText(String.valueOf(quantity) + " Items | " + GlobalData.currencySymbol + priceAmount);
+        } else {
+            int totalAmount = isSelectedProduct.getPrices().getPrice();
+            for (Addon addon : list) {
+                if (addon.getAddon().getChecked()) {
+                    totalAmount = totalAmount + (addon.getQuantity() * addon.getPrice());
+                    AddonBottomSheetFragment.addons.append(addon.getAddon().getName() + ", ");
+                }
+            }
+            AddonBottomSheetFragment.price.setText("1 Item | " + GlobalData.currencySymbol + totalAmount);
         }
-        AddonBottomSheetFragment.price.setText("1 Item | " + GlobalData.currencySymbol + totalAmount);
+
 
     }
-
-
 
 
     @Override

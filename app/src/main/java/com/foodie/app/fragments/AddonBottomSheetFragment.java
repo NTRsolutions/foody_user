@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.CartAddOnsAdapter;
+import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Addon;
+import com.foodie.app.models.Cart;
 import com.foodie.app.models.Product;
 
 import org.json.JSONObject;
@@ -68,6 +70,9 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
     TextView update;
 
     Unbinder unbinder;
+    Product product;
+
+    public static Cart selectedCart;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -83,70 +88,71 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
         addOnsRv.setItemAnimator(new DefaultItemAnimator());
         addOnsRv.setHasFixedSize(false);
         addOnsRv.setNestedScrollingEnabled(false);
-
-
         addonList = new ArrayList<>();
         CartAddOnsAdapter addOnsAdapter = new CartAddOnsAdapter(addonList, context);
         addOnsRv.setAdapter(addOnsAdapter);
-
-        if (GlobalData.isSelectedProduct != null) {
-            Product product = GlobalData.isSelectedProduct;
-            productName.setText(product.getName());
-            productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
-
+        if (selectedCart != null) {
+            product = selectedCart.getProduct();
+            GlobalData.cartAddons = selectedCart.getCartAddons();
             addonList.clear();
             addonList.addAll(product.getAddons());
             addOnsRv.getAdapter().notifyDataSetChanged();
-
-            update.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Product product = GlobalData.isSelectedProduct;
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity",String.valueOf(GlobalData.isSelctedCart.getQuantity()));
-                    map.put("cart_id", String.valueOf(GlobalData.isSelctedCart.getId()));
-
-                    for (int i = 0; i < list.size(); i++) {
-                        Addon addon = list.get(i);
-                        if (addon.getAddon().getChecked()) {
-                            map.put("product_addons[" + "" + i + "]", addon.getId().toString());
-                            map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
-                        }
-                    }
-                    Log.e("AddCart_add", map.toString());
-                    addItem(map);
-                }
-            });
+        } else if (GlobalData.isSelectedProduct != null) {
+            product = GlobalData.isSelectedProduct;
+            addonList.clear();
+            addonList.addAll(product.getAddons());
+            addOnsRv.getAdapter().notifyDataSetChanged();
         }
+        productName.setText(product.getName());
+        productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
 
-    }
-
-    private void addItem(HashMap<String, String> map) {
-        Call<AddCart> call = apiInterface.postAddCart(map);
-        call.enqueue(new Callback<AddCart>() {
+        update.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(@Nonnull Call<AddCart> call,@Nonnull Response<AddCart> response) {
-                if (response.isSuccessful()) {
-                    GlobalData.addCart = response.body();
-                    dismiss();
-                }else {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            public void onClick(View view) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("product_id", product.getId().toString());
+                map.put("quantity", String.valueOf(GlobalData.isSelctedCart.getQuantity()));
+                map.put("cart_id", String.valueOf(GlobalData.isSelctedCart.getId()));
+                for (int i = 0; i < list.size(); i++) {
+                    Addon addon = list.get(i);
+                    if (addon.getAddon().getChecked()) {
+                        map.put("product_addons[" + "" + i + "]", addon.getId().toString());
+                        map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
                     }
                 }
-            }
-
-            @Override
-            public void onFailure(@Nonnull Call<AddCart> call, @Nonnull Throwable t) {
-                Toast.makeText(getContext(), "Something wrong - addItem AddonBottomSheetFragment", Toast.LENGTH_SHORT).show();
+                Log.e("AddCart_add", map.toString());
+                ViewCartAdapter.addCart(map);
+                dismiss();
             }
         });
 
     }
+
+//    private void addItem(HashMap<String, String> map) {
+//        Call<AddCart> call = apiInterface.postAddCart(map);
+//        call.enqueue(new Callback<AddCart>() {
+//            @Override
+//            public void onResponse(@Nonnull Call<AddCart> call, @Nonnull Response<AddCart> response) {
+//                if (response.isSuccessful()) {
+//                    GlobalData.addCart = response.body();
+//                    dismiss();
+//                } else {
+//                    try {
+//                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+//                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+//                    } catch (Exception e) {
+//                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@Nonnull Call<AddCart> call, @Nonnull Throwable t) {
+//                Toast.makeText(getContext(), "Something wrong - addItem AddonBottomSheetFragment", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+//    }
 
     @Override
     public void onDestroyView() {

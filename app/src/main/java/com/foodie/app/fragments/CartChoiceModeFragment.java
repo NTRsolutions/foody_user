@@ -73,7 +73,7 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
     TextView productPrice;
     String addOnsValue = "";
     List<CartAddon> cartAddonList;
-    Cart lastCart;
+    public  static Cart lastCart;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     CustomDialog customDialog;
     HashMap<String, String> repeatCartMap;
@@ -95,10 +95,14 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
             productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
             cartAddonList = new ArrayList<>();
             if (GlobalData.addCart != null) {
-                for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
-                    if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
-                        lastCart = GlobalData.addCart.getProductList().get(i);
-                        cartAddonList=lastCart.getCartAddons();
+                if(isViewcart){
+                    cartAddonList=lastCart.getCartAddons();
+                }else {
+                    for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
+                        if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
+                            lastCart = GlobalData.addCart.getProductList().get(i);
+                            cartAddonList=lastCart.getCartAddons();
+                        }
                     }
                 }
             } else if (product.getCart() != null && !product.getCart().isEmpty()) {
