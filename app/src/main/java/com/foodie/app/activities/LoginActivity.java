@@ -214,24 +214,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         try {
             if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
                 device_token = SharedHelper.getKey(context, "device_token");
-                utils.print(TAG, "GCM Registration Token: " + device_token);
+                Log.d(TAG, "GCM Registration Token: " + device_token);
             } else {
                 device_token = "" + FirebaseInstanceId.getInstance().getToken();
                 SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
-                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+                Log.d(TAG, "Failed to complete token refresh: " + device_token);
             }
         } catch (Exception e) {
             device_token = "COULD NOT GET FCM TOKEN";
-            utils.print(TAG, "Failed to complete token refresh");
+            Log.d(TAG, "Failed to complete token refresh");
         }
 
         try {
             device_UDID = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            utils.print(TAG, "Device UDID:" + device_UDID);
+            Log.d(TAG, "Device UDID:" + device_UDID);
         } catch (Exception e) {
             device_UDID = "COULD NOT GET UDID";
             e.printStackTrace();
-            utils.print(TAG, "Failed to complete device UDID");
+            Log.d(TAG, "Failed to complete device UDID");
         }
     }
 
@@ -250,7 +250,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onConnected(@Nullable Bundle bundle) {
 
 //                FirebaseAuth.getInstance().signOut();
-                if(mGoogleApiClient.isConnected()) {
+                if (mGoogleApiClient.isConnected()) {
                     Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
                         @Override
                         public void onResult(@NonNull Status status) {
@@ -367,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     public void initValues() {
-        GlobalData.loginBy="manual";
+        GlobalData.loginBy = "manual";
         mobile = edMobileNumber.getText().toString();
         password = edPassword.getText().toString();
         if (!isValidMobile(country_code + mobile)) {
@@ -400,7 +400,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void login(HashMap<String, String> map) {
-        if(!customDialog.isShowing()){
+        if (!customDialog.isShowing()) {
             customDialog = new CustomDialog(context);
             customDialog.setCancelable(false);
             customDialog.show();
@@ -412,8 +412,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             call = apiInterface.postSocialLogin(map);
         call.enqueue(new Callback<LoginModel>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+            public void onResponse(@NonNull Call<LoginModel> call, @NonNull Response<LoginModel> response) {
+                if (response.isSuccessful()) {
+                    SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
+                    GlobalData.accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
+                    getProfile();
+                } else {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -422,17 +426,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    //Get Profile data
-                    SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
-                    GlobalData.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
-                    getProfile();
                 }
-
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginModel> call, @NonNull Throwable t) {
                 customDialog.dismiss();
             }
         });
@@ -447,22 +445,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Call<User> getprofile = apiInterface.getProfile(map);
         getprofile.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 customDialog.dismiss();
                 SharedHelper.putKey(context, "logged", "true");
-                GlobalData.getInstance().profileModel = response.body();
-                GlobalData.getInstance().addCart = new AddCart();
-                GlobalData.getInstance().addCart.setProductList(response.body().getCart());
-                GlobalData.getInstance().addressList = new AddressList();
-                GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
+                GlobalData.profileModel = response.body();
+                GlobalData.addCart = new AddCart();
+                GlobalData.addCart.setProductList(response.body().getCart());
+                GlobalData.addressList = new AddressList();
+                GlobalData.addressList.setAddresses(response.body().getAddresses());
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                 customDialog.dismiss();
-
             }
         });
     }
@@ -470,8 +467,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void fbLogin() {
 
         if (isInternet) {
-            LoginManager.getInstance().logInWithReadPermissions(
-                    LoginActivity.this, Arrays.asList("email"));
+            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email"));
 
             LoginManager.getInstance().registerCallback(callbackManager,
                     new FacebookCallback<LoginResult>() {
