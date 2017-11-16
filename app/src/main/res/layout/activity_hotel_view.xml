@@ -32,6 +32,7 @@
                 android:layout_height="250dp">
 
                 <ImageView
+                    android:contentDescription="@string/restaurant"
                     android:id="@+id/restaurant_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -58,14 +59,13 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:contentInsetStart="0dp"
                 app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginEnd="10dp">
 
                     <!-- Heart and Search Button Layout -->
 
@@ -81,7 +81,7 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_gravity="center"
-                            android:layout_marginRight="35dp"
+                            android:layout_marginEnd="35dp"
                             app:btn_color="#e7e8e9"
                             app:btn_fill_color="@color/colorRed"
                             app:siShape="@raw/icc_heart" />
@@ -91,6 +91,7 @@
                             android:layout_height="16dp"
                             android:layout_gravity="center"
                             android:tint="#e7e8e9"
+                            android:contentDescription="@string/search"
                             app:srcCompat="@drawable/ic_search_icon" />
                     </LinearLayout>
 
@@ -130,13 +131,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical">
-
 
                 <View
                     android:id="@+id/view_line"
@@ -144,8 +143,6 @@
                     android:layout_height="1dp"
                     android:alpha="0"
                     android:background="#EEE" />
-
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -167,7 +164,6 @@
                                 fontPath="fonts/Nunito-Bold.ttf"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Dominos Pizza"
                                 android:textAllCaps="true"
                                 android:textColor="@color/colorPrimaryText"
                                 android:textSize="@dimen/text_large" />
@@ -176,7 +172,6 @@
                                 android:id="@+id/restaurant_subtitle2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="American fast food"
                                 android:textAllCaps="false"
                                 android:textColor="@color/colorSecondaryText"
                                 android:textSize="@dimen/text_medium" />
@@ -229,7 +224,6 @@
                                             android:layout_height="18dp"
                                             android:drawableStart="@drawable/star"
                                             android:gravity="center_horizontal"
-                                            android:text="4.2"
                                             android:textAllCaps="true"
                                             android:textColor="@color/colorPrimaryText"
                                             android:textSize="@dimen/text_small" />
@@ -247,7 +241,6 @@
 
                                 </LinearLayout>
 
-
                             </LinearLayout>
 
                             <LinearLayout
@@ -261,7 +254,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="18dp"
                                     android:gravity="center_horizontal"
-                                    android:text="32 Mins"
                                     android:textAllCaps="true"
                                     android:textColor="@color/colorPrimaryText"
                                     android:textSize="@dimen/text_small" />
@@ -294,7 +286,6 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="18dp"
                                         android:gravity="center"
-                                        android:text="32 Mins"
                                         android:textAllCaps="true"
                                         android:textColor="@color/colorPrimaryText"
                                         android:textSize="@dimen/text_small" />
@@ -373,9 +364,8 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
                                     android:layout_gravity="center"
-                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginStart="5dp"
                                     android:text="Recommended "
                                     android:textAllCaps="true"
                                     android:textColor="@color/colorSecondaryText"
@@ -398,7 +388,7 @@
                             android:id="@+id/offer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_offers"
+                            android:drawableStart="@drawable/ic_offers"
                             android:drawablePadding="10dp"
                             android:gravity="center_vertical"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -450,9 +440,7 @@
 
             </RelativeLayout>
 
-
         </RelativeLayout>
-
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -461,7 +449,7 @@
         layout="@layout/header_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/header_view_end_margin_right"
+        android:layout_marginEnd="@dimen/header_view_end_margin_right"
         app:layout_behavior=".ViewBehavior" />
 
 
@@ -492,7 +480,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="sjdhfbjsda"
                 android:textColor="@color/colorTextWhite"
                 android:textSize="@dimen/text_small_large" />
 
@@ -502,12 +489,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/item_text"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:text="From : Thalapakatti"
                 android:textColor="@color/colorTextWhite"
                 android:textSize="@dimen/text_tiny"
                 android:visibility="gone" />
         </RelativeLayout>
-
 
         <TextView
             android:id="@+id/view_cart"
@@ -525,6 +510,5 @@
             android:textSize="@dimen/text_small_large" />
 
     </RelativeLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

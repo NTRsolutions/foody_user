@@ -54,6 +54,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +81,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     TextView restaurantTitle2;
     @BindView(R.id.restaurant_subtitle2)
     TextView restaurantSubtitle2;
-//    @BindView(R.id.scroll_view)
+    //    @BindView(R.id.scroll_view)
 //    NestedScrollView scrollView;
     public static TextView itemText;
     public static TextView viewCartShopName;
@@ -125,11 +126,11 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     public static Shop shops;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
-    public  static List<Category> categoryList;
-    public  static List<Product> featureProductList;
-    public  static  HotelCatagoeryAdapter catagoeryAdapter;
+    public static List<Category> categoryList;
+    public static List<Product> featureProductList;
+    public static HotelCatagoeryAdapter catagoeryAdapter;
     ViewSkeletonScreen skeleton;
-    boolean isFavourite=false;
+    boolean isFavourite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,8 +176,8 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         }
 
         if (shops.getRatings() != null) {
-            Double ratingvalue = new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-            rating.setText("" + ratingvalue);
+            Double ratingvalue = new BigDecimal(shops.getRatings().getRating()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            rating.setText(String.valueOf(ratingvalue));
         } else
             rating.setText("No Rating");
 
@@ -293,7 +294,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         //Heart Animation Button
         if (heartBtn != null)
             heartBtn.init(this);
-        if (shops.getFavorite() != null||isFavourite) {
+        if (shops.getFavorite() != null || isFavourite) {
             heartBtn.setChecked(true);
             heartBtn.setTag(1);
         } else
@@ -320,7 +321,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                     if (checked) {
                         if (GlobalData.profileModel != null)
                             doFavorite(shops.getId());
-                        else{
+                        else {
                             startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                             overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
                             finish();
@@ -344,12 +345,12 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         Call<Favorite> call = apiInterface.deleteFavorite(id);
         call.enqueue(new Callback<Favorite>() {
             @Override
-            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+            public void onResponse(@NonNull Call<Favorite> call, @NonNull Response<Favorite> response) {
                 Favorite favorite = response.body();
             }
 
             @Override
-            public void onFailure(Call<Favorite> call, Throwable t) {
+            public void onFailure(@NonNull Call<Favorite> call, @NonNull Throwable t) {
 
             }
         });
@@ -360,12 +361,12 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         Call<Favorite> call = apiInterface.doFavorite(id);
         call.enqueue(new Callback<Favorite>() {
             @Override
-            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+            public void onResponse(@NonNull Call<Favorite> call, @NonNull Response<Favorite> response) {
                 Favorite favorite = response.body();
             }
 
             @Override
-            public void onFailure(Call<Favorite> call, Throwable t) {
+            public void onFailure(@NonNull Call<Favorite> call, @NonNull Throwable t) {
 
             }
         });
@@ -385,15 +386,15 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
         }
-        GlobalData.getInstance().notificationCount = itemQuantity;
+        GlobalData.notificationCount = itemQuantity;
         if (itemQuantity == 0) {
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
             // Start animation
             viewCartLayout.startAnimation(slide_down);
         } else if (itemQuantity == 1) {
-            if (shops.getId() == GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+            if (Objects.equals(shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
             String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
@@ -404,9 +405,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 viewCartLayout.startAnimation(slide_up);
             }
         } else {
-            if (shops.getId() != GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+            if (!Objects.equals(shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
 
@@ -425,34 +426,33 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         Call<ShopDetail> call = apiInterface.getCategories(map);
         call.enqueue(new Callback<ShopDetail>() {
             @Override
-            public void onResponse(Call<ShopDetail> call, Response<ShopDetail> response) {
+            public void onResponse(@NonNull Call<ShopDetail> call, @NonNull Response<ShopDetail> response) {
                 skeleton.hide();
                 categoryList.clear();
-                Category category=new Category();
-                featureProductList= new ArrayList<>();
-                featureProductList=response.body().getFeaturedProducts();
+                Category category = new Category();
+                featureProductList = new ArrayList<>();
+                featureProductList = response.body().getFeaturedProducts();
                 category.setName(getResources().getString(R.string.featured_products));
                 category.setProducts(featureProductList);
                 categoryList.add(category);
                 categoryList.addAll(response.body().getCategories());
-                GlobalData.getInstance().categoryList = categoryList;
-                GlobalData.getInstance().selectedShop.setCategories(categoryList);
+                GlobalData.categoryList = categoryList;
+                GlobalData.selectedShop.setCategories(categoryList);
                 catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
                 accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                 accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
                 accompanimentDishesRv.setAdapter(catagoeryAdapter);
-                if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
-                    setViewcartBottomLayout(GlobalData.getInstance().addCart);
+                if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0) {
+                    setViewcartBottomLayout(GlobalData.addCart);
                 }
                 catagoeryAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<ShopDetail> call, Throwable t) {
+            public void onFailure(@NonNull Call<ShopDetail> call, @NonNull Throwable t) {
 
             }
         });
-
 
 
     }
@@ -476,13 +476,13 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 //                }
 //            }
 //        }
-        if(bottomSheetDialogFragment!=null)
+        if (bottomSheetDialogFragment != null)
             bottomSheetDialogFragment.dismiss();
         //get User Profile Data
-        if (GlobalData.getInstance().profileModel != null) {
+        if (GlobalData.profileModel != null) {
             HashMap<String, String> map = new HashMap<>();
             map.put("shop", String.valueOf(shops.getId()));
-            map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
+            map.put("user_id", String.valueOf(GlobalData.profileModel.getId()));
             getCategories(map);
         } else {
             HashMap<String, String> map = new HashMap<>();
