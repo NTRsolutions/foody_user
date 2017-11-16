@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -147,31 +148,28 @@ public class AddCardActivity extends AppCompatActivity {
         Call<Message> call = apiInterface.addCard(cardToken);
         call.enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(Call<Message> call, Response<Message> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    finish();
                 }
-
             }
 
             @Override
-            public void onFailure(Call<Message> call, Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 Toast.makeText(AddCardActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 customDialog.dismiss();
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
-
             }
         });
-
 
     }
 
