@@ -56,14 +56,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_toEndOf="@+id/promo_img"
-                android:layout_toRightOf="@+id/promo_img"
                 android:text="@string/promotion_details"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_medium"
-                android:textStyle="bold" />
+                fontPath="fonts/Nunito-Bold.ttf" />
 
         </RelativeLayout>
 
@@ -78,13 +76,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginStart="@dimen/_15sdp"
                 android:gravity="center"
                 android:text="@string/enter_the_amount"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_medium"
-                android:textStyle="bold" />
+                fontPath="fonts/Nunito-Bold.ttf" />
 
             <EditText
                 android:id="@+id/amount_txt"
@@ -97,7 +95,6 @@
                 android:padding="@dimen/_5sdp"
                 android:layout_toEndOf="@+id/enter_amount_lbl"
                 android:inputType="number"
-                android:layout_toRightOf="@+id/enter_amount_lbl"
                 android:background="@color/colorWhite"
                 android:textColor="@color/colorAccent" />
 

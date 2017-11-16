@@ -6,8 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,19 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
 import com.foodie.app.R;
 import com.foodie.app.adapter.AccountPaymentAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.CustomDialog;
-import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.models.AddMoney;
 import com.foodie.app.models.Card;
-import com.foodie.app.models.PaymentMethod;
-import com.foodie.app.models.WalletHistory;
 
 import org.json.JSONObject;
 
@@ -102,24 +98,24 @@ public class AddMoneyActivity extends AppCompatActivity {
         Call<List<Card>> call = apiInterface.getCardList();
         call.enqueue(new Callback<List<Card>>() {
             @Override
-            public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
+            public void onResponse(@NonNull Call<List<Card>> call, @NonNull Response<List<Card>> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    cardArrayList.clear();
+                    cardArrayList.addAll(response.body());
+                    accountPaymentAdapter.notifyDataSetChanged();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    cardArrayList.clear();
-                    cardArrayList.addAll(response.body());
-                    accountPaymentAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Card>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Card>> call, @NonNull Throwable t) {
                 customDialog.dismiss();
                 Toast.makeText(AddMoneyActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
 
@@ -148,18 +144,17 @@ public class AddMoneyActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.pay_btn:
-                String amount=amountTxt.getText().toString();
+                String amount = amountTxt.getText().toString();
                 if (amount.equalsIgnoreCase("")) {
                     Toast.makeText(context, "Please enter amount", Toast.LENGTH_SHORT).show();
-                }else if( Integer.parseInt(amount)== 0){
+                } else if (Integer.parseInt(amount) == 0) {
                     Toast.makeText(context, "Please enter valid amount", Toast.LENGTH_SHORT).show();
-                }
-                else if (isCardChecked) {
+                } else if (isCardChecked) {
                     for (int i = 0; i < cardArrayList.size(); i++) {
                         if (cardArrayList.get(i).isChecked()) {
                             Card card = cardArrayList.get(i);
-                            HashMap<String, String> map = new HashMap();
-                            map.put("amount", ""+amountTxt.getText().toString());
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("amount", "" + amountTxt.getText().toString());
                             map.put("card_id", card.getCardId());
                             addMoney(map);
                             return;
@@ -199,7 +194,7 @@ public class AddMoneyActivity extends AppCompatActivity {
 //        nbutton.setTextColor(getResources().getColor(R.color.theme));
 //        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
         Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setTextColor(getResources().getColor(R.color.theme));
+        pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
         pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
     }
 
@@ -208,30 +203,28 @@ public class AddMoneyActivity extends AppCompatActivity {
         Call<AddMoney> call = apiInterface.addMoney(map);
         call.enqueue(new Callback<AddMoney>() {
             @Override
-            public void onResponse(Call<AddMoney> call, Response<AddMoney> response) {
+            public void onResponse(@NonNull Call<AddMoney> call, @NonNull Response<AddMoney> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(AddMoneyActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    GlobalData.profileModel.setWalletBalance(response.body().getUser().getWalletBalance());
+                    onBackPressed();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("card_id"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    Toast.makeText(AddMoneyActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    GlobalData.profileModel.setWalletBalance(response.body().getUser().getWalletBalance());
-                    onBackPressed();
                 }
-
             }
 
             @Override
-            public void onFailure(Call<AddMoney> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddMoney> call, @NonNull Throwable t) {
                 customDialog.dismiss();
                 Toast.makeText(AddMoneyActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 }
