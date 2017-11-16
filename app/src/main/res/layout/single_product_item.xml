@@ -68,7 +68,7 @@
     <TextView
         android:id="@+id/addons"
         android:layout_width="match_parent"
-        android:hint="No Addons"
+        android:hint="@string/no_addons"
         android:layout_marginBottom="4dp"
         android:textSize="@dimen/_8sdp"
         android:layout_height="wrap_content" />

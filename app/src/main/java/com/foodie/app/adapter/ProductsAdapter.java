@@ -1,8 +1,12 @@
 package com.foodie.app.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,11 +24,16 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
+import com.foodie.app.activities.LoginActivity;
+import com.foodie.app.activities.ProductDetailActivity;
+import com.foodie.app.activities.ViewCartActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
+import com.foodie.app.fragments.CartChoiceModeFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Cart;
+import com.foodie.app.models.ClearCart;
 import com.foodie.app.models.Product;
 import com.foodie.app.models.Shop;
 import com.robinhood.ticker.TickerUtils;
@@ -40,6 +50,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.foodie.app.helper.GlobalData.notificationCount;
+import static com.foodie.app.helper.GlobalData.profileModel;
 import static com.foodie.app.helper.GlobalData.selectedShop;
 
 /**
@@ -63,6 +74,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
     Animation slide_down, slide_up;
     boolean isShopIsChanged = true;
     Shop currentShop = new Shop();
+    public static CartChoiceModeFragment bottomSheetDialogFragment;
 
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
@@ -146,15 +158,30 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 /** Press Add Card Add button */
                 product = list.get(section);
                 currentShop = list.get(section).getShop();
-                int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
-                holder.cardTextValue.setText("" + countValue);
-                holder.cardTextValueTicker.setText("" + countValue);
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("product_id", product.getId().toString());
-                map.put("quantity", holder.cardTextValue.getText().toString());
-                Log.e("AddCart_add", map.toString());
-                addCart(map);
-                product.getCart().get(0).setQuantity(countValue);
+                if (product.getAddons() != null && !product.getAddons().isEmpty()) {
+                    GlobalData.isSelectedProduct = product;
+                    bottomSheetDialogFragment = new CartChoiceModeFragment();
+                    bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+                    CartChoiceModeFragment.isViewcart=false;
+                } else {
+                    int cartId = 0;
+                    for (int i = 0; i < addCart.getProductList().size(); i++) {
+                        if (addCart.getProductList().get(i).getProductId().equals(product.getId())) {
+                            cartId = addCart.getProductList().get(i).getId();
+                        }
+                    }
+                    int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
+                    holder.cardTextValue.setText("" + countValue);
+                    holder.cardTextValueTicker.setText("" + countValue);
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("product_id", product.getId().toString());
+                    map.put("quantity", holder.cardTextValue.getText().toString());
+                    map.put("cart_id", String.valueOf(cartId));
+                    Log.e("AddCart_add", map.toString());
+                    addCart(map);
+                }
+
+
             }
         });
 
@@ -164,6 +191,12 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 /** Press Add Card Minus button */
                 product = list.get(section);
                 currentShop = list.get(section).getShop();
+                int cartId = 0;
+                for (int i = 0; i < addCart.getProductList().size(); i++) {
+                    if (addCart.getProductList().get(i).getProductId().equals(product.getId())) {
+                        cartId = addCart.getProductList().get(i).getId();
+                    }
+                }
                 if (holder.cardTextValue.getText().toString().equalsIgnoreCase("1")) {
                     int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
@@ -175,20 +208,48 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", "0");
+                    map.put("cart_id", String.valueOf(cartId));
                     Log.e("AddCart_Minus", map.toString());
                     addCart(map);
-                    product.setCart(null);
                 } else {
-                    int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
-                    holder.cardTextValue.setText("" + countMinusValue);
-                    holder.cardTextValueTicker.setText("" + countMinusValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity", holder.cardTextValue.getText().toString());
-                    Log.e("AddCart_Minus", map.toString());
-                    addCart(map);
-                    //Add model values
-                    product.getCart().get(0).setQuantity(countMinusValue);
+                    if (product.getCart().size() == 1) {
+                        int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
+                        holder.cardTextValue.setText("" + countMinusValue);
+                        holder.cardTextValueTicker.setText("" + countMinusValue);
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("product_id", product.getId().toString());
+                        map.put("quantity", holder.cardTextValue.getText().toString());
+                        map.put("cart_id", String.valueOf(cartId));
+                        Log.e("AddCart_Minus", map.toString());
+                        addCart(map);
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(context.getResources().getString(R.string.remove_item_from_cart))
+                                .setMessage(context.getResources().getString(R.string.remove_item_from_cart_description))
+                                .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                        context.startActivity(new Intent(context, ViewCartActivity.class));
+                                        activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+
+                                    }
+                                })
+                                .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        nbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+                        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                        pbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+                    }
                 }
             }
         });
@@ -206,35 +267,119 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             @Override
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
+                product = list.get(section);
 
-                if (GlobalData.getInstance().profileModel != null) {
-                    product = list.get(section);
-                    currentShop = list.get(section).getShop();
-                    holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                    holder.cardAddTextLayout.setVisibility(View.GONE);
-                    holder.cardTextValue.setText("1");
-                    holder.cardTextValueTicker.setText("1");
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("product_id", product.getId().toString());
-                    map.put("quantity", holder.cardTextValue.getText().toString());
-                    Log.e("AddCart_Text", map.toString());
-                    addCart(map);
-                    if (!product.getCart().isEmpty()) {
-                        product.getCart().get(0).setQuantity(1);
+                if (profileModel != null) {
+                    if (currentShop != null && currentShop.getId().equals(list.get(section).getShop().getId())) {
+                        currentShop = list.get(section).getShop();
+                        if (product.getAddons() != null && product.getAddons().size() != 0) {
+                            GlobalData.isSelectedProduct = product;
+                            context.startActivity(new Intent(context, ProductDetailActivity.class));
+                            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                        } else {
+                            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                            holder.cardAddTextLayout.setVisibility(View.GONE);
+                            holder.cardTextValue.setText("1");
+                            holder.cardTextValueTicker.setText("1");
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("product_id", product.getId().toString());
+                            map.put("quantity", holder.cardTextValue.getText().toString());
+                            Log.e("AddCart_Text", map.toString());
+                            addCart(map);
+                        }
+
                     } else {
-                        Cart cart = new Cart();
-                        cart.setQuantity(1);
-                        product.getCart().add(cart);
+                        Log.e("IsShopchanged", "True");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
+                                .setMessage(context.getResources().getString(R.string.do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant))
+                                .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                        clearCart();
+                                        isShopIsChanged = false;
+                                        if (product.getAddons() != null && product.getAddons().size() != 0) {
+                                            GlobalData.isSelectedProduct = product;
+                                            context.startActivity(new Intent(context, ProductDetailActivity.class));
+                                            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                                        } else {
+                                            GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
+                                            product = list.get(section);
+                                            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                                            holder.cardAddTextLayout.setVisibility(View.GONE);
+                                            holder.cardTextValue.setText("1");
+                                            holder.cardTextValueTicker.setText("1");
+                                            HashMap<String, String> map = new HashMap<String, String>();
+                                            map.put("product_id", product.getId().toString());
+                                            map.put("quantity", holder.cardTextValue.getText().toString());
+                                            Log.e("AddCart_Text", map.toString());
+                                            addCart(map);
+                                        }
+
+                                    }
+                                })
+                                .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        nbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+                        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                        pbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+
+
                     }
 
+
                 } else {
+                    activity.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                    activity.finish();
                     Toast.makeText(context, context.getResources().getString(R.string.please_login_and_order_dishes), Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
     }
+
+    private void clearCart() {
+        Call<ClearCart> call = apiInterface.clearCart();
+        call.enqueue(new Callback<ClearCart>() {
+            @Override
+            public void onResponse(Call<ClearCart> call, Response<ClearCart> response) {
+
+                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else if (response.isSuccessful()) {
+//                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    selectedShop = HotelViewActivity.shops;
+                    GlobalData.getInstance().addCart.getProductList().clear();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ClearCart> call, Throwable t) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                GlobalData.getInstance().addCartShopId = selectedShop.getId();
+            }
+        });
+
+    }
+
 
     private void addCart(HashMap<String, String> map) {
         Call<AddCart> call = apiInterface.postAddCart(map);

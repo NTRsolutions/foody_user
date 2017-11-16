@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +75,7 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
 
     Unbinder unbinder;
     Product product;
+   BottomSheetBehavior mBottomSheetBehavior ;
 
     public static Cart selectedCart;
 
@@ -78,7 +83,7 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(final Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        View contentView = View.inflate(getContext(), R.layout.addon_bottom_sheet_fragment, null);
+        final View contentView = View.inflate(getContext(), R.layout.addon_bottom_sheet_fragment, null);
         dialog.setContentView(contentView);
         ButterKnife.bind(this, contentView);
         context = getContext();
@@ -88,6 +93,31 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
         addOnsRv.setItemAnimator(new DefaultItemAnimator());
         addOnsRv.setHasFixedSize(false);
         addOnsRv.setNestedScrollingEnabled(false);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
+        CoordinatorLayout.Behavior behavior = params.getBehavior();
+
+        if (behavior != null && behavior instanceof BottomSheetBehavior) {
+            mBottomSheetBehavior = (BottomSheetBehavior) behavior;
+            mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                }
+            });
+            contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    contentView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    int height = contentView.getMeasuredHeight();
+                    mBottomSheetBehavior.setPeekHeight(height);
+                }
+            });
+        }
         addonList = new ArrayList<>();
         CartAddOnsAdapter addOnsAdapter = new CartAddOnsAdapter(addonList, context);
         addOnsRv.setAdapter(addOnsAdapter);
@@ -128,31 +158,37 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
 
     }
 
-//    private void addItem(HashMap<String, String> map) {
-//        Call<AddCart> call = apiInterface.postAddCart(map);
-//        call.enqueue(new Callback<AddCart>() {
-//            @Override
-//            public void onResponse(@Nonnull Call<AddCart> call, @Nonnull Response<AddCart> response) {
-//                if (response.isSuccessful()) {
-//                    GlobalData.addCart = response.body();
-//                    dismiss();
-//                } else {
-//                    try {
-//                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-//                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-//                    } catch (Exception e) {
-//                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@Nonnull Call<AddCart> call, @Nonnull Throwable t) {
-//                Toast.makeText(getContext(), "Something wrong - addItem AddonBottomSheetFragment", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
-//    }
+    private void setAddOnsText() {
+        int quantity = 0;
+        int priceAmount = 0;
+        boolean once=true;
+        AddonBottomSheetFragment.addons.setText("");
+        if (selectedCart != null) {
+            Product product = AddonBottomSheetFragment.selectedCart.getProduct();
+            quantity = AddonBottomSheetFragment.selectedCart.getQuantity();
+            priceAmount = quantity * product.getPrices().getPrice();
+            for (Addon addon : list) {
+                if (addon.getAddon().getChecked()) {
+                    if (once){
+                        addons.append(addon.getAddon().getName());
+                        once=false;
+                    }
+                    else{
+                        AddonBottomSheetFragment.addons.append(", " + addon.getAddon().getName());
+                    }
+
+                    priceAmount = priceAmount + (quantity * (addon.getQuantity() * addon.getPrice()));
+                }
+            }
+            if (quantity == 1)
+                AddonBottomSheetFragment.price.setText(String.valueOf(quantity) + " Item | " + GlobalData.currencySymbol + priceAmount);
+            else
+                AddonBottomSheetFragment.price.setText(String.valueOf(quantity) + " Items | " + GlobalData.currencySymbol + priceAmount);
+
+        }
+    }
+
 
     @Override
     public void onDestroyView() {

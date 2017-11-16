@@ -2,6 +2,7 @@ package com.foodie.app.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -304,6 +305,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 AddonBottomSheetFragment bottomSheetDialogFragment = new AddonBottomSheetFragment();
                 bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
                 AddonBottomSheetFragment.selectedCart=list.get(position);
+                // Right here!
+
             }
         });
 

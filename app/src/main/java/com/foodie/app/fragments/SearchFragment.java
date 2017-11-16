@@ -47,6 +47,7 @@ import retrofit2.Response;
  */
 
 public class SearchFragment extends Fragment {
+
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.view_line1)
