@@ -213,6 +213,9 @@
     <string name="add_custom_notes">Add Custom Notes</string>
     <string name="featured_products">Featured Products</string>
     <string name="reorder_confirm_message">Your cart contains dishes from %1$s. Do you want to discard the selection and add dishes from %2$s ?</string>
+    <string name="no_result">No Results</string>
+    <string name="what_is_the_love">what is the love</string>
+    <string name="fav_description">Once you favorite a restaurant, it will appear here.</string>
 
 
 </resources>
