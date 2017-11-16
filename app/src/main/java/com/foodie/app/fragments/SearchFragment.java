@@ -69,6 +69,7 @@ public class SearchFragment extends Fragment {
 
     public static List<Shop> shopList;
     public static List<Product> productList;
+    ViewPagerAdapter adapter;
 
 
     @Override
@@ -125,10 +126,8 @@ public class SearchFragment extends Fragment {
         searchEt = (EditText) toolbarLayout.findViewById(R.id.search_et);
         progressBar = (ProgressBar) toolbarLayout.findViewById(R.id.progress_bar);
         searchCloseImg = (ImageView) toolbarLayout.findViewById(R.id.search_close_img);
-//        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.showSoftInput(searchEt, InputMethodManager.SHOW_IMPLICIT);
         //ViewPager Adapter
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new RestaurantSearchFragment(), "RESTAURANT");
         adapter.addFragment(new ProductSearchFragment(), "DISHES");
         viewPager.setAdapter(adapter);
@@ -206,6 +205,7 @@ public class SearchFragment extends Fragment {
                     productList.clear();
                     shopList.addAll(response.body().getShops());
                     productList.addAll(response.body().getProducts());
+                    adapter.notifyDataSetChanged();
 //                    skeletonScreen.hide();
                     ProductSearchFragment.productsAdapter.notifyDataSetChanged();
                     RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
