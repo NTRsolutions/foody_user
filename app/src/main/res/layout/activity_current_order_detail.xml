@@ -7,25 +7,19 @@
     android:focusableInTouchMode="true"
     tools:context="com.foodie.app.activities.CurrentOrderDetailActivity">
 
-
-    <!--  Toolbar   -->
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:contentInsetEnd="0dp"
-        android:contentInsetLeft="0dp"
-        android:contentInsetRight="0dp"
-        android:contentInsetStart="0dp"
         android:elevation="1dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ToolBarStyle"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetRight="0dp"
-        app:contentInsetStart="0dp">
+        app:contentInsetStart="0dp"
+        tools:targetApi="lollipop">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +27,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -43,7 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Order #1001"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_small_large" />
@@ -53,7 +46,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="1item, $250"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="@dimen/text_tiny" />
 
@@ -65,13 +57,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/activity_vertical_margin_half"
                 android:gravity="center"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textColor="@color/theme"
                 android:textSize="@dimen/text_small"
                 android:visibility="gone" />
 
         </LinearLayout>
-
 
     </android.support.v7.widget.Toolbar>
 
@@ -90,9 +81,8 @@
                 android:id="@+id/map_touch_rel"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_180sdp">
-                <!--  Map Fragment-->
-                <fragment
 
+                <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
@@ -106,9 +96,7 @@
                     android:layout_height="match_parent"
                     android:src="@android:color/transparent" />
 
-
             </RelativeLayout>
-
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/order_flow_rv"
@@ -120,25 +108,20 @@
 
             </android.support.v7.widget.RecyclerView>
 
-
-            <!--   Order Status Layout-->
-
             <RelativeLayout
                 android:id="@+id/order_status_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/view_line2"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:visibility="gone">
 
-
                 <ImageView
                     android:id="@+id/order_succeess_image"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
                     android:src="@drawable/ic_circle_tick" />
 
                 <TextView
@@ -146,13 +129,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/order_succeess_image"
-                    android:text="Order Delivered Successfully "
+                    android:layout_toEndOf="@id/order_succeess_image"
+                    android:text="@string/order_delivered_successfully"
                     android:textColor="@color/colorGreen"
                     android:textSize="@dimen/text_medium" />
 
             </RelativeLayout>
-
 
             <View
                 android:layout_width="match_parent"
@@ -160,9 +142,6 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/colorSecondaryText"
                 android:layerType="software" />
-
-
-            <!--   Delivery id and Time info Layout-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -175,7 +154,6 @@
                     android:id="@+id/order_id_txt_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="#8888"
                     android:textColor="@color/theme"
                     android:textSize="@dimen/text_medium" />
 
@@ -184,12 +162,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="8:30PM"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 
             </RelativeLayout>
-
 
             <View
                 android:layout_width="match_parent"
@@ -198,18 +174,14 @@
                 android:background="@color/colorSecondaryText"
                 android:layerType="software" />
 
-            <!-- Order Detail Fragment-->
-
             <FrameLayout
                 android:id="@+id/order_detail_fargment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"></FrameLayout>
-
+                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
 
 </RelativeLayout>
