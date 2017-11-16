@@ -135,6 +135,7 @@
     <string name="description_5">Your order is delivered successfully</string>
 
     <!--Past Order Page-->
+    <string name="order_delivered_successfully">Order Delivered Successfully</string>
     <string name="order_delivered_successfully_on">Order Delivered Successfully on </string>
     <string name="address_hint">Dad\'s place, John\'s Home</string>
     <string name="cancel">Cancel</string>
@@ -212,6 +213,10 @@
     <string name="add_custom_notes">Add Custom Notes</string>
     <string name="featured_products">Featured Products</string>
     <string name="reorder_confirm_message">Your cart contains dishes from %1$s. Do you want to discard the selection and add dishes from %2$s ?</string>
+    <string name="no_result">No Results</string>
+    <string name="what_is_the_love">what is the love</string>
+    <string name="fav_description">Once you favorite a restaurant, it will appear here.</string>
+    <string name="close">Close</string>
     <string name="no_addons">No Addons</string>
 
 

@@ -79,8 +79,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         model.setCuisines(cuisineList1);
         modelList.add(model);
         filters = new ArrayList<>();
-        if(GlobalData.cuisineList!=null){
-            for (Cuisine obj: GlobalData.cuisineList) {
+        if (GlobalData.cuisineList != null) {
+            for (Cuisine obj : GlobalData.cuisineList) {
                 filters.add(obj.getName());
             }
             model = new FilterModel();

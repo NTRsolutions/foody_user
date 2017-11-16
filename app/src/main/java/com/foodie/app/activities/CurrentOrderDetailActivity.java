@@ -91,6 +91,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -196,8 +197,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         };
         List<OrderFlow> orderFlowList = new ArrayList<>();
         orderFlowList.add(new OrderFlow(getString(R.string.order_placed), getString(R.string.description_1), R.drawable.ic_order_placed, ORDER_STATUS.get(0)));
-        orderFlowList.add(new OrderFlow(getString(R.string.order_confirmed), getString(R.string.description_2), R.drawable.ic_order_confirmed, ORDER_STATUS.get(1) ));
-        orderFlowList.add(new OrderFlow(getString(R.string.order_processed), getString(R.string.description_3), R.drawable.ic_order_processed, ORDER_STATUS.get(2)+ORDER_STATUS.get(3) + ORDER_STATUS.get(4)));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_confirmed), getString(R.string.description_2), R.drawable.ic_order_confirmed, ORDER_STATUS.get(1)));
+        orderFlowList.add(new OrderFlow(getString(R.string.order_processed), getString(R.string.description_3), R.drawable.ic_order_processed, ORDER_STATUS.get(2) + ORDER_STATUS.get(3) + ORDER_STATUS.get(4)));
         orderFlowList.add(new OrderFlow(getString(R.string.order_pickedup), getString(R.string.description_4), R.drawable.ic_order_picked_up, ORDER_STATUS.get(5) + ORDER_STATUS.get(6)));
         orderFlowList.add(new OrderFlow(getString(R.string.order_delivered), getString(R.string.description_5), R.drawable.ic_order_delivered, ORDER_STATUS.get(7)));
 
@@ -239,8 +240,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
             }
         });
 
-        if (GlobalData.getInstance().isSelectedOrder != null) {
-            Order order = GlobalData.getInstance().isSelectedOrder;
+        if (GlobalData.isSelectedOrder != null) {
+            Order order = GlobalData.isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
             priceAmount = order.getInvoice().getNet();
@@ -618,8 +619,10 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         Call<Order> call = apiInterface.cancelOrder(isSelectedOrder.getId(), reason);
         call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+            public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
+                if (response.isSuccessful()) {
+                    onBackPressed();
+                } else {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -627,16 +630,13 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    onBackPressed();
                 }
             }
 
             @Override
-            public void onFailure(Call<Order> call, Throwable t) {
+            public void onFailure(@NonNull Call<Order> call, @NonNull Throwable t) {
                 customDialog.dismiss();
                 Toast.makeText(CurrentOrderDetailActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -657,19 +657,11 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         Call<Order> call = apiInterface.getParticularOrders(order_id);
         call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
+                if (response.isSuccessful()) {
                     isSelectedOrder = response.body();
                     Log.i("isSelectedOrder : ", isSelectedOrder.toString());
-
-                    if (isSelectedOrder.getStatus().equals("PICKEDUP") || isSelectedOrder.getStatus().equals("ARRIVED")||isSelectedOrder.getStatus().equals("ASSIGNED")) {
+                    if (isSelectedOrder.getStatus().equals("PICKEDUP") || isSelectedOrder.getStatus().equals("ARRIVED") || isSelectedOrder.getStatus().equals("ASSIGNED")) {
                         liveNavigation(isSelectedOrder.getTransporter().getLatitude(),
                                 isSelectedOrder.getTransporter().getLongitude());
                     }
@@ -677,12 +669,18 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                         previousStatus = isSelectedOrder.getStatus();
                         adapter.notifyDataSetChanged();
                     }
-
+                } else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<Order> call, Throwable t) {
+            public void onFailure(@NonNull Call<Order> call, @NonNull Throwable t) {
 
             }
         });
@@ -706,7 +704,6 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                 providerMarker = mMap.addMarker(markerOptions);
             }
         }
-
     }
 
     //car Motion Animation
@@ -794,8 +791,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         System.out.println("Time : " + time);
         String value = "";
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
 
             if (time != null) {
                 Date date = df.parse(time);
@@ -828,8 +825,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
             @Override
             public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Something wrong - rateTransporter", Toast.LENGTH_SHORT).show();
-                finish();
                 startActivity(new Intent(context, OrdersActivity.class));
+                finish();
             }
         });
     }

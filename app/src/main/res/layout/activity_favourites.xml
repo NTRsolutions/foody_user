@@ -47,6 +47,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:contentDescription="@string/no_result"
                 android:padding="8dp"
                 android:src="@drawable/empty_fav" />
 
@@ -57,7 +58,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="What is the Love"
+                android:text="@string/what_is_the_love"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="22sp"
@@ -69,7 +70,7 @@
                 android:layout_marginTop="8sp"
                 android:gravity="center"
                 android:maxLines="3"
-                android:text="Once you favorite a restaurant, it will appear here."
+                android:text="@string/fav_description"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="14sp"
                 tools:ignore="MissingPrefix" />
@@ -77,6 +78,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.foodie.app.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.PasswordTransformationMethod;
@@ -92,7 +93,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         } else if (!strConfirmPassword.equalsIgnoreCase(strNewPassword)) {
             Toast.makeText(this, "Password and confirm password doesn't match", Toast.LENGTH_SHORT).show();
         } else {
-
             HashMap<String, String> map = new HashMap<>();
             map.put("password_old", strOldPassword);
             map.put("password", strNewPassword);
@@ -108,23 +108,23 @@ public class ChangePasswordActivity extends AppCompatActivity {
         Call<ChangePassword> call = apiInterface.changePassword(map);
         call.enqueue(new Callback<ChangePassword>() {
             @Override
-            public void onResponse(Call<ChangePassword> call, Response<ChangePassword> response) {
+            public void onResponse(@NonNull Call<ChangePassword> call, @NonNull Response<ChangePassword> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<ChangePassword> call, Throwable t) {
+            public void onFailure(@NonNull Call<ChangePassword> call, @NonNull Throwable t) {
 
             }
         });

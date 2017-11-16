@@ -11,10 +11,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        android:minHeight="?attr/actionBarSize"
         app:theme="@style/ToolBarStyle">
 
         <LinearLayout
@@ -24,16 +24,17 @@
 
             <ImageView
                 android:id="@+id/close_img"
-                android:padding="@dimen/_6sdp"
-                android:src="@drawable/ic_close"
                 android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp" />
+                android:layout_height="@dimen/_30sdp"
+                android:contentDescription="@string/close"
+                android:padding="@dimen/_6sdp"
+                android:src="@drawable/ic_close" />
 
             <TextView
-                android:layout_marginStart="@dimen/activity_vertical_margin_half"
                 fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/activity_vertical_margin_half"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/filters"
@@ -42,16 +43,16 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:enabled="false"
-                android:clickable="false"
-                fontPath="fonts/Nunito-Bold.ttf"
-                android:gravity="center"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
                 android:id="@+id/reset_txt"
-                android:alpha="0.5"
+                fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:alpha="0.5"
                 android:background="?attr/selectableItemBackground"
+                android:clickable="false"
+                android:enabled="false"
+                android:gravity="center"
                 android:text="@string/reset"
                 android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
@@ -82,14 +83,14 @@
     </LinearLayout>
 
     <Button
-        android:enabled="false"
-        android:clickable="false"
-        android:alpha="0.5"
         android:id="@+id/apply_filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:alpha="0.5"
         android:background="@color/colorAccent"
+        android:clickable="false"
+        android:enabled="false"
         android:text="@string/apply_filter"
         android:textColor="@color/colorWhite" />
 </RelativeLayout>

@@ -7,13 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -219,29 +219,28 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         Call<Order> call = apiInterface.postCheckout(map);
         call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
+            public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    GlobalData.addCart = null;
+                    GlobalData.notificationCount = 0;
+                    GlobalData.selectedShop = null;
+                    GlobalData.isSelectedOrder = new Order();
+                    GlobalData.isSelectedOrder = response.body();
+                    startActivity(new Intent(context, CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                } else {
                     try {
-
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    GlobalData.getInstance().addCart = null;
-                    GlobalData.getInstance().notificationCount = 0;
-                    GlobalData.getInstance().selectedShop = null;
-                    GlobalData.getInstance().isSelectedOrder = new Order();
-                    GlobalData.getInstance().isSelectedOrder = response.body();
-                    startActivity(new Intent(context, CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<Order> call, Throwable t) {
+            public void onFailure(@NonNull Call<Order> call, @NonNull Throwable t) {
                 Toast.makeText(AccountPaymentActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
@@ -252,26 +251,25 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         Call<List<Card>> call = apiInterface.getCardList();
         call.enqueue(new Callback<List<Card>>() {
             @Override
-            public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
+            public void onResponse(@NonNull Call<List<Card>> call, @NonNull Response<List<Card>> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    cardArrayList.clear();
+                    cardArrayList.addAll(response.body());
+                    accountPaymentAdapter.notifyDataSetChanged();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    cardArrayList.clear();
-                    cardArrayList.addAll(response.body());
-                    accountPaymentAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Card>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Card>> call, @NonNull Throwable t) {
                 customDialog.dismiss();
-
             }
         });
 
@@ -282,16 +280,9 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         Call<Message> call = apiInterface.deleteCard(id);
         call.enqueue(new Callback<Message>() {
             @Override
-            public void onResponse(Call<Message> call, Response<Message> response) {
+            public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     for (int i = 0; i < GlobalData.cardArrayList.size(); i++) {
                         if (GlobalData.cardArrayList.get(i).getId().equals(id)) {
@@ -300,11 +291,18 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                             return;
                         }
                     }
+                } else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<Message> call, Throwable t) {
+            public void onFailure(@NonNull Call<Message> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
                 customDialog.dismiss();
             }

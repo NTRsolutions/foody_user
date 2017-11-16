@@ -73,7 +73,6 @@ public class FavouritesActivity extends AppCompatActivity {
         favoritesRv.setAdapter(adapter);
         getFavorites();
 
-
     }
 
 
@@ -105,7 +104,6 @@ public class FavouritesActivity extends AppCompatActivity {
 
                     model = new FavListModel();
                     model.setHeader("un available");
-
 
                     List<Available> list = new ArrayList<>();
                     for (UnAvailable obj : response.body().getUnAvailable()) {

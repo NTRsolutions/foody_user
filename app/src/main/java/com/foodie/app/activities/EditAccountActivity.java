@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -133,24 +134,24 @@ public class EditAccountActivity extends AppCompatActivity {
         try {
             if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
                 device_token = SharedHelper.getKey(context, "device_token");
-                utils.print(TAG, "GCM Registration Token: " + device_token);
+                Log.d(TAG, "GCM Registration Token: " + device_token);
             } else {
                 device_token = "" + FirebaseInstanceId.getInstance().getToken();
                 SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
-                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+                Log.d(TAG, "Failed to complete token refresh: " + device_token);
             }
         } catch (Exception e) {
             device_token = "COULD NOT GET FCM TOKEN";
-            utils.print(TAG, "Failed to complete token refresh");
+            Log.d(TAG, "Failed to complete token refresh");
         }
 
         try {
             device_UDID = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            utils.print(TAG, "Device UDID:" + device_UDID);
+            Log.d(TAG, "Device UDID:" + device_UDID);
         } catch (Exception e) {
             device_UDID = "COULD NOT GET UDID";
             e.printStackTrace();
-            utils.print(TAG, "Failed to complete device UDID");
+            Log.d(TAG, "Failed to complete device UDID");
         }
     }
 
@@ -199,17 +200,17 @@ public class EditAccountActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 customDialog.cancel();
-                if (response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    GlobalData.profileModel = response.body();
+                    finish();
+                    Toast.makeText(context, getResources().getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().toString());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    GlobalData.profileModel = response.body();
-                    finish();
-                    Toast.makeText(context, getResources().getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -3,9 +3,11 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -35,6 +37,7 @@ import static com.foodie.app.helper.GlobalData.addCart;
 
 public class SplashActivity extends AppCompatActivity {
 
+    int retryCount = 0;
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ConnectionHelper connectionHelper;
@@ -58,10 +61,10 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 //Do something after 3000ms
                 if (SharedHelper.getKey(context, "logged").equalsIgnoreCase("true") && SharedHelper.getKey(context, "logged") != null) {
-                    GlobalData.getInstance().accessToken = SharedHelper.getKey(context, "access_token");
-                    if(connectionHelper.isConnectingToInternet()){
+                    GlobalData.accessToken = SharedHelper.getKey(context, "access_token");
+                    if (connectionHelper.isConnectingToInternet()) {
                         getProfile();
-                    }else {
+                    } else {
                         displayMessage(getString(R.string.oops_connect_your_internet));
                     }
 
@@ -78,28 +81,30 @@ public class SplashActivity extends AppCompatActivity {
         try {
             if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
                 device_token = SharedHelper.getKey(context, "device_token");
-                utils.print(TAG, "GCM Registration Token: " + device_token);
+                Log.d(TAG, "GCM Registration Token: " + device_token);
             } else {
                 device_token = "" + FirebaseInstanceId.getInstance().getToken();
                 SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
-                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+                Log.d(TAG, "Failed to complete token refresh: " + device_token);
             }
         } catch (Exception e) {
             device_token = "COULD NOT GET FCM TOKEN";
-            utils.print(TAG, "Failed to complete token refresh");
+            Log.d(TAG, "Failed to complete token refresh");
         }
 
         try {
             device_UDID = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-            utils.print(TAG, "Device UDID:" + device_UDID);
+            Log.d(TAG, "Device UDID:" + device_UDID);
         } catch (Exception e) {
             device_UDID = "COULD NOT GET UDID";
             e.printStackTrace();
-            utils.print(TAG, "Failed to complete device UDID");
+            Log.d(TAG, "Failed to complete device UDID");
         }
     }
 
     private void getProfile() {
+        retryCount++;
+
         HashMap<String, String> map = new HashMap<>();
         map.put("device_type", "android");
         map.put("device_id", device_UDID);
@@ -107,8 +112,19 @@ public class SplashActivity extends AppCompatActivity {
         Call<User> getprofile = apiInterface.getProfile(map);
         getprofile.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful() && response.errorBody() != null) {
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if (response.isSuccessful()) {
+                    SharedHelper.putKey(context, "logged", "true");
+                    GlobalData.profileModel = response.body();
+                    addCart = new AddCart();
+                    addCart.setProductList(response.body().getCart());
+                    GlobalData.addressList = new AddressList();
+                    GlobalData.addressList.setAddresses(response.body().getAddresses());
+                    if (addCart.getProductList() != null && addCart.getProductList().size() != 0)
+                        GlobalData.addCartShopId = addCart.getProductList().get(0).getProduct().getShopId();
+                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                } else {
                     if (response.code() == 401) {
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, LoginActivity.class));
@@ -120,25 +136,16 @@ public class SplashActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    SharedHelper.putKey(context, "logged", "true");
-                    GlobalData.getInstance().profileModel = response.body();
-                    addCart = new AddCart();
-                    addCart.setProductList(response.body().getCart());
-                    GlobalData.getInstance().addressList = new AddressList();
-                    GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
-                    if (addCart.getProductList() != null && addCart.getProductList().size() != 0)
-                        GlobalData.getInstance().addCartShopId = addCart.getProductList().get(0).getProduct().getShopId();
-                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
                 }
 
 
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                if (retryCount < 5) {
+                    getProfile();
+                }
 
             }
         });
@@ -146,12 +153,11 @@ public class SplashActivity extends AppCompatActivity {
 
     public void displayMessage(String toastString) {
         try {
-            Snackbar.make(getCurrentFocus(), toastString, Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
-        }catch (Exception e){
-            try{
-                Toast.makeText(context,""+toastString,Toast.LENGTH_SHORT).show();
-            }catch (Exception ee){
+            Snackbar.make(getCurrentFocus(), toastString, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+        } catch (Exception e) {
+            try {
+                Toast.makeText(context, "" + toastString, Toast.LENGTH_SHORT).show();
+            } catch (Exception ee) {
                 ee.printStackTrace();
             }
         }
