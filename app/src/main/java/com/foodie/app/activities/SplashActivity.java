@@ -35,6 +35,7 @@ import static com.foodie.app.helper.GlobalData.addCart;
 
 public class SplashActivity extends AppCompatActivity {
 
+    int retryCount = 0;
     Context context;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     ConnectionHelper connectionHelper;
@@ -100,6 +101,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getProfile() {
+        retryCount++;
+
         HashMap<String, String> map = new HashMap<>();
         map.put("device_type", "android");
         map.put("device_id", device_UDID);
@@ -138,7 +141,9 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                if (retryCount < 5) {
+                    getProfile();
+                }
 
             }
         });
