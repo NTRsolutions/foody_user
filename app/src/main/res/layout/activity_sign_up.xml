@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_back"
             android:visibility="gone" />
 
@@ -37,7 +38,6 @@
                 android:id="@+id/app_logo"
                 android:layout_width="@dimen/_120sdp"
                 android:layout_height="@dimen/_120sdp"
-                android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:contentDescription="@string/login"
@@ -50,12 +50,12 @@
                 android:layout_height="@dimen/edit_text_size"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:background="@drawable/shadow_view"
-                android:drawableLeft="@drawable/login_left"
                 android:drawablePadding="@dimen/_10sdp"
+                android:drawableStart="@drawable/login_left"
                 android:hint="@string/name"
                 android:imeOptions="actionNext"
-                android:paddingLeft="@dimen/_10sdp"
-                android:singleLine="true"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_10sdp"
                 app:theme="@style/MyEditTextTheme" />
 
             <EditText
@@ -64,20 +64,20 @@
                 android:layout_height="@dimen/edit_text_size"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:background="@drawable/shadow_view"
-                android:drawableLeft="@drawable/ic_mail"
                 android:drawablePadding="@dimen/_10sdp"
+                android:drawableStart="@drawable/ic_mail"
                 android:hint="@string/email_address"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:paddingLeft="@dimen/_10sdp"
-                android:singleLine="true"
+                android:maxLines="1"
+                android:paddingStart="@dimen/_10sdp"
                 app:theme="@style/MyEditTextTheme" />
 
             <RelativeLayout
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:id="@+id/mobile_number_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_size"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:background="@drawable/shadow_view">
 
                 <ImageView
@@ -85,7 +85,7 @@
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:src="@drawable/flag_in" />
 
                 <TextView
@@ -93,8 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/_6sdp"
-                    android:layout_toRightOf="@+id/countryImage"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_toEndOf="@+id/countryImage"
                     android:gravity="center"
                     android:text="+91"
                     android:textSize="@dimen/text_normal" />
@@ -104,16 +104,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/countryNumber"
+                    android:layout_toEndOf="@+id/countryNumber"
                     android:background="@null"
                     android:hint="@string/mobile_number"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingStart="@dimen/_10sdp"
                     android:textSize="@dimen/text_normal" />
             </RelativeLayout>
-
 
 
             <RelativeLayout
@@ -122,19 +121,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin">
 
-
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/edit_text_size"
                     android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/password_left"
                     android:drawablePadding="@dimen/_10sdp"
+                    android:drawableStart="@drawable/password_left"
                     android:hint="@string/password"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:paddingStart="@dimen/_10sdp"
                     app:theme="@style/MyEditTextTheme" />
 
                 <ImageView
@@ -143,11 +141,10 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
                     android:src="@drawable/ic_eye_open" />
 
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:id="@+id/confirm_password_layout"
@@ -160,12 +157,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/edit_text_size"
                     android:background="@drawable/shadow_view"
-                    android:drawableLeft="@drawable/password_left"
                     android:drawablePadding="@dimen/_10sdp"
+                    android:drawableStart="@drawable/password_left"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:paddingStart="@dimen/_10sdp"
                     app:theme="@style/MyEditTextTheme" />
 
                 <ImageView
@@ -174,25 +171,21 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
                     android:src="@drawable/ic_eye_open" />
 
             </RelativeLayout>
-
 
             <Button
                 android:id="@+id/sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:background="@color/theme"
                 android:text="@string/register"
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
-
 
     </RelativeLayout>
 </ScrollView>

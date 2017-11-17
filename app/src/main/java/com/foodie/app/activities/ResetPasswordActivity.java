@@ -3,6 +3,8 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -83,7 +85,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
-    @OnClick({R.id.change_btn, R.id.sign_in_here,R.id.password_eye_img,R.id.confirm_password_eye_img})
+    @OnClick({R.id.change_btn, R.id.sign_in_here, R.id.password_eye_img, R.id.confirm_password_eye_img})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.change_btn:
@@ -94,23 +96,23 @@ public class ResetPasswordActivity extends AppCompatActivity {
             case R.id.password_eye_img:
                 if (passwordEyeImg.getTag().equals(1)) {
                     newPassword.setTransformationMethod(null);
-                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    passwordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_close));
                     passwordEyeImg.setTag(0);
                 } else {
                     passwordEyeImg.setTag(1);
                     newPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    passwordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_open));
                 }
                 break;
             case R.id.confirm_password_eye_img:
                 if (confirmPasswordEyeImg.getTag().equals(1)) {
                     confirmPassword.setTransformationMethod(null);
-                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    confirmPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_close));
                     confirmPasswordEyeImg.setTag(0);
                 } else {
                     confirmPasswordEyeImg.setTag(1);
                     confirmPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    confirmPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_open));
                 }
                 break;
         }
@@ -144,24 +146,24 @@ public class ResetPasswordActivity extends AppCompatActivity {
         Call<ResetPassword> call = apiInterface.resetPassword(map);
         call.enqueue(new Callback<ResetPassword>() {
             @Override
-            public void onResponse(Call<ResetPassword> call, Response<ResetPassword> response) {
+            public void onResponse(@NonNull Call<ResetPassword> call, @NonNull Response<ResetPassword> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(ResetPasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(context, HomeActivity.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    Toast.makeText(ResetPasswordActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(context, HomeActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 }
             }
 
             @Override
-            public void onFailure(Call<ResetPassword> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResetPassword> call, @NonNull Throwable t) {
 
             }
         });

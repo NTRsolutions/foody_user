@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -83,8 +84,8 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             }
         });
         modelListReference.clear();
-        AddressList addressList= new AddressList();
-        if(GlobalData.profileModel!=null){
+        AddressList addressList = new AddressList();
+        if (GlobalData.profileModel != null) {
             addressList.setHeader(getResources().getString(R.string.saved_addresses));
             addressList.setAddresses(GlobalData.profileModel.getAddresses());
         }
@@ -113,10 +114,10 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
 
 
     private void getAddress() {
-        Call<List<Address>> getres = apiInterface.getAddresses();
-        getres.enqueue(new Callback<List<Address>>() {
+        Call<List<Address>> call = apiInterface.getAddresses();
+        call.enqueue(new Callback<List<Address>>() {
             @Override
-            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+            public void onResponse(@NonNull Call<List<Address>> call, @NonNull Response<List<Address>> response) {
                 if (response.isSuccessful()) {
                     modelList.clear();
                     animationLineCartAdd.setVisibility(View.GONE);
@@ -133,7 +134,7 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Address>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Address>> call, @NonNull Throwable t) {
 
             }
         });

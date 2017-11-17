@@ -15,8 +15,7 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-          >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/lnrMap"
@@ -25,11 +24,10 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:layout_marginBottom="170dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="170dp"
                     android:layout_weight="1">
-
 
 
                     <fragment
@@ -40,15 +38,15 @@
                         android:layout_alignParentStart="true" />
 
                     <ImageView
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:tint="@color/colorTextBlack"
                         android:id="@+id/imgCurrentLoc"
                         android:layout_width="@dimen/_35sdp"
                         android:layout_height="@dimen/_40sdp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_gravity="end"
                         android:layout_margin="@dimen/_10sdp"
-                        android:src="@drawable/ic_locator" />
+                        android:src="@drawable/ic_locator"
+                        android:tint="@color/colorTextBlack" />
 
                     <ImageView
                         android:id="@+id/current_loc_img"
@@ -56,8 +54,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_margin="10dp"
-                        android:contentDescription="@string/app_name"
-                        android:background="@drawable/ic_other_marker" />
+                        android:background="@drawable/ic_other_marker"
+                        android:contentDescription="@string/app_name" />
                 </RelativeLayout>
 
 
@@ -77,12 +75,9 @@
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_back" />
 
-
         </RelativeLayout>
     </RelativeLayout>
 
-    <include
-        layout="@layout/bottom_sheet_save_delivery_location" />
-
+    <include layout="@layout/bottom_sheet_save_delivery_location" />
 
 </android.support.design.widget.CoordinatorLayout>

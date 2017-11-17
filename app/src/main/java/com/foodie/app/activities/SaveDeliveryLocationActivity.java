@@ -185,7 +185,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                                 // Got last known location. In some rare situations this can be null.
                                 if (location != null) {
                                     // Logic to handle location object
-                                    getAddress( location.getLatitude(), location.getLongitude());
+                                    getAddress(location.getLatitude(), location.getLongitude());
 //                                    getAddress(context, location.getLatitude(), location.getLongitude());
                                 }
                             }
@@ -202,7 +202,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
                                 // Logic to handle location object
-                                getAddress( location.getLatitude(), location.getLongitude());
+                                getAddress(location.getLatitude(), location.getLongitude());
 //                                getAddress(context, location.getLatitude(), location.getLongitude());
                             }
                         }
@@ -426,13 +426,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 address.setPincode(obj.getPostalCode());
                 addressHeader = obj.getFeatureName();
                 //SharedHelper.putKey(context, "pickup_address", strReturnedAddress.toString());
-            }
-            else {
-                getAddress(context,latitude,longitude);
+            } else {
+                getAddress(context, latitude, longitude);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            getAddress(context,latitude,longitude);
+            getAddress(context, latitude, longitude);
         }
     }
 
@@ -446,7 +445,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 context.getResources().getString(R.string.google_api_key));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 Log.e("sUCESS", "SUCESS" + response.body());
                 if (response.body() != null) {
                     try {
@@ -459,8 +458,8 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             addressArray.optJSONObject(0).optString("long_name");
                             address.setCity(addressArray.optJSONObject(2).optString("long_name"));
                             address.setState(addressArray.optJSONObject(3).optString("long_name"));
-                            if(addressArray.optJSONObject(4).optString("long_name")!=null)
-                            address.setCountry(addressArray.optJSONObject(4).optString("long_name"));
+                            if (addressArray.optJSONObject(4).optString("long_name") != null)
+                                address.setCountry(addressArray.optJSONObject(4).optString("long_name"));
                             address.setLatitude(latitude);
                             address.setLongitude(longitude);
                             address.setPincode(addressArray.optJSONObject(5).optString("long_name"));
@@ -489,7 +488,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e("onFailure", "onFailure" + call.request().url());
                 addressHeader = "" + latitude + "" + longitude;
 
@@ -570,7 +569,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                         if (isAddressSave) {
                             //select the address data and set to address in Cart fargment page
                             Intent returnIntent = new Intent();
-                            GlobalData.getInstance().selectedAddress = response.body();
+                            GlobalData.selectedAddress = response.body();
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         } else {
@@ -698,9 +697,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 finish();
                 break;
 
-
         }
     }
-
-
+    
 }

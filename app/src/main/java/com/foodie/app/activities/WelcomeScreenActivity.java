@@ -351,4 +351,3 @@ public class WelcomeScreenActivity extends AppCompatActivity implements GoogleAp
         }
     }
 }
-

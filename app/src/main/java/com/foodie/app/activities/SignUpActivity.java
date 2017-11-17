@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
@@ -206,6 +207,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
         getUserCountryInfo();
     }
+
     private void getUserCountryInfo() {
         Locale current = getResources().getConfiguration().locale;
         Country country = Country.getCountryFromSIM(context);
@@ -222,24 +224,24 @@ public class SignUpActivity extends AppCompatActivity {
         try {
             if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
                 device_token = SharedHelper.getKey(context, "device_token");
-                utils.print(TAG, "GCM Registration Token: " + device_token);
+                Log.d(TAG, "GCM Registration Token: " + device_token);
             } else {
                 device_token = "" + FirebaseInstanceId.getInstance().getToken();
                 SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
-                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+                Log.d(TAG, "Failed to complete token refresh: " + device_token);
             }
         } catch (Exception e) {
             device_token = "COULD NOT GET FCM TOKEN";
-            utils.print(TAG, "Failed to complete token refresh");
+            Log.d(TAG, "Failed to complete token refresh");
         }
 
         try {
             device_UDID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            utils.print(TAG, "Device UDID:" + device_UDID);
+            Log.d(TAG, "Device UDID:" + device_UDID);
         } catch (Exception e) {
             device_UDID = "COULD NOT GET UDID";
             e.printStackTrace();
-            utils.print(TAG, "Failed to complete device UDID");
+            Log.d(TAG, "Failed to complete device UDID");
         }
     }
 
@@ -255,23 +257,23 @@ public class SignUpActivity extends AppCompatActivity {
             case R.id.password_eye_img:
                 if (passwordEyeImg.getTag().equals(1)) {
                     passwordEdit.setTransformationMethod(null);
-                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    passwordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_close));
                     passwordEyeImg.setTag(0);
                 } else {
                     passwordEyeImg.setTag(1);
                     passwordEdit.setTransformationMethod(new PasswordTransformationMethod());
-                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    passwordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_open));
                 }
                 break;
             case R.id.confirm_password_eye_img:
                 if (confirmPasswordEyeImg.getTag().equals(1)) {
                     confirmPassword.setTransformationMethod(null);
-                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    confirmPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_close));
                     confirmPasswordEyeImg.setTag(0);
                 } else {
                     confirmPasswordEyeImg.setTag(1);
                     confirmPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    confirmPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_eye_open));
                 }
                 break;
         }
@@ -283,10 +285,10 @@ public class SignUpActivity extends AppCompatActivity {
         Call<RegisterModel> call = apiInterface.postRegister(map);
         call.enqueue(new Callback<RegisterModel>() {
             @Override
-            public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
+            public void onResponse(@NonNull Call<RegisterModel> call, @NonNull Response<RegisterModel> response) {
                 if (response.body() != null) {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("username", GlobalData.getInstance().mobile);
+                    map.put("username", GlobalData.mobile);
                     map.put("password", password);
                     map.put("grant_type", GRANT_TYPE);
                     map.put("client_id", BuildConfigure.CLIENT_ID);
@@ -296,9 +298,9 @@ public class SignUpActivity extends AppCompatActivity {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if(jObjError.optString("email")!=null)
+                        if (jObjError.optString("email") != null)
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
-                        else if(jObjError.optString("error")!=null)
+                        else if (jObjError.optString("error") != null)
                             Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
@@ -309,7 +311,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RegisterModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<RegisterModel> call, @NonNull Throwable t) {
 
             }
         });
@@ -331,7 +333,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onConnected(@Nullable Bundle bundle) {
 
 //                FirebaseAuth.getInstance().signOut();
-                if(mGoogleApiClient.isConnected()) {
+                if (mGoogleApiClient.isConnected()) {
                     Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
                         @Override
                         public void onResult(@NonNull Status status) {
@@ -357,10 +359,10 @@ public class SignUpActivity extends AppCompatActivity {
         Call<LoginModel> call = apiInterface.postLogin(map);
         call.enqueue(new Callback<LoginModel>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+            public void onResponse(@NonNull Call<LoginModel> call, @NonNull Response<LoginModel> response) {
                 if (response.body() != null) {
                     SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
-                    GlobalData.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
+                    GlobalData.accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     //Get Profile data
                     getProfile();
 
@@ -369,17 +371,18 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginModel> call, @NonNull Throwable t) {
 
             }
         });
     }
+
     public void initValues() {
         name = nameEdit.getText().toString();
         email = emailEdit.getText().toString();
         strConfirmPassword = confirmPassword.getText().toString();
-        if(!GlobalData.loginBy.equals("manual"))
-        GlobalData.mobile = country_code + etMobileNumber.getText().toString();
+        if (!GlobalData.loginBy.equals("manual"))
+            GlobalData.mobile = country_code + etMobileNumber.getText().toString();
         password = passwordEdit.getText().toString();
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_username), Toast.LENGTH_SHORT).show();
@@ -387,13 +390,13 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, getResources().getString(R.string.please_enter_your_email), Toast.LENGTH_SHORT).show();
         } else if (!TextUtils.isValidEmail(email)) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_valid_email), Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(etMobileNumber.getText().toString())&&!GlobalData.loginBy.equals("manual")) {
+        } else if (TextUtils.isEmpty(etMobileNumber.getText().toString()) && !GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_your_mobile_number), Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(password)&&GlobalData.loginBy.equals("manual")) {
+        } else if (TextUtils.isEmpty(password) && GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(strConfirmPassword)&&GlobalData.loginBy.equals("manual")) {
+        } else if (TextUtils.isEmpty(strConfirmPassword) && GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_your_confirm_password), Toast.LENGTH_SHORT).show();
-        } else if (!strConfirmPassword.equalsIgnoreCase(password)&&GlobalData.loginBy.equals("manual")) {
+        } else if (!strConfirmPassword.equalsIgnoreCase(password) && GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, getResources().getString(R.string.password_and_confirm_password_doesnot_match), Toast.LENGTH_SHORT).show();
         } else {
             HashMap<String, String> map = new HashMap<>();
@@ -403,13 +406,13 @@ public class SignUpActivity extends AppCompatActivity {
             map.put("password", password);
             map.put("password_confirmation", strConfirmPassword);
             if (connectionHelper.isConnectingToInternet()) {
-                if(GlobalData.loginBy.equals("manual")){
+                if (GlobalData.loginBy.equals("manual")) {
                     signup(map);
-                }else {
-                    HashMap<String,String> map1=new HashMap<>();
+                } else {
+                    HashMap<String, String> map1 = new HashMap<>();
                     map1.put("phone", GlobalData.mobile);
-                    map1.put("login_by",GlobalData.loginBy);
-                    map1.put("accessToken",GlobalData.access_token);
+                    map1.put("login_by", GlobalData.loginBy);
+                    map1.put("accessToken", GlobalData.access_token);
                     getOtpVerification(map1);
                 }
 
@@ -424,38 +427,38 @@ public class SignUpActivity extends AppCompatActivity {
         Call<Otp> call = apiInterface.postOtp(map);
         call.enqueue(new Callback<Otp>() {
             @Override
-            public void onResponse(@NonNull Call<Otp> call, @NonNull  Response<Otp> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
+            public void onResponse(@NonNull Call<Otp> call, @NonNull Response<Otp> response) {
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    GlobalData.otpValue = response.body().getOtp();
+                    startActivity(new Intent(context, OtpActivity.class));
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if(jObjError.has("phone"))
+                        if (jObjError.has("phone"))
                             Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
-                        else if(jObjError.has("email"))
+                        else if (jObjError.has("email"))
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    customDialog.dismiss();
-                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    GlobalData.getInstance().otpValue = response.body().getOtp();
-                    startActivity(new Intent(context, OtpActivity.class));
-                    finish();
                 }
 
             }
 
             @Override
-            public void onFailure(@NonNull Call<Otp> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Otp> call, @NonNull Throwable t) {
                 customDialog.dismiss();
                 Toast.makeText(SignUpActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
+
     private void getProfile() {
         HashMap<String, String> map = new HashMap<>();
         map.put("device_type", "android");
@@ -464,9 +467,17 @@ public class SignUpActivity extends AppCompatActivity {
         Call<User> getprofile = apiInterface.getProfile(map);
         getprofile.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful() && response.errorBody() != null) {
-
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if (response.isSuccessful()) {
+                    SharedHelper.putKey(context, "logged", "true");
+                    GlobalData.profileModel = response.body();
+                    GlobalData.addCart = new AddCart();
+                    GlobalData.addCart.setProductList(response.body().getCart());
+                    GlobalData.addressList = new AddressList();
+                    GlobalData.addressList.setAddresses(response.body().getAddresses());
+                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                } else {
                     if (response.code() == 401) {
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, LoginActivity.class));
@@ -479,21 +490,12 @@ public class SignUpActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    SharedHelper.putKey(context, "logged", "true");
-                    GlobalData.getInstance().profileModel = response.body();
-                    GlobalData.getInstance().addCart = new AddCart();
-                    GlobalData.getInstance().addCart.setProductList(response.body().getCart());
-                    GlobalData.getInstance().addressList = new AddressList();
-                    GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
-                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
 
             }
         });
@@ -511,4 +513,3 @@ public class SignUpActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 }
-

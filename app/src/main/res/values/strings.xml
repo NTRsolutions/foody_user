@@ -85,7 +85,7 @@
     <string name="sign_in">Sign in</string>
     <string name="signup">Sign up</string>
     <string name="search">S e a r c h</string>
-    <string name="search_description">View menus, photos and reviews for restaurants aroud you</string>
+    <string name="search_description">View menus, photos and reviews for restaurants around you</string>
     <string name="bookmark">B o o k m a r k</string>
     <string name="bookmark_description">Add places you want to visit in the future to your bookmark</string>
     <string name="mob_no">Mobile Number</string>
@@ -128,7 +128,7 @@
     <string name="order_cancelled">Order Cancelled</string>
 
     <!--Order Flow Description-->
-    <string name="description_1">We have recieved your order</string>
+    <string name="description_1">We have received your order</string>
     <string name="description_2">Your order has been confirmed</string>
     <string name="description_3">We are preparing your order</string>
     <string name="description_4">Your order is already pickup</string>
@@ -233,6 +233,7 @@
     <string name="add_item">Add Item</string>
     <string name="promotion_list_empty">Promotion list empty</string>
     <string name="promotion_empty_description">Once you have promotion code, it will appear here.</string>
+    <string name="skip">Skip</string>
 
 
 </resources>

@@ -37,7 +37,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
                 android:background="@drawable/button_corner_bg_theme"
                 android:text="@string/add"
                 android:textAllCaps="true"
@@ -66,10 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="$150"
                 android:textColor="@color/theme"
                 android:textSize="@dimen/text_medium" />
-
 
         </RelativeLayout>
 
@@ -97,8 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/_100sdp"
@@ -110,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="No Results"
+                    android:text="@string/no_result"
                     android:textAllCaps="true"
                     android:textColor="@color/colorTextBlack"
                     android:textSize="@dimen/text_medium" />
@@ -119,15 +116,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:text=""
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="@dimen/text_medium" />
 
             </LinearLayout>
 
         </RelativeLayout>
-
-
 
     </LinearLayout>
 </LinearLayout>
