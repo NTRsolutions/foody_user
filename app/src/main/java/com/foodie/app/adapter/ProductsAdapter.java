@@ -272,6 +272,16 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             }
         });
 
+        holder.rootLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalData.isSelectedProduct = list.get(section);
+                context.startActivity(new Intent(context, ProductDetailActivity.class));
+                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+            }
+        });
+
+
         holder.cardAddTextLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -439,7 +449,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd,addOnsIconImg;
         private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, viewFullMenu,customizableTxt;
         TickerView cardTextValueTicker;
-        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout,rootLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
@@ -456,6 +466,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
 
              /*    Add card Button Layout*/
                 cardAddDetailLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_layout);
+                rootLayout = (RelativeLayout) itemView.findViewById(R.id.root_layout);
                 cardAddTextLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_text_layout);
                 cardInfoLayout = (RelativeLayout) itemView.findViewById(R.id.add_card_info_layout);
                 cardAddInfoText = (TextView) itemView.findViewById(R.id.avialablity_time);

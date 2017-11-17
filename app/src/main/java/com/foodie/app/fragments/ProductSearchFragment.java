@@ -63,4 +63,10 @@ public class ProductSearchFragment extends Fragment {
         productRv.setItemAnimator(new DefaultItemAnimator());
         productRv.setAdapter(productsAdapter);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        productsAdapter.notifyDataSetChanged();
+    }
 }

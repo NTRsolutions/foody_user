@@ -205,7 +205,6 @@ public class SearchFragment extends Fragment {
                     productList.clear();
                     shopList.addAll(response.body().getShops());
                     productList.addAll(response.body().getProducts());
-                    adapter.notifyDataSetChanged();
 //                    skeletonScreen.hide();
                     ProductSearchFragment.productsAdapter.notifyDataSetChanged();
                     RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
