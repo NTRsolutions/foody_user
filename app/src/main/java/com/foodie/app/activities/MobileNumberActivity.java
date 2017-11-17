@@ -73,8 +73,7 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class MobileNumberActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
-
+public class MobileNumberActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.app_logo)
     ImageView appLogo;
@@ -110,7 +109,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
 
     Button fb_login;
     JSONObject json;
-    String fb_first_name = "", fb_id = "", profile_img = "", fb_email = "",fb_last_name="";
+    String fb_first_name = "", fb_id = "", profile_img = "", fb_email = "", fb_last_name = "";
     ConnectionHelper helper;
     Boolean isInternet;
 
@@ -162,7 +161,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            isSignUp = bundle.getBoolean("signup",true);
+            isSignUp = bundle.getBoolean("signup", true);
         }
 
         // You can limit the displayed countries
@@ -179,7 +178,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
 
     }
 
-    public  void fbLogin(){
+    public void fbLogin() {
         if (isInternet) {
 
             LoginManager.getInstance().logInWithReadPermissions(
@@ -191,7 +190,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                         public void onSuccess(LoginResult loginResult) {
                             if (AccessToken.getCurrentAccessToken() != null) {
                                 Log.e("loginresult", "" + loginResult.getAccessToken().getToken());
-                                SharedHelper.putKey(MobileNumberActivity.this,"access_token",loginResult.getAccessToken().getToken());
+                                SharedHelper.putKey(MobileNumberActivity.this, "access_token", loginResult.getAccessToken().getToken());
                                 GlobalData.access_token = loginResult.getAccessToken().getToken();
                                 RequestData();
                             }
@@ -244,17 +243,17 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                     try {
                         if (json != null) {
                             GlobalData.name = json.optString("name");
-                            GlobalData.email  = json.optString("email");
+                            GlobalData.email = json.optString("email");
                             com.facebook.Profile profile = com.facebook.Profile.getCurrentProfile();
                             String FBUserID = profile.getId();
                             Log.e("FBUserID", "" + FBUserID);
                             URL image_value = new URL("https://graph.facebook.com/" + FBUserID + "/picture?type=large");
-                            GlobalData.imageUrl  = image_value.toString();
-                            Log.e("Connected FB", "" + GlobalData.name );
-                            Log.e("Connected FB", "" +  GlobalData.email );
-                            Log.e("FBUserPhoto FB",     GlobalData.imageUrl);
+                            GlobalData.imageUrl = image_value.toString();
+                            Log.e("Connected FB", "" + GlobalData.name);
+                            Log.e("Connected FB", "" + GlobalData.email);
+                            Log.e("FBUserPhoto FB", GlobalData.imageUrl);
                             customDialog.dismiss();
-                            GlobalData.loginBy="facebook";
+                            GlobalData.loginBy = "facebook";
                             startActivity(new Intent(context, SignUpActivity.class));
                             overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                             finish();
@@ -303,27 +302,26 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
         Call<ForgotPassword> call = apiInterface.forgotPassword(mobileNumber);
         call.enqueue(new Callback<ForgotPassword>() {
             @Override
-            public void onResponse(Call<ForgotPassword> call, Response<ForgotPassword> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
+            public void onResponse(@NonNull Call<ForgotPassword> call, @NonNull Response<ForgotPassword> response) {
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    GlobalData.profileModel = response.body().getUser();
+                    GlobalData.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
+                    startActivity(new Intent(context, OtpActivity.class).putExtra("signup", false));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    customDialog.dismiss();
-                    GlobalData.profileModel = response.body().getUser();
-                    GlobalData.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
-                    startActivity(new Intent(context, OtpActivity.class).putExtra("signup", false));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<ForgotPassword> call, Throwable t) {
+            public void onFailure(@NonNull Call<ForgotPassword> call, @NonNull Throwable t) {
 
             }
         });
@@ -339,33 +337,30 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
         Call<Otp> call = apiInterface.postOtp(map);
         call.enqueue(new Callback<Otp>() {
             @Override
-            public void onResponse(@NonNull Call<Otp> call,@NonNull  Response<Otp> response) {
-
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
+            public void onResponse(@NonNull Call<Otp> call, @NonNull Response<Otp> response) {
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(MobileNumberActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    GlobalData.otpValue = response.body().getOtp();
+                    startActivity(new Intent(MobileNumberActivity.this, OtpActivity.class));
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if(jObjError.has("phone"))
+                        if (jObjError.has("phone"))
                             Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
-                        else if(jObjError.has("email"))
+                        else if (jObjError.has("email"))
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    customDialog.dismiss();
-                    Toast.makeText(MobileNumberActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    GlobalData.getInstance().otpValue = response.body().getOtp();
-                    startActivity(new Intent(MobileNumberActivity.this, OtpActivity.class));
-                    finish();
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<Otp> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Otp> call, @NonNull Throwable t) {
 
             }
         });
@@ -423,14 +418,14 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        try{
+        try {
             Log.d("Beginscreen", "handleSignInResult:" + result.isSuccess());
             if (result.isSuccess()) {
                 // Signed in successfully, show authenticated UI.
                 GoogleSignInAccount acct = result.getSignInAccount();
-                GlobalData.name=acct.getDisplayName();
-                GlobalData.email=acct.getEmail();
-                GlobalData.imageUrl=""+acct.getPhotoUrl();
+                GlobalData.name = acct.getDisplayName();
+                GlobalData.email = acct.getEmail();
+                GlobalData.imageUrl = "" + acct.getPhotoUrl();
                 Log.d("Google", "display_name:" + acct.getDisplayName());
                 Log.d("Google", "mail:" + acct.getEmail());
                 Log.d("Google", "photo:" + acct.getPhotoUrl());
@@ -438,7 +433,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             } else {
                 Snackbar.make(this.findViewById(android.R.id.content), getResources().getString(R.string.google_login_failed), Snackbar.LENGTH_SHORT).show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -467,7 +462,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             super.onPostExecute(GoogleaccessToken);
             Log.e("Token", GoogleaccessToken);
             GlobalData.access_token = GoogleaccessToken;
-            GlobalData.loginBy="google";
+            GlobalData.loginBy = "google";
             startActivity(new Intent(context, SignUpActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             finish();
@@ -500,13 +495,12 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                 String mobileNumber = country_code + etMobileNumber.getText().toString();
                 if (isValidMobile(mobileNumber)) {
                     GlobalData.mobile = mobileNumber;
-                    GlobalData.loginBy="manual";
-                    if (isSignUp){
-                        HashMap<String,String> map = new HashMap();
-                        map.put("phone",mobileNumber);
+                    GlobalData.loginBy = "manual";
+                    if (isSignUp) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("phone", mobileNumber);
                         getOtpVerification(map);
-                    }
-                    else
+                    } else
                         forgotPassord(mobileNumber);
                 } else {
                     Toast.makeText(this, "Please enter valid mobile number", Toast.LENGTH_SHORT).show();
@@ -516,11 +510,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
     }
 
     private boolean isValidMobile(String phone) {
-        if (phone == null || phone.length() < 6 || phone.length() > 13) {
-            return false;
-        } else {
-            return android.util.Patterns.PHONE.matcher(phone).matches();
-        }
+        return !(phone == null || phone.length() < 6 || phone.length() > 13) && android.util.Patterns.PHONE.matcher(phone).matches();
     }
 
     @Override

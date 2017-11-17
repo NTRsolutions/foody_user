@@ -219,6 +219,7 @@
     <string name="close">Close</string>
     <string name="no_addons">No Addons</string>
     <string name="add_new_address">Add New Address</string>
+    <string name="back">back</string>
 
 
 </resources>
