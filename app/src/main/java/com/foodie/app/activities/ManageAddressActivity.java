@@ -57,6 +57,7 @@ public class ManageAddressActivity extends AppCompatActivity {
     ScrollView rootView;
 
     private SkeletonScreen skeletonScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

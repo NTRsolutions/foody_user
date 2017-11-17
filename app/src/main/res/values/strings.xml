@@ -218,6 +218,7 @@
     <string name="fav_description">Once you favorite a restaurant, it will appear here.</string>
     <string name="close">Close</string>
     <string name="no_addons">No Addons</string>
+    <string name="add_new_address">Add New Address</string>
 
 
 </resources>
