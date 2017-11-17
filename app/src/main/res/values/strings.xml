@@ -220,6 +220,7 @@
     <string name="no_addons">No Addons</string>
     <string name="add_new_address">Add New Address</string>
     <string name="back">back</string>
+    <string name="notifications">Notifications</string>
 
 
 </resources>

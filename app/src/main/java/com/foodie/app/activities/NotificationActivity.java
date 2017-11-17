@@ -43,7 +43,6 @@ public class NotificationActivity extends AppCompatActivity {
         });
         toolbar.setContentInsetsAbsolute(toolbar.getContentInsetLeft(), 0);
 
-
         final ArrayList<NotificationItem> notificationList = new ArrayList<>();
         notificationList.add(new NotificationItem("10% offer for veg orders", "Sep 08,2017", "Use Code AD123"));
         notificationList.add(new NotificationItem("5% offer for Non-veg orders", "Sep 15,2017", "Use Code NV124"));
@@ -53,7 +52,6 @@ public class NotificationActivity extends AppCompatActivity {
         notificationRv.setHasFixedSize(true);
         NotificationAdapter orderItemListAdapter = new NotificationAdapter(notificationList, context);
         notificationRv.setAdapter(orderItemListAdapter);
-
 
     }
 

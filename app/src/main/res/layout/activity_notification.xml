@@ -11,31 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:titleTextColor="@color/colorTextBlack"
-        android:title="OTHER"
         android:elevation="1dp"
         android:minHeight="?attr/actionBarSize"
-        >
+        android:title="@string/other"
+        android:titleTextColor="@color/colorTextBlack">
 
         <TextView
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="16sp"
-            android:textAllCaps="true"
-            android:text="Notifications"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:text="@string/notifications"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="16sp" />
 
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/notification_rv"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
-
-
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar" />
 
 </RelativeLayout>
