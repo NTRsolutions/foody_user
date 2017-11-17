@@ -231,6 +231,8 @@
     <string name="did_not_get_otp">Didn\'t get the OTP</string>
     <string name="resend_otp">Resend OTP</string>
     <string name="add_item">Add Item</string>
+    <string name="promotion_list_empty">Promotion list empty</string>
+    <string name="promotion_empty_description">Once you have promotion code, it will appear here.</string>
 
 
 </resources>

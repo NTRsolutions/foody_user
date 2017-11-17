@@ -26,22 +26,22 @@
     </android.support.v7.widget.Toolbar>
 
     <View
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@+id/toolbar"
         android:background="#eee" />
 
     <RelativeLayout
-        android:layout_marginTop="@dimen/_1sdp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
+        android:layout_marginTop="@dimen/_1sdp"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/promotions_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/error_layout"
@@ -65,7 +65,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Promotion list empty"
+                android:text="@string/promotion_list_empty"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="22sp"
@@ -77,7 +77,7 @@
                 android:layout_marginTop="8sp"
                 android:gravity="center"
                 android:maxLines="3"
-                android:text="Once you have promotion code, it will appear here."
+                android:text="@string/promotion_empty_description"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="14sp"
                 tools:ignore="MissingPrefix" />
@@ -85,6 +85,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
 
 </RelativeLayout>

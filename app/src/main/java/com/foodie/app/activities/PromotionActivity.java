@@ -50,7 +50,6 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     @BindView(R.id.error_layout)
     LinearLayout errorLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,12 +90,11 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
                     promotionsModelArrayList.clear();
                     Log.e("onResponse: ", response.toString());
                     promotionsModelArrayList.addAll(response.body());
-                    if(promotionsModelArrayList.size()==0){
+                    if (promotionsModelArrayList.size() == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         promotionsRv.getAdapter().notifyDataSetChanged();
                     }
-
                 } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().toString());
@@ -145,7 +143,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
             public void onResponse(@NonNull Call<PromotionResponse> call, @NonNull Response<PromotionResponse> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(PromotionActivity.this,getResources().getString(R.string.promo_code_apply_successfully), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PromotionActivity.this, getResources().getString(R.string.promo_code_apply_successfully), Toast.LENGTH_SHORT).show();
                     GlobalData.profileModel.setWalletBalance(response.body().getWalletMoney());
                     gotoFlow();
                 } else {
@@ -166,7 +164,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
     }
 
     private void gotoFlow() {
-        startActivity(new Intent(this, AccountPaymentActivity.class).putExtra("is_show_wallet",true).putExtra("is_show_cash",false));
+        startActivity(new Intent(this, AccountPaymentActivity.class).putExtra("is_show_wallet", true).putExtra("is_show_cash", false));
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
         finish();
     }
