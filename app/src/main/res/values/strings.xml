@@ -221,6 +221,9 @@
     <string name="add_new_address">Add New Address</string>
     <string name="back">back</string>
     <string name="notifications">Notifications</string>
+    <string name="order_list_empty">Order list empty</string>
+    <string name="order_list_empty_description">Once you order a restaurant, it will appear here.</string>
+    <string name="past_orders">Past Orders</string>
 
 
 </resources>

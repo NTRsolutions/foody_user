@@ -66,7 +66,6 @@ public class OrdersActivity extends AppCompatActivity {
     Runnable orderStatusRunnable;
     CustomDialog customDialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,20 +114,13 @@ public class OrdersActivity extends AppCompatActivity {
         Call<List<Order>> call = apiInterface.getPastOders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
-            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+            public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     pastOrderList = new ArrayList<Order>();
                     pastOrderList = response.body();
                     OrderModel model = new OrderModel();
-                    model.setHeader("Past Orders");
+                    model.setHeader(getString(R.string.past_orders));
                     model.setOrders(pastOrderList);
                     modelList.add(model);
                     modelListReference.clear();
@@ -142,11 +134,18 @@ public class OrdersActivity extends AppCompatActivity {
                         errorLayout.setVisibility(View.VISIBLE);
                     } else
                         errorLayout.setVisibility(View.GONE);
+                } else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Order>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Order>> call, @NonNull Throwable t) {
                 customDialog.dismiss();
                 Toast.makeText(OrdersActivity.this, "Some thing went wrong", Toast.LENGTH_SHORT).show();
             }
@@ -159,16 +158,8 @@ public class OrdersActivity extends AppCompatActivity {
         Call<List<Order>> call = apiInterface.getOngoingOrders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
-            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    getPastOrders();
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
+                if (response.isSuccessful()) {
                     if (response.body().size() == 0) {
                         getPastOrders();
                     } else if (onGoingOrderList.size() != response.body().size()) {
@@ -186,12 +177,19 @@ public class OrdersActivity extends AppCompatActivity {
                             errorLayout.setVisibility(View.GONE);
                         getPastOrders();
                     }
+                } else {
+                    getPastOrders();
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Order>> call, Throwable t) {
-
+            public void onFailure(@NonNull Call<List<Order>> call, @NonNull Throwable t) {
                 Toast.makeText(OrdersActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                 getPastOrders();
             }
