@@ -200,6 +200,9 @@
     <string name="skip">Skip</string>
     <string name="food">Food</string>
     <string name="help">Help</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="my_account">My Account</string>
+    <string name="reorder">Reorder</string>
 
 
 </resources>

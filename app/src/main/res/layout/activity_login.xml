@@ -110,6 +110,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:paddingStart="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_8sdp"
                         android:textSize="@dimen/text_normal"
                         app:theme="@style/MyEditTextTheme" />
 

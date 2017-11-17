@@ -23,23 +23,23 @@
                 android:id="@+id/source_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:padding="2dp"
                 android:src="@drawable/ic_map_marker" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/source_image"
+                android:layout_toEndOf="@+id/source_image"
                 android:orientation="vertical">
 
                 <TextView
-                    android:textAllCaps="true"
                     android:id="@+id/restaurant_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="SubWay"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 
@@ -56,21 +56,21 @@
 
 
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/doted_line_layout"
-            android:layout_below="@+id/source_layout"
             android:layout_width="30dp"
-            android:layout_height="30dp">
+            android:layout_height="30dp"
+            android:layout_below="@+id/source_layout">
 
             <ImageView
-                android:layout_centerHorizontal="true"
                 android:id="@+id/dot_line_img"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:scaleType="centerInside"
                 android:background="@drawable/order_cancelled_line"
-                />
+                android:scaleType="centerInside" />
 
         </RelativeLayout>
 
@@ -87,23 +87,23 @@
                 android:id="@+id/destination_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:padding="2dp"
                 android:src="@drawable/ic_home" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/destination_image"
+                android:layout_toEndOf="@+id/destination_image"
                 android:orientation="vertical">
 
                 <TextView
-                    android:textAllCaps="true"
                     android:id="@+id/user_address_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Home"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 
@@ -127,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_below="@id/destination_layout"
-            android:layout_marginLeft="@dimen/_45sdp"
+            android:layout_marginStart="@dimen/_45sdp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@color/colorSecondaryText"
             android:layerType="software" />
@@ -146,7 +146,7 @@
                 android:id="@+id/order_succeess_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
                 android:padding="3dp"
                 android:src="@drawable/ic_circle_tick" />
 
@@ -155,13 +155,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/order_succeess_image"
+                android:layout_toEndOf="@id/order_succeess_image"
                 android:text="Order Delivered Successfully on 12-3-17, 12.00am "
                 android:textColor="@color/colorGreen"
                 android:textSize="@dimen/text_tiny" />
 
         </RelativeLayout>
-
 
         <View
             android:layout_width="match_parent"

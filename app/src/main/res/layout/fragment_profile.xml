@@ -44,8 +44,9 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:maxLines="1"
+                            android:paddingEnd="8dp"
                             android:paddingStart="8dp"
-                            android:text="My Account"
+                            android:text="@string/my_account"
                             android:textColor="@color/colorTextBlack"
                             android:textSize="@dimen/text_medium" />
 
@@ -53,7 +54,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
-                            android:paddingRight="4dp"
+                            android:paddingEnd="4dp"
                             android:paddingStart="8dp"
                             android:text="Manage Address, Favorites, Payment, Orders, Change Password"
                             android:textColor="@color/colorSecondaryText"
@@ -67,7 +68,7 @@
                         android:id="@+id/arrow_image"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_marginTop="3dp"
                         android:padding="3dp"
                         android:src="@drawable/ic_navigate_up_arrow" />
@@ -86,7 +87,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:singleLine="true"
                         android:text="..........................................................................................................................................................................." />
 
 
@@ -100,7 +100,6 @@
 
                 </RelativeLayout>
 
-
             </LinearLayout>
 
             <RelativeLayout
@@ -110,7 +109,6 @@
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="vertical">
-
 
                 <ListView
                     android:id="@+id/profile_setting_lv"
@@ -129,11 +127,9 @@
                     android:background="#eee" />
             </RelativeLayout>
 
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_20sdp"
-                android:layout_below="@id/profile_setting_lv"
                 android:layout_marginTop="30dp"
                 android:background="#eee" />
 
@@ -240,7 +236,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/botttom_bar_size" />
         </LinearLayout>
-
 
     </RelativeLayout>
 </FrameLayout>

@@ -70,11 +70,11 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/order_item_rv"
-                    android:orientation="vertical"
-                    android:nestedScrollingEnabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin">
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical">
 
                 </android.support.v7.widget.RecyclerView>
 
@@ -249,7 +249,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:orientation="horizontal"
-                    android:paddingRight="@dimen/activity_vertical_margin">
+                    android:paddingEnd="@dimen/activity_vertical_margin"
+                    android:paddingStart="@dimen/activity_vertical_margin">
 
                     <LinearLayout
 

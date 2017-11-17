@@ -40,10 +40,11 @@
                 fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_down"
                 android:drawablePadding="8dp"
-                android:drawableRight="@drawable/ic_down"
                 android:maxLines="1"
                 android:paddingEnd="2dp"
+                android:paddingStart="2dp"
                 android:text="Home"
                 android:textAllCaps="true"
                 android:textColor="@color/colorPrimaryText"
@@ -55,8 +56,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-               android:paddingRight="@dimen/_8sdp"
-                android:text="Washington, DC, Green town west..."
+                android:paddingEnd="@dimen/_8sdp"
+                android:paddingStart="@dimen/_8sdp"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/text_tiny" />
 
@@ -78,13 +79,11 @@
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_filter"
             android:gravity="center"
-
             android:text="@string/filter"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/text_tiny" />
 
     </LinearLayout>
-
 
 </RelativeLayout>

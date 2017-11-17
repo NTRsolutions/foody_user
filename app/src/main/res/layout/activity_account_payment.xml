@@ -132,7 +132,6 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
                             android:contentDescription="@string/app_name"
                             android:src="@drawable/ic_add_card" />
 
@@ -142,7 +141,6 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@+id/add_card_img"
-                            android:layout_toRightOf="@+id/add_card_img"
                             android:text="@string/add_new_card"
                             android:textAllCaps="true"
                             android:textColor="@color/colorAccent"
@@ -156,11 +154,11 @@
                 <!--    Cash Payment Layout-->
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/cash_payment_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -183,43 +181,38 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
                             android:contentDescription="@string/app_name"
                             android:src="@drawable/ic_cash" />
 
                         <RadioButton
-                            android:clickable="false"
-                            android:layout_width="match_parent"
                             android:id="@+id/cash_check_box"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@+id/cash_img"
-                            android:layout_toRightOf="@+id/cash_img"
                             android:button="@null"
-                            android:drawableRight="@drawable/check_selector"
+                            android:clickable="false"
+                            android:drawableEnd="@drawable/check_selector"
                             android:text="@string/by_cash"
                             android:textColor="@color/colorPrimaryText"
                             android:textSize="@dimen/text_medium" />
 
                     </RelativeLayout>
 
-
                 </LinearLayout>
-
 
             </LinearLayout>
 
             <Button
-                android:visibility="gone"
-                android:layout_alignParentBottom="true"
                 android:id="@+id/proceed_to_pay_btn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
+                android:layout_alignParentBottom="true"
                 android:background="@drawable/button_corner_bg_green"
                 android:text="@string/proceed_to_pay"
-                android:textColor="@color/colorTextWhite" />
+                android:textColor="@color/colorTextWhite"
+                android:visibility="gone" />
         </RelativeLayout>
-
 
 
     </ScrollView>
