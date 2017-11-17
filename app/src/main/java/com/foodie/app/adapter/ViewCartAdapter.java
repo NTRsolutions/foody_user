@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -111,9 +112,9 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         }
         holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
         if (!product.getFoodType().equalsIgnoreCase("veg")) {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_nonveg));
         } else {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_veg));
         }
         selectedShop = product.getShop();
 

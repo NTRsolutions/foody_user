@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.PasswordTransformationMethod;
@@ -149,34 +150,34 @@ public class ChangePasswordActivity extends AppCompatActivity {
             case R.id.old_password_eye_img:
                 if (oldPasswordEyeImg.getTag().equals(1)) {
                     oldPassword.setTransformationMethod(null);
-                    oldPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    oldPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_close));
                     oldPasswordEyeImg.setTag(0);
                 } else {
                     oldPasswordEyeImg.setTag(1);
                     oldPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    oldPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    oldPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_open));
                 }
                 break;
             case R.id.password_eye_img:
                 if (passwordEyeImg.getTag().equals(1)) {
                     newPassword.setTransformationMethod(null);
-                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    passwordEyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_close));
                     passwordEyeImg.setTag(0);
                 } else {
                     passwordEyeImg.setTag(1);
                     newPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    passwordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    passwordEyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_open));
                 }
                 break;
             case R.id.confirm_password_eye_img:
                 if (confirmPasswordEyeImg.getTag().equals(1)) {
                     confirmPassword.setTransformationMethod(null);
-                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    confirmPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_close));
                     confirmPasswordEyeImg.setTag(0);
                 } else {
                     confirmPasswordEyeImg.setTag(1);
                     confirmPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    confirmPasswordEyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    confirmPasswordEyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_open));
                 }
                 break;
             case R.id.confirm:

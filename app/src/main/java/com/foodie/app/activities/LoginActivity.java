@@ -299,12 +299,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             case R.id.eye_img:
                 if (eyeImg.getTag().equals(1)) {
                     edPassword.setTransformationMethod(null);
-                    eyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_close));
+                    eyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_close));
                     eyeImg.setTag(0);
                 } else {
                     eyeImg.setTag(1);
                     edPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    eyeImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_open));
+                    eyeImg.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_eye_open));
                 }
                 break;
 

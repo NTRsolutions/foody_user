@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -393,10 +394,10 @@ public class ProfileFragment extends Fragment {
         AlertDialog alert = builder.create();
         alert.show();
         Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setTextColor(getResources().getColor(R.color.theme));
+        nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
         nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
         Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setTextColor(getResources().getColor(R.color.theme));
+        pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
         pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,10 +126,10 @@ public class AccountPaymentAdapter extends BaseAdapter {
                 AlertDialog alert = builder.create();
                 alert.show();
                 Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-                nbutton.setTextColor(context_.getResources().getColor(R.color.theme));
+                nbutton.setTextColor(ContextCompat.getColor(context_,R.color.theme));
                 nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
                 Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-                pbutton.setTextColor(context_.getResources().getColor(R.color.theme));
+                pbutton.setTextColor(ContextCompat.getColor(context_,R.color.theme));
                 pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
 
             }

@@ -2,6 +2,7 @@ package com.foodie.app.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ import static com.foodie.app.helper.GlobalData.isSelectedOrder;
 public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyViewHolder> {
     private List<OrderFlow> list;
     private Context context;
-    public  String orderStatus="";
+    public String orderStatus = "";
 
 
     public OrderFlowAdapter(List<OrderFlow> list, Context con) {
@@ -58,26 +59,26 @@ public class OrderFlowAdapter extends RecyclerView.Adapter<OrderFlowAdapter.MyVi
         holder.statusTitle.setText(orderFlow.statusTitle);
         holder.statusDescription.setText(orderFlow.statusDescription);
         holder.statusImage.setImageResource(orderFlow.statusImage);
-        if(orderFlow.status.contains(isSelectedOrder.getStatus())){
-            holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
-            if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(GlobalData.ORDER_STATUS.size() - 1))){
+        if (orderFlow.status.contains(isSelectedOrder.getStatus())) {
+            holder.statusTitle.setTextColor(ContextCompat.getColor(context, R.color.colorTextBlack));
+            if (isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(GlobalData.ORDER_STATUS.size() - 1))) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         //Do something after 100ms
-                        ((CurrentOrderDetailActivity)context).rate();
+                        ((CurrentOrderDetailActivity) context).rate();
                     }
                 }, 2000);
 
             }
-            if(isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(0))){
-               CurrentOrderDetailActivity.orderCancelTxt.setVisibility(View.VISIBLE);
-            }else {
+            if (isSelectedOrder.getStatus().equals(GlobalData.ORDER_STATUS.get(0))) {
+                CurrentOrderDetailActivity.orderCancelTxt.setVisibility(View.VISIBLE);
+            } else {
                 CurrentOrderDetailActivity.orderCancelTxt.setVisibility(View.GONE);
             }
-        }else {
-            holder.statusTitle.setTextColor(context.getResources().getColor(R.color.colorSecondaryText));
+        } else {
+            holder.statusTitle.setTextColor(ContextCompat.getColor(context, R.color.colorSecondaryText));
         }
 
         if (list.size() == position + 1)

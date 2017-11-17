@@ -1,6 +1,7 @@
 package com.foodie.app.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,9 +46,9 @@ public class RecommendedDishesAdapter extends RecyclerView.Adapter<RecommendedDi
         holder.priceTxt.setText(dish.getPrice());
         if (dish.getIsVeg()) {
 //            holder.dishNameTxt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_veg, 0, 0, 0);
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_nonveg));
         } else {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_veg));
         }
 
 

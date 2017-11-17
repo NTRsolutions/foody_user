@@ -572,7 +572,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
             notification = null;
             bottomNavigation.setNotification(notification, 2);
         } else if (bottomNavigation != null) {
-            bottomNavigation.setNotificationBackgroundColor(context.getResources().getColor(R.color.theme));
+            bottomNavigation.setNotificationBackgroundColor(ContextCompat.getColor(context, R.color.theme));
             bottomNavigation.setNotification(String.valueOf(itemCount), 2);
         }
 

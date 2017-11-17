@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -190,14 +191,14 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             holder.priceTxt.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
 
         if (!product.getFoodType().equalsIgnoreCase("veg")) {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_nonveg));
         } else {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_veg));
         }
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("access_token2", GlobalData.getInstance().accessToken);
+                Log.e("access_token2", GlobalData.accessToken);
                 /** Press Add Card Add button */
                 product = list.get(section).getProducts().get(relativePosition);
                 if (product.getAddons() != null && !product.getAddons().isEmpty()) {
@@ -287,10 +288,10 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         AlertDialog alert = builder.create();
                         alert.show();
                         Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-                        nbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                         nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
                         Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-                        pbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                        pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                         pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
                     }
                 }
@@ -302,7 +303,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
                 product = list.get(section).getProducts().get(relativePosition);
-                if (isShopIsChanged && GlobalData.getInstance().addCart != null) {
+                if (isShopIsChanged && GlobalData.addCart != null) {
                     Log.e("IsShopchanged", "" + isShopIsChanged);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
@@ -317,7 +318,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                                         context.startActivity(new Intent(context, ProductDetailActivity.class));
                                         activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                                     } else {
-                                        GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
+                                        GlobalData.selectedShop = HotelViewActivity.shops;
                                         product = list.get(section).getProducts().get(relativePosition);
                                         holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                                         holder.cardAddTextLayout.setVisibility(View.GONE);
@@ -342,12 +343,12 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     AlertDialog alert = builder.create();
                     alert.show();
                     Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-                    nbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                    nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                     nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
                     Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-                    pbutton.setTextColor(context.getResources().getColor(R.color.theme));
+                    pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                     pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
-                } else if (GlobalData.getInstance().profileModel != null) {
+                } else if (GlobalData.profileModel != null) {
             /*     Check Shop*/
                     Log.e("IsShopchanged2 :", "" + isShopIsChanged);
                     Log.e("profileModel", "" + profileModel.toString());
