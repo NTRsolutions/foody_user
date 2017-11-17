@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -104,12 +105,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         viewCart = (TextView) findViewById(R.id.view_cart);
         addItemLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
         product = GlobalData.isSelectedProduct;
-        if( GlobalData.addCart!=null){
-            if(GlobalData.addCart.getProductList().size()!=0){
+        if (GlobalData.addCart != null) {
+            if (GlobalData.addCart.getProductList().size() != 0) {
                 for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
                     if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
                         cartId = GlobalData.addCart.getProductList().get(i).getId();
-                        quantity=GlobalData.addCart.getProductList().get(i).getQuantity();
+                        quantity = GlobalData.addCart.getProductList().get(i).getQuantity();
                     }
                 }
             }
@@ -120,16 +121,15 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("product_id", product.getId().toString());
-                if(product.getCart()!=null&&product.getCart().size()==1&&product.getAddons().isEmpty()){
-                    map.put("quantity",String.valueOf(product.getCart().get(0).getQuantity()+1));
-                    map.put("cart_id",String.valueOf(product.getCart().get(0).getId()));
-                }
-                else if(product.getAddons().isEmpty()&&cartId!=0){
-                    map.put("quantity",String.valueOf(quantity+1));
-                    map.put("cart_id",String.valueOf(cartId));
+                if (product.getCart() != null && product.getCart().size() == 1 && product.getAddons().isEmpty()) {
+                    map.put("quantity", String.valueOf(product.getCart().get(0).getQuantity() + 1));
+                    map.put("cart_id", String.valueOf(product.getCart().get(0).getId()));
+                } else if (product.getAddons().isEmpty() && cartId != 0) {
+                    map.put("quantity", String.valueOf(quantity + 1));
+                    map.put("cart_id", String.valueOf(cartId));
                 } else {
-                    map.put("quantity","1");
-                    if(!list.isEmpty()){
+                    map.put("quantity", "1");
+                    if (!list.isEmpty()) {
                         for (int i = 0; i < list.size(); i++) {
                             Addon addon = list.get(i);
                             if (addon.getAddon().getChecked()) {
@@ -191,22 +191,22 @@ public class ProductDetailActivity extends AppCompatActivity {
         Call<AddCart> call = apiInterface.postAddCart(map);
         call.enqueue(new Callback<AddCart>() {
             @Override
-            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+            public void onResponse(@NonNull Call<AddCart> call, @NonNull Response<AddCart> response) {
+                if (response.isSuccessful()) {
+                    GlobalData.addCart = response.body();
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    GlobalData.getInstance().addCart = response.body();
-                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<AddCart> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddCart> call, @NonNull Throwable t) {
 
             }
         });
@@ -228,7 +228,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         if (dots.length > 0)
             dots[currentPage].setTextColor(Color.parseColor("#FFFFFF"));
     }
-
 
     @Override
     protected void attachBaseContext(Context newBase) {

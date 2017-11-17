@@ -230,6 +230,7 @@
     <string name="please_type_verification_code">Please type the verification code</string>
     <string name="did_not_get_otp">Didn\'t get the OTP</string>
     <string name="resend_otp">Resend OTP</string>
+    <string name="add_item">Add Item</string>
 
 
 </resources>
