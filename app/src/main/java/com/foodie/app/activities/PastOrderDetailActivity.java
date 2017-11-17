@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import com.foodie.app.models.Order;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,7 +91,7 @@ public class PastOrderDetailActivity extends AppCompatActivity {
             }
         });
         if (isSelectedOrder != null) {
-            Order order = GlobalData.getInstance().isSelectedOrder;
+            Order order = GlobalData.isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
             priceAmount = order.getInvoice().getNet();
@@ -97,10 +99,10 @@ public class PastOrderDetailActivity extends AppCompatActivity {
                 orderStatusTxt.setText(getResources().getString(R.string.order_cancelled));
                 orderSucceessImage.setImageResource(R.drawable.order_cancelled_img);
                 dotLineImg.setBackgroundResource(R.drawable.order_cancelled_line);
-                orderStatusTxt.setTextColor(getResources().getColor(R.color.colorRed));
+                orderStatusTxt.setTextColor(ContextCompat.getColor(this, R.color.colorRed));
             } else {
                 orderStatusTxt.setText(getResources().getString(R.string.order_delivered_successfully_on) + getFormatTime(order.getOrdertiming().get(7).getCreatedAt()));
-                orderStatusTxt.setTextColor(getResources().getColor(R.color.colorGreen));
+                orderStatusTxt.setTextColor(ContextCompat.getColor(this, R.color.colorGreen));
                 orderSucceessImage.setImageResource(R.drawable.ic_circle_tick);
                 dotLineImg.setBackgroundResource(R.drawable.ic_line);
             }
@@ -128,8 +130,8 @@ public class PastOrderDetailActivity extends AppCompatActivity {
         System.out.println("Time : " + time);
         String value = "";
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm aa");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm aa", Locale.getDefault());
 
             if (time != null) {
                 Date date = df.parse(time);
