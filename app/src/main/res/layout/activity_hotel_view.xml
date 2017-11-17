@@ -25,33 +25,33 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:layout_width="match_parent"
-                app:layout_collapseMode="parallax"
-                android:layout_height="250dp">
+                app:layout_collapseMode="parallax">
 
                 <ImageView
-                    android:contentDescription="@string/restaurant"
                     android:id="@+id/restaurant_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/restaurant"
                     android:fitsSystemWindows="true"
-                    android:scaleType="fitXY"
-                     />
+                    android:scaleType="fitXY" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/transparent_bg_bottom"
                     android:fitsSystemWindows="true" />
+
                 <ImageView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/transparent_bg_top"
-                    android:fitsSystemWindows="true" />
+                    android:fitsSystemWindows="true"
+                    android:visibility="gone" />
             </RelativeLayout>
 
 
@@ -90,18 +90,19 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_gravity="center"
-                            android:tint="#e7e8e9"
                             android:contentDescription="@string/search"
+                            android:tint="#e7e8e9"
                             app:srcCompat="@drawable/ic_search_icon" />
                     </LinearLayout>
 
                     <!--    Header Toolbar Layout-->
 
                     <RelativeLayout
-                        android:layout_marginEnd="@dimen/_75sdp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true">
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_75sdp">
+
                         <include
                             android:id="@+id/toolbar_header_view"
                             layout="@layout/header_view"
@@ -144,116 +145,147 @@
                     android:alpha="0"
                     android:background="#EEE" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/restaurant_title2"
+                            fontPath="fonts/Nunito-Bold.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textSize="@dimen/text_large" />
+
+                        <TextView
+                            android:id="@+id/restaurant_subtitle2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_medium" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/horizantal_dotted_line"
+                        android:layerType="software"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:id="@+id/restaurant_title2"
-                                fontPath="fonts/Nunito-Bold.ttf"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAllCaps="true"
-                                android:textColor="@color/colorPrimaryText"
-                                android:textSize="@dimen/text_large" />
-
-                            <TextView
-                                android:id="@+id/restaurant_subtitle2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAllCaps="false"
-                                android:textColor="@color/colorSecondaryText"
-                                android:textSize="@dimen/text_medium" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="4dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="16dp"
-                            android:background="@drawable/horizantal_dotted_line"
-                            android:layerType="software"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/activity_horizontal_margin"
-                            android:paddingRight="@dimen/activity_horizontal_margin">
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
-                                android:layout_weight="1"
                                 android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:orientation="vertical">
-
-
-                                    <RelativeLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:id="@+id/rating"
-                                            fontPath="fonts/Nunito-Bold.ttf"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="18dp"
-                                            android:drawableStart="@drawable/star"
-                                            android:gravity="center_horizontal"
-                                            android:textAllCaps="true"
-                                            android:textColor="@color/colorPrimaryText"
-                                            android:textSize="@dimen/text_small" />
-                                    </RelativeLayout>
-
+                                    android:layout_gravity="center"
+                                    android:gravity="center">
 
                                     <TextView
+                                        android:id="@+id/rating"
+                                        fontPath="fonts/Nunito-Bold.ttf"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:maxLines="1"
-                                        android:text="0 Rating"
-                                        android:textColor="@color/colorSecondaryText"
-                                        android:textSize="@dimen/text_tiny" />
+                                        android:layout_height="18dp"
+                                        android:drawableStart="@drawable/star"
+                                        android:gravity="center_horizontal"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/colorPrimaryText"
+                                        android:textSize="@dimen/text_small" />
+                                </RelativeLayout>
 
-                                </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="0 Rating"
+                                    android:textColor="@color/colorSecondaryText"
+                                    android:textSize="@dimen/text_tiny" />
 
                             </LinearLayout>
 
-                            <LinearLayout
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="18dp"
+                                android:gravity="center_horizontal"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="@dimen/text_small" />
+
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:visibility="gone">
+                                android:gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:text="Delivery Time"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="@dimen/text_tiny" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/delivery_time"
+                                    fontPath="fonts/Nunito-Bold.ttf"
                                     android:layout_width="match_parent"
                                     android:layout_height="18dp"
-                                    android:gravity="center_horizontal"
+                                    android:gravity="center"
                                     android:textAllCaps="true"
                                     android:textColor="@color/colorPrimaryText"
                                     android:textSize="@dimen/text_small" />
@@ -261,164 +293,132 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center_horizontal"
+                                    android:gravity="center"
                                     android:maxLines="1"
                                     android:text="Delivery Time"
                                     android:textColor="@color/colorSecondaryText"
                                     android:textSize="@dimen/text_tiny" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:id="@+id/delivery_time"
-                                        fontPath="fonts/Nunito-Bold.ttf"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="18dp"
-                                        android:gravity="center"
-                                        android:textAllCaps="true"
-                                        android:textColor="@color/colorPrimaryText"
-                                        android:textSize="@dimen/text_small" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:maxLines="1"
-                                        android:text="Delivery Time"
-                                        android:textColor="@color/colorSecondaryText"
-                                        android:textSize="@dimen/text_tiny" />
-
-                                </LinearLayout>
-
 
                             </LinearLayout>
 
                         </LinearLayout>
 
-                        <View
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/horizantal_dotted_line"
+                        android:layerType="software" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone">
+
+                        <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="4dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/horizantal_dotted_line"
-                            android:layerType="software" />
+                            android:layout_height="wrap_content"
+                            android:text="Non Veg"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="@dimen/text_medium" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/light_grey"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:orientation="vertical"
+                            android:layout_height="16dp"
+                            android:orientation="horizontal"
                             android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:visibility="gone">
+                            android:paddingRight="10dp">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:padding="1dp"
+                                android:src="@drawable/ic_polygon" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Non Veg"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="5dp"
+                                android:text="Recommended "
                                 android:textAllCaps="true"
                                 android:textColor="@color/colorSecondaryText"
-                                android:textSize="@dimen/text_medium" />
+                                android:textSize="@dimen/text_small" />
+
+
                         </LinearLayout>
 
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="16dp"
-                            android:background="@color/light_grey"
-                            android:visibility="gone" />
-
-                        <LinearLayout
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recommended_dishes_rv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="16dp"
-                                android:orientation="horizontal"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp">
-
-                                <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:padding="1dp"
-                                    android:src="@drawable/ic_polygon" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginStart="5dp"
-                                    android:text="Recommended "
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/colorSecondaryText"
-                                    android:textSize="@dimen/text_small" />
-
-
-                            </LinearLayout>
-
-
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/recommended_dishes_rv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:orientation="horizontal" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/offer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_offers"
-                            android:drawablePadding="10dp"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/activity_horizontal_margin"
-                            android:paddingRight="@dimen/activity_horizontal_margin"
-                            android:paddingTop="@dimen/activity_horizontal_margin"
-                            android:text="Flat 20% offer on all orders"
-                            android:textColor="@color/colorRed"
-                            android:textSize="@dimen/text_small"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <android.support.v7.widget.RecyclerView
-                                android:clickable="true"
-                                android:id="@+id/accompaniment_dishes_rv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:nestedScrollingEnabled="false"
-                                android:orientation="vertical"
-                                android:padding="@dimen/activity_horizontal_margin" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:orientation="vertical" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/offer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_offers"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/activity_horizontal_margin"
+                        android:text="Flat 20% offer on all orders"
+                        android:textColor="@color/colorRed"
+                        android:textSize="@dimen/text_small"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/accompaniment_dishes_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="vertical"
+                            android:padding="@dimen/activity_horizontal_margin" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="vertical" />
+                </LinearLayout>
 
             </LinearLayout>
 

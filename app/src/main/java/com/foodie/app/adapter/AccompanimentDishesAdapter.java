@@ -2,6 +2,7 @@ package com.foodie.app.adapter;
 
 import android.content.Context;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,9 +72,9 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
         }
 
         if (dish.getIsVeg()) {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nonveg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_nonveg));
         } else {
-            holder.foodImageType.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_veg));
+            holder.foodImageType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_veg));
         }
 
     }

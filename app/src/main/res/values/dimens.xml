@@ -1,7 +1,4 @@
 <resources>
-    <dimen name="app_bar_height">@dimen/_180sdp</dimen>
-    <dimen name="app_bar_height2">@dimen/_180sdp</dimen>
-    <dimen name="fab_margin">@dimen/_14sdp</dimen>
     <dimen name="text_margin">@dimen/_14sdp</dimen>
 
     <dimen name="text_large">@dimen/_17sdp</dimen>

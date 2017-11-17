@@ -10,81 +10,77 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <ImageView
-        android:layout_marginBottom="@dimen/activity_vertical_margin_half"
-        android:visibility="gone"
         android:id="@+id/featured_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="250dp"
+        android:contentDescription="@string/app_name"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_half"
+        android:visibility="gone" />
 
-  <RelativeLayout
+    <RelativeLayout
 
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-      <ImageView
-          android:id="@+id/food_type_image"
-          android:layout_width="@dimen/_12sdp"
-          android:layout_height="@dimen/_12sdp"
-          android:layout_marginRight="12dp"
-          android:layout_marginTop="3dp"
-          android:src="@drawable/ic_veg" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/food_type_image"
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="3dp"
+            android:contentDescription="@string/food"
+            android:src="@drawable/ic_veg" />
 
-      <TextView
-          android:id="@+id/dish_name_text"
-          fontPath="fonts/Nunito-SemiBold.ttf"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_alignBottom="@+id/food_type_image"
-          android:layout_alignStart="@+id/price_text"
-          android:layout_toStartOf="@+id/relativeLayout"
-          android:gravity="center_vertical"
-          android:maxLines="1"
-          android:text="Chicken Ke"
-          android:textColor="@color/colorPrimaryText"
-          android:textSize="@dimen/text_small" />
+        <TextView
+            android:id="@+id/dish_name_text"
+            fontPath="fonts/Nunito-SemiBold.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/food_type_image"
+            android:layout_alignStart="@+id/price_text"
+            android:layout_toStartOf="@+id/relativeLayout"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/text_small" />
 
-      <TextView
-          android:id="@+id/price_text"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/dish_name_text"
-          android:layout_marginTop="8dp"
-          android:layout_toRightOf="@+id/food_type_image"
-          android:text="$100"
-          android:textColor="@color/colorTextBlack"
-          android:textSize="@dimen/text_small"
-          fontPath="fonts/Nunito-Bold.ttf" />
+        <TextView
+            android:id="@+id/price_text"
+            fontPath="fonts/Nunito-Bold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dish_name_text"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/food_type_image"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="@dimen/text_small" />
 
-      <TextView
-          android:id="@+id/category_text"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/price_text"
-          android:layout_marginStart="0dp"
-          android:layout_marginTop="8dp"
-          android:layout_toRightOf="@+id/food_type_image"
-          android:gravity="center_vertical"
-          android:maxLines="1"
-          android:text="Starter"
-          android:textColor="@color/colorSecondaryText"
-          android:textSize="@dimen/text_small"
-          android:visibility="gone"
-          app:layout_constraintLeft_toLeftOf="@+id/price_text"
-          app:layout_constraintTop_toBottomOf="@+id/price_text" />
+        <TextView
+            android:id="@+id/category_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/price_text"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/food_type_image"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/text_small"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@+id/price_text"
+            app:layout_constraintTop_toBottomOf="@+id/price_text" />
 
-      <RelativeLayout
-          android:id="@+id/relativeLayout"
-          android:layout_width="@dimen/_80sdp"
-          android:layout_height="wrap_content"
-          android:layout_alignParentEnd="true">
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true">
 
-          <include layout="@layout/add_card_button_layout" />
+            <include layout="@layout/add_card_button_layout" />
 
-      </RelativeLayout>
+        </RelativeLayout>
 
-
-  </RelativeLayout>
-
-
+    </RelativeLayout>
 
 </LinearLayout>
