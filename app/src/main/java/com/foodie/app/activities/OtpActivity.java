@@ -81,7 +81,7 @@ public class OtpActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            isSignUp = bundle.getBoolean("signup",true);
+            isSignUp = bundle.getBoolean("signup", true);
         }
         mobileNumberTxt.setText(GlobalData.mobile);
         otpValue1.setText(String.valueOf(GlobalData.otpValue));
@@ -92,24 +92,24 @@ public class OtpActivity extends AppCompatActivity {
         try {
             if (!SharedHelper.getKey(context, "device_token").equals("") && SharedHelper.getKey(context, "device_token") != null) {
                 device_token = SharedHelper.getKey(context, "device_token");
-                utils.print(TAG, "GCM Registration Token: " + device_token);
+                Log.d(TAG, "GCM Registration Token: " + device_token);
             } else {
                 device_token = "" + FirebaseInstanceId.getInstance().getToken();
                 SharedHelper.putKey(context, "device_token", "" + FirebaseInstanceId.getInstance().getToken());
-                utils.print(TAG, "Failed to complete token refresh: " + device_token);
+                Log.d(TAG, "Failed to complete token refresh: " + device_token);
             }
         } catch (Exception e) {
             device_token = "COULD NOT GET FCM TOKEN";
-            utils.print(TAG, "Failed to complete token refresh");
+            Log.d(TAG, "Failed to complete token refresh");
         }
 
         try {
             device_UDID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            utils.print(TAG, "Device UDID:" + device_UDID);
+            Log.d(TAG, "Device UDID:" + device_UDID);
         } catch (Exception e) {
             device_UDID = "COULD NOT GET UDID";
             e.printStackTrace();
-            utils.print(TAG, "Failed to complete device UDID");
+            Log.d(TAG, "Failed to complete device UDID");
         }
     }
 
@@ -123,19 +123,19 @@ public class OtpActivity extends AppCompatActivity {
         Call<RegisterModel> call = apiInterface.postRegister(map);
         call.enqueue(new Callback<RegisterModel>() {
             @Override
-            public void onResponse(Call<RegisterModel> call, Response<RegisterModel> response) {
-                if (response.body() != null) {
+            public void onResponse(@NonNull Call<RegisterModel> call, @NonNull Response<RegisterModel> response) {
+                if (response.isSuccessful()) {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("login_by", GlobalData.loginBy);
                     map.put("accessToken", GlobalData.access_token);
                     login(map);
-                } else if (response.errorBody() != null) {
+                } else {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if(jObjError.has("phone"))
+                        if (jObjError.has("phone"))
                             Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
-                        else if(jObjError.has("email"))
+                        else if (jObjError.has("email"))
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
                         else
                             Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
@@ -147,7 +147,7 @@ public class OtpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RegisterModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<RegisterModel> call, @NonNull Throwable t) {
                 Toast.makeText(OtpActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 customDialog.dismiss();
             }
@@ -163,19 +163,16 @@ public class OtpActivity extends AppCompatActivity {
             call = apiInterface.postSocialLogin(map);
         call.enqueue(new Callback<LoginModel>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-                if (response.body() != null) {
+            public void onResponse(@NonNull Call<LoginModel> call, @NonNull Response<LoginModel> response) {
+                if (response.isSuccessful()) {
                     SharedHelper.putKey(context, "access_token", response.body().getTokenType() + " " + response.body().getAccessToken());
-                    GlobalData.getInstance().accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
-                    //Get Profile data
+                    GlobalData.accessToken = response.body().getTokenType() + " " + response.body().getAccessToken();
                     getProfile();
-
                 }
-
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<LoginModel> call, @NonNull Throwable t) {
 
             }
         });
@@ -189,9 +186,17 @@ public class OtpActivity extends AppCompatActivity {
         Call<User> getprofile = apiInterface.getProfile(map);
         getprofile.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (!response.isSuccessful() && response.errorBody() != null) {
-
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if (response.isSuccessful()) {
+                    SharedHelper.putKey(context, "logged", "true");
+                    GlobalData.profileModel = response.body();
+                    GlobalData.addCart = new AddCart();
+                    GlobalData.addCart.setProductList(response.body().getCart());
+                    GlobalData.addressList = new AddressList();
+                    GlobalData.addressList.setAddresses(response.body().getAddresses());
+                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                } else {
                     if (response.code() == 401) {
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, LoginActivity.class));
@@ -204,21 +209,12 @@ public class OtpActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    SharedHelper.putKey(context, "logged", "true");
-                    GlobalData.getInstance().profileModel = response.body();
-                    GlobalData.getInstance().addCart = new AddCart();
-                    GlobalData.getInstance().addCart.setProductList(response.body().getCart());
-                    GlobalData.getInstance().addressList = new AddressList();
-                    GlobalData.getInstance().addressList.setAddresses(response.body().getAddresses());
-                    startActivity(new Intent(context, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
 
             }
         });
@@ -231,22 +227,19 @@ public class OtpActivity extends AppCompatActivity {
         call.enqueue(new Callback<Otp>() {
             @Override
             public void onResponse(@NonNull Call<Otp> call, @NonNull Response<Otp> response) {
-
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    GlobalData.otpValue = response.body().getOtp();
+                    otpValue1.setText(String.valueOf(GlobalData.otpValue));
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    customDialog.dismiss();
-                    Toast.makeText(context, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    GlobalData.getInstance().otpValue = response.body().getOtp();
-                    otpValue1.setText(String.valueOf(GlobalData.otpValue));
                 }
-
             }
 
             @Override
@@ -261,8 +254,8 @@ public class OtpActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.otp_continue:
-                Log.d("OtpData", otpValue1.getText().toString() + " = " + GlobalData.getInstance().otpValue);
-                if (otpValue1.getText().toString().equals("" + GlobalData.getInstance().otpValue)) {
+                Log.d("OtpData", otpValue1.getText().toString() + " = " + GlobalData.otpValue);
+                if (otpValue1.getText().toString().equals("" + GlobalData.otpValue)) {
                     if (!GlobalData.loginBy.equals("manual")) {
                         HashMap<String, String> map = new HashMap<>();
                         map.put("name", GlobalData.name);
@@ -285,8 +278,8 @@ public class OtpActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.resend_otp:
-                HashMap<String,String> map1 = new HashMap();
-                map1.put("phone",GlobalData.mobileNumber);
+                HashMap<String, String> map1 = new HashMap<>();
+                map1.put("phone", GlobalData.mobileNumber);
                 getOtpVerification(map1);
                 break;
         }
