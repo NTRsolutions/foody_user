@@ -28,8 +28,6 @@ import com.robinhood.ticker.TickerView;
 
 import java.util.List;
 
-import static com.foodie.app.helper.GlobalData.isSelectedProduct;
-
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
  */
@@ -49,13 +47,13 @@ public class CartAddOnsAdapter extends RecyclerView.Adapter<CartAddOnsAdapter.My
     AnimatedVectorDrawableCompat avdProgress;
     Dialog dialog;
     Runnable action;
-    Shop selectedShop = GlobalData.getInstance().selectedShop;
+    Shop selectedShop = GlobalData.selectedShop;
 
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
     public CartAddOnsAdapter(List<Addon> list, Context con) {
-        this.list = list;
+        CartAddOnsAdapter.list = list;
         this.context = con;
     }
 
@@ -146,7 +144,7 @@ public class CartAddOnsAdapter extends RecyclerView.Adapter<CartAddOnsAdapter.My
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("access_token2", GlobalData.getInstance().accessToken);
+                Log.e("access_token2", GlobalData.accessToken);
                 /** Press Add Card Add button */
                 addon = list.get(position);
                 addon.getAddon().setChecked(true);

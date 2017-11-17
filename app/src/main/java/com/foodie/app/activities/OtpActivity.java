@@ -221,7 +221,7 @@ public class OtpActivity extends AppCompatActivity {
     }
 
 
-    public void getOtpVerification(HashMap map) {
+    public void getOtpVerification(HashMap<String, String> map) {
         customDialog.show();
         Call<Otp> call = apiInterface.postOtp(map);
         call.enqueue(new Callback<Otp>() {

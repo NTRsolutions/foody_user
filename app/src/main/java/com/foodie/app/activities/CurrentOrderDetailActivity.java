@@ -385,7 +385,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
             try {
                 // Fetching the data from web service
                 data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
+                Log.d("Background Task data", data);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
@@ -428,7 +428,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
 
             String line = "";
             while ((line = br.readLine()) != null) {
@@ -436,7 +436,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
             }
 
             data = sb.toString();
-            Log.d("downloadUrl", data.toString());
+            Log.d("downloadUrl", data);
             br.close();
 
         } catch (Exception e) {
@@ -462,7 +462,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask", jsonData[0].toString());
+                Log.d("ParserTask", jsonData[0]);
                 DataParser parser = new DataParser();
                 Log.d("ParserTask", parser.toString());
 
@@ -570,10 +570,8 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         String output = "json";
 
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-
-        return url;
+        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
     }
 
     private void showDialog() {

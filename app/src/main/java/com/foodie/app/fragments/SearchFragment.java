@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -90,7 +89,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
     }
 
     @Override
@@ -168,7 +167,7 @@ public class SearchFragment extends Fragment {
         });
 
         toolbar.addView(toolbarLayout);
-        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         searchCloseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
@@ -31,12 +32,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         if (remoteMessage.getData() != null) {
-            utils.print(TAG, "From: " + remoteMessage.getFrom());
-            utils.print(TAG, "Notification Message Body: " + remoteMessage.getData());
+            Log.d(TAG, "From: " + remoteMessage.getFrom());
+            Log.d(TAG, "Notification Message Body: " + remoteMessage.getData());
             //Calling method to generate notification
             sendNotification(remoteMessage.getData().get("message"));
         }else{
-            utils.print(TAG,"FCM Notification failed");
+            Log.d(TAG,"FCM Notification failed");
         }
     }
 

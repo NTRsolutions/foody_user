@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -70,7 +71,7 @@ public class OrderHelpFragment extends Fragment {
     int DISPUTE_ID = 0;
     int itemQuantity = 0;
     String currency = "";
-    String reason="OTHERS";
+    String reason = "OTHERS";
     CustomDialog customDialog;
     String disputeType;
     Integer DISPUTE_HELP_ID = 0;
@@ -93,15 +94,15 @@ public class OrderHelpFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_help, container, false);
         unbinder = ButterKnife.bind(this, view);
-        customDialog=new CustomDialog(context);
+        customDialog = new CustomDialog(context);
         helpRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         helpRv.setItemAnimator(new DefaultItemAnimator());
         helpRv.setHasFixedSize(true);
-        disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context,getActivity());
+        disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context, getActivity());
         helpRv.setAdapter(disputeMessageAdapter);
-        if(disputeMessageList.size() > 0){
+        if (disputeMessageList.size() > 0) {
             otherHelpLayout.setVisibility(View.GONE);
-        }else{
+        } else {
             otherHelpLayout.setVisibility(View.VISIBLE);
         }
 
@@ -160,7 +161,7 @@ public class OrderHelpFragment extends Fragment {
                             Toast.makeText(context, "Please enter reason", Toast.LENGTH_SHORT).show();
                         } else {
                             dialog.dismiss();
-                            HashMap<String, String> map = new HashMap<String, String>();
+                            HashMap<String, String> map = new HashMap<>();
                             map.put("order_id", GlobalData.isSelectedOrder.getId().toString());
                             map.put("status", "CREATED");
                             map.put("description", edt.getText().toString());
@@ -179,31 +180,28 @@ public class OrderHelpFragment extends Fragment {
 
     }
 
-    private void postDispute(HashMap map) {
+    private void postDispute(HashMap<String, String> map) {
         customDialog.show();
         Call<Order> call = apiInterface.postDispute(map);
         call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
+            public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Dispute create successfully", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    customDialog.dismiss();
-                    Toast.makeText(context, "Dispute create successfully", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
-
                 }
-
             }
 
             @Override
-            public void onFailure(Call<Order> call, Throwable t) {
+            public void onFailure(@NonNull Call<Order> call, @NonNull Throwable t) {
 
             }
         });
@@ -215,7 +213,7 @@ public class OrderHelpFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.chat_us:
-                    startActivity(new Intent(getActivity(), OtherHelpActivity.class).putExtra("is_chat", true));
+                startActivity(new Intent(getActivity(), OtherHelpActivity.class).putExtra("is_chat", true));
                 break;
             case R.id.dispute:
                 showDialog();

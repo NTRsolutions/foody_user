@@ -1,56 +1,32 @@
 package com.foodie.app.adapter;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foodie.app.R;
-import com.foodie.app.activities.HotelViewActivity;
-import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.activities.ProductDetailActivity;
-import com.foodie.app.build.api.ApiClient;
-import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Addon;
-import com.foodie.app.models.Addon_;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.Shop;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.foodie.app.helper.GlobalData.categoryList;
 import static com.foodie.app.helper.GlobalData.isSelectedProduct;
-import static com.foodie.app.helper.GlobalData.profileModel;
-import static com.foodie.app.helper.GlobalData.selectedShop;
 
 /**
  * Created by santhosh@appoets.com on 22-08-2017.
@@ -71,7 +47,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
     AnimatedVectorDrawableCompat avdProgress;
     Dialog dialog;
     Runnable action;
-    Shop selectedShop = GlobalData.getInstance().selectedShop;
+    Shop selectedShop = GlobalData.selectedShop;
 
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
@@ -150,7 +126,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("access_token2", GlobalData.getInstance().accessToken);
+                Log.e("access_token2", GlobalData.accessToken);
                 /** Press Add Card Add button */
                 addon = list.get(position);
                 addon.getAddon().setChecked(true);

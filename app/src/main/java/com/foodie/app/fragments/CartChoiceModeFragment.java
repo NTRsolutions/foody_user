@@ -5,12 +5,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
-import com.foodie.app.models.Addon;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Product;
@@ -44,8 +41,6 @@ import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.foodie.app.adapter.AddOnsAdapter.list;
 
 /**
  * Created by santhosh@appoets.com on 13-11-2017.
@@ -73,11 +68,11 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
     TextView productPrice;
     String addOnsValue = "";
     List<CartAddon> cartAddonList;
-    public  static Cart lastCart;
+    public static Cart lastCart;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     CustomDialog customDialog;
     HashMap<String, String> repeatCartMap;
-    public  static  boolean isViewcart=false;
+    public static boolean isViewcart = false;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -95,13 +90,13 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
             productPrice.setText(product.getPrices().getCurrency() + " " + product.getPrices().getPrice());
             cartAddonList = new ArrayList<>();
             if (GlobalData.addCart != null) {
-                if(isViewcart){
-                    cartAddonList=lastCart.getCartAddons();
-                }else {
+                if (isViewcart) {
+                    cartAddonList = lastCart.getCartAddons();
+                } else {
                     for (int i = 0; i < GlobalData.addCart.getProductList().size(); i++) {
                         if (GlobalData.addCart.getProductList().get(i).getProductId().equals(product.getId())) {
                             lastCart = GlobalData.addCart.getProductList().get(i);
-                            cartAddonList=lastCart.getCartAddons();
+                            cartAddonList = lastCart.getCartAddons();
                         }
                     }
                 }
@@ -136,7 +131,7 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 break;
             case R.id.repeat_btn:
-                repeatCartMap = new HashMap<String, String>();
+                repeatCartMap = new HashMap<>();
                 repeatCartMap.put("product_id", product.getId().toString());
                 repeatCartMap.put("quantity", String.valueOf(lastCart.getQuantity() + 1));
                 repeatCartMap.put("cart_id", String.valueOf(lastCart.getId()));
@@ -146,11 +141,9 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                     repeatCartMap.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
                 }
                 Log.e("Repeat_cart", repeatCartMap.toString());
-                if (isViewcart)
-                {
-                   ViewCartAdapter.addCart(repeatCartMap);
-                }
-                else {
+                if (isViewcart) {
+                    ViewCartAdapter.addCart(repeatCartMap);
+                } else {
                     HotelCatagoeryAdapter.addCart(repeatCartMap);
                     if (HotelViewActivity.categoryList != null) {
                         for (int i = 0; i < HotelViewActivity.categoryList.size(); i++) {
@@ -174,23 +167,23 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
         Call<AddCart> call = apiInterface.postAddCart(map);
         call.enqueue(new Callback<AddCart>() {
             @Override
-            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+            public void onResponse(@NonNull Call<AddCart> call, @NonNull Response<AddCart> response) {
                 customDialog.dismiss();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                if (response.isSuccessful()) {
+                    GlobalData.addCart = response.body();
+                    dismiss();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    GlobalData.getInstance().addCart = response.body();
-                    dismiss();
                 }
             }
 
             @Override
-            public void onFailure(Call<AddCart> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddCart> call, @NonNull Throwable t) {
                 customDialog.dismiss();
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
                 dismiss();

@@ -33,7 +33,6 @@ import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.fragments.CartChoiceModeFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
-import com.foodie.app.models.Cart;
 import com.foodie.app.models.ClearCart;
 import com.foodie.app.models.Product;
 import com.foodie.app.models.Shop;
@@ -131,9 +130,9 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
         product = list.get(section);
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
-        addCart = GlobalData.getInstance().addCart;
+        addCart = GlobalData.addCart;
         if (!product.getCart().isEmpty()) {
-            GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
+            selectedShop = HotelViewActivity.shops;
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
             holder.cardTextValueTicker.setText(String.valueOf(product.getCart().get(0).getQuantity()));
@@ -164,7 +163,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("access_token2", GlobalData.getInstance().accessToken);
+                Log.e("access_token2", GlobalData.accessToken);
                 /** Press Add Card Add button */
                 product = list.get(section);
                 currentShop = list.get(section).getShop();
@@ -183,7 +182,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                     holder.cardTextValue.setText("" + countValue);
                     holder.cardTextValueTicker.setText("" + countValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", holder.cardTextValue.getText().toString());
                     map.put("cart_id", String.valueOf(cartId));
@@ -215,7 +214,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     if (addCart.getProductList().size() == 0 && addCart != null)
                         HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", "0");
                     map.put("cart_id", String.valueOf(cartId));
@@ -226,7 +225,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                         int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                         holder.cardTextValue.setText("" + countMinusValue);
                         holder.cardTextValueTicker.setText("" + countMinusValue);
-                        HashMap<String, String> map = new HashMap<String, String>();
+                        HashMap<String, String> map = new HashMap<>();
                         map.put("product_id", product.getId().toString());
                         map.put("quantity", holder.cardTextValue.getText().toString());
                         map.put("cart_id", String.valueOf(cartId));
@@ -268,7 +267,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position", section));
-                GlobalData.getInstance().selectedShop = list.get(section).getShop();
+                selectedShop = list.get(section).getShop();
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
         });
@@ -291,7 +290,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                             holder.cardAddTextLayout.setVisibility(View.GONE);
                             holder.cardTextValue.setText("1");
                             holder.cardTextValueTicker.setText("1");
-                            HashMap<String, String> map = new HashMap<String, String>();
+                            HashMap<String, String> map = new HashMap<>();
                             map.put("product_id", product.getId().toString());
                             map.put("quantity", holder.cardTextValue.getText().toString());
                             Log.e("AddCart_Text", map.toString());
@@ -313,13 +312,13 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                                             context.startActivity(new Intent(context, ProductDetailActivity.class));
                                             activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                                         } else {
-                                            GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
+                                            selectedShop = HotelViewActivity.shops;
                                             product = list.get(section);
                                             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                                             holder.cardAddTextLayout.setVisibility(View.GONE);
                                             holder.cardTextValue.setText("1");
                                             holder.cardTextValueTicker.setText("1");
-                                            HashMap<String, String> map = new HashMap<String, String>();
+                                            HashMap<String, String> map = new HashMap<>();
                                             map.put("product_id", product.getId().toString());
                                             map.put("quantity", holder.cardTextValue.getText().toString());
                                             Log.e("AddCart_Text", map.toString());
@@ -373,7 +372,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 } else if (response.isSuccessful()) {
 //                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     selectedShop = HotelViewActivity.shops;
-                    GlobalData.getInstance().addCart.getProductList().clear();
+                    GlobalData.addCart.getProductList().clear();
 
                 }
 
@@ -382,7 +381,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             @Override
             public void onFailure(Call<ClearCart> call, Throwable t) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
-                GlobalData.getInstance().addCartShopId = selectedShop.getId();
+                GlobalData.addCartShopId = selectedShop.getId();
             }
         });
 
@@ -394,7 +393,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
-                GlobalData.getInstance().selectedShop = currentShop;
+                selectedShop = currentShop;
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
@@ -403,9 +402,9 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    GlobalData.getInstance().addCartShopId = selectedShop.getId();
+                    GlobalData.addCartShopId = selectedShop.getId();
                     addCart = response.body();
-                    GlobalData.getInstance().addCart = response.body();
+                    GlobalData.addCart = response.body();
 //                    setViewcartBottomLayout(addCart);
                     priceAmount = 0;
                     itemQuantity = 0;

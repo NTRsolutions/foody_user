@@ -93,22 +93,22 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
 
         private MyViewHolder(View view) {
             super(view);
-            dishImg = (ImageView) view.findViewById(R.id.dishImg);
-            foodImageType = (ImageView) view.findViewById(R.id.food_type_image);
-            animationLineCartAdd = (ImageView) view.findViewById(R.id.animation_line_cart_add);
-            dishNameTxt = (TextView) view.findViewById(R.id.dish_name_text);
-            priceTxt = (TextView) view.findViewById(R.id.price_text);
+            dishImg = view.findViewById(R.id.dishImg);
+            foodImageType = view.findViewById(R.id.food_type_image);
+            animationLineCartAdd = view.findViewById(R.id.animation_line_cart_add);
+            dishNameTxt = view.findViewById(R.id.dish_name_text);
+            priceTxt = view.findViewById(R.id.price_text);
 
              /*    Add card Button Layout*/
-            cardAddDetailLayout = (RelativeLayout) view.findViewById(R.id.add_card_layout);
-            cardAddTextLayout = (RelativeLayout) view.findViewById(R.id.add_card_text_layout);
-            cardInfoLayout = (RelativeLayout) view.findViewById(R.id.add_card_info_layout);
-            cardAddInfoText = (TextView) view.findViewById(R.id.avialablity_time);
-            cardAddOutOfStock = (TextView) view.findViewById(R.id.out_of_stock);
-            cardAddBtn = (ImageView) view.findViewById(R.id.card_add_btn);
-            cardMinusBtn = (ImageView) view.findViewById(R.id.card_minus_btn);
-            cardTextValue = (TextView) view.findViewById(R.id.card_value);
-            cardTextValueTicker = (TickerView) view.findViewById(R.id.card_value_ticker);
+            cardAddDetailLayout = view.findViewById(R.id.add_card_layout);
+            cardAddTextLayout = view.findViewById(R.id.add_card_text_layout);
+            cardInfoLayout = view.findViewById(R.id.add_card_info_layout);
+            cardAddInfoText = view.findViewById(R.id.avialablity_time);
+            cardAddOutOfStock = view.findViewById(R.id.out_of_stock);
+            cardAddBtn = view.findViewById(R.id.card_add_btn);
+            cardMinusBtn = view.findViewById(R.id.card_minus_btn);
+            cardTextValue = view.findViewById(R.id.card_value);
+            cardTextValueTicker = view.findViewById(R.id.card_value_ticker);
 
             //itemView.setOnClickListener( this);
 
@@ -123,7 +123,6 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.add_card_text_layout:
-                    /** Press Add Card Text Layout */
                     cardAddDetailLayout.setVisibility(View.VISIBLE);
                     HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
                     itemCount = itemCount + 1;
@@ -133,7 +132,6 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
                     break;
 
                 case R.id.card_add_btn:
-                    /** Press Add Card Add button */
                     int countValue = Integer.parseInt(cardTextValue.getText().toString()) + 1;
                     itemCount = itemCount + 1;
                     priceAmount = priceAmount + Integer.parseInt(list.get(getAdapterPosition()).getPrice());
@@ -142,7 +140,6 @@ public class AccompanimentDishesAdapter extends RecyclerView.Adapter<Accompanime
                     cardTextValueTicker.setText("" + countValue);
                     break;
                 case R.id.card_minus_btn:
-                    /** Press Add Card Minus button */
                     if (cardTextValue.getText().toString().equalsIgnoreCase("1")) {
                         cardAddDetailLayout.setVisibility(View.GONE);
                         HotelViewActivity.viewCartLayout.setVisibility(View.GONE);

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -151,33 +150,33 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
                 errorLoadingLayout.setVisibility(View.GONE);
                 locationAddressLayout.setVisibility(View.VISIBLE);
-                if (GlobalData.getInstance().selectedAddress != null && GlobalData.profileModel != null) {
-                    GlobalData.addressHeader=GlobalData.getInstance().selectedAddress.getType();
-                    addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
-                    addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
-                    latitude = GlobalData.getInstance().selectedAddress.getLatitude();
-                    longitude = GlobalData.getInstance().selectedAddress.getLongitude();
-                    GlobalData.getInstance().addressHeader = GlobalData.getInstance().selectedAddress.getMapAddress();
+                if (selectedAddress != null && GlobalData.profileModel != null) {
+                    GlobalData.addressHeader= selectedAddress.getType();
+                    addressLabel.setText(selectedAddress.getType());
+                    addressTxt.setText(selectedAddress.getMapAddress());
+                    latitude = selectedAddress.getLatitude();
+                    longitude = selectedAddress.getLongitude();
+                    GlobalData.addressHeader = selectedAddress.getMapAddress();
                 } else if (addressList != null && addressList.getAddresses().size() != 0 && GlobalData.profileModel != null) {
                     for (int i = 0; i < addressList.getAddresses().size(); i++) {
                         Address address1 = addressList.getAddresses().get(i);
                         if (getDoubleThreeDigits(latitude) == getDoubleThreeDigits(address1.getLatitude()) && getDoubleThreeDigits(longitude) == getDoubleThreeDigits(address1.getLongitude())) {
                             selectedAddress = address1;
-                            addressLabel.setText(GlobalData.getInstance().addressHeader);
-                            addressTxt.setText(GlobalData.getInstance().address);
-                            addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
-                            addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
-                            latitude = GlobalData.getInstance().selectedAddress.getLatitude();
-                            longitude = GlobalData.getInstance().selectedAddress.getLongitude();
+                            addressLabel.setText(GlobalData.addressHeader);
+                            addressTxt.setText(GlobalData.address);
+                            addressLabel.setText(selectedAddress.getType());
+                            addressTxt.setText(selectedAddress.getMapAddress());
+                            latitude = selectedAddress.getLatitude();
+                            longitude = selectedAddress.getLongitude();
                             break;
                         } else {
-                            addressLabel.setText(GlobalData.getInstance().addressHeader);
-                            addressTxt.setText(GlobalData.getInstance().address);
+                            addressLabel.setText(GlobalData.addressHeader);
+                            addressTxt.setText(GlobalData.address);
                         }
                     }
                 } else {
-                    addressLabel.setText(GlobalData.getInstance().addressHeader);
-                    addressTxt.setText(GlobalData.getInstance().address);
+                    addressLabel.setText(GlobalData.addressHeader);
+                    addressTxt.setText(GlobalData.address);
                 }
                 findRestaurant();
         }
@@ -228,7 +227,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         skeletonSpinner = Skeleton.bind(catagoerySpinner)
                 .load(R.layout.skeleton_label)
                 .show();
-        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
 
         //Spinner
         //Creating the ArrayAdapter instance having the country shopList
@@ -324,8 +323,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         map.put("latitude", String.valueOf(latitude));
         map.put("longitude", String.valueOf(longitude));
         //get User Profile Data
-        if (GlobalData.getInstance().profileModel != null) {
-            map.put("user_id", String.valueOf(GlobalData.getInstance().profileModel.getId()));
+        if (GlobalData.profileModel != null) {
+            map.put("user_id", String.valueOf(GlobalData.profileModel.getId()));
         }
         if (isFilterApplied) {
             filterSelectionImage.setVisibility(View.VISIBLE);
@@ -383,9 +382,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         impressiveDishesLayout.setVisibility(View.GONE);
                     else
                         impressiveDishesLayout.setVisibility(View.VISIBLE);
-                    GlobalData.getInstance().shopList = response.body().getShops();
+                    GlobalData.shopList = response.body().getShops();
                     restaurantList.clear();
-                    restaurantList.addAll(GlobalData.getInstance().shopList);
+                    restaurantList.addAll(GlobalData.shopList);
                     bannerList.clear();
                     bannerList.addAll(response.body().getBanners());
                     restaurantCountTxt.setText("" + restaurantList.size() + " Restaurants");
@@ -419,7 +418,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    cuisineList = new ArrayList<Cuisine>();
+                    cuisineList = new ArrayList<>();
                     cuisineList.addAll(response.body());
                 }
             }
@@ -434,8 +433,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     public double getDoubleThreeDigits(Double value) {
-        Double outputValue = new BigDecimal(value.toString()).setScale(3, RoundingMode.HALF_UP).doubleValue();
-        return outputValue;
+        return new BigDecimal(value.toString()).setScale(3, RoundingMode.HALF_UP).doubleValue();
 
     }
 
@@ -468,39 +466,39 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("location"));
         if (!GlobalData.addressHeader.equalsIgnoreCase("")) {
             errorLoadingLayout.setVisibility(View.GONE);
             locationAddressLayout.setVisibility(View.VISIBLE);
-            if (GlobalData.getInstance().selectedAddress != null && GlobalData.profileModel != null) {
-                GlobalData.addressHeader=GlobalData.getInstance().selectedAddress.getType();
-                addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
-                addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
-                latitude = GlobalData.getInstance().selectedAddress.getLatitude();
-                longitude = GlobalData.getInstance().selectedAddress.getLongitude();
-                GlobalData.getInstance().addressHeader = GlobalData.getInstance().selectedAddress.getMapAddress();
+            if (selectedAddress != null && GlobalData.profileModel != null) {
+                GlobalData.addressHeader= selectedAddress.getType();
+                addressLabel.setText(selectedAddress.getType());
+                addressTxt.setText(selectedAddress.getMapAddress());
+                latitude = selectedAddress.getLatitude();
+                longitude = selectedAddress.getLongitude();
+                GlobalData.addressHeader = selectedAddress.getMapAddress();
             } else if (addressList != null && addressList.getAddresses().size() != 0 && GlobalData.profileModel != null) {
                 for (int i = 0; i < addressList.getAddresses().size(); i++) {
                     Address address1 = addressList.getAddresses().get(i);
                     if (getDoubleThreeDigits(latitude) == getDoubleThreeDigits(address1.getLatitude()) && getDoubleThreeDigits(longitude) == getDoubleThreeDigits(address1.getLongitude())) {
                         selectedAddress = address1;
-                        addressLabel.setText(GlobalData.getInstance().addressHeader);
-                        addressTxt.setText(GlobalData.getInstance().address);
-                        addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
-                        addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
-                        latitude = GlobalData.getInstance().selectedAddress.getLatitude();
-                        longitude = GlobalData.getInstance().selectedAddress.getLongitude();
+                        addressLabel.setText(GlobalData.addressHeader);
+                        addressTxt.setText(GlobalData.address);
+                        addressLabel.setText(selectedAddress.getType());
+                        addressTxt.setText(selectedAddress.getMapAddress());
+                        latitude = selectedAddress.getLatitude();
+                        longitude = selectedAddress.getLongitude();
                         break;
                     } else {
-                        addressLabel.setText(GlobalData.getInstance().addressHeader);
-                        addressTxt.setText(GlobalData.getInstance().address);
+                        addressLabel.setText(GlobalData.addressHeader);
+                        addressTxt.setText(GlobalData.address);
                     }
                 }
             } else {
-                addressLabel.setText(GlobalData.getInstance().addressHeader);
-                addressTxt.setText(GlobalData.getInstance().address);
+                addressLabel.setText(GlobalData.addressHeader);
+                addressTxt.setText(GlobalData.address);
             }
             findRestaurant();
 
@@ -537,13 +535,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 //        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_OK) {
             System.out.print("HomeFragment : Success");
-            if (GlobalData.getInstance().selectedAddress != null) {
-                addressLabel.setText(GlobalData.getInstance().addressHeader);
-                addressTxt.setText(GlobalData.getInstance().address);
-                addressLabel.setText(GlobalData.getInstance().selectedAddress.getType());
-                addressTxt.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
-                latitude = GlobalData.getInstance().selectedAddress.getLatitude();
-                longitude = GlobalData.getInstance().selectedAddress.getLongitude();
+            if (selectedAddress != null) {
+                addressLabel.setText(GlobalData.addressHeader);
+                addressTxt.setText(GlobalData.address);
+                addressLabel.setText(selectedAddress.getType());
+                addressTxt.setText(selectedAddress.getMapAddress());
+                latitude = selectedAddress.getLatitude();
+                longitude = selectedAddress.getLongitude();
                 skeletonScreen.show();
                 skeletonScreen2.show();
                 skeletonText1.show();

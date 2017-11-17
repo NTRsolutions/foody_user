@@ -1,9 +1,7 @@
 package com.foodie.app.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -32,7 +28,6 @@ import com.foodie.app.utils.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -99,7 +94,7 @@ public class OrdersActivity extends AppCompatActivity {
         adapter = new OrdersAdapter(this, activity, modelListReference);
         ordersRv.setAdapter(adapter);
         ordersRv.setHasFixedSize(false);
-        onGoingOrderList = new ArrayList<Order>();
+        onGoingOrderList = new ArrayList<>();
         if (connectionHelper.isConnectingToInternet()) {
             customDialog.show();
             getOngoingOrders();
@@ -117,7 +112,7 @@ public class OrdersActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
-                    pastOrderList = new ArrayList<Order>();
+                    pastOrderList = new ArrayList<>();
                     pastOrderList = response.body();
                     OrderModel model = new OrderModel();
                     model.setHeader(getString(R.string.past_orders));

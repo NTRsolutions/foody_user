@@ -2,7 +2,6 @@ package com.foodie.app.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -62,7 +61,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
     public static AnimatedVectorDrawableCompat avdProgress;
     public static Dialog dialog;
     public static Runnable action;
-    public static Shop selectedShop = GlobalData.getInstance().selectedShop;
+    public static Shop selectedShop = GlobalData.selectedShop;
     public static CartChoiceModeFragment bottomSheetDialogFragment;
 
 
@@ -71,7 +70,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
     public ViewCartAdapter(List<Cart> list, Context con) {
         this.list = list;
-        this.context = con;
+        context = con;
     }
 
     @Override
@@ -137,7 +136,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("access_token2", GlobalData.getInstance().accessToken);
+                Log.e("access_token2", GlobalData.accessToken);
                 /** Intilaize Animation View Image */
                 holder.animationLineCartAdd.setVisibility(View.VISIBLE);
                 //Intialize
@@ -167,7 +166,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                     holder.cardTextValue.setText("" + countValue);
                     holder.cardTextValueTicker.setText("" + countValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", holder.cardTextValue.getText().toString());
                     map.put("cart_id", String.valueOf(list.get(position).getId()));
@@ -246,7 +245,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             }
                         }
                     }
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));
                     map.put("cart_id", String.valueOf(list.get(position).getId()));
@@ -267,7 +266,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                             }
                         }
                     }
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));
                     map.put("cart_id", String.valueOf(list.get(position).getId()));
@@ -371,7 +370,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
-                    GlobalData.getInstance().addCart = response.body();
+                    GlobalData.addCart = response.body();
                     CartFragment.viewCartItemList.clear();
                     GlobalData.addCart=addCart;
                     CartFragment.viewCartItemList.addAll(response.body().getProductList());
@@ -402,7 +401,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                                 discount = (int) (priceAmount * (offerPercentage * 0.01));
                             }
                         }
-                        GlobalData.getInstance().notificationCount = itemQuantity;
+                        GlobalData.notificationCount = itemQuantity;
                         //Set Payment details
                         String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
                         CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
@@ -415,7 +414,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         CartFragment.payAmount.setText(currency + "" + topPayAmount);
 
                     } else {
-                        GlobalData.getInstance().notificationCount = itemQuantity;
+                        GlobalData.notificationCount = itemQuantity;
 //                        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
                         CartFragment.errorLayout.setVisibility(View.VISIBLE);
                         CartFragment.dataLayout.setVisibility(View.GONE);

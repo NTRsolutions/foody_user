@@ -306,7 +306,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
                     GlobalData.profileModel = response.body().getUser();
-                    GlobalData.getInstance().otpValue = Integer.parseInt(response.body().getUser().getOtp());
+                    GlobalData.otpValue = Integer.parseInt(response.body().getUser().getOtp());
                     startActivity(new Intent(context, OtpActivity.class).putExtra("signup", false));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                     finish();

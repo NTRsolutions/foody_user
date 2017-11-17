@@ -18,8 +18,7 @@ public class SharedHelper {
 
     public static String getKey(Context contextGetKey, String Key) {
         sharedPreferences = contextGetKey.getSharedPreferences("Cache", Context.MODE_PRIVATE);
-        String Value = sharedPreferences.getString(Key, "");
-        return Value;
+        return sharedPreferences.getString(Key, "");
 
     }
 

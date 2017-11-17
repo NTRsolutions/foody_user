@@ -214,7 +214,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         }
     }
 
-    private void checkOut(HashMap map) {
+    private void checkOut(HashMap<String, String> map) {
         customDialog.show();
         Call<Order> call = apiInterface.postCheckout(map);
         call.enqueue(new Callback<Order>() {

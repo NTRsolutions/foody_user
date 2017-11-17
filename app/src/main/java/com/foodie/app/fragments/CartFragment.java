@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +23,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +33,6 @@ import com.ethanhua.skeleton.ViewSkeletonScreen;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
 import com.foodie.app.activities.AccountPaymentActivity;
-import com.foodie.app.activities.CurrentOrderDetailActivity;
 import com.foodie.app.activities.SaveDeliveryLocationActivity;
 import com.foodie.app.activities.SetDeliveryLocationActivity;
 import com.foodie.app.adapter.ViewCartAdapter;
@@ -45,7 +43,6 @@ import com.foodie.app.helper.ConnectionHelper;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Cart;
-import com.foodie.app.models.Order;
 import com.foodie.app.utils.Utils;
 import com.robinhood.ticker.TickerUtils;
 
@@ -139,7 +136,7 @@ public class CartFragment extends Fragment {
     Fragment orderFullViewFragment;
     FragmentManager fragmentManager;
     //Orderitem List
-    public  static List<Cart> viewCartItemList;
+    public static List<Cart> viewCartItemList;
 
     int priceAmount = 0;
     int discount = 0;
@@ -150,14 +147,14 @@ public class CartFragment extends Fragment {
     int ADDRESS_SELECTION = 1;
 
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-    public  static ViewCartAdapter viewCartAdapter;
+    public static ViewCartAdapter viewCartAdapter;
     CustomDialog customDialog;
     NumberFormat numberFormat = GlobalData.getNumberFormat();
     ViewSkeletonScreen skeleton;
     ConnectionHelper connectionHelper;
     Activity activity;
 
-    public static HashMap<String,String> checkoutMap;
+    public static HashMap<String, String> checkoutMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -184,7 +181,7 @@ public class CartFragment extends Fragment {
 
         HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
-        if (GlobalData.getInstance().profileModel == null) {
+        if (GlobalData.profileModel == null) {
             dataLayout.setVisibility(View.GONE);
             errorLayout.setVisibility(View.VISIBLE);
             errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
@@ -210,29 +207,29 @@ public class CartFragment extends Fragment {
         orderItemRv.setNestedScrollingEnabled(false);
 
         //Intialize address Value
-        if (GlobalData.getInstance().selectedAddress != null && GlobalData.getInstance().selectedAddress.getLandmark() != null) {
-            if (GlobalData.getInstance().addressList.getAddresses().size() == 1)
+        if (GlobalData.selectedAddress != null && GlobalData.selectedAddress.getLandmark() != null) {
+            if (GlobalData.addressList.getAddresses().size() == 1)
                 addAddressTxt.setText(getString(R.string.add_address));
             else
                 addAddressTxt.setText(getString(R.string.change_address));
             addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_green);
             addAddressBtn.setText(getResources().getString(R.string.proceed_to_pay));
-            addressHeader.setText(GlobalData.getInstance().selectedAddress.getType());
-            addressDetail.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
+            addressHeader.setText(GlobalData.selectedAddress.getType());
+            addressDetail.setText(GlobalData.selectedAddress.getMapAddress());
             if (viewCartItemList != null && viewCartItemList.size() != 0)
                 addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");
-        } else if (GlobalData.getInstance().addressList != null) {
+        } else if (GlobalData.addressList != null) {
             addAddressBtn.setBackgroundResource(R.drawable.button_corner_bg_theme);
             addAddressBtn.setText(getResources().getString(R.string.add_address));
-            locationErrorSubTitle.setText(GlobalData.getInstance().addressHeader);
+            locationErrorSubTitle.setText(GlobalData.addressHeader);
             selectedAddressBtn.setVisibility(View.VISIBLE);
             locationErrorLayout.setVisibility(View.VISIBLE);
             locationInfoLayout.setVisibility(View.GONE);
         } else {
-            if (GlobalData.getInstance().selectedAddress != null)
+            if (GlobalData.selectedAddress != null)
                 locationErrorSubTitle.setText(GlobalData.selectedAddress.getMapAddress());
             else
-                locationErrorSubTitle.setText(GlobalData.getInstance().addressHeader);
+                locationErrorSubTitle.setText(GlobalData.addressHeader);
             locationErrorLayout.setVisibility(View.VISIBLE);
             selectedAddressBtn.setVisibility(View.GONE);
             locationInfoLayout.setVisibility(View.GONE);
@@ -246,7 +243,7 @@ public class CartFragment extends Fragment {
         Call<AddCart> call = apiInterface.getViewCart();
         call.enqueue(new Callback<AddCart>() {
             @Override
-            public void onResponse(Call<AddCart> call, Response<AddCart> response) {
+            public void onResponse(@NonNull Call<AddCart> call, @NonNull Response<AddCart> response) {
                 skeleton.hide();
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
                     errorLayout.setVisibility(View.VISIBLE);
@@ -261,11 +258,11 @@ public class CartFragment extends Fragment {
                     customDialog.dismiss();
                     //get Item Count
                     itemCount = response.body().getProductList().size();
-                    GlobalData.getInstance().notificationCount=response.body().getProductList().size();
+                    GlobalData.notificationCount = response.body().getProductList().size();
                     if (itemCount == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
                         dataLayout.setVisibility(View.GONE);
-                        GlobalData.addCart=response.body();
+                        GlobalData.addCart = response.body();
                     } else {
                         errorLayout.setVisibility(View.GONE);
                         dataLayout.setVisibility(View.VISIBLE);
@@ -273,7 +270,7 @@ public class CartFragment extends Fragment {
                             //Get Total item Quantity
                             itemQuantity = itemQuantity + response.body().getProductList().get(i).getQuantity();
                             //Get product price
-                            AddCart addCart=response.body();
+                            AddCart addCart = response.body();
                             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
                             if (addCart.getProductList().get(i).getCartAddons() != null && !addCart.getProductList().get(i).getCartAddons().isEmpty()) {
@@ -283,11 +280,11 @@ public class CartFragment extends Fragment {
                                 }
                             }
                         }
-                        GlobalData.getInstance().addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
+                        GlobalData.addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
                         //Set Payment details
                         String currency = response.body().getProductList().get(0).getProduct().getPrices().getCurrency();
                         itemTotalAmount.setText(currency + "" + priceAmount);
-                        if(response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount()!=null){
+                        if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() != null) {
                             if (response.body().getProductList().get(0).getProduct().getShop().getOfferMinAmount() < priceAmount) {
                                 int offerPercentage = response.body().getProductList().get(0).getProduct().getShop().getOfferPercent();
                                 discount = (int) (priceAmount * (offerPercentage * 0.01));
@@ -302,8 +299,8 @@ public class CartFragment extends Fragment {
                         Glide.with(context).load(image_url).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
                                 .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
                         deliveryChargeValue = response.body().getDeliveryCharges();
-                        tax = (int) (topPayAmount*(response.body().getTaxPercentage()*0.01));
-                        topPayAmount=topPayAmount+tax;
+                        tax = (int) (topPayAmount * (response.body().getTaxPercentage() * 0.01));
+                        topPayAmount = topPayAmount + tax;
                         topPayAmount = topPayAmount + response.body().getDeliveryCharges();
                         payAmount.setText(currency + "" + topPayAmount);
                         serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + String.valueOf(tax));
@@ -317,7 +314,7 @@ public class CartFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<AddCart> call, Throwable t) {
+            public void onFailure(@NonNull Call<AddCart> call, @NonNull Throwable t) {
                 errorLayout.setVisibility(View.VISIBLE);
                 dataLayout.setVisibility(View.GONE);
             }
@@ -332,13 +329,13 @@ public class CartFragment extends Fragment {
             int money = GlobalData.profileModel.getWalletBalance();
             if (money > 0) {
 //                amountTxt.setText(numberFormat.format(money));
-                amountTxt.setText(GlobalData.currencySymbol+" "+money);
+                amountTxt.setText(GlobalData.currencySymbol + " " + money);
                 walletLayout.setVisibility(View.VISIBLE);
             } else {
                 walletLayout.setVisibility(View.INVISIBLE);
             }
         }
-        if(bottomSheetDialogFragment!=null)
+        if (bottomSheetDialogFragment != null)
             bottomSheetDialogFragment.dismiss();
 
     }
@@ -426,14 +423,14 @@ public class CartFragment extends Fragment {
                 /**  If address is filled */
                 if (connectionHelper.isConnectingToInternet()) {
 //                    checkOut(GlobalData.getInstance().selectedAddress.getId());
-                    checkoutMap= new HashMap<>();
-                    checkoutMap.put("user_address_id",""+GlobalData.getInstance().selectedAddress.getId());
-                    checkoutMap.put("note",""+customNotes.getText());
-                    if(useWalletChkBox.isChecked())
-                    checkoutMap.put("wallet","1");
+                    checkoutMap = new HashMap<>();
+                    checkoutMap.put("user_address_id", "" + GlobalData.selectedAddress.getId());
+                    checkoutMap.put("note", "" + customNotes.getText());
+                    if (useWalletChkBox.isChecked())
+                        checkoutMap.put("wallet", "1");
                     else
-                    checkoutMap.put("wallet","0");
-                    startActivity(new Intent(context, AccountPaymentActivity.class).putExtra("is_show_wallet",false).putExtra("is_show_cash",true));
+                        checkoutMap.put("wallet", "0");
+                    startActivity(new Intent(context, AccountPaymentActivity.class).putExtra("is_show_wallet", false).putExtra("is_show_cash", true));
                     activity.overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
                 } else {
                     Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
@@ -444,17 +441,16 @@ public class CartFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.print("CartFragment");
         if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_OK) {
             System.out.print("CartFragment : Success");
-            if (GlobalData.getInstance().selectedAddress != null) {
+            if (GlobalData.selectedAddress != null) {
                 locationErrorLayout.setVisibility(View.GONE);
                 locationInfoLayout.setVisibility(View.VISIBLE);
-                addressHeader.setText(GlobalData.getInstance().selectedAddress.getType());
-                addressDetail.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
+                addressHeader.setText(GlobalData.selectedAddress.getType());
+                addressDetail.setText(GlobalData.selectedAddress.getMapAddress());
                 addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");
             } else {
                 locationErrorLayout.setVisibility(View.VISIBLE);

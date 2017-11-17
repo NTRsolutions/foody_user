@@ -93,7 +93,7 @@ public class DeliveryLocationAdapter extends SectionedRecyclerViewAdapter<Delive
                 if (SetDeliveryLocationActivity.isAddressSelection) {
                     //select the address data and set to address in Cart fargment page
                     Intent returnIntent = new Intent();
-                    GlobalData.getInstance().selectedAddress = object;
+                    GlobalData.selectedAddress = object;
                     activity.setResult(Activity.RESULT_OK, returnIntent);
                     activity.finish();
                 }

@@ -69,7 +69,7 @@ public class OrderDetailFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
 
-        Order order = GlobalData.getInstance().isSelectedOrder;
+        Order order = GlobalData.isSelectedOrder;
         //set Item List Values
         itemList = new ArrayList<>();
         if(order!=null){

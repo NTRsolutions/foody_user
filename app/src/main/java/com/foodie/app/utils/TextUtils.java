@@ -13,11 +13,7 @@ public class TextUtils {
 
     //check Valid Mail address
     public final static boolean isValidEmail(String strText) {
-        if (strText == null) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(strText).matches();
-        }
+        return strText != null && android.util.Patterns.EMAIL_ADDRESS.matcher(strText).matches();
     }
 
 }

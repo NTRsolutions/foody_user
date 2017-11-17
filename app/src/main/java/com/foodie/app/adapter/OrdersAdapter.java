@@ -16,12 +16,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.foodie.app.R;
 import com.foodie.app.activities.CurrentOrderDetailActivity;
-import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.activities.PastOrderDetailActivity;
 import com.foodie.app.activities.ViewCartActivity;
 import com.foodie.app.build.api.ApiClient;
@@ -173,7 +171,7 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             }
         });
 
-        holder.totalAmount.setText(GlobalData.getInstance().currencySymbol + object.getInvoice().getNet().toString());
+        holder.totalAmount.setText(GlobalData.currencySymbol + object.getInvoice().getNet().toString());
         //set Item List Values
         itemList = new ArrayList<>();
         itemList.addAll(object.getItems());
@@ -190,10 +188,10 @@ public class OrdersAdapter extends SectionedRecyclerViewAdapter<OrdersAdapter.Vi
             @Override
             public void onClick(View v) {
                 if (list.get(section).getHeader().equalsIgnoreCase("Current Orders")) {
-                    GlobalData.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
+                    GlobalData.isSelectedOrder = list.get(section).getOrders().get(relativePosition);
                     context1.startActivity(new Intent(context1, CurrentOrderDetailActivity.class).putExtra("is_order_page",true));
                 } else {
-                    GlobalData.getInstance().isSelectedOrder = list.get(section).getOrders().get(relativePosition);
+                    GlobalData.isSelectedOrder = list.get(section).getOrders().get(relativePosition);
                     context1.startActivity(new Intent(context1, PastOrderDetailActivity.class));
                 }
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);

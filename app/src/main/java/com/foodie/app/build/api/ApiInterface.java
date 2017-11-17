@@ -9,7 +9,6 @@ import com.foodie.app.models.AddMoney;
 import com.foodie.app.models.Address;
 import com.foodie.app.models.Card;
 import com.foodie.app.models.Message;
-import com.foodie.app.models.Category;
 import com.foodie.app.models.ChangePassword;
 import com.foodie.app.models.ClearCart;
 import com.foodie.app.models.Cuisine;

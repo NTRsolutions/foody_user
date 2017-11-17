@@ -31,7 +31,6 @@ import com.foodie.app.activities.ProductDetailActivity;
 import com.foodie.app.activities.ViewCartActivity;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.fragments.AddonBottomSheetFragment;
 import com.foodie.app.fragments.CartChoiceModeFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
@@ -47,6 +46,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,12 +81,12 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
 
     public HotelCatagoeryAdapter(Context context, Activity activity, List<Category> list) {
-        this.context = context;
+        HotelCatagoeryAdapter.context = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
         this.activity = activity;
-        if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
-            addCart = GlobalData.getInstance().addCart;
+        if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0) {
+            addCart = GlobalData.addCart;
         }
     }
 
@@ -145,14 +145,14 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         }
 
         //only once check
-        if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0 && relativePosition < 2) {
-            setViewcartBottomLayout(GlobalData.getInstance().addCart);
-            addCart = GlobalData.getInstance().addCart;
+        if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0 && relativePosition < 2) {
+            setViewcartBottomLayout(GlobalData.addCart);
+            addCart = GlobalData.addCart;
         }
 
         //Check if product is already added
         if (product.getCart() != null && product.getCart().size() != 0) {
-            GlobalData.getInstance().selectedShop = HotelViewActivity.shops;
+            selectedShop = HotelViewActivity.shops;
             holder.cardAddTextLayout.setVisibility(View.GONE);
             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
             Integer quantity = 0;
@@ -216,7 +216,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                     holder.cardTextValue.setText("" + countValue);
                     holder.cardTextValueTicker.setText("" + countValue);
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", holder.cardTextValue.getText().toString());
                     map.put("cart_id", String.valueOf(cartId));
@@ -249,7 +249,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     if (addCart.getProductList().size() == 0 && addCart != null)
                         HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
-                    HashMap<String, String> map = new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", "0");
                     map.put("cart_id", String.valueOf(cartId));
@@ -260,7 +260,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         int countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                         holder.cardTextValue.setText("" + countMinusValue);
                         holder.cardTextValueTicker.setText("" + countMinusValue);
-                        HashMap<String, String> map = new HashMap<String, String>();
+                        HashMap<String, String> map = new HashMap<>();
                         map.put("product_id", product.getId().toString());
                         map.put("quantity", holder.cardTextValue.getText().toString());
                         map.put("cart_id", String.valueOf(cartId));
@@ -318,13 +318,13 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                                         context.startActivity(new Intent(context, ProductDetailActivity.class));
                                         activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                                     } else {
-                                        GlobalData.selectedShop = HotelViewActivity.shops;
+                                        selectedShop = HotelViewActivity.shops;
                                         product = list.get(section).getProducts().get(relativePosition);
                                         holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                                         holder.cardAddTextLayout.setVisibility(View.GONE);
                                         holder.cardTextValue.setText("1");
                                         holder.cardTextValueTicker.setText("1");
-                                        HashMap<String, String> map = new HashMap<String, String>();
+                                        HashMap<String, String> map = new HashMap<>();
                                         map.put("product_id", product.getId().toString());
                                         map.put("quantity", holder.cardTextValue.getText().toString());
                                         Log.e("AddCart_Text", map.toString());
@@ -348,7 +348,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
                     pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                     pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
-                } else if (GlobalData.profileModel != null) {
+                } else if (profileModel != null) {
             /*     Check Shop*/
                     Log.e("IsShopchanged2 :", "" + isShopIsChanged);
                     Log.e("profileModel", "" + profileModel.toString());
@@ -362,7 +362,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         holder.cardAddTextLayout.setVisibility(View.GONE);
                         holder.cardTextValue.setText("1");
                         holder.cardTextValueTicker.setText("1");
-                        HashMap<String, String> map = new HashMap<String, String>();
+                        HashMap<String, String> map = new HashMap<>();
                         map.put("product_id", product.getId().toString());
                         map.put("quantity", holder.cardTextValue.getText().toString());
                         Log.e("AddCart_Text", map.toString());
@@ -409,7 +409,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 } else if (response.isSuccessful()) {
 //                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     selectedShop = HotelViewActivity.shops;
-                    GlobalData.getInstance().addCart.getProductList().clear();
+                    GlobalData.addCart.getProductList().clear();
 
                 }
 
@@ -418,7 +418,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             @Override
             public void onFailure(Call<ClearCart> call, Throwable t) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
-                GlobalData.getInstance().addCartShopId = selectedShop.getId();
+                GlobalData.addCartShopId = selectedShop.getId();
             }
         });
 
@@ -439,9 +439,9 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     }
                 } else if (response.isSuccessful()) {
                     if (selectedShop!= null)
-                        GlobalData.getInstance().addCartShopId = selectedShop.getId();
+                        GlobalData.addCartShopId = selectedShop.getId();
                     addCart = response.body();
-                    GlobalData.getInstance().addCart = response.body();
+                    GlobalData.addCart = response.body();
                     setViewcartBottomLayout(addCart);
                 }
             }
@@ -473,16 +473,16 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 }
             }
         }
-        GlobalData.getInstance().notificationCount = itemQuantity;
+        GlobalData.notificationCount = itemQuantity;
         if (itemQuantity == 0) {
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
             // Start animation
             HotelViewActivity.viewCartLayout.startAnimation(slide_down);
         } else if (itemQuantity == 1) {
-            if (HotelViewActivity.shops.getId() != GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+            if (!Objects.equals(HotelViewActivity.shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
                 isShopIsChanged = true;
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
             } else {
                 isShopIsChanged = false;
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
@@ -495,10 +495,10 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                 HotelViewActivity.viewCartLayout.startAnimation(slide_up);
             }
         } else {
-            if (HotelViewActivity.shops.getId() != GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShopId()) {
+            if (!Objects.equals(HotelViewActivity.shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
                 isShopIsChanged = true;
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.getInstance().addCart.getProductList().get(0).getProduct().getShop().getName());
+                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
             } else {
                 isShopIsChanged = false;
                 HotelViewActivity.viewCartShopName.setVisibility(View.GONE);

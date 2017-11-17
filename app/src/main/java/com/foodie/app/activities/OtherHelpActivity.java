@@ -151,7 +151,7 @@ public class OtherHelpActivity extends AppCompatActivity {
                             Toast.makeText(context, "Please enter reason", Toast.LENGTH_SHORT).show();
                         } else {
                             dialog.dismiss();
-                            HashMap<String, String> map = new HashMap<String, String>();
+                            HashMap<String, String> map = new HashMap<>();
                             map.put("order_id", GlobalData.isSelectedOrder.getId().toString());
                             map.put("status", "CREATED");
                             map.put("description", edt.getText().toString());
@@ -170,7 +170,7 @@ public class OtherHelpActivity extends AppCompatActivity {
 
     }
 
-    private void postDispute(HashMap map) {
+    private void postDispute(HashMap<String, String> map) {
         customDialog.show();
         Call<Order> call = apiInterface.postDispute(map);
         call.enqueue(new Callback<Order>() {

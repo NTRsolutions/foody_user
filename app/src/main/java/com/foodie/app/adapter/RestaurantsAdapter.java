@@ -83,7 +83,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
 //        }
 
         if (shops.getRatings() != null) {
-            Double rating = new BigDecimal(shops.getRatings().getRating().toString()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+            Double rating = new BigDecimal(shops.getRatings().getRating()).setScale(1, RoundingMode.HALF_UP).doubleValue();
             holder.rating.setText("" + rating);
         } else
             holder.rating.setText("No Rating");
@@ -120,7 +120,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
                 context.startActivity(new Intent(context, HotelViewActivity.class).putExtra("position", getAdapterPosition()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                GlobalData.getInstance().selectedShop = list.get(getAdapterPosition());
+                GlobalData.selectedShop = list.get(getAdapterPosition());
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 list.get(getAdapterPosition()).getCuisines();
 

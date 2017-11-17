@@ -16,12 +16,8 @@ public class ConnectionHelper {
     public boolean isConnectingToInternet() {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            //Toast.makeText(context, "Oops ! Connect your Internet", Toast.LENGTH_LONG).show();
-            return false;
-        }
+        //Toast.makeText(context, "Oops ! Connect your Internet", Toast.LENGTH_LONG).show();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
 
     }
 }

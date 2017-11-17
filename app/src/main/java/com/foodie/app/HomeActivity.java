@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -22,7 +20,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -32,7 +29,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.build.configure.BuildConfigure;
 import com.foodie.app.fragments.CartFragment;
 import com.foodie.app.fragments.HomeFragment;
 import com.foodie.app.fragments.ProfileFragment;
@@ -64,7 +60,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -177,7 +172,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
             buildGoogleApiClient();
         }
 
-        if (GlobalData.getInstance().profileModel != null)
+        if (profileModel != null)
             getNotificationItemCount();
 
         fragmentManager = getSupportFragmentManager();
@@ -253,7 +248,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
             public void onResponse(Call<List<DisputeMessage>> call, Response<List<DisputeMessage>> response) {
                 if (response.isSuccessful()) {
                     Log.e("Dispute List : ", response.toString());
-                    disputeMessageList = new ArrayList<DisputeMessage>();
+                    disputeMessageList = new ArrayList<>();
                     disputeMessageList.addAll(response.body());
                 } else {
                     try {
@@ -478,15 +473,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
     }
 
     public void getNotificationItemCount() {
-        if (GlobalData.getInstance().addCart != null && GlobalData.getInstance().addCart.getProductList().size() != 0) {
-            itemCount = GlobalData.getInstance().addCart.getProductList().size();
+        if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0) {
+            itemCount = GlobalData.addCart.getProductList().size();
             int itemQuantity = 0;
             for (int i = 0; i < itemCount; i++) {
                 //Get Total item Quantity
-                itemQuantity = itemQuantity + GlobalData.getInstance().addCart.getProductList().get(i).getQuantity();
+                itemQuantity = itemQuantity + GlobalData.addCart.getProductList().get(i).getQuantity();
                 //Get product price
             }
-            GlobalData.getInstance().notificationCount = itemQuantity;
+            notificationCount = itemQuantity;
         }
     }
 

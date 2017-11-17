@@ -3,7 +3,6 @@ package com.foodie.app.fragments;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -12,39 +11,27 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.CartAddOnsAdapter;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Addon;
 import com.foodie.app.models.Cart;
 import com.foodie.app.models.Product;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static com.foodie.app.activities.AccountPaymentActivity.apiInterface;
 import static com.foodie.app.adapter.CartAddOnsAdapter.list;
 
 
@@ -139,7 +126,7 @@ public class AddonBottomSheetFragment extends BottomSheetDialogFragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> map = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<>();
                 map.put("product_id", product.getId().toString());
                 map.put("quantity", String.valueOf(GlobalData.isSelctedCart.getQuantity()));
                 map.put("cart_id", String.valueOf(GlobalData.isSelctedCart.getId()));

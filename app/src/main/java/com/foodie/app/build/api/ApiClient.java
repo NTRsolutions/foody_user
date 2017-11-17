@@ -56,8 +56,8 @@ public class ApiClient {
         public Response intercept(Chain chain) throws IOException {
             Request.Builder builder = chain.request().newBuilder();
             builder.addHeader("X-Requested-With", "XMLHttpRequest");
-            builder.addHeader("Authorization", "" + GlobalData.getInstance().accessToken);
-            Log.e("access_token", GlobalData.getInstance().accessToken);
+            builder.addHeader("Authorization", "" + GlobalData.accessToken);
+            Log.e("access_token", GlobalData.accessToken);
 
             return chain.proceed(builder.build());
         }

@@ -1,13 +1,11 @@
 package com.foodie.app.activities;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,10 +20,8 @@ import android.widget.Toast;
 import com.foodie.app.R;
 import com.foodie.app.adapter.AddOnsAdapter;
 import com.foodie.app.adapter.SliderPagerAdapter;
-import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
-import com.foodie.app.fragments.SliderDialogFragment;
 import com.foodie.app.helper.CustomDialog;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
@@ -33,7 +29,6 @@ import com.foodie.app.models.Addon;
 import com.foodie.app.models.Image;
 import com.foodie.app.models.Product;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,7 +43,6 @@ import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.adapter.AddOnsAdapter.list;
-import static com.foodie.app.helper.GlobalData.cuisineIdArrayList;
 
 
 public class ProductDetailActivity extends AppCompatActivity {
@@ -119,7 +113,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         addItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> map = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<>();
                 map.put("product_id", product.getId().toString());
                 if (product.getCart() != null && product.getCart().size() == 1 && product.getAddons().isEmpty()) {
                     map.put("quantity", String.valueOf(product.getCart().get(0).getQuantity() + 1));

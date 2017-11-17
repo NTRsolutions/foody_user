@@ -392,11 +392,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private boolean isValidMobile(String phone) {
-        if (phone == null || phone.length() < 6 || phone.length() > 13) {
-            return false;
-        } else {
-            return android.util.Patterns.PHONE.matcher(phone).matches();
-        }
+        return !(phone == null || phone.length() < 6 || phone.length() > 13) && android.util.Patterns.PHONE.matcher(phone).matches();
     }
 
     public void login(HashMap<String, String> map) {

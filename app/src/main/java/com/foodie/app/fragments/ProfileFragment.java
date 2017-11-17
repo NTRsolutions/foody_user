@@ -26,7 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.BuildConfig;
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
@@ -36,7 +35,6 @@ import com.foodie.app.activities.EditAccountActivity;
 import com.foodie.app.activities.FavouritesActivity;
 import com.foodie.app.activities.LoginActivity;
 import com.foodie.app.activities.ManageAddressActivity;
-import com.foodie.app.activities.NotificationActivity;
 import com.foodie.app.activities.OrdersActivity;
 import com.foodie.app.activities.PromotionActivity;
 import com.foodie.app.activities.WelcomeScreenActivity;
@@ -106,7 +104,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
 
-        if (GlobalData.getInstance().profileModel != null) {
+        if (GlobalData.profileModel != null) {
             errorLayout.setVisibility(View.GONE);
             final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
             List<Integer> listIcons = new ArrayList<>();
@@ -129,7 +127,7 @@ public class ProfileFragment extends Fragment {
             });
             arrowImage.setTag(true);
 //            collapse(listLayout);
-            HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+            HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         } else {
             //set Error Layout
             errorLayout.setVisibility(View.VISIBLE);
@@ -147,7 +145,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
+        HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         initView();
     }
 
@@ -210,7 +208,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         System.out.println("ProfileFragment");
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
-        if (GlobalData.getInstance().profileModel != null) {
+        if (GlobalData.profileModel != null) {
             toolbar.setVisibility(View.VISIBLE);
             toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
             userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
@@ -379,7 +377,7 @@ public class ProfileFragment extends Fragment {
                             signOut();
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        GlobalData.getInstance().profileModel = null;
+                        GlobalData.profileModel = null;
                         getActivity().finish();
 
 

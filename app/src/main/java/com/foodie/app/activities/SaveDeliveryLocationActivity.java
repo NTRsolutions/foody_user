@@ -305,13 +305,17 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                     addressEdit.setText(address.getMapAddress());
                     flatNoEdit.setText(address.getBuilding());
                     landmark.setText(address.getLandmark());
-                    if (address.getType().equals("home")) {
-                        homeRadio.setChecked(true);
-                    } else if (address.getType().equals("work")) {
-                        workRadio.setChecked(true);
-                    } else {
-                        otherAddressHeaderEt.setText(address.getType());
-                        otherRadio.setChecked(true);
+                    switch (address.getType()) {
+                        case "home":
+                            homeRadio.setChecked(true);
+                            break;
+                        case "work":
+                            workRadio.setChecked(true);
+                            break;
+                        default:
+                            otherAddressHeaderEt.setText(address.getType());
+                            otherRadio.setChecked(true);
+                            break;
                     }
                 }
             }
@@ -465,7 +469,7 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             address.setPincode(addressArray.optJSONObject(5).optString("long_name"));
                             addressHeader = addressArray.optJSONObject(0).optString("long_name");
                             String address = jsonArray.optJSONObject(0).optString("formatted_address");
-                            addressEdit.setText(address.toString());
+                            addressEdit.setText(address);
                             addressHeader = address;
                             Log.v("Formatted Address", "" + GlobalData.addressHeader);
                         } else {

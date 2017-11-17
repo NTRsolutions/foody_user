@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.helper.GlobalData;
@@ -63,7 +62,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.MyViewHold
             public void onClick(View v) {
                 Banner banner = list.get(position);
                 context.startActivity(new Intent(context, HotelViewActivity.class));
-                GlobalData.getInstance().selectedShop = banner.getShop();
+                GlobalData.selectedShop = banner.getShop();
                 activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 Log.d("Hello", "onItemClick position: " + banner.getShop().getName());
             }
