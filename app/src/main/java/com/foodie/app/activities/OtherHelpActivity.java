@@ -3,6 +3,7 @@ package com.foodie.app.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -79,7 +80,7 @@ public class OtherHelpActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         reason = getIntent().getExtras().getString("type");
         DISPUTE_HELP_ID = getIntent().getExtras().getInt("id");
-        Order order = GlobalData.getInstance().isSelectedOrder;
+        Order order = GlobalData.isSelectedOrder;
         itemQuantity = order.getInvoice().getQuantity();
         priceAmount = order.getInvoice().getNet();
         currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
@@ -90,7 +91,7 @@ public class OtherHelpActivity extends AppCompatActivity {
         orderIdTxt.setText("ORDER #000" + order.getId().toString());
         reasonTitle.setText(reason);
         isChat = getIntent().getBooleanExtra("is_chat", false);
-        if(isChat)
+        if (isChat)
             chatUs.performClick();
         //Toolbar
         setSupportActionBar(toolbar);
@@ -131,8 +132,8 @@ public class OtherHelpActivity extends AppCompatActivity {
         });
         dialogBuilder.setTitle(orderIdTxt.getText().toString());
         dialogBuilder.setMessage(reason);
-        dialogBuilder.setPositiveButton("Submit", null);
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialogBuilder.setPositiveButton(getString(R.string.submit), null);
+        dialogBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
             }
@@ -174,26 +175,24 @@ public class OtherHelpActivity extends AppCompatActivity {
         Call<Order> call = apiInterface.postDispute(map);
         call.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    customDialog.dismiss();
+            public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
+                customDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(OtherHelpActivity.this, "Dispute create successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                } else if (response.isSuccessful()) {
-                    customDialog.dismiss();
-                    Toast.makeText(OtherHelpActivity.this, "Dispute create successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-
                 }
 
             }
 
             @Override
-            public void onFailure(Call<Order> call, Throwable t) {
+            public void onFailure(@NonNull Call<Order> call, @NonNull Throwable t) {
 
             }
         });
