@@ -271,22 +271,20 @@ public class ProfileFragment extends Fragment {
         switch (value) {
             case "English":
                 LocaleUtils.setLocale(getActivity(), "en");
-                onResume();
                 break;
             case "Arabic":
                 LocaleUtils.setLocale(getActivity(), "ar");
-                onResume();
                 break;
             case "Spanish":
                 LocaleUtils.setLocale(getActivity(), "es");
-                onResume();
                 break;
             default:
                 LocaleUtils.setLocale(getActivity(), "en");
-                onResume();
                 break;
         }
-        startActivity(new Intent(getActivity(),HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(getActivity(),HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra("change_language",true));
+        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
     }
     private void initView() {
         if (GlobalData.profileModel != null) {

@@ -104,7 +104,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 0;
 
     FusedLocationProviderClient mFusedLocationClient;
+    boolean isChangePassword=false;
     Retrofit retrofit;
+    FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +116,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         setContentView(R.layout.activity_home);
         connectionHelper = new ConnectionHelper(this);
 
+        isChangePassword = getIntent().getBooleanExtra("change_language", false);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -176,9 +178,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
             getNotificationItemCount();
 
         fragmentManager = getSupportFragmentManager();
-        fragment = new HomeFragment();
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.main_container, fragment).commit();
+        transaction = fragmentManager.beginTransaction();
 
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
@@ -187,18 +187,16 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.search, R.drawable.ic_search, R.color.grey);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem("Cart", R.drawable.ic_cart, R.color.grey);
         AHBottomNavigationItem item4 = new AHBottomNavigationItem("Profile", R.drawable.ic_user, R.color.grey);
-
-// Add items
+        // Add items
         bottomNavigation.addItem(item1);
         bottomNavigation.addItem(item2);
         bottomNavigation.addItem(item3);
         bottomNavigation.addItem(item4);
 
-// Set background color
+        // Set background color
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
 
-
-// Disable the translation inside the CoordinatorLayout
+        // Disable the translation inside the CoordinatorLayout
         bottomNavigation.setBehaviorTranslationEnabled(true);
         bottomNavigation.setTranslucentNavigationEnabled(true);
 
@@ -210,8 +208,17 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
 
 
         // Set current item programmatically
-        bottomNavigation.setCurrentItem(0);
-
+        if(isChangePassword){
+            fragment = new ProfileFragment();
+            transaction.add(R.id.main_container, fragment).commit();
+            bottomNavigation.setCurrentItem(3);
+        }
+        else
+        {
+            fragment = new HomeFragment();
+            transaction.add(R.id.main_container, fragment).commit();
+            bottomNavigation.setCurrentItem(0);
+        }
         // Set listeners
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
@@ -232,7 +239,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener,
                         break;
                 }
 
-                final FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.main_container, fragment).commit();
                 return true;
             }
