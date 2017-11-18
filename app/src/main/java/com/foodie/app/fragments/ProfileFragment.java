@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,6 +44,7 @@ import com.foodie.app.helper.GlobalData;
 import com.foodie.app.helper.SharedHelper;
 import com.foodie.app.utils.ListViewSizeHelper;
 import com.facebook.login.LoginManager;
+import com.foodie.app.utils.LocaleUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -104,40 +106,6 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
 
-        if (GlobalData.profileModel != null) {
-            errorLayout.setVisibility(View.GONE);
-            final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
-            List<Integer> listIcons = new ArrayList<>();
-            listIcons.add(R.drawable.ic_home);
-            listIcons.add(R.drawable.heart);
-            listIcons.add(R.drawable.payment);
-            listIcons.add(R.drawable.ic_myorders);
-//            listIcons.add(R.drawable.ic_notifications);
-            listIcons.add(R.drawable.ic_promotion_details);
-            listIcons.add(R.drawable.padlock);
-//            listIcons.add(R.drawable.padlock);
-            ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
-            profileSettingLv.setAdapter(adbPerson);
-            ListViewSizeHelper.getListViewSize(profileSettingLv);
-            profileSettingLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    openSettingPage(position);
-                }
-            });
-            arrowImage.setTag(true);
-//            collapse(listLayout);
-            HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
-        } else {
-            //set Error Layout
-            errorLayout.setVisibility(View.VISIBLE);
-        }
-
-        String VERSION_NAME = BuildConfig.VERSION_NAME;
-        int versionCode = BuildConfig.VERSION_CODE;
-        appVersion.setText("App version " + VERSION_NAME + " ("+String.valueOf(versionCode)+ ")");
-
-
         return view;
     }
 
@@ -187,6 +155,9 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(context, PromotionActivity.class));
                 break;
             case 5:
+                changeLanguage();
+                break;
+            case 6:
                 startActivity(new Intent(context, ChangePasswordActivity.class));
                 break;
 //            case 4:
@@ -209,7 +180,6 @@ public class ProfileFragment extends Fragment {
         System.out.println("ProfileFragment");
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         if (GlobalData.profileModel != null) {
-            toolbar.setVisibility(View.VISIBLE);
             toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_profile, toolbar, false);
             userImage = (ImageView) toolbarLayout.findViewById(R.id.user_image);
             userName = (TextView) toolbarLayout.findViewById(R.id.user_name);
@@ -231,11 +201,93 @@ public class ProfileFragment extends Fragment {
                 }
             });
             toolbar.addView(toolbarLayout);
+            toolbar.setVisibility(View.VISIBLE);
+
+            errorLayout.setVisibility(View.GONE);
+            final List<String> list = Arrays.asList(getResources().getStringArray(R.array.profile_settings));
+            List<Integer> listIcons = new ArrayList<>();
+            listIcons.add(R.drawable.home);
+            listIcons.add(R.drawable.heart);
+            listIcons.add(R.drawable.payment);
+            listIcons.add(R.drawable.ic_myorders);
+            listIcons.add(R.drawable.ic_promotion_details);
+            listIcons.add(R.drawable.ic_translate);
+            listIcons.add(R.drawable.padlock);
+            ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
+            profileSettingLv.setAdapter(adbPerson);
+            ListViewSizeHelper.getListViewSize(profileSettingLv);
+            profileSettingLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    openSettingPage(position);
+                }
+            });
+            arrowImage.setTag(true);
+//            collapse(listLayout);
+            HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
+
+            String VERSION_NAME = BuildConfig.VERSION_NAME;
+            int versionCode = BuildConfig.VERSION_CODE;
+            appVersion.setText("App version " + VERSION_NAME + " ("+String.valueOf(versionCode)+ ")");
+
         } else {
             toolbar.setVisibility(View.GONE);
+            //set Error Layout
+            errorLayout.setVisibility(View.VISIBLE);
         }
+
+
     }
 
+    private void changeLanguage() {
+
+        List<String> languages = Arrays.asList(getResources().getStringArray(R.array.languages));
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.language_dialog, null);
+        alertDialog.setView(convertView);
+        alertDialog.setCancelable(true);
+        alertDialog.setTitle("Change Language");
+        final AlertDialog alert = alertDialog.create();
+
+        final ListView lv = (ListView) convertView.findViewById(R.id.lv);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, languages);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                String item = lv.getItemAtPosition(position).toString();
+                setLanguage(item);
+                alert.dismiss();
+            }
+        });
+        alert.show();
+
+    }
+
+
+    private void setLanguage(String value) {
+        SharedHelper.putKey(getActivity(), "language", value);
+        switch (value) {
+            case "English":
+                LocaleUtils.setLocale(getActivity(), "en");
+                onResume();
+                break;
+            case "Arabic":
+                LocaleUtils.setLocale(getActivity(), "ar");
+                onResume();
+                break;
+            case "Spanish":
+                LocaleUtils.setLocale(getActivity(), "es");
+                onResume();
+                break;
+            default:
+                LocaleUtils.setLocale(getActivity(), "en");
+                onResume();
+                break;
+        }
+        startActivity(new Intent(getActivity(),HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    }
     private void initView() {
         if (GlobalData.profileModel != null) {
             Glide.with(context).load(GlobalData.profileModel.getAvatar()).placeholder(R.drawable.man).dontAnimate()

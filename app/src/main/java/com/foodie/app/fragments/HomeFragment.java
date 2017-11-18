@@ -26,7 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amar.library.ui.StickyScrollView;
+
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.foodie.app.HomeActivity;
@@ -87,8 +87,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     Spinner catagoerySpinner;
     @BindView(R.id.title)
     LinearLayout title;
-    @BindView(R.id.scrollView)
-    StickyScrollView scrollView;
     @BindView(R.id.restaurant_count_txt)
     TextView restaurantCountTxt;
     @BindView(R.id.offer_title_header)
@@ -516,6 +514,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        activity = getActivity();
+
     }
 
     @Override
@@ -548,8 +548,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 skeletonText2.show();
                 skeletonSpinner.show();
                 findRestaurant();
-
-            } else {
 
             }
         } else if (requestCode == ADDRESS_SELECTION && resultCode == Activity.RESULT_CANCELED) {

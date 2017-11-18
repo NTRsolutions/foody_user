@@ -171,7 +171,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                     GlobalData.isSelectedProduct = product;
                     bottomSheetDialogFragment = new CartChoiceModeFragment();
                     bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-                    CartChoiceModeFragment.isViewcart=false;
+                    CartChoiceModeFragment.isViewcart = false;
                 } else {
                     int cartId = 0;
                     for (int i = 0; i < addCart.getProductList().size(); i++) {
@@ -287,9 +287,8 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
                 product = list.get(section);
-
                 if (profileModel != null) {
-                    if (currentShop != null && currentShop.getId().equals(list.get(section).getShop().getId())) {
+                    if (GlobalData.addCart == null && !GlobalData.addCart.getProductList().isEmpty()) {
                         currentShop = list.get(section).getShop();
                         if (product.getAddons() != null && product.getAddons().size() != 0) {
                             GlobalData.isSelectedProduct = product;
@@ -305,66 +304,85 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                             map.put("quantity", holder.cardTextValue.getText().toString());
                             Log.e("AddCart_Text", map.toString());
                             addCart(map);
+
+                        }
+                    }
+                  else if (!GlobalData.addCart.getProductList().isEmpty() && addCart.getProductList().get(0).getProduct().getShop().getId().equals(list.get(section).getShop().getId())) {
+                            currentShop = list.get(section).getShop();
+                            if (product.getAddons() != null && product.getAddons().size() != 0) {
+                                GlobalData.isSelectedProduct = product;
+                                context.startActivity(new Intent(context, ProductDetailActivity.class));
+                                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                            } else {
+                                holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                                holder.cardAddTextLayout.setVisibility(View.GONE);
+                                holder.cardTextValue.setText("1");
+                                holder.cardTextValueTicker.setText("1");
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("product_id", product.getId().toString());
+                                map.put("quantity", holder.cardTextValue.getText().toString());
+                                Log.e("AddCart_Text", map.toString());
+                                addCart(map);
+                            }
+
+                        } else {
+                            Log.e("IsShopchanged", "True");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
+                                    .setMessage(context.getResources().getString(R.string.do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant))
+                                    .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue with delete
+                                            clearCart();
+                                            isShopIsChanged = false;
+                                            if (product.getAddons() != null && product.getAddons().size() != 0) {
+                                                GlobalData.isSelectedProduct = product;
+                                                context.startActivity(new Intent(context, ProductDetailActivity.class));
+                                                activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                                            } else {
+                                                selectedShop = HotelViewActivity.shops;
+                                                product = list.get(section);
+                                                holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                                                holder.cardAddTextLayout.setVisibility(View.GONE);
+                                                holder.cardTextValue.setText("1");
+                                                holder.cardTextValueTicker.setText("1");
+                                                HashMap<String, String> map = new HashMap<>();
+                                                map.put("product_id", product.getId().toString());
+                                                map.put("quantity", holder.cardTextValue.getText().toString());
+                                                Log.e("AddCart_Text", map.toString());
+                                                addCart(map);
+                                            }
+
+                                        }
+                                    })
+                                    .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                            dialog.dismiss();
+
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                            Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                            nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
+                            nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+                            Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                            pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
+                            pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
                         }
 
+
                     } else {
-                        Log.e("IsShopchanged", "True");
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
-                                .setMessage(context.getResources().getString(R.string.do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant))
-                                .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // continue with delete
-                                        clearCart();
-                                        isShopIsChanged = false;
-                                        if (product.getAddons() != null && product.getAddons().size() != 0) {
-                                            GlobalData.isSelectedProduct = product;
-                                            context.startActivity(new Intent(context, ProductDetailActivity.class));
-                                            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                                        } else {
-                                            selectedShop = HotelViewActivity.shops;
-                                            product = list.get(section);
-                                            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                                            holder.cardAddTextLayout.setVisibility(View.GONE);
-                                            holder.cardTextValue.setText("1");
-                                            holder.cardTextValueTicker.setText("1");
-                                            HashMap<String, String> map = new HashMap<>();
-                                            map.put("product_id", product.getId().toString());
-                                            map.put("quantity", holder.cardTextValue.getText().toString());
-                                            Log.e("AddCart_Text", map.toString());
-                                            addCart(map);
-                                        }
-
-                                    }
-                                })
-                                .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                        dialog.dismiss();
-
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-                        nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
-                        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
-                        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-                        pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
-                        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+                        activity.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                        activity.finish();
+                        Toast.makeText(context, context.getResources().getString(R.string.please_login_and_order_dishes), Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    activity.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                    activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
-                    activity.finish();
-                    Toast.makeText(context, context.getResources().getString(R.string.please_login_and_order_dishes), Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
 
-    }
+        }
 
     private void clearCart() {
         Call<ClearCart> call = apiInterface.clearCart();
@@ -444,10 +462,10 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView headerTxt;
-        private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd,addOnsIconImg;
-        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, viewFullMenu,customizableTxt;
+        private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd, addOnsIconImg;
+        private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, viewFullMenu, customizableTxt;
         TickerView cardTextValueTicker;
-        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout,rootLayout;
+        RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout, rootLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);

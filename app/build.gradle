@@ -112,7 +112,6 @@ dependencies {
     compile 'com.robinhood.ticker:ticker:1.2.0'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.sackcentury:shinebutton:0.1.9'
-    compile 'se.emilsjolander:StickyScrollViewItems:1.1.0'
     compile 'com.roughike:bottom-bar:2.3.1'
     compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
     compile 'com.ethanhua:skeleton:1.0.0'
