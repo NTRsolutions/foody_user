@@ -74,6 +74,10 @@ public class GlobalData {
     public static String currencySymbol = "$";
     public static int notificationCount = 0;
 
+//Search Fragment
+    public static List<Shop> searchShopList;
+    public static List<Product> searchProductList;
+
     public static ArrayList<HashMap<String, String>> foodCart;
     public static String accessToken = "";
 

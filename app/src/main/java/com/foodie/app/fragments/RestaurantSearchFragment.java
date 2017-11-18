@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.foodie.app.fragments.SearchFragment.shopList;
+import static com.foodie.app.helper.GlobalData.searchShopList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,11 +48,6 @@ public class RestaurantSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
         unbinder = ButterKnife.bind(this, view);
         context = getActivity();
-//        skeletonScreen = Skeleton.bind(restaurantsRv)
-//                .adapter(restaurantsAdapter)
-//                .load(R.layout.skeleton_restaurant_list_item)
-//                .count(6)
-//                .show();
 
         return view;
     }
@@ -64,10 +59,9 @@ public class RestaurantSearchFragment extends Fragment {
         restaurantsRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         restaurantsRv.setItemAnimator(new DefaultItemAnimator());
         restaurantsRv.setHasFixedSize(true);
-        shopList = new ArrayList<>();
-        restaurantsAdapter = new RestaurantsAdapter(shopList, context, getActivity());
+        restaurantsAdapter = new RestaurantsAdapter(searchShopList, context, getActivity());
         restaurantsRv.setAdapter(restaurantsAdapter);
-//        skeletonScreen.hide();
+
 
     }
 

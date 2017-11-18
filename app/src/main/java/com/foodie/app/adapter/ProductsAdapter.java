@@ -59,7 +59,7 @@ import static com.foodie.app.helper.GlobalData.selectedShop;
 
 public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapter.ViewHolder> {
 
-    private List<Product> list = new ArrayList<>();
+    List<Product> list = new ArrayList<>();
     private LayoutInflater inflater;
     Context context;
     Activity activity;
@@ -126,7 +126,6 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int section, final int relativePosition, final int absolutePosition) {
-//        addon = shopList.get(section).getproducts.get(relativePosition);
         product = list.get(section);
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());

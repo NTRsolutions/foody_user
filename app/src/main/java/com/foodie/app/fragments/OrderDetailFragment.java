@@ -34,7 +34,6 @@ public class OrderDetailFragment extends Fragment {
     @BindView(R.id.order_recycler_view)
     RecyclerView orderRecyclerView;
     Unbinder unbinder;
-
     Context context = getActivity();
     @BindView(R.id.item_total_amount)
     TextView itemTotalAmount;
@@ -45,7 +44,6 @@ public class OrderDetailFragment extends Fragment {
     @BindView(R.id.total_amount)
     TextView totalAmount;
     List<Item> itemList;
-
 
     int totalAmountValue = 0;
     int discount = 0;

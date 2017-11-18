@@ -23,14 +23,11 @@ import com.foodie.app.adapter.ViewPagerAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
 import com.foodie.app.helper.GlobalData;
-import com.foodie.app.models.Product;
 import com.foodie.app.models.Search;
-import com.foodie.app.models.Shop;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.helper.GlobalData.searchProductList;
+import static com.foodie.app.helper.GlobalData.searchShopList;
 
 
 /**
@@ -49,8 +48,6 @@ public class SearchFragment extends Fragment {
 
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
-    @BindView(R.id.view_line1)
-    View viewLine1;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     Unbinder unbinder;
@@ -66,9 +63,8 @@ public class SearchFragment extends Fragment {
     private View toolbarLayout;
     ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
 
-    public static List<Shop> shopList;
-    public static List<Product> productList;
     ViewPagerAdapter adapter;
+    String input="";
 
 
     @Override
@@ -81,8 +77,6 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         unbinder = ButterKnife.bind(this, view);
-
-
         return view;
     }
 
@@ -90,6 +84,8 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
         HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
+        if(!input.equalsIgnoreCase(""))
+            getSearch(input);
     }
 
     @Override
@@ -116,11 +112,13 @@ public class SearchFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         System.out.println("SearchFragment");
-        shopList = new ArrayList<>();
-        productList = new ArrayList<>();
+        searchShopList = new ArrayList<>();
+        searchProductList = new ArrayList<>();
         toolbar = (ViewGroup) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         rootLayout.setVisibility(View.GONE);
+        GlobalData.searchProductList = new ArrayList<>();
+        GlobalData.searchShopList = new ArrayList<>();
         toolbarLayout = LayoutInflater.from(context).inflate(R.layout.toolbar_search, toolbar, false);
         searchEt = (EditText) toolbarLayout.findViewById(R.id.search_et);
         progressBar = (ProgressBar) toolbarLayout.findViewById(R.id.progress_bar);
@@ -129,11 +127,28 @@ public class SearchFragment extends Fragment {
         adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new RestaurantSearchFragment(), "RESTAURANT");
         adapter.addFragment(new ProductSearchFragment(), "DISHES");
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         viewPager.setAdapter(adapter);
         //set ViewPager
         tabLayout.setupWithViewPager(viewPager);
-        searchEt.addTextChangedListener(new TextWatcher() {
 
+        searchEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -148,7 +163,8 @@ public class SearchFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (s.length() != 0) {
-                    getSearch(s);
+                    input=s.toString();
+                    getSearch(input);
                     searchCloseImg.setVisibility(View.VISIBLE);
                     rootLayout.setVisibility(View.VISIBLE);
                     relatedTxt.setText("Related to \"" + s.toString() + "\"");
@@ -156,24 +172,22 @@ public class SearchFragment extends Fragment {
                     relatedTxt.setText("Related to ");
                     searchCloseImg.setVisibility(View.GONE);
                     rootLayout.setVisibility(View.GONE);
-                    shopList.clear();
-                    productList.clear();
+                    searchShopList.clear();
+                    searchProductList.clear();
                     relatedTxt.setText(s.toString());
-//                    skeletonScreen.hide();
                     RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
                 }
 
             }
         });
-
         toolbar.addView(toolbarLayout);
         HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         searchCloseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchEt.setText("");
-                shopList.clear();
-                productList.clear();
+                searchShopList.clear();
+                searchProductList.clear();
                 ProductSearchFragment.productsAdapter.notifyDataSetChanged();
                 RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
             }
@@ -183,7 +197,6 @@ public class SearchFragment extends Fragment {
     }
 
     private void getSearch(final CharSequence s) {
-//        skeletonScreen.show();
         progressBar.setVisibility(View.VISIBLE);
         Call<Search> call = apiInterface.getSearch(s.toString());
         call.enqueue(new Callback<Search>() {
@@ -200,11 +213,10 @@ public class SearchFragment extends Fragment {
                     }
                 } else if (response.isSuccessful()) {
                     progressBar.setVisibility(View.GONE);
-                    shopList.clear();
-                    productList.clear();
-                    shopList.addAll(response.body().getShops());
-                    productList.addAll(response.body().getProducts());
-//                    skeletonScreen.hide();
+                    searchShopList.clear();
+                    searchProductList.clear();
+                    searchShopList.addAll(response.body().getShops());
+                    searchProductList.addAll(response.body().getProducts());
                     ProductSearchFragment.productsAdapter.notifyDataSetChanged();
                     RestaurantSearchFragment.restaurantsAdapter.notifyDataSetChanged();
 
@@ -213,7 +225,6 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Search> call, Throwable t) {
-
                 progressBar.setVisibility(View.GONE);
             }
         });

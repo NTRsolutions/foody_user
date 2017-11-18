@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.foodie.app.R;
 import com.foodie.app.adapter.ProductsAdapter;
+import com.foodie.app.helper.GlobalData;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.foodie.app.fragments.SearchFragment.productList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,9 +56,8 @@ public class ProductSearchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        productList = new ArrayList<>();
         //Set Categoery shopList adapter
-        productsAdapter = new ProductsAdapter(getActivity(),getActivity(), productList);
+        productsAdapter = new ProductsAdapter(getActivity(),getActivity(), GlobalData.searchProductList);
         productRv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         productRv.setItemAnimator(new DefaultItemAnimator());
         productRv.setAdapter(productsAdapter);
