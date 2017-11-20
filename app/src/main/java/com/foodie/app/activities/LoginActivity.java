@@ -348,7 +348,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             countryNumber.setText(country.getDialCode());
             country_code = country.getDialCode();
         } else {
-            Toast.makeText(LoginActivity.this, "Required Sim", Toast.LENGTH_SHORT).show();
+            Country us = new Country("US", "United States", "+1", R.drawable.flag_us);
+            countryImage.setImageResource(us.getFlag());
+            countryNumber.setText(us.getDialCode());
+            country_code = us.getDialCode();
         }
     }
 
