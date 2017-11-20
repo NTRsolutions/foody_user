@@ -330,10 +330,11 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                         }
 
                     } else {
+                        String message = String.format(activity.getResources().getString(R.string.reorder_confirm_message), product.getShop().getName(), GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
                         Log.e("IsShopchanged", "True");
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
-                                .setMessage(context.getResources().getString(R.string.do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant))
+                                .setMessage(message)
                                 .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // continue with delete
@@ -344,7 +345,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                                             context.startActivity(new Intent(context, ProductDetailActivity.class));
                                             activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                                         } else {
-                                            selectedShop = HotelViewActivity.shops;
+                                            selectedShop =product.getShop();
                                             product = list.get(section);
                                             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                                             holder.cardAddTextLayout.setVisibility(View.GONE);
@@ -374,6 +375,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                         Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
                         pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                         pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+
                     }
 
 

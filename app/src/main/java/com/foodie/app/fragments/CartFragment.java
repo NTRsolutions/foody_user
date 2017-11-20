@@ -271,6 +271,13 @@ public class CartFragment extends Fragment {
                             //Get product price
                             if (response.body().getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
+                            AddCart addCart=response.body();
+                            if (addCart.getProductList().get(i).getCartAddons() != null && !addCart.getProductList().get(i).getCartAddons().isEmpty()) {
+                                for (int j = 0; j < addCart.getProductList().get(i).getCartAddons().size(); j++) {
+                                    priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * (addCart.getProductList().get(i).getCartAddons().get(j).getQuantity() *
+                                            addCart.getProductList().get(i).getCartAddons().get(j).getAddonProduct().getPrice()));
+                                }
+                            }
                         }
                         GlobalData.notificationCount=itemQuantity;
                         GlobalData.getInstance().addCartShopId = response.body().getProductList().get(0).getProduct().getShopId();
