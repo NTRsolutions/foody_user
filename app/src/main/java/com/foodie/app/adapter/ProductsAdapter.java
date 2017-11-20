@@ -293,7 +293,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 /** Press Add Card Text Layout */
                 product = list.get(section);
                 if (profileModel != null) {
-                    if (GlobalData.addCart == null && !GlobalData.addCart.getProductList().isEmpty()) {
+                    if (GlobalData.addCart == null || GlobalData.addCart.getProductList().isEmpty()) {
                         currentShop = list.get(section).getShop();
                         if (product.getAddons() != null && product.getAddons().size() != 0) {
                             GlobalData.isSelectedProduct = product;

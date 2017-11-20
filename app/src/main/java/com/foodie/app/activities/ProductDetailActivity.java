@@ -92,6 +92,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
         context = ProductDetailActivity.this;
+        customDialog= new CustomDialog(context);
 
         //Intialize
         addOnsTxt = (TextView) findViewById(R.id.add_ons_txt);
@@ -182,10 +183,12 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void addItem(HashMap<String, String> map) {
+        customDialog.show();
         Call<AddCart> call = apiInterface.postAddCart(map);
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(@NonNull Call<AddCart> call, @NonNull Response<AddCart> response) {
+                customDialog.dismiss();
                 if (response.isSuccessful()) {
                     GlobalData.addCart = response.body();
                     finish();
@@ -201,6 +204,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<AddCart> call, @NonNull Throwable t) {
+                Toast.makeText(ProductDetailActivity.this, "ProductDetail : Something went wrong", Toast.LENGTH_SHORT).show();
+                customDialog.dismiss();
 
             }
         });

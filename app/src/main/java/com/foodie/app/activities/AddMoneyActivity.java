@@ -145,7 +145,9 @@ public class AddMoneyActivity extends AppCompatActivity {
                 break;
             case R.id.pay_btn:
                 String amount = amountTxt.getText().toString();
-                if (amount.equalsIgnoreCase("")) {
+                if (!isCardChecked) {
+                    Toast.makeText(context, "Please choose your card", Toast.LENGTH_SHORT).show();
+                } else if (amount.equalsIgnoreCase("")) {
                     Toast.makeText(context, "Please enter amount", Toast.LENGTH_SHORT).show();
                 } else if (Integer.parseInt(amount) == 0) {
                     Toast.makeText(context, "Please enter valid amount", Toast.LENGTH_SHORT).show();
