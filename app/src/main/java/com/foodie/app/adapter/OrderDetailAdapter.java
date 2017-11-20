@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodie.app.R;
+import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Item;
 
 import java.util.List;
@@ -56,6 +57,19 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         else
             holder.dishImg.setImageResource(R.drawable.ic_nonveg);
 
+        if(item.getCartAddons()!= null && !item.getCartAddons().isEmpty()){
+            List<CartAddon> cartAddonList = item.getCartAddons();
+            for (int i = 0; i < cartAddonList.size(); i++) {
+                if (i == 0)
+                    holder.addons.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
+                else
+                    holder.addons.append(", " + cartAddonList.get(i).getAddonProduct().getAddon().getName());
+            }
+
+            holder.addons.setVisibility(View.VISIBLE);
+        }else{
+            holder.addons.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -67,12 +81,13 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout itemView;
         private ImageView dishImg;
-        private TextView dishName, price;
+        private TextView dishName,addons, price;
 
         private MyViewHolder(View view) {
             super(view);
             itemView = (LinearLayout) view.findViewById(R.id.item_view);
             dishName = (TextView) view.findViewById(R.id.restaurant_name);
+            addons = (TextView) view.findViewById(R.id.addons);
             dishImg = (ImageView) view.findViewById(R.id.food_type_image);
             price = (TextView) view.findViewById(R.id.price);
             itemView.setOnClickListener(this);

@@ -4,6 +4,8 @@ package com.foodie.app.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Item {
 
     @SerializedName("id")
@@ -27,6 +29,9 @@ public class Item {
     @SerializedName("product")
     @Expose
     private Product product;
+    @SerializedName("cart_addons")
+    @Expose
+    private List<CartAddon> cartAddons = null;
 
     public Integer getId() {
         return id;
@@ -84,4 +89,11 @@ public class Item {
         this.product = product;
     }
 
+    public List<CartAddon> getCartAddons() {
+        return cartAddons;
+    }
+
+    public void setCartAddons(List<CartAddon> cartAddons) {
+        this.cartAddons = cartAddons;
+    }
 }
