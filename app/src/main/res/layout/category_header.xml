@@ -6,6 +6,8 @@
     android:paddingTop="@dimen/_8sdp">
 
     <LinearLayout
+
+        android:id="@+id/category_header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -29,6 +31,18 @@
             android:textSize="@dimen/_8sdp" />
 
     </LinearLayout>
+
+    <TextView
+        android:visibility="gone"
+        fontPath="fonts/Nunito-Bold.ttf"
+        android:textAllCaps="true"
+        android:id="@+id/featured_product_title"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="@dimen/text_medium"
+        android:text="@string/featured_products"
+        android:gravity="start|center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

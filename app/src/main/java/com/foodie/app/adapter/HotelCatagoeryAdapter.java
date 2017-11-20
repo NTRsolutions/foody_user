@@ -119,7 +119,17 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
     @Override
     public void onBindHeaderViewHolder(ViewHolder holder, final int section) {
-        holder.headerTxt.setText(list.get(section).getName());
+
+        if(list.get(section).getName().equalsIgnoreCase(context.getResources().getString(R.string.featured_products))){
+            holder.featureProductsTitle.setVisibility(View.VISIBLE);
+            holder.categoryHeaderLayout.setVisibility(View.GONE);
+        }
+        else {
+            holder.featureProductsTitle.setVisibility(View.GONE);
+            holder.categoryHeaderLayout.setVisibility(View.VISIBLE);
+            holder.headerTxt.setText(list.get(section).getName());
+        }
+
         holder.headerTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -517,17 +527,20 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView headerTxt;
+        TextView headerTxt,featureProductsTitle;
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd, addOnsIconImg, featuredImage;
         private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customizableTxt;
         TickerView cardTextValueTicker;
         RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
-        LinearLayout rootLayout;
+        LinearLayout rootLayout,categoryHeaderLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);
             if (isHeader) {
                 headerTxt = (TextView) itemView.findViewById(R.id.category_header);
+                featureProductsTitle = (TextView) itemView.findViewById(R.id.featured_product_title);
+                categoryHeaderLayout = (LinearLayout) itemView.findViewById(R.id.category_header_layout);
+
             } else {
                 dishImg = (ImageView) itemView.findViewById(R.id.dishImg);
                 foodImageType = (ImageView) itemView.findViewById(R.id.food_type_image);
