@@ -132,7 +132,6 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-
             <RadioGroup
                 android:id="@+id/type_radiogroup"
                 android:layout_width="match_parent"
@@ -190,7 +189,7 @@
                 <EditText
                     android:id="@+id/other_address_header_et"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:hint="@string/address_hint"
                     android:textColor="@color/colorPrimaryText" />
 
