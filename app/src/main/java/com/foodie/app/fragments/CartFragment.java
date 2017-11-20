@@ -251,7 +251,7 @@ public class CartFragment extends Fragment {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
                     customDialog.dismiss();
@@ -263,6 +263,7 @@ public class CartFragment extends Fragment {
                         dataLayout.setVisibility(View.GONE);
                         GlobalData.addCart=response.body();
                     } else {
+                        AddCart addCart=response.body();
                         errorLayout.setVisibility(View.GONE);
                         dataLayout.setVisibility(View.VISIBLE);
                         for (int i = 0; i < itemCount; i++) {
@@ -271,7 +272,7 @@ public class CartFragment extends Fragment {
                             //Get product price
                             if (response.body().getProductList().get(i).getProduct().getPrices().getPrice() != null)
                                 priceAmount = priceAmount + (response.body().getProductList().get(i).getQuantity() * response.body().getProductList().get(i).getProduct().getPrices().getPrice());
-                            AddCart addCart=response.body();
+
                             if (addCart.getProductList().get(i).getCartAddons() != null && !addCart.getProductList().get(i).getCartAddons().isEmpty()) {
                                 for (int j = 0; j < addCart.getProductList().get(i).getCartAddons().size(); j++) {
                                     priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * (addCart.getProductList().get(i).getCartAddons().get(j).getQuantity() *
@@ -294,7 +295,6 @@ public class CartFragment extends Fragment {
                         serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getTaxPercentage().toString());
                         int topPayAmount = priceAmount - discount;
                         topPayAmount = topPayAmount + response.body().getDeliveryCharges() + response.body().getTaxPercentage();
-                        ;
                         payAmount.setText(currency + "" + topPayAmount);
                         //Set Restaurant Details
                         restaurantName.setText(response.body().getProductList().get(0).getProduct().getShop().getName());
@@ -326,6 +326,10 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        priceAmount = 0;
+        discount = 0;
+        itemCount = 0;
+        itemQuantity = 0;
         if (GlobalData.profileModel != null) {
             int money = GlobalData.profileModel.getWalletBalance();
             dataLayout.setVisibility(View.VISIBLE);

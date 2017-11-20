@@ -158,11 +158,11 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 product = list.get(position).getProduct();
                 if (product.getAddons() != null && !product.getAddons().isEmpty()) {
                     GlobalData.isSelectedProduct = product;
-                    CartChoiceModeFragment.lastCart=list.get(position);
+                    CartChoiceModeFragment.lastCart = list.get(position);
                     bottomSheetDialogFragment = new CartChoiceModeFragment();
                     bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-                    CartChoiceModeFragment.isViewcart=true;
-                    CartChoiceModeFragment.isSearch=false;
+                    CartChoiceModeFragment.isViewcart = true;
+                    CartChoiceModeFragment.isSearch = false;
                 } else {
                     int countValue = Integer.parseInt(holder.cardTextValue.getText().toString()) + 1;
                     holder.cardTextValue.setText("" + countValue);
@@ -305,7 +305,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                 GlobalData.cartAddons = productList.getCartAddons();
                 AddonBottomSheetFragment bottomSheetDialogFragment = new AddonBottomSheetFragment();
                 bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-                AddonBottomSheetFragment.selectedCart=list.get(position);
+                AddonBottomSheetFragment.selectedCart = list.get(position);
                 // Right here!
 
             }
@@ -373,7 +373,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     addCart = response.body();
                     GlobalData.addCart = response.body();
                     CartFragment.viewCartItemList.clear();
-                    GlobalData.addCart=addCart;
+                    GlobalData.addCart = addCart;
                     CartFragment.viewCartItemList.addAll(response.body().getProductList());
                     CartFragment.viewCartAdapter.notifyDataSetChanged();
                     priceAmount = 0;
@@ -408,8 +408,8 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
                         CartFragment.discountAmount.setText("- " + currency + "" + discount);
                         int topPayAmount = priceAmount - discount;
-                        int tax = (int) (topPayAmount*(response.body().getTaxPercentage()*0.01));
-                        topPayAmount=topPayAmount+tax;
+                        int tax = (int) (topPayAmount * (response.body().getTaxPercentage() * 0.01));
+                        topPayAmount = topPayAmount + tax;
                         topPayAmount = topPayAmount + response.body().getDeliveryCharges();
                         CartFragment.serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + String.valueOf(tax));
                         CartFragment.payAmount.setText(currency + "" + topPayAmount);

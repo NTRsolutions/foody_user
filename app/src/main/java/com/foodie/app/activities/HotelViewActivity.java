@@ -423,6 +423,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     }
 
     private void getCategories(HashMap<String, String> map) {
+        skeleton.show();
         Call<ShopDetail> call = apiInterface.getCategories(map);
         call.enqueue(new Callback<ShopDetail>() {
             @Override
@@ -466,16 +467,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
     @Override
     protected void onResume() {
         super.onResume();
-//        if (GlobalData.getInstance().shopList != null) {
-//            List<Shop> shopList = GlobalData.getInstance().shopList;
-//            for (int i = 0; i < shopList.size(); i++) {
-//                if (shopList.get(i).getId().equals(shops.getId())) {
-//                    shops = shopList.get(i);
-//                    categoryList = GlobalData.getInstance().categoryList;
-//                    catagoeryAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        }
         if (bottomSheetDialogFragment != null)
             bottomSheetDialogFragment.dismiss();
         //get User Profile Data

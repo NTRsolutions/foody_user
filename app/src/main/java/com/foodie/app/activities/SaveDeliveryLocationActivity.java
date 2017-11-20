@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -252,6 +253,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
             public void onClick(View view) {
                 currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
                 otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+                animation.setDuration(500);
+                Animation animation2 = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
+                animation2.setDuration(500);
+                typeRadiogroup.startAnimation(animation2);
+                otherAddressTitleLayout.startAnimation(animation);
                 typeRadiogroup.setVisibility(View.GONE);
             }
         });
@@ -267,6 +274,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 else if (radioButton.getText().toString().equalsIgnoreCase(getResources().getString(R.string.other))) {
                     currentLocImg.setBackgroundResource(R.drawable.ic_other_marker);
                     otherAddressTitleLayout.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+                    animation.setDuration(500);
+                    Animation animation2 = AnimationUtils.loadAnimation(context, R.anim.slide_out_left);
+                    animation2.setDuration(500);
+                    typeRadiogroup.startAnimation(animation2);
+                    otherAddressTitleLayout.startAnimation(animation);
                     typeRadiogroup.setVisibility(View.GONE);
                 }
 
@@ -669,6 +682,13 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                 }
                 break;
             case R.id.cancel_txt:
+                otherAddressHeaderEt.setVisibility(View.VISIBLE);
+                Animation animation2 = AnimationUtils.loadAnimation(context, R.anim.slide_out_right);
+                animation2.setDuration(500);
+                otherAddressHeaderEt.startAnimation(animation2);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_left);
+                animation.setDuration(500);
+                typeRadiogroup.startAnimation(animation);
                 typeRadiogroup.setVisibility(View.VISIBLE);
                 otherRadio.setChecked(true);
                 break;
@@ -703,5 +723,5 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
 
         }
     }
-    
+
 }
