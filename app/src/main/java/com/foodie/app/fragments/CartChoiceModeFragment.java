@@ -18,6 +18,7 @@ import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.ProductDetailActivity;
 import com.foodie.app.adapter.HotelCatagoeryAdapter;
+import com.foodie.app.adapter.ProductsAdapter;
 import com.foodie.app.adapter.ViewCartAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
@@ -73,6 +74,7 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
     CustomDialog customDialog;
     HashMap<String, String> repeatCartMap;
     public static boolean isViewcart = false;
+    public static boolean isSearch = false;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -143,6 +145,17 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                 Log.e("Repeat_cart", repeatCartMap.toString());
                 if (isViewcart) {
                     ViewCartAdapter.addCart(repeatCartMap);
+                } else if (isSearch) {
+                    ProductsAdapter.addCart(repeatCartMap);
+                    if (GlobalData.searchProductList != null) {
+                        for (int i = 0; i < GlobalData.searchProductList.size(); i++) {
+                            Product oldProduct = GlobalData.searchProductList.get(i);
+                            if (oldProduct.getId().equals(product.getId())) {
+                                GlobalData.searchProductList.get(i).getCart().get(GlobalData.searchProductList.get(i).getCart().size() - 1).setQuantity(lastCart.getQuantity() + 1);
+                                ProductSearchFragment.productsAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
                 } else {
                     HotelCatagoeryAdapter.addCart(repeatCartMap);
                     if (HotelViewActivity.categoryList != null) {

@@ -206,6 +206,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     bottomSheetDialogFragment = new CartChoiceModeFragment();
                     bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
                     CartChoiceModeFragment.isViewcart=false;
+                    CartChoiceModeFragment.isSearch=false;
                 } else {
                     int cartId = 0;
                     for (int i = 0; i < addCart.getProductList().size(); i++) {

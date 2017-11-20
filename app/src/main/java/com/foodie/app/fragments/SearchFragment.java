@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.foodie.app.HomeActivity;
 import com.foodie.app.R;
+import com.foodie.app.adapter.ProductsAdapter;
 import com.foodie.app.adapter.ViewPagerAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
@@ -28,6 +29,7 @@ import com.foodie.app.models.Search;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.helper.GlobalData.profileModel;
 import static com.foodie.app.helper.GlobalData.searchProductList;
 import static com.foodie.app.helper.GlobalData.searchShopList;
 
@@ -84,8 +87,16 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
         HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
-        if(!input.equalsIgnoreCase(""))
-            getSearch(input);
+        if(!input.equalsIgnoreCase("")){
+            HashMap<String,String> map= new HashMap();
+            map.put("name",input);
+            if(GlobalData.profileModel!=null)
+                map.put("user_id",GlobalData.profileModel.getId().toString());
+            getSearch(map);
+        }
+        if(ProductsAdapter.bottomSheetDialogFragment!=null)
+            ProductsAdapter.bottomSheetDialogFragment.dismiss();
+
     }
 
     @Override
@@ -164,7 +175,11 @@ public class SearchFragment extends Fragment {
                                       int before, int count) {
                 if (s.length() != 0) {
                     input=s.toString();
-                    getSearch(input);
+                    HashMap<String,String> map= new HashMap();
+                    map.put("name",s.toString());
+                    if(GlobalData.profileModel!=null)
+                        map.put("user_id",GlobalData.profileModel.getId().toString());
+                    getSearch(map);
                     searchCloseImg.setVisibility(View.VISIBLE);
                     rootLayout.setVisibility(View.VISIBLE);
                     relatedTxt.setText("Related to \"" + s.toString() + "\"");
@@ -196,9 +211,10 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void getSearch(final CharSequence s) {
+    private void getSearch(HashMap map) {
         progressBar.setVisibility(View.VISIBLE);
-        Call<Search> call = apiInterface.getSearch(s.toString());
+        Call<Search> call = apiInterface.getSearch(map);
+
         call.enqueue(new Callback<Search>() {
             @Override
             public void onResponse(Call<Search> call, Response<Search> response) {

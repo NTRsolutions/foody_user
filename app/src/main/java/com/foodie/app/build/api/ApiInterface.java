@@ -185,7 +185,7 @@ public interface ApiInterface {
 
     /*-------------SEARCH--------------------*/
     @GET("api/user/search")
-    Call<Search> getSearch(@Query("name") String search);
+    Call<Search> getSearch(@QueryMap HashMap<String,String> params);
 
     /*-----------------------WALLET-----------------------*/
     @GET("api/user/wallet")
