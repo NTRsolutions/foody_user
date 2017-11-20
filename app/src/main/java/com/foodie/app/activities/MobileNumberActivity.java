@@ -400,7 +400,11 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             mCountryDialCodeTextView.setText(country.getDialCode());
             country_code = country.getDialCode();
         } else {
-            Toast.makeText(MobileNumberActivity.this, "Required Sim", Toast.LENGTH_SHORT).show();
+            Country us = new Country("US", "United States", "+1", R.drawable.flag_us);
+            mCountryFlagImageView.setImageResource(us.getFlag());
+            mCountryDialCodeTextView.setText(us.getDialCode());
+            country_code = us.getDialCode();
+            //Toast.makeText(MobileNumberActivity.this, "Required Sim", Toast.LENGTH_SHORT).show();
         }
     }
 
