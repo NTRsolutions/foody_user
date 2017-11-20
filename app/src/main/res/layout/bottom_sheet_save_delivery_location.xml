@@ -67,11 +67,14 @@
                 android:layout_marginTop="16dp">
 
                 <EditText
+                    android:text="hjbashdbhjbashbhjcbdjhbsdhbhjvbhjbdsbvhjnbsdjdbhjnvdbhjvdsbhbhvdbhjvdssbdhjs"
+                    android:ellipsize="end"
                     android:id="@+id/address"
                     android:layout_width="match_parent"
+                    android:maxLines="1"
                     android:layout_height="wrap_content"
                     android:hint="@string/address"
-                    android:inputType="textPostalAddress"
+                    android:inputType="text"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="@dimen/text_medium" />
 
