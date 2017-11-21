@@ -168,8 +168,6 @@ public class OrderHelpFragment extends Fragment {
                             map.put("dispute_type", disputeType);
                             map.put("created_by", "user");
                             map.put("created_to", "user");
-                            if (!disputeType.equalsIgnoreCase("others"))
-                                map.put("disputehelp_id", DISPUTE_HELP_ID.toString());
                             postDispute(map);
                         }
                     }
@@ -202,7 +200,8 @@ public class OrderHelpFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<Order> call, @NonNull Throwable t) {
-
+                customDialog.dismiss();
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
 

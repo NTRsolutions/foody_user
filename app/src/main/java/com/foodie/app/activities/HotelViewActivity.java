@@ -385,6 +385,12 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             //Get product price
             if (addCart.getProductList().get(i).getProduct().getPrices().getPrice() != null)
                 priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * addCart.getProductList().get(i).getProduct().getPrices().getPrice());
+            if (addCart.getProductList().get(i).getCartAddons() != null && !addCart.getProductList().get(i).getCartAddons().isEmpty()) {
+                for (int j = 0; j < addCart.getProductList().get(i).getCartAddons().size(); j++) {
+                    priceAmount = priceAmount + (addCart.getProductList().get(i).getQuantity() * (addCart.getProductList().get(i).getCartAddons().get(j).getQuantity() *
+                            addCart.getProductList().get(i).getCartAddons().get(j).getAddonProduct().getPrice()));
+                }
+            }
         }
         GlobalData.notificationCount = itemQuantity;
         if (itemQuantity == 0) {
@@ -392,7 +398,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             // Start animation
             viewCartLayout.startAnimation(slide_down);
         } else if (itemQuantity == 1) {
-            if (Objects.equals(shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
+            if (!shops.getId().equals(GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
                 HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
             } else
@@ -445,6 +451,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 accompanimentDishesRv.setAdapter(catagoeryAdapter);
                 if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0) {
                     setViewcartBottomLayout(GlobalData.addCart);
+                }
+                else {
+                    viewCartLayout.setVisibility(View.GONE);
                 }
                 catagoeryAdapter.notifyDataSetChanged();
             }
@@ -505,7 +514,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             isHideToolbarView = !isHideToolbarView;
         }
     }
-
 }
 
 

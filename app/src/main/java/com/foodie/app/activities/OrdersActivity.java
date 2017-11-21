@@ -96,12 +96,6 @@ public class OrdersActivity extends AppCompatActivity {
         ordersRv.setAdapter(adapter);
         ordersRv.setHasFixedSize(false);
         onGoingOrderList = new ArrayList<>();
-        if (connectionHelper.isConnectingToInternet()) {
-            customDialog.show();
-            getOngoingOrders();
-        } else {
-            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
-        }
 
     }
 
@@ -205,6 +199,12 @@ public class OrdersActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         //Get Ongoing Order list
         handler.postDelayed(orderStatusRunnable, 5000);
+        if (connectionHelper.isConnectingToInternet()) {
+            customDialog.show();
+            getOngoingOrders();
+        } else {
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
+        }
 
     }
 

@@ -40,6 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.foodie.app.helper.GlobalData.cardArrayList;
 import static com.foodie.app.helper.GlobalData.categoryList;
 
 /**
@@ -126,12 +127,18 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         }
 
         List<CartAddon> cartAddonList = list.get(position).getCartAddons();
-        for (int i = 0; i < cartAddonList.size(); i++) {
-            if (i == 0)
-                holder.addons.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
-            else
-                holder.addons.append(", " + cartAddonList.get(i).getAddonProduct().getAddon().getName());
+        if(cartAddonList.isEmpty()){
+            holder.addons.setText("");
+        }else {
+            for (int i = 0; i < cartAddonList.size(); i++) {
+                if (i == 0)
+                    holder.addons.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());
+                else
+                    holder.addons.append(", " + cartAddonList.get(i).getAddonProduct().getAddon().getName());
+            }
         }
+
+
 
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,20 +190,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                     holder.priceTxt.setText(product.getPrices().getCurrency() + " " + priceAmount);
                 }
-
-//                //We don't know categories means do nothing,
-//                if (categoryList != null) {
-//                    //we Know category
-//                    for (int i = 0; i < categoryList.size(); i++) {
-//                        for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
-//                            if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-//                                categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countValue);
-//                            }
-//                        }
-//                    }
-//                }
-
-
             }
         });
 
@@ -236,19 +229,16 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
                     productList = list.get(position);
-//                    if (categoryList != null) {
-//                        for (int i = 0; i < categoryList.size(); i++) {
-//                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
-//                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-//                                    categoryList.get(i).getProducts().get(j).setCart(null);
-//                                }
-//                            }
-//                        }
-//                    }
                     HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));
                     map.put("cart_id", String.valueOf(list.get(position).getId()));
+                    List<CartAddon> cartAddonList=list.get(position).getCartAddons();
+                    for (int i = 0; i < cartAddonList.size(); i++) {
+                        CartAddon cartAddon = cartAddonList.get(i);
+                        map.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
+                        map.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
+                    }
                     Log.e("AddCart_Minus", map.toString());
                     addCart(map);
                     remove(productList);
@@ -257,19 +247,16 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
-//                    if (categoryList != null) {
-//                        for (int i = 0; i < categoryList.size(); i++) {
-//                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
-//                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-//                                    categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countMinusValue);
-//                                }
-//                            }
-//                        }
-//                    }
                     HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));
                     map.put("cart_id", String.valueOf(list.get(position).getId()));
+                    List<CartAddon> cartAddonList=list.get(position).getCartAddons();
+                    for (int i = 0; i < cartAddonList.size(); i++) {
+                        CartAddon cartAddon = cartAddonList.get(i);
+                        map.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
+                        map.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
+                    }
                     Log.e("AddCart_Minus", map.toString());
                     addCart(map);
                 }
@@ -370,9 +357,9 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     }
                 } else if (response.isSuccessful()) {
                     addCart = response.body();
+                    GlobalData.addCart = new AddCart();
                     GlobalData.addCart = response.body();
                     CartFragment.viewCartItemList.clear();
-                    GlobalData.addCart = addCart;
                     CartFragment.viewCartItemList.addAll(response.body().getProductList());
                     CartFragment.viewCartAdapter.notifyDataSetChanged();
                     priceAmount = 0;
@@ -415,7 +402,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
 
                     } else {
                         GlobalData.notificationCount = itemQuantity;
-//                        HomeActivity.updateNotificationCount(context, GlobalData.getInstance().notificationCount);
                         CartFragment.errorLayout.setVisibility(View.VISIBLE);
                         CartFragment.dataLayout.setVisibility(View.GONE);
                         Toast.makeText(context, "Cart is empty", Toast.LENGTH_SHORT).show();

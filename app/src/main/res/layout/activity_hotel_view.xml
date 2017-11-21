@@ -475,6 +475,7 @@
             android:layout_centerVertical="true">
 
             <TextView
+                android:ellipsize="end"
                 android:id="@+id/item_text"
                 fontPath="fonts/Nunito-Bold.ttf"
                 android:layout_width="wrap_content"

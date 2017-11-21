@@ -262,6 +262,7 @@ public class CartFragment extends Fragment {
                         errorLayout.setVisibility(View.VISIBLE);
                         dataLayout.setVisibility(View.GONE);
                         GlobalData.addCart=response.body();
+                        GlobalData.addCart=null;
                     } else {
                         AddCart addCart=response.body();
                         errorLayout.setVisibility(View.GONE);

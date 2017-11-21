@@ -41,6 +41,7 @@ import com.foodie.app.fragments.CartChoiceModeFragment;
 import com.foodie.app.helper.GlobalData;
 import com.foodie.app.models.AddCart;
 import com.foodie.app.models.Cart;
+import com.foodie.app.models.CartAddon;
 import com.foodie.app.models.Category;
 import com.foodie.app.models.ClearCart;
 import com.foodie.app.models.Product;
@@ -166,11 +167,11 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             holder.featuredImage.setVisibility(View.GONE);
         }
 
-        //only once check
-        if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0 && relativePosition < 2) {
-            setViewcartBottomLayout(GlobalData.addCart);
-            addCart = GlobalData.addCart;
-        }
+//        //only once check
+//        if (GlobalData.addCart != null && section=list.size()&&re) {
+//            setViewcartBottomLayout(GlobalData.addCart);
+//            addCart = GlobalData.addCart;
+//        }
         //Check if product is already added
         if (product.getCart() != null && product.getCart().size() != 0) {
             selectedShop = HotelViewActivity.shops;
@@ -224,9 +225,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             public void onClick(View v) {
 
                 /** Intilaize Animation View Image */
-                holder.cardTextValueTicker.setVisibility(View.VISIBLE);
-                holder.cardTextValue.setVisibility(View.GONE);
-                holder.animationLineCartAdd.setVisibility(View.VISIBLE);
                 //Intialize
                 avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
                 holder.animationLineCartAdd.setBackground(avdProgress);
@@ -252,6 +250,9 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     CartChoiceModeFragment.isViewcart = false;
                     CartChoiceModeFragment.isSearch = false;
                 } else {
+                    holder.cardTextValueTicker.setVisibility(View.VISIBLE);
+                    holder.cardTextValue.setVisibility(View.GONE);
+                    holder.animationLineCartAdd.setVisibility(View.VISIBLE);
                     int cartId = 0;
                     for (int i = 0; i < addCart.getProductList().size(); i++) {
                         if (addCart.getProductList().get(i).getProductId().equals(product.getId())) {
@@ -329,6 +330,12 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         map.put("product_id", product.getId().toString());
                         map.put("quantity", holder.cardTextValue.getText().toString());
                         map.put("cart_id", String.valueOf(cartId));
+                        List<CartAddon> cartAddonList=product.getCart().get(0).getCartAddons();
+                        for (int i = 0; i < cartAddonList.size(); i++) {
+                            CartAddon cartAddon = cartAddonList.get(i);
+                            map.put("product_addons[" + "" + i + "]", cartAddon.getAddonProduct().getId().toString());
+                            map.put("addons_qty[" + "" + i + "]", cartAddon.getQuantity().toString());
+                        }
                         Log.e("AddCart_Minus", map.toString());
                         addCart(map);
                     } else {
@@ -603,7 +610,7 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             }
         }
         GlobalData.notificationCount = itemQuantity;
-        if (itemQuantity == 0) {
+        if (addCart.getProductList().isEmpty()) {
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
             // Start animation
             HotelViewActivity.viewCartLayout.startAnimation(slide_down);
@@ -620,7 +627,10 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             }
             String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
             String itemMessage=context.getResources().getQuantityString(R.plurals.item,itemQuantity,itemQuantity);
-            HotelViewActivity.itemText.setText(itemMessage+ " | " + currency + String.valueOf(priceAmount));
+            itemMessage=itemMessage+ " | " + currency + String.valueOf(priceAmount);
+//            Toast.makeText(context, itemMessage, Toast.LENGTH_SHORT).show();
+            Log.d("itemMessage",itemMessage);
+            HotelViewActivity.itemText.setText(itemMessage);
             if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
                 // Start animation
                 HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
