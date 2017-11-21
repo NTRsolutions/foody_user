@@ -115,10 +115,6 @@ public class OrdersActivity extends AppCompatActivity {
                     modelList.add(model);
                     modelListReference.clear();
                     modelListReference.addAll(modelList);
-//                    LayoutAnimationController controller =
-//                            AnimationUtils.loadLayoutAnimation(OrdersActivity.this, R.anim.item_animation_slide_right);
-//                    ordersRv.setLayoutAnimation(controller);
-//                    ordersRv.scheduleLayoutAnimation();
                     adapter.notifyDataSetChanged();
                     if (onGoingOrderList.size() == 0 && pastOrderList.size() == 0) {
                         errorLayout.setVisibility(View.VISIBLE);
@@ -144,7 +140,6 @@ public class OrdersActivity extends AppCompatActivity {
     }
 
     private void getOngoingOrders() {
-
         Call<List<Order>> call = apiInterface.getOngoingOrders();
         call.enqueue(new Callback<List<Order>>() {
             @Override
@@ -153,6 +148,7 @@ public class OrdersActivity extends AppCompatActivity {
                     if (response.body().size() == 0) {
                         getPastOrders();
                     } else if (onGoingOrderList.size() != response.body().size()) {
+
                         onGoingOrderList.clear();
                         onGoingOrderList.addAll(response.body());
                         OrderModel model = new OrderModel();
@@ -166,6 +162,9 @@ public class OrdersActivity extends AppCompatActivity {
                         } else
                             errorLayout.setVisibility(View.GONE);
                         getPastOrders();
+                    }
+                    else {
+                        customDialog.dismiss();
                     }
                 } else {
                     getPastOrders();
@@ -182,6 +181,7 @@ public class OrdersActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<List<Order>> call, @NonNull Throwable t) {
                 Toast.makeText(OrdersActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
                 getPastOrders();
+                customDialog.dismiss();
             }
         });
 
