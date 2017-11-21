@@ -1,5 +1,6 @@
 package com.foodie.app.activities;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 
 import com.foodie.app.R;
 import com.foodie.app.fragments.CartFragment;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ViewCartActivity extends AppCompatActivity {
 
@@ -30,5 +33,9 @@ public class ViewCartActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

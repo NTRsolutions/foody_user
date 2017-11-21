@@ -12,7 +12,8 @@
     <ImageView
         android:id="@+id/featured_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
         android:contentDescription="@string/app_name"
         android:layout_marginBottom="@dimen/activity_vertical_margin_half"
         android:visibility="gone" />

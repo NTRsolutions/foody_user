@@ -292,9 +292,10 @@ public class CartFragment extends Fragment {
                             }
                         }
                         discountAmount.setText("- " + currency + "" + discount);
-                        serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getTaxPercentage().toString());
                         int topPayAmount = priceAmount - discount;
-                        topPayAmount = topPayAmount + response.body().getDeliveryCharges() + response.body().getTaxPercentage();
+                        int tax = (int) (topPayAmount * (response.body().getTaxPercentage() * 0.01));
+                        serviceTax.setText(currency +String.valueOf(tax));
+                        topPayAmount = topPayAmount + response.body().getDeliveryCharges() + tax;
                         payAmount.setText(currency + "" + topPayAmount);
                         //Set Restaurant Details
                         restaurantName.setText(response.body().getProductList().get(0).getProduct().getShop().getName());
@@ -303,7 +304,6 @@ public class CartFragment extends Fragment {
                         Glide.with(context).load(image_url).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
                                 .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
                         deliveryChargeValue = response.body().getDeliveryCharges();
-                        tax = response.body().getTaxPercentage();
                         deliveryCharges.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + response.body().getDeliveryCharges().toString());
                         viewCartItemList.clear();
                         viewCartItemList=response.body().getProductList();

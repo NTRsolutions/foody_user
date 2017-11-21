@@ -1,9 +1,12 @@
 package com.foodie.app.activities;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.foodie.app.R;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SecretKeyActivity extends AppCompatActivity {
 
@@ -11,5 +14,9 @@ public class SecretKeyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secret_key);
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

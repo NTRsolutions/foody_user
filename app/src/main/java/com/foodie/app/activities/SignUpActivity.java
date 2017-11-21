@@ -189,6 +189,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onSelectCountry(String name, String code, String dialCode,
                                         int flagDrawableResID) {
                 countryNumber.setText(dialCode);
+                country_code=dialCode;
                 countryImage.setImageResource(flagDrawableResID);
                 mCountryPicker.dismiss();
             }
@@ -515,4 +516,5 @@ public class SignUpActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
+
 }

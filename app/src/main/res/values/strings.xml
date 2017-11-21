@@ -203,6 +203,12 @@
     <string name="type_a_message">Type a message</string>
     <string name="my_account">My Account</string>
     <string name="reorder">Reorder</string>
+    <string name="please_login">Please login</string>
+
+    <plurals name="item">
+        <item quantity="one">%d Item</item>
+        <item quantity="other">%d Items</item>
+    </plurals>
 
 
 </resources>

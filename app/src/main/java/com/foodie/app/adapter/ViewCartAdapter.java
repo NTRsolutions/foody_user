@@ -203,7 +203,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
         holder.cardMinusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /** Intilaize Animation View Image */
                 holder.animationLineCartAdd.setVisibility(View.VISIBLE);
                 //Intialize
@@ -237,15 +236,15 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
                     productList = list.get(position);
-                    if (categoryList != null) {
-                        for (int i = 0; i < categoryList.size(); i++) {
-                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
-                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                    categoryList.get(i).getProducts().get(j).setCart(null);
-                                }
-                            }
-                        }
-                    }
+//                    if (categoryList != null) {
+//                        for (int i = 0; i < categoryList.size(); i++) {
+//                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
+//                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
+//                                    categoryList.get(i).getProducts().get(j).setCart(null);
+//                                }
+//                            }
+//                        }
+//                    }
                     HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));
@@ -258,15 +257,15 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                     countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
-                    if (categoryList != null) {
-                        for (int i = 0; i < categoryList.size(); i++) {
-                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
-                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
-                                    categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countMinusValue);
-                                }
-                            }
-                        }
-                    }
+//                    if (categoryList != null) {
+//                        for (int i = 0; i < categoryList.size(); i++) {
+//                            for (int j = 0; j < categoryList.get(i).getProducts().size(); j++) {
+//                                if (categoryList.get(i).getProducts().get(j).getId().equals(product.getId())) {
+//                                    categoryList.get(i).getProducts().get(j).getCart().get(0).setQuantity(countMinusValue);
+//                                }
+//                            }
+//                        }
+//                    }
                     HashMap<String, String> map = new HashMap<>();
                     map.put("product_id", product.getId().toString());
                     map.put("quantity", String.valueOf(countMinusValue));

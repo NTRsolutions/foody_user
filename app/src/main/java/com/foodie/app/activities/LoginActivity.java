@@ -141,10 +141,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 100;
     private static final int REQ_SIGN_IN_REQUIRED = 100;
-    public static int APP_REQUEST_CODE = 99;
-    String accessToken = "";
-    String loginBy = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -686,4 +682,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }

@@ -136,7 +136,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_payment);
         ButterKnife.bind(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         context = AccountPaymentActivity.this;
         customDialog = new CustomDialog(context);
         cashPaymentLayout = (LinearLayout) findViewById(R.id.cash_payment_layout);
@@ -225,6 +225,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
                     GlobalData.addCart = null;
                     GlobalData.notificationCount = 0;
                     GlobalData.selectedShop = null;
+                    GlobalData.profileModel.setWalletBalance(response.body().getUser().getWalletBalance());
                     GlobalData.isSelectedOrder = new Order();
                     GlobalData.isSelectedOrder = response.body();
                     startActivity(new Intent(context, CurrentOrderDetailActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -420,11 +421,13 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
         switch (view.getId()) {
             case R.id.wallet_layout:
                 startActivity(new Intent(this, WalletActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 finish();
                 break;
             case R.id.add_new_cart:
 //              launchDropIn(view);
                 startActivity(new Intent(AccountPaymentActivity.this, AddCardActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 break;
         }
     }
@@ -482,6 +485,7 @@ public class AccountPaymentActivity extends AppCompatActivity implements Payment
             Intent intent = new Intent(this, CreateTransactionActivity.class)
                     .putExtra(CreateTransactionActivity.EXTRA_PAYMENT_METHOD_NONCE, mNonce);
             startActivity(intent);
+
 
             mPurchased = true;
         }

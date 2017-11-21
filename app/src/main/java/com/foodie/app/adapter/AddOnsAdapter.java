@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.ProductDetailActivity;
@@ -91,19 +92,26 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
         holder.addonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                    holder.cardAddTextLayout.setVisibility(View.GONE);
-                    addon = list.get(position);
-                    addon.getAddon().setChecked(true);
-                    setAddOnsText();
-                } else {
-                    holder.cardAddDetailLayout.setVisibility(View.GONE);
-                    holder.cardAddTextLayout.setVisibility(View.VISIBLE);
-                    addon.getAddon().setChecked(false);
-                    setAddOnsText();
 
+                if(GlobalData.profileModel!=null){
+                    if (checked) {
+                        holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                        holder.cardAddTextLayout.setVisibility(View.GONE);
+                        addon = list.get(position);
+                        addon.getAddon().setChecked(true);
+                        setAddOnsText();
+                    } else {
+                        holder.cardAddDetailLayout.setVisibility(View.GONE);
+                        holder.cardAddTextLayout.setVisibility(View.VISIBLE);
+                        addon.getAddon().setChecked(false);
+                        setAddOnsText();
+
+                    }
                 }
+                else {
+                    Toast.makeText(context, context.getResources().getString(R.string.please_login), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -111,15 +119,20 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
-                addon = list.get(position);
-                holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                holder.cardAddTextLayout.setVisibility(View.GONE);
-                holder.cardTextValue.setText("1");
-                holder.cardTextValueTicker.setText("1");
-                addon.setQuantity(1);
-                holder.addonName.setChecked(true);
-                addon.getAddon().setChecked(true);
-                setAddOnsText();
+                if(GlobalData.profileModel!=null){
+                    addon = list.get(position);
+                    holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                    holder.cardAddTextLayout.setVisibility(View.GONE);
+                    holder.cardTextValue.setText("1");
+                    holder.cardTextValueTicker.setText("1");
+                    addon.setQuantity(1);
+                    holder.addonName.setChecked(true);
+                    addon.getAddon().setChecked(true);
+                    setAddOnsText();
+                }else {
+                    Toast.makeText(context, context.getResources().getString(R.string.please_login), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

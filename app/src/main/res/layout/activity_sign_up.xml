@@ -35,6 +35,7 @@
             tools:layout_editor_absoluteY="25dp">
 
             <ImageView
+                android:padding="@dimen/_10sdp"
                 android:id="@+id/app_logo"
                 android:layout_width="@dimen/_120sdp"
                 android:layout_height="@dimen/_120sdp"

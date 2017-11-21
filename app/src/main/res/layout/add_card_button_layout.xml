@@ -41,6 +41,7 @@
                 android:visibility="gone" />
 
             <com.robinhood.ticker.TickerView
+
                 android:id="@+id/card_value_ticker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

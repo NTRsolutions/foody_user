@@ -505,6 +505,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             isHideToolbarView = !isHideToolbarView;
         }
     }
+
 }
 
 

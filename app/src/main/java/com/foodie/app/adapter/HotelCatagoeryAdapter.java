@@ -2,17 +2,23 @@ package com.foodie.app.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -38,6 +44,7 @@ import com.foodie.app.models.Cart;
 import com.foodie.app.models.Category;
 import com.foodie.app.models.ClearCart;
 import com.foodie.app.models.Product;
+import com.foodie.app.models.ShopDetail;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
@@ -69,13 +76,17 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     public static int priceAmount = 0;
     public static int itemCount = 0;
     public static int itemQuantity = 0;
-    Product product;
+    public static Product product;
     List<Product> productList;
     public static ApiInterface apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
     public static AddCart addCart;
     public static Animation slide_down, slide_up;
     public static boolean isShopIsChanged = false;
     public static CartChoiceModeFragment bottomSheetDialogFragment;
+    public static AnimatedVectorDrawableCompat avdProgress;
+    public static Dialog dialog;
+    public static Runnable action;
+    public static boolean dataResponse = false;
 
     //Animation number
     private static final char[] NUMBER_LIST = TickerUtils.getDefaultNumberList();
@@ -120,11 +131,10 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     @Override
     public void onBindHeaderViewHolder(ViewHolder holder, final int section) {
 
-        if(list.get(section).getName().equalsIgnoreCase(context.getResources().getString(R.string.featured_products))){
+        if (list.get(section).getName().equalsIgnoreCase(context.getResources().getString(R.string.featured_products))) {
             holder.featureProductsTitle.setVisibility(View.VISIBLE);
             holder.categoryHeaderLayout.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             holder.featureProductsTitle.setVisibility(View.GONE);
             holder.categoryHeaderLayout.setVisibility(View.VISIBLE);
             holder.headerTxt.setText(list.get(section).getName());
@@ -145,6 +155,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         productList = list.get(section).getProducts();
         holder.cardTextValueTicker.setCharacterList(NUMBER_LIST);
         holder.dishNameTxt.setText(product.getName());
+        holder.cardTextValueTicker.setVisibility(View.GONE);
+        holder.cardTextValue.setVisibility(View.VISIBLE);
         if (category.getName().equalsIgnoreCase(context.getResources().getString(R.string.featured_products))) {
             holder.featuredImage.setVisibility(View.VISIBLE);
             Glide.with(context).load(product.getFeaturedImages().get(0).getUrl()).placeholder(R.drawable.ic_banner).dontAnimate()
@@ -159,7 +171,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             setViewcartBottomLayout(GlobalData.addCart);
             addCart = GlobalData.addCart;
         }
-
         //Check if product is already added
         if (product.getCart() != null && product.getCart().size() != 0) {
             selectedShop = HotelViewActivity.shops;
@@ -169,8 +180,11 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             for (Cart cart : product.getCart()) {
                 quantity += cart.getQuantity();
             }
-            holder.cardTextValueTicker.setText(String.valueOf(quantity));
-            holder.cardTextValue.setText(String.valueOf(quantity));
+            if(!holder.cardTextValue.getText().toString().equalsIgnoreCase(String.valueOf(quantity))){
+                holder.cardTextValueTicker.setText(String.valueOf(quantity));
+                holder.cardTextValue.setText(String.valueOf(quantity));
+            }
+
         } else {
             holder.cardAddTextLayout.setVisibility(View.VISIBLE);
             holder.cardAddDetailLayout.setVisibility(View.GONE);
@@ -208,6 +222,26 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.cardAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /** Intilaize Animation View Image */
+                holder.cardTextValueTicker.setVisibility(View.VISIBLE);
+                holder.cardTextValue.setVisibility(View.GONE);
+                holder.animationLineCartAdd.setVisibility(View.VISIBLE);
+                //Intialize
+                avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
+                holder.animationLineCartAdd.setBackground(avdProgress);
+                avdProgress.start();
+                action = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!dataResponse) {
+                            avdProgress.start();
+                            holder.animationLineCartAdd.postDelayed(action, 3000);
+                        }
+
+                    }
+                };
+                holder.animationLineCartAdd.postDelayed(action, 3000);
                 Log.e("access_token2", GlobalData.accessToken);
                 /** Press Add Card Add button */
                 product = list.get(section).getProducts().get(relativePosition);
@@ -215,8 +249,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                     GlobalData.isSelectedProduct = product;
                     bottomSheetDialogFragment = new CartChoiceModeFragment();
                     bottomSheetDialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-                    CartChoiceModeFragment.isViewcart=false;
-                    CartChoiceModeFragment.isSearch=false;
+                    CartChoiceModeFragment.isViewcart = false;
+                    CartChoiceModeFragment.isSearch = false;
                 } else {
                     int cartId = 0;
                     for (int i = 0; i < addCart.getProductList().size(); i++) {
@@ -244,6 +278,26 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.cardMinusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /** Intilaize Animation View Image */
+                holder.animationLineCartAdd.setVisibility(View.VISIBLE);
+                holder.cardTextValueTicker.setVisibility(View.VISIBLE);
+                holder.cardTextValue.setVisibility(View.GONE);
+                //Intialize
+                avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
+                holder.animationLineCartAdd.setBackground(avdProgress);
+                avdProgress.start();
+                action = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!dataResponse) {
+                            avdProgress.start();
+                            holder.animationLineCartAdd.postDelayed(action, 3000);
+                        }
+
+                    }
+                };
+                holder.animationLineCartAdd.postDelayed(action, 3000);
+
                 /** Press Add Card Minus button */
                 product = list.get(section).getProducts().get(relativePosition);
                 int cartId = 0;
@@ -312,6 +366,23 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.cardAddTextLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /** Intilaize Animation View Image */
+                holder.animationLineCartAdd.setVisibility(View.VISIBLE);
+                //Intialize
+                avdProgress = AnimatedVectorDrawableCompat.create(context, R.drawable.add_cart_avd_line);
+                holder.animationLineCartAdd.setBackground(avdProgress);
+                avdProgress.start();
+                action = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!dataResponse) {
+                            avdProgress.start();
+                            holder.animationLineCartAdd.postDelayed(action, 3000);
+                        }
+
+                    }
+                };
+                holder.animationLineCartAdd.postDelayed(action, 3000);
                 /** Press Add Card Text Layout */
                 product = list.get(section).getProducts().get(relativePosition);
                 if (isShopIsChanged && GlobalData.addCart != null) {
@@ -399,10 +470,6 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
     }
 
-    public void alertDialog() {
-
-    }
-
     private void clearCart() {
 
         Call<ClearCart> call = apiInterface.clearCart();
@@ -436,12 +503,20 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
     }
 
     public static void addCart(HashMap<String, String> map) {
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.empty_dialog);
+        dialog.setCancelable(false);
+        dataResponse = false;
+        dialog.show();
         Call<AddCart> call = apiInterface.postAddCart(map);
         call.enqueue(new Callback<AddCart>() {
             @Override
             public void onResponse(Call<AddCart> call, Response<AddCart> response) {
                 selectedShop = HotelViewActivity.shops;
                 if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+                    dialog.dismiss();
+                    dataResponse=true;
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
@@ -449,19 +524,62 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else if (response.isSuccessful()) {
-                    if (selectedShop!= null)
+                    if (selectedShop != null)
                         GlobalData.addCartShopId = selectedShop.getId();
                     addCart = response.body();
                     GlobalData.addCart = response.body();
                     setViewcartBottomLayout(addCart);
+                    //get User Profile Data
+                    if (GlobalData.profileModel != null) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("shop", String.valueOf(HotelViewActivity.shops.getId()));
+                        map.put("user_id", String.valueOf(GlobalData.profileModel.getId()));
+                        getCategories(map);
+                    } else {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("shop", String.valueOf(HotelViewActivity.shops.getId()));
+                        getCategories(map);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<AddCart> call, Throwable t) {
+                dialog.dismiss();
+                dataResponse=true;
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    public static void getCategories(HashMap<String, String> map) {
+        Call<ShopDetail> call = apiInterface.getCategories(map);
+        call.enqueue(new Callback<ShopDetail>() {
+            @Override
+            public void onResponse(@NonNull Call<ShopDetail> call, @NonNull Response<ShopDetail> response) {
+                dataResponse = true;
+                dialog.dismiss();
+                HotelViewActivity.categoryList.clear();
+                Category category = new Category();
+                category.setName(context.getResources().getString(R.string.featured_products));
+                category.setProducts(response.body().getFeaturedProducts());
+                HotelViewActivity.categoryList.add(category);
+                HotelViewActivity.categoryList.addAll(response.body().getCategories());
+                GlobalData.categoryList = HotelViewActivity.categoryList;
+                GlobalData.selectedShop.setCategories(HotelViewActivity.categoryList);
+                HotelViewActivity.catagoeryAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ShopDetail> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Some thing went wrong", Toast.LENGTH_SHORT).show();
+                dataResponse = true;
+                dialog.dismiss();
+
+            }
+        });
+
 
     }
 
@@ -489,23 +607,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             HotelViewActivity.viewCartLayout.setVisibility(View.GONE);
             // Start animation
             HotelViewActivity.viewCartLayout.startAnimation(slide_down);
-        } else if (itemQuantity == 1) {
-            if (!Objects.equals(HotelViewActivity.shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
-                isShopIsChanged = true;
-                HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
-            } else {
-                isShopIsChanged = false;
-                HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
-            }
-            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-            HotelViewActivity.itemText.setText("" + itemQuantity + " Item | " + currency + "" + priceAmount);
-            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
-                // Start animation
-                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
-                HotelViewActivity.viewCartLayout.startAnimation(slide_up);
-            }
-        } else {
+        }
+        else {
             if (!Objects.equals(HotelViewActivity.shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
                 isShopIsChanged = true;
                 HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
@@ -516,7 +619,8 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
 
             }
             String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
-            HotelViewActivity.itemText.setText("" + itemQuantity + " Items | " + currency +String.valueOf(priceAmount));
+            String itemMessage=context.getResources().getQuantityString(R.plurals.item,itemQuantity,itemQuantity);
+            HotelViewActivity.itemText.setText(itemMessage+ " | " + currency + String.valueOf(priceAmount));
             if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
                 // Start animation
                 HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
@@ -524,15 +628,51 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
             }
 
         }
+
+//        else if (itemQuantity == 1) {
+//            if (!Objects.equals(HotelViewActivity.shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
+//                isShopIsChanged = true;
+//                HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
+//                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
+//            } else {
+//                isShopIsChanged = false;
+//                HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
+//            }
+//            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+//            HotelViewActivity.itemText.setText("" + itemQuantity + " Item | " + currency + "" + priceAmount);
+//            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
+//                // Start animation
+//                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+//                HotelViewActivity.viewCartLayout.startAnimation(slide_up);
+//            }
+//        } else {
+//            if (!Objects.equals(HotelViewActivity.shops.getId(), GlobalData.addCart.getProductList().get(0).getProduct().getShopId())) {
+//                isShopIsChanged = true;
+//                HotelViewActivity.viewCartShopName.setVisibility(View.VISIBLE);
+//                HotelViewActivity.viewCartShopName.setText("From : " + GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
+//            } else {
+//                isShopIsChanged = false;
+//                HotelViewActivity.viewCartShopName.setVisibility(View.GONE);
+//
+//            }
+//            String currency = addCart.getProductList().get(0).getProduct().getPrices().getCurrency();
+//            HotelViewActivity.itemText.setText("" + itemQuantity + " Items | " + currency + String.valueOf(priceAmount));
+//            if (HotelViewActivity.viewCartLayout.getVisibility() == View.GONE) {
+//                // Start animation
+//                HotelViewActivity.viewCartLayout.setVisibility(View.VISIBLE);
+//                HotelViewActivity.viewCartLayout.startAnimation(slide_up);
+//            }
+
+//        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView headerTxt,featureProductsTitle;
+        TextView headerTxt, featureProductsTitle;
         private ImageView dishImg, foodImageType, cardAddBtn, cardMinusBtn, animationLineCartAdd, addOnsIconImg, featuredImage;
         private TextView dishNameTxt, priceTxt, cardTextValue, cardAddInfoText, cardAddOutOfStock, customizableTxt;
         TickerView cardTextValueTicker;
         RelativeLayout cardAddDetailLayout, cardAddTextLayout, cardInfoLayout;
-        LinearLayout rootLayout,categoryHeaderLayout;
+        LinearLayout rootLayout, categoryHeaderLayout;
 
         public ViewHolder(View itemView, boolean isHeader) {
             super(itemView);

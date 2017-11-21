@@ -284,4 +284,5 @@ public class OtpActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

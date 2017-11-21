@@ -55,7 +55,7 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promotion);
         ButterKnife.bind(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -129,8 +129,8 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
         if (tag != null && tag.equalsIgnoreCase(AddMoneyActivity.TAG)) {
             startActivity(new Intent(this, AddMoneyActivity.class));
         }
+        overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
         finish();
-        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
 
@@ -165,7 +165,8 @@ public class PromotionActivity extends AppCompatActivity implements PromotionsAd
 
     private void gotoFlow() {
         startActivity(new Intent(this, AccountPaymentActivity.class).putExtra("is_show_wallet", true).putExtra("is_show_cash", false));
-        overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
         finish();
     }
+
 }

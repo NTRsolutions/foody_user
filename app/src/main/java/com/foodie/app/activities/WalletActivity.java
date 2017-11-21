@@ -150,4 +150,5 @@ public class WalletActivity extends AppCompatActivity {
     public void onBackClicked() {
         onBackPressed();
     }
+
 }

@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.helper.GlobalData.onGoingOrderList;
 import static com.foodie.app.helper.GlobalData.pastOrderList;
@@ -224,5 +225,9 @@ public class OrdersActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         handler.removeCallbacks(orderStatusRunnable);
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

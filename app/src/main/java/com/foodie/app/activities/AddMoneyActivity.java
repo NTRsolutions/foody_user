@@ -76,7 +76,7 @@ public class AddMoneyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_amount);
         ButterKnife.bind(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         customDialog = new CustomDialog(context);
         title.setText(context.getResources().getString(R.string.add_money));
         cardArrayList = new ArrayList<>();
@@ -128,8 +128,8 @@ public class AddMoneyActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(this, WalletActivity.class));
-        finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
+        finish();
     }
 
     @Override
@@ -157,7 +157,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                             Card card = cardArrayList.get(i);
                             HashMap<String, String> map = new HashMap<>();
                             map.put("amount", "" + amountTxt.getText().toString());
-                            map.put("card_id", card.getCardId());
+                            map.put("card_id", card.getId().toString());
                             addMoney(map);
                             return;
                         }
@@ -169,6 +169,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                 break;
             case R.id.promo_layout:
                 startActivity(new Intent(this, PromotionActivity.class).putExtra("tag", TAG));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                 finish();
                 break;
         }
@@ -180,6 +181,7 @@ public class AddMoneyActivity extends AppCompatActivity {
                 .setPositiveButton(getResources().getString(R.string.okay), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(context, AccountPaymentActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                         finish();
 
                     }
@@ -208,8 +210,8 @@ public class AddMoneyActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<AddMoney> call, @NonNull Response<AddMoney> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(AddMoneyActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    GlobalData.profileModel.setWalletBalance(response.body().getUser().getWalletBalance());
+//                    Toast.makeText(AddMoneyActivity.this, context.getResources().getString(R.string.) , Toast.LENGTH_SHORT).show();
+                    GlobalData.profileModel.setWalletBalance(response.body().getWalletBalance());
                     onBackPressed();
                 } else {
                     try {

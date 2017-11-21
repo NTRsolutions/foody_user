@@ -373,6 +373,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
             public void onSelectCountry(String name, String code, String dialCode,
                                         int flagDrawableResID) {
                 mCountryDialCodeTextView.setText(dialCode);
+                country_code=dialCode;
                 mCountryFlagImageView.setImageResource(flagDrawableResID);
                 mCountryPicker.dismiss();
             }
@@ -528,4 +529,6 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }

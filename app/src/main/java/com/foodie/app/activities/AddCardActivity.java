@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class AddCardActivity extends AppCompatActivity {
 
@@ -249,5 +250,10 @@ public class AddCardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

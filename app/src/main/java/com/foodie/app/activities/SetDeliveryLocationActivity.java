@@ -195,4 +195,5 @@ public class SetDeliveryLocationActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
+
 }

@@ -316,4 +316,5 @@ public class EditAccountActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

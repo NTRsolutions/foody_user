@@ -98,6 +98,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.foodie.app.helper.GlobalData.ORDER_STATUS;
 import static com.foodie.app.helper.GlobalData.isSelectedOrder;
@@ -891,5 +892,9 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(orderStatusRunnable);
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }
