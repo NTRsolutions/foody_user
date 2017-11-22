@@ -213,7 +213,7 @@
                                 android:orientation="vertical">
 
                                 <RelativeLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center">
@@ -225,7 +225,6 @@
                                         android:layout_height="18dp"
                                         android:drawableStart="@drawable/star"
                                         android:gravity="center_horizontal"
-                                        android:textAllCaps="true"
                                         android:textColor="@color/colorPrimaryText"
                                         android:textSize="@dimen/text_small" />
                                 </RelativeLayout>

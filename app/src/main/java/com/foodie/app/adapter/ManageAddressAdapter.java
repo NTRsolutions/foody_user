@@ -136,8 +136,15 @@ public class ManageAddressAdapter extends RecyclerView.Adapter<ManageAddressAdap
                                             list.remove(position);
                                             if(list.size()==0)
                                                 ManageAddressActivity.errorLayout.setVisibility(View.VISIBLE);
-                                            else
+                                            else{
                                                 ManageAddressActivity.errorLayout.setVisibility(View.GONE);
+                                                for (int i = 0; i < GlobalData.addressList.getAddresses().size(); i++) {
+                                                    if( GlobalData.addressList.getAddresses().get(i).getId().equals(id)){
+                                                        GlobalData.addressList.getAddresses().remove(i);
+                                                    }
+                                                }
+                                            }
+
                                             notifyItemRemoved(position);
                                             notifyItemRangeChanged(position, list.size());
                                         }

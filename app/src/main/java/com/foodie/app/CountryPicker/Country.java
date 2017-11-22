@@ -228,7 +228,7 @@ public class Country {
             new Country("SS", "South Sudan", "+211", R.drawable.flag_ss),
             new Country("ST", "Sao Tome and Principe", "+239", R.drawable.flag_st),
             new Country("SV", "El Salvador", "+503", R.drawable.flag_sv),
-            new Country("SX", "  Sint Maarten", "+1", R.drawable.flag_sx),
+            new Country("SX", "Sint Maarten", "+1", R.drawable.flag_sx),
             new Country("SY", "Syrian Arab Republic", "+963", R.drawable.flag_sy),
             new Country("SZ", "Swaziland", "+268", R.drawable.flag_sz),
             new Country("TC", "Turks and Caicos Islands", "+1", R.drawable.flag_tc),

@@ -61,7 +61,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -150,16 +152,16 @@ public class SignUpActivity extends AppCompatActivity {
             mobileNumberLayout.setVisibility(View.GONE);
         }
 
+
         // You can limit the displayed countries
-        ArrayList<Country> nc = new ArrayList<>();
-        for (Country c : Country.getAllCountries()) {
-//            if (c.getDialCode().endsWith("0")) {
-            nc.add(c);
-//            }
-        }
-        // and decide, in which order they will be displayed
-        Collections.reverse(nc);
-        mCountryPicker.setCountriesList(nc);
+        List<Country> countryList=Country.getAllCountries();
+        Collections.sort(countryList, new Comparator<Country>() {
+            @Override
+            public int compare(Country s1, Country s2) {
+                return s1.getName().compareToIgnoreCase(s2.getName());
+            }
+        });
+        mCountryPicker.setCountriesList(countryList);
         setListener();
         //Social login logout
         signOut();

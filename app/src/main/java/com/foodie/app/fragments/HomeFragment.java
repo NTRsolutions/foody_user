@@ -376,7 +376,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     }
 
                     //Check Banner list
-                    if (response.body().getBanners().size() == 0)
+                    if (response.body().getBanners().size() == 0||isFilterApplied)
                         impressiveDishesLayout.setVisibility(View.GONE);
                     else
                         impressiveDishesLayout.setVisibility(View.VISIBLE);

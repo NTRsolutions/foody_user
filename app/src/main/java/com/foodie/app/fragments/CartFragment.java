@@ -233,9 +233,7 @@ public class CartFragment extends Fragment {
             selectedAddressBtn.setVisibility(View.GONE);
             locationInfoLayout.setVisibility(View.GONE);
         }
-
         return view;
-
     }
 
     private void getViewCart() {
@@ -470,6 +468,13 @@ public class CartFragment extends Fragment {
             if (GlobalData.getInstance().selectedAddress != null) {
                 locationErrorLayout.setVisibility(View.GONE);
                 locationInfoLayout.setVisibility(View.VISIBLE);
+                //Intialize address Value
+                if (GlobalData.getInstance().selectedAddress != null && GlobalData.getInstance().selectedAddress.getLandmark() != null) {
+                    if (GlobalData.getInstance().addressList.getAddresses().size() == 1)
+                        addAddressTxt.setText(getString(R.string.add_address));
+                    else
+                        addAddressTxt.setText(getString(R.string.change_address));
+                }
                 addressHeader.setText(GlobalData.getInstance().selectedAddress.getType());
                 addressDetail.setText(GlobalData.getInstance().selectedAddress.getMapAddress());
                 addressDeliveryTime.setText(viewCartItemList.get(0).getProduct().getShop().getEstimatedDeliveryTime().toString() + " Mins");

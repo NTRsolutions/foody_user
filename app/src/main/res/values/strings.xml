@@ -100,8 +100,8 @@
     <string name="description_1">We have received your order</string>
     <string name="description_2">Your order has been confirmed</string>
     <string name="description_3">We are preparing your order</string>
-    <string name="description_4">Your order is already pickup</string>
-    <string name="description_5">Your order is delivered successfully</string>
+    <string name="description_4">Your order picked up</string>
+    <string name="description_5">Your order has been delivered</string>
 
     <!--Past Order Page-->
     <string name="order_delivered_successfully">Order Delivered Successfully</string>
@@ -126,9 +126,14 @@
     <string name="apply">Apply</string>
     <string name="promocode">Promocode</string>
     <string name="use_wallet">Use wallet</string>
-    <string name="oops_connect_your_internet">Oops ! Connect your Internet.</string>
     <string name="google_login_failed">Google login failed</string>
     <string name="dispute">Dispute</string>
+
+    <!--    Check Internet Conneciton  -->
+    <string name="oops_connect_your_internet">Oops ! Connect your Internet.</string>
+    <string name="retry">Retry</string>
+    <string name="server_down">Server down</string>
+    <string name="no_internet_found_check_your_internet_connection">No internet found.\nCheck your internet connection or try again</string>
 
     <!--   Braintree  -->
 
@@ -173,7 +178,7 @@
     <string name="i_will_choose">I\'ll choose</string>
     <string name="repeat">Repeat</string>
     <string name="remove_item_from_cart">Remove item from cart</string>
-    <string name="remove_item_from_cart_description">The item has multiple customiztaions added.Proceed to cart to remove item?</string>
+    <string name="remove_item_from_cart_description">The item has multiple customization added.Proceed to cart to remove item?</string>
     <string name="add_custom_notes">Add Custom Notes</string>
     <string name="featured_products">Featured Products</string>
     <string name="reorder_confirm_message">Your cart contains dishes from %1$s. Do you want to discard the selection and add dishes from %2$s ?</string>
@@ -205,9 +210,16 @@
     <string name="reorder">Reorder</string>
     <string name="please_login">Please login</string>
 
+    <string name="no_restaurant_found">No restaurant found</string>
+    <string name="no_restaurant_found_in_your_location">No results found based on filter/location</string>
+
     <plurals name="item">
         <item quantity="one">%d Item</item>
         <item quantity="other">%d Items</item>
+    </plurals>
+    <plurals name="add_ons">
+        <item quantity="one">+%d Add-On</item>
+        <item quantity="other">+%d Add-Ons</item>
     </plurals>
 
 

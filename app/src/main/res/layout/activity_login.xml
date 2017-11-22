@@ -107,7 +107,7 @@
                         android:drawablePadding="@dimen/_8sdp"
                         android:drawableStart="@drawable/password_left"
                         android:hint="@string/password"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:paddingStart="@dimen/_8sdp"

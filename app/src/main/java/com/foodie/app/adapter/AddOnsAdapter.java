@@ -93,7 +93,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
 
-                if(GlobalData.profileModel!=null){
+//                if(GlobalData.profileModel!=null){
                     if (checked) {
                         holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                         holder.cardAddTextLayout.setVisibility(View.GONE);
@@ -107,10 +107,10 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
                         setAddOnsText();
 
                     }
-                }
-                else {
-                    Toast.makeText(context, context.getResources().getString(R.string.please_login), Toast.LENGTH_SHORT).show();
-                }
+//                }
+//                else {
+//                    Toast.makeText(context, context.getResources().getString(R.string.please_login), Toast.LENGTH_SHORT).show();
+//                }
 
             }
         });
@@ -119,7 +119,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             @Override
             public void onClick(View v) {
                 /** Press Add Card Text Layout */
-                if(GlobalData.profileModel!=null){
+//                if(GlobalData.profileModel!=null){
                     addon = list.get(position);
                     holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                     holder.cardAddTextLayout.setVisibility(View.GONE);
@@ -129,9 +129,9 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
                     holder.addonName.setChecked(true);
                     addon.getAddon().setChecked(true);
                     setAddOnsText();
-                }else {
-                    Toast.makeText(context, context.getResources().getString(R.string.please_login), Toast.LENGTH_SHORT).show();
-                }
+//                }else {
+//                    Toast.makeText(context, context.getResources().getString(R.string.please_login), Toast.LENGTH_SHORT).show();
+//                }
 
             }
         });
@@ -162,19 +162,15 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
                     holder.cardAddTextLayout.setVisibility(View.VISIBLE);
                     holder.addonName.setChecked(false);
                     addon.getAddon().setChecked(false);
-
                 } else {
                     countMinusValue = Integer.parseInt(holder.cardTextValue.getText().toString()) - 1;
                     holder.cardTextValue.setText("" + countMinusValue);
                     holder.cardTextValueTicker.setText("" + countMinusValue);
                     addon.setQuantity(countMinusValue);
-
                 }
                 setAddOnsText();
             }
         });
-
-
     }
 
     private void setAddOnsText() {
@@ -186,11 +182,7 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             }
         }
         ProductDetailActivity.itemText.setText("1 Item | " + GlobalData.currencySymbol + totalAmount);
-
     }
-
-
-
 
     @Override
     public int getItemCount() {
@@ -221,8 +213,6 @@ public class AddOnsAdapter extends RecyclerView.Adapter<AddOnsAdapter.MyViewHold
             cardTextValue = (TextView) itemView.findViewById(R.id.card_value);
             cardTextValueTicker = (TickerView) itemView.findViewById(R.id.card_value_ticker);
         }
-
-
     }
 
 }

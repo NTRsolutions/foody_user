@@ -111,6 +111,7 @@
                     android:visibility="gone">
 
                     <ImageView
+                        android:layout_marginTop="@dimen/_70sdp"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:padding="8dp"
@@ -123,7 +124,7 @@
                         android:layout_marginTop="20dp"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:text="No restaurant found"
+                        android:text="@string/no_restaurant_found"
                         android:textAllCaps="true"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="22sp"
@@ -135,7 +136,7 @@
                         android:layout_marginTop="8sp"
                         android:gravity="center"
                         android:maxLines="3"
-                        android:text="No results found based on filter/location"
+                        android:text="@string/no_restaurant_found_in_your_location"
                         android:textColor="@color/colorSecondaryText"
                         android:textSize="14sp"
                         tools:ignore="MissingPrefix" />

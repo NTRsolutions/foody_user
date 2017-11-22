@@ -38,6 +38,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.foodie.app.build.configure.BuildConfigure.PUBNUB_CHANNEL_NAME;
+import static com.foodie.app.build.configure.BuildConfigure.PUBNUB_PUBLISH_KEY;
+import static com.foodie.app.build.configure.BuildConfigure.PUBNUB_SUBSCRIBE_KEY;
+
 /**
  * Created by santhosh@appoets.com on 03-10-17.
  *
@@ -72,14 +76,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             btnSend.setOnClickListener(this);
 
             PNConfiguration pnConfiguration = new PNConfiguration();
-            pnConfiguration.setSubscribeKey(PubnubKeys.SUBSCRIBE_KEY);
-            pnConfiguration.setPublishKey(PubnubKeys.PUBLISH_KEY);
-            PubnubKeys.CHANNEL_NAME=GlobalData.isSelectedOrder.getId().toString();
-
+            pnConfiguration.setPublishKey(PUBNUB_PUBLISH_KEY);
+            pnConfiguration.setSubscribeKey(PUBNUB_SUBSCRIBE_KEY);
+            PUBNUB_CHANNEL_NAME=GlobalData.isSelectedOrder.getId().toString();
             pubnub = new PubNub(pnConfiguration);
-
             pubnub.history()
-                    .channel(PubnubKeys.CHANNEL_NAME)
+                    .channel(PUBNUB_CHANNEL_NAME)
                     .count(20)
                     .async(new PNCallback<PNHistoryResult>() {
                         @Override
@@ -182,7 +184,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
             });
 
-            pubnub.subscribe().channels(Arrays.asList(PubnubKeys.CHANNEL_NAME)).execute();
+            pubnub.subscribe().channels(Arrays.asList(PUBNUB_CHANNEL_NAME)).execute();
         }
         return view;
     }
@@ -198,7 +200,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 jObj.addProperty("type", "user");
                 jObj.addProperty("message", myText);
 
-                pubnub.publish().channel(PubnubKeys.CHANNEL_NAME).message(jObj).async(new PNCallback<PNPublishResult>() {
+                pubnub.publish().channel(PUBNUB_CHANNEL_NAME).message(jObj).async(new PNCallback<PNPublishResult>() {
                     @Override
                     public void onResponse(PNPublishResult result, PNStatus status) {
                         // Check whether request successfully completed or not.
@@ -244,14 +246,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        pubnub.subscribe().channels(Arrays.asList(PubnubKeys.CHANNEL_NAME)).execute();
+        pubnub.subscribe().channels(Arrays.asList(PUBNUB_CHANNEL_NAME)).execute();
         Log.d(TAG, "subscribed");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        pubnub.unsubscribe().channels(Arrays.asList(PubnubKeys.CHANNEL_NAME)).execute();
+        pubnub.unsubscribe().channels(Arrays.asList(PUBNUB_CHANNEL_NAME)).execute();
         Log.d(TAG, "Un subscribed");
     }
 }

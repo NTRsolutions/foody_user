@@ -587,10 +587,12 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                             //select the address data and set to address in Cart fargment page
                             Intent returnIntent = new Intent();
                             GlobalData.selectedAddress = response.body();
+                            GlobalData.addressList.getAddresses().add(response.body());
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         } else {
                             GlobalData.selectedAddress = response.body();
+                            GlobalData.addressList.getAddresses().add(response.body());
                             finish();
                         }
                     } else {

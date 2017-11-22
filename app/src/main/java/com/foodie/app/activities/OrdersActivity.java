@@ -58,7 +58,6 @@ public class OrdersActivity extends AppCompatActivity {
     List<OrderModel> modelList = new ArrayList<>();
     Intent orderIntent;
     ConnectionHelper connectionHelper;
-    Handler handler;
     Runnable orderStatusRunnable;
     CustomDialog customDialog;
 
@@ -66,12 +65,14 @@ public class OrdersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         context = OrdersActivity.this;
         customDialog = new CustomDialog(context);
         ButterKnife.bind(this);
         connectionHelper = new ConnectionHelper(context);
         setSupportActionBar(toolbar);
+        onGoingOrderList = new ArrayList<>();
+        pastOrderList = new ArrayList<>();
         toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,21 +82,12 @@ public class OrdersActivity extends AppCompatActivity {
         });
         toolbar.setPadding(0, 0, 0, 0);//for tab otherwise give space in tab
         toolbar.setContentInsetsAbsolute(0, 0);
-        handler = new Handler();
-        orderStatusRunnable = new Runnable() {
-            public void run() {
-                getOngoingOrders();
-                handler.postDelayed(this, 5000);
-            }
-        };
-        handler.postDelayed(orderStatusRunnable, 5000);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         ordersRv.setLayoutManager(manager);
         modelListReference.clear();
         adapter = new OrdersAdapter(this, activity, modelListReference);
         ordersRv.setAdapter(adapter);
         ordersRv.setHasFixedSize(false);
-        onGoingOrderList = new ArrayList<>();
 
     }
 
@@ -107,7 +99,7 @@ public class OrdersActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
                 customDialog.dismiss();
                 if (response.isSuccessful()) {
-                    pastOrderList = new ArrayList<>();
+                    pastOrderList.clear();
                     pastOrderList = response.body();
                     OrderModel model = new OrderModel();
                     model.setHeader(getString(R.string.past_orders));
@@ -145,27 +137,16 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().size() == 0) {
-                        getPastOrders();
-                    } else if (onGoingOrderList.size() != response.body().size()) {
-
-                        onGoingOrderList.clear();
-                        onGoingOrderList.addAll(response.body());
-                        OrderModel model = new OrderModel();
-                        model.setHeader("Current Orders");
-                        model.setOrders(onGoingOrderList);
-                        modelList.add(model);
-                        modelListReference.clear();
-                        modelListReference.addAll(modelList);
-                        if (onGoingOrderList.size() == 0 && pastOrderList.size() == 0) {
-                            errorLayout.setVisibility(View.VISIBLE);
-                        } else
-                            errorLayout.setVisibility(View.GONE);
-                        getPastOrders();
-                    }
-                    else {
-                        customDialog.dismiss();
-                    }
+                    onGoingOrderList.clear();
+                    modelListReference.clear();
+                    onGoingOrderList=response.body();
+                    modelList.clear();
+                    OrderModel model = new OrderModel();
+                    model.setHeader("Current Orders");
+                    model.setOrders(onGoingOrderList);
+                    modelList.add(model);
+                    modelListReference.addAll(modelList);
+                    getPastOrders();
                 } else {
                     getPastOrders();
                     try {
@@ -190,15 +171,14 @@ public class OrdersActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        handler.removeCallbacks(orderStatusRunnable);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+        modelList.clear();
         //Get Ongoing Order list
-        handler.postDelayed(orderStatusRunnable, 5000);
         if (connectionHelper.isConnectingToInternet()) {
             customDialog.show();
             getOngoingOrders();
@@ -218,14 +198,14 @@ public class OrdersActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(orderStatusRunnable);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        handler.removeCallbacks(orderStatusRunnable);
     }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

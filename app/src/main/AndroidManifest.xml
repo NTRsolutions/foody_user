@@ -196,6 +196,7 @@
         <activity
             android:name=".activities.AddMoneyActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.WalletActivity"

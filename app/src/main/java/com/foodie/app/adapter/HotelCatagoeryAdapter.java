@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.foodie.app.R;
 import com.foodie.app.activities.HotelViewActivity;
 import com.foodie.app.activities.LoginActivity;
@@ -160,8 +161,15 @@ public class HotelCatagoeryAdapter extends SectionedRecyclerViewAdapter<HotelCat
         holder.cardTextValue.setVisibility(View.VISIBLE);
         if (category.getName().equalsIgnoreCase(context.getResources().getString(R.string.featured_products))) {
             holder.featuredImage.setVisibility(View.VISIBLE);
-            Glide.with(context).load(product.getFeaturedImages().get(0).getUrl()).placeholder(R.drawable.ic_banner).dontAnimate()
-                    .error(R.drawable.ic_banner).into(holder.featuredImage);
+            Glide.with(context).load(product.getFeaturedImages().get(0).getUrl())
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ic_banner)
+                    .error((R.drawable.ic_banner))
+                    .into(holder.featuredImage);
+//            Glide.with(context).load(product.getFeaturedImages().get(0).getUrl()).placeholder(R.drawable.ic_banner).dontAnimate()
+//                    .error(R.drawable.ic_banner).into(holder.featuredImage);
 
         } else {
             holder.featuredImage.setVisibility(View.GONE);

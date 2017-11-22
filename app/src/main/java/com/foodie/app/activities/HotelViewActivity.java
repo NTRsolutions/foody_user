@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.ViewSkeletonScreen;
 import com.foodie.app.HeaderView;
@@ -173,7 +174,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
         }
 
-        if (shops.getRatings() != null) {
+        if (shops.getRatings() != null&&shops.getRatings().equals("")) {
             Double ratingvalue = new BigDecimal(shops.getRatings().getRating()).setScale(1, RoundingMode.HALF_UP).doubleValue();
             rating.setText(String.valueOf(ratingvalue));
         } else
@@ -194,9 +195,16 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             }
         });
 
+        Glide.with(context).load(shops.getAvatar())
+                .thumbnail(0.5f)
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.ic_restaurant_place_holder)
+                .error((R.drawable.ic_restaurant_place_holder))
+                .into(restaurantImage);
 
-        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
-                .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
+//        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
+//                .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
 
         //Set Palette color
         Picasso.with(HotelViewActivity.this)
@@ -476,17 +484,23 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         super.onResume();
         if (bottomSheetDialogFragment != null)
             bottomSheetDialogFragment.dismiss();
-        //get User Profile Data
-        if (GlobalData.profileModel != null) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("shop", String.valueOf(shops.getId()));
-            map.put("user_id", String.valueOf(GlobalData.profileModel.getId()));
-            getCategories(map);
+
+        if (connectionHelper.isConnectingToInternet()) {
+            //get User Profile Data
+            if (GlobalData.profileModel != null) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("shop", String.valueOf(shops.getId()));
+                map.put("user_id", String.valueOf(GlobalData.profileModel.getId()));
+                getCategories(map);
+            } else {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("shop", String.valueOf(shops.getId()));
+                getCategories(map);
+            }
         } else {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("shop", String.valueOf(shops.getId()));
-            getCategories(map);
+            Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
         }
+
 
     }
 

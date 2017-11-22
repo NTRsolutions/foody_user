@@ -106,7 +106,8 @@ public class CartChoiceModeFragment extends BottomSheetDialogFragment {
                 cartAddonList = product.getCart().get(product.getCart().size() - 1).getCartAddons();
                 lastCart = product.getCart().get(product.getCart().size() - 1);
             }
-            addOnsQty.setText("" + cartAddonList.size() + "+ Add on");
+//            addOnsQty.setText("" + cartAddonList.size() + " Add on");
+            addOnsQty.setText(context.getResources().getQuantityString(R.plurals.add_ons,cartAddonList.size(),cartAddonList.size()));
             for (int i = 0; i < cartAddonList.size(); i++) {
                 if (i == 0)
                     addOnsItemsTxt.setText(cartAddonList.get(i).getAddonProduct().getAddon().getName());

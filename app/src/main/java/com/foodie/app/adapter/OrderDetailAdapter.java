@@ -50,14 +50,21 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Item item = list.get(position);
-        holder.dishName.setText(item.getProduct().getName() +" x " +String.valueOf(item.getQuantity()));
-        holder.price.setText(item.getProduct().getPrices().getCurrency() + item.getProduct().getPrices().getPrice());
+        holder.dishName.setText(item.getProduct().getName() + " x " + String.valueOf(item.getQuantity()));
+        Integer priceAmount = item.getProduct().getPrices().getPrice()*item.getQuantity();
+        if (list.get(position).getCartAddons() != null && !list.get(position).getCartAddons().isEmpty()) {
+            for (int j = 0; j < list.get(position).getCartAddons().size(); j++) {
+                priceAmount = priceAmount + (list.get(position).getQuantity() * (list.get(position).getCartAddons().get(j).getQuantity() *
+                        list.get(position).getCartAddons().get(j).getAddonProduct().getPrice()));
+            }
+        }
+        holder.price.setText(item.getProduct().getPrices().getCurrency() + priceAmount);
         if (item.getProduct().getFoodType().equalsIgnoreCase("veg"))
             holder.dishImg.setImageResource(R.drawable.ic_veg);
         else
             holder.dishImg.setImageResource(R.drawable.ic_nonveg);
 
-        if(item.getCartAddons()!= null && !item.getCartAddons().isEmpty()){
+        if (item.getCartAddons() != null && !item.getCartAddons().isEmpty()) {
             List<CartAddon> cartAddonList = item.getCartAddons();
             for (int i = 0; i < cartAddonList.size(); i++) {
                 if (i == 0)
@@ -67,7 +74,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
             }
 
             holder.addons.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.addons.setVisibility(View.GONE);
         }
     }
@@ -81,7 +88,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private LinearLayout itemView;
         private ImageView dishImg;
-        private TextView dishName,addons, price;
+        private TextView dishName, addons, price;
 
         private MyViewHolder(View view) {
             super(view);

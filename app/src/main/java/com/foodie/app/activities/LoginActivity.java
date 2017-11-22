@@ -74,7 +74,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -190,15 +192,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mCountryPicker = CountryPicker.newInstance("Select Country");
         // You can limit the displayed countries
-        ArrayList<Country> nc = new ArrayList<>();
-        for (Country c : Country.getAllCountries()) {
-//            if (c.getDialCode().endsWith("0")) {
-            nc.add(c);
-//            }
-        }
-        // and decide, in which order they will be displayed
-        Collections.reverse(nc);
-        mCountryPicker.setCountriesList(nc);
+        List<Country> countryList=Country.getAllCountries();
+        Collections.sort(countryList, new Comparator<Country>() {
+            @Override
+            public int compare(Country s1, Country s2) {
+                return s1.getName().compareToIgnoreCase(s2.getName());
+            }
+        });
+        mCountryPicker.setCountriesList(countryList);
         setListener();
         final boolean once = false;
         eyeImg.setTag(1);
@@ -517,69 +518,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
     }
-
-//    public void RequestData() {
-//        if (isInternet) {
-//            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-//                @Override
-//                public void onCompleted(JSONObject object, GraphResponse response) {
-//
-//                    Log.e("response", "" + response);
-//                    json = response.getJSONObject();
-//                    Log.e("FB JSON", "" + json);
-//
-//                    try {
-//                        if (json != null) {
-//                            GlobalData.name = json.optString("name");
-//                            GlobalData.email  = json.optString("email");
-//                            com.facebook.Profile profile = com.facebook.Profile.getCurrentProfile();
-//                            String FBUserID = profile.getId();
-//                            Log.e("FBUserID", "" + FBUserID);
-//                            URL image_value = new URL("https://graph.facebook.com/" + FBUserID + "/picture?type=large");
-//                            GlobalData.imageUrl  = image_value.toString();
-//                            Log.e("Connected FB", "" + GlobalData.name );
-//                            Log.e("Connected FB", "" +  GlobalData.email );
-//                            Log.e("FBUserPhoto FB",     GlobalData.imageUrl);
-//
-//
-//
-//                        } else {
-//
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            });
-//            Bundle parameters = new Bundle();
-//            parameters.putString("fields", "id,name,link,email,picture");
-//            request.setParameters(parameters);
-//            request.executeAsync();
-//        } else {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//            builder.setMessage("Check your Internet").setCancelable(false);
-//            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                }
-//            });
-//            builder.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//
-//                    Intent NetworkAction = new Intent(Settings.ACTION_SETTINGS);
-//                    startActivity(NetworkAction);
-//
-//                }
-//            });
-//            builder.show();
-//        }
-//
-//
-//    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
