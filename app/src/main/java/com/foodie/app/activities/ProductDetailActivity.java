@@ -101,7 +101,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
         context = ProductDetailActivity.this;
-        customDialog= new CustomDialog(context);
+        customDialog = new CustomDialog(context);
 
         //Intialize
         addOnsTxt = (TextView) findViewById(R.id.add_ons_txt);
@@ -148,62 +148,65 @@ public class ProductDetailActivity extends AppCompatActivity {
         addItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final HashMap<String, String> map = new HashMap<>();
-                map.put("product_id", product.getId().toString());
-                if (product.getCart() != null && product.getCart().size() == 1 && product.getAddons().isEmpty()) {
-                    map.put("quantity", String.valueOf(product.getCart().get(0).getQuantity() + 1));
-                    map.put("cart_id", String.valueOf(product.getCart().get(0).getId()));
-                } else if (product.getAddons().isEmpty() && cartId != 0) {
-                    map.put("quantity", String.valueOf(quantity + 1));
-                    map.put("cart_id", String.valueOf(cartId));
+                if (GlobalData.profileModel == null) {
+                    Toast.makeText(context, "Please login", Toast.LENGTH_SHORT).show();
                 } else {
-                    map.put("quantity", "1");
-                    if (!list.isEmpty()) {
-                        for (int i = 0; i < list.size(); i++) {
-                            Addon addon = list.get(i);
-                            if (addon.getAddon().getChecked()) {
-                                map.put("product_addons[" + "" + i + "]", addon.getId().toString());
-                                map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
+                    final HashMap<String, String> map = new HashMap<>();
+                    map.put("product_id", product.getId().toString());
+                    if (product.getCart() != null && product.getCart().size() == 1 && product.getAddons().isEmpty()) {
+                        map.put("quantity", String.valueOf(product.getCart().get(0).getQuantity() + 1));
+                        map.put("cart_id", String.valueOf(product.getCart().get(0).getId()));
+                    } else if (product.getAddons().isEmpty() && cartId != 0) {
+                        map.put("quantity", String.valueOf(quantity + 1));
+                        map.put("cart_id", String.valueOf(cartId));
+                    } else {
+                        map.put("quantity", "1");
+                        if (!list.isEmpty()) {
+                            for (int i = 0; i < list.size(); i++) {
+                                Addon addon = list.get(i);
+                                if (addon.getAddon().getChecked()) {
+                                    map.put("product_addons[" + "" + i + "]", addon.getId().toString());
+                                    map.put("addons_qty[" + "" + i + "]", addon.getQuantity().toString());
+                                }
                             }
                         }
                     }
+                    Log.e("AddCart_add", map.toString());
+
+                    if (!Utils.isShopChanged(product.getShopId())) {
+                        addItem(map);
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
+                                .setMessage(context.getResources().getString(R.string.do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant))
+                                .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                        clearCart();
+                                        addItem(map);
+
+                                    }
+                                })
+                                .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
+                        nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
+                        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+                        pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
+                        pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
+                    }
+
+
                 }
-                Log.e("AddCart_add", map.toString());
 
-
-                if(!Utils.isShopChanged(HotelViewActivity.shops.getId())){
-                    addItem(map);
-                }
-
-                else {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
-                            .setMessage(context.getResources().getString(R.string.do_you_want_to_discart_the_selection_and_add_dishes_from_the_restaurant))
-                            .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue with delete
-                                    clearCart();
-                                    addItem(map);
-
-                                }
-                            })
-                            .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                    dialog.dismiss();
-
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                    Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-                    nbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
-                    nbutton.setTypeface(nbutton.getTypeface(), Typeface.BOLD);
-                    Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-                    pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
-                    pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
-                }
 
             }
         });
@@ -243,7 +246,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 } else if (response.isSuccessful()) {
                     selectedShop = HotelViewActivity.shops;
                     GlobalData.addCart.getProductList().clear();
-                    GlobalData.notificationCount=0;
+                    GlobalData.notificationCount = 0;
 
                 }
 
