@@ -140,7 +140,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         context = HotelViewActivity.this;
         activity = HotelViewActivity.this;
         connectionHelper = new ConnectionHelper(context);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -149,9 +148,9 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                 onBackPressed();
             }
         });
-
-        activity = HotelViewActivity.this;
         appBarLayout.addOnOffsetChangedListener(this);
+
+        shops = GlobalData.selectedShop;
 
         //Load animation
         slide_down = AnimationUtils.loadAnimation(context,
@@ -166,7 +165,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 
         }
         isFavourite = getIntent().getBooleanExtra("is_fav", false);
-        shops = GlobalData.selectedShop;
 
         if (shops.getOfferPercent() == null) {
             offer.setVisibility(View.GONE);

@@ -37,6 +37,7 @@ import com.foodie.app.models.Cart;
 import com.foodie.app.models.ClearCart;
 import com.foodie.app.models.Product;
 import com.foodie.app.models.Shop;
+import com.foodie.app.utils.Utils;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
@@ -147,7 +148,6 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
             holder.cardTextValueTicker.setText(String.valueOf(1));
             holder.cardTextValue.setText(String.valueOf(1));
         }
-
 
         if (product.getAddons() != null && product.getAddons().size() != 0) {
             holder.customizableTxt.setVisibility(View.VISIBLE);
@@ -293,45 +293,8 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 /** Press Add Card Text Layout */
                 product = list.get(section);
                 if (profileModel != null) {
-                    if (GlobalData.addCart == null || GlobalData.addCart.getProductList().isEmpty()) {
-                        currentShop = list.get(section).getShop();
-                        if (product.getAddons() != null && product.getAddons().size() != 0) {
-                            GlobalData.isSelectedProduct = product;
-                            context.startActivity(new Intent(context, ProductDetailActivity.class));
-                            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                        } else {
-                            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                            holder.cardAddTextLayout.setVisibility(View.GONE);
-                            holder.cardTextValue.setText("1");
-                            holder.cardTextValueTicker.setText("1");
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("product_id", product.getId().toString());
-                            map.put("quantity", holder.cardTextValue.getText().toString());
-                            Log.e("AddCart_Text", map.toString());
-                            addCart(map);
-
-                        }
-                    } else if (!GlobalData.addCart.getProductList().isEmpty() && addCart.getProductList().get(0).getProduct().getShop().getId().equals(list.get(section).getShop().getId())) {
-                        currentShop = list.get(section).getShop();
-                        if (product.getAddons() != null && product.getAddons().size() != 0) {
-                            GlobalData.isSelectedProduct = product;
-                            context.startActivity(new Intent(context, ProductDetailActivity.class));
-                            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
-                        } else {
-                            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
-                            holder.cardAddTextLayout.setVisibility(View.GONE);
-                            holder.cardTextValue.setText("1");
-                            holder.cardTextValueTicker.setText("1");
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("product_id", product.getId().toString());
-                            map.put("quantity", holder.cardTextValue.getText().toString());
-                            Log.e("AddCart_Text", map.toString());
-                            addCart(map);
-                        }
-
-                    } else {
+                  if (Utils.isShopChanged(product.getShopId())) {
                         String message = String.format(activity.getResources().getString(R.string.reorder_confirm_message), product.getShop().getName(), GlobalData.addCart.getProductList().get(0).getProduct().getShop().getName());
-                        Log.e("IsShopchanged", "True");
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle(context.getResources().getString(R.string.replace_cart_item))
                                 .setMessage(message)
@@ -345,7 +308,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                                             context.startActivity(new Intent(context, ProductDetailActivity.class));
                                             activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
                                         } else {
-                                            selectedShop =product.getShop();
+                                            selectedShop = product.getShop();
                                             product = list.get(section);
                                             holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
                                             holder.cardAddTextLayout.setVisibility(View.GONE);
@@ -375,10 +338,24 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                         Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
                         pbutton.setTextColor(ContextCompat.getColor(context, R.color.theme));
                         pbutton.setTypeface(pbutton.getTypeface(), Typeface.BOLD);
-
+                    } else {
+                        currentShop = list.get(section).getShop();
+                        if (product.getAddons() != null && product.getAddons().size() != 0) {
+                            GlobalData.isSelectedProduct = product;
+                            context.startActivity(new Intent(context, ProductDetailActivity.class));
+                            activity.overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                        } else {
+                            holder.cardAddDetailLayout.setVisibility(View.VISIBLE);
+                            holder.cardAddTextLayout.setVisibility(View.GONE);
+                            holder.cardTextValue.setText("1");
+                            holder.cardTextValueTicker.setText("1");
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("product_id", product.getId().toString());
+                            map.put("quantity", holder.cardTextValue.getText().toString());
+                            Log.e("AddCart_Text", map.toString());
+                            addCart(map);
+                        }
                     }
-
-
                 } else {
                     activity.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     activity.overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
@@ -406,7 +383,7 @@ public class ProductsAdapter extends SectionedRecyclerViewAdapter<ProductsAdapte
                 } else if (response.isSuccessful()) {
                     selectedShop = HotelViewActivity.shops;
                     GlobalData.addCart.getProductList().clear();
-
+                    GlobalData.notificationCount=0;
 
                 }
 
