@@ -428,8 +428,9 @@ public class ProfileFragment extends Fragment {
                         SharedHelper.putKey(context, "logged", "false");
                         startActivity(new Intent(context, WelcomeScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         GlobalData.profileModel = null;
+                        GlobalData.addCart = null;
+                        GlobalData.notificationCount=0;
                         getActivity().finish();
-
 
                     }
                 })

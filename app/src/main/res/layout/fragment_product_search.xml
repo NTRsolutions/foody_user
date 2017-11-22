@@ -6,6 +6,7 @@
     tools:context="com.foodie.app.fragments.ProductSearchFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginBottom="@dimen/_45sdp"
         android:id="@+id/product_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
