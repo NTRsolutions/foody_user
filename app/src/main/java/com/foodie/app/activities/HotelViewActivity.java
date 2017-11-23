@@ -152,76 +152,86 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
         appBarLayout.addOnOffsetChangedListener(this);
 
         shops = GlobalData.selectedShop;
+        if(shops!=null){
+            //Load animation
+            slide_down = AnimationUtils.loadAnimation(context,
+                    R.anim.slide_down);
+            slide_up = AnimationUtils.loadAnimation(context,
+                    R.anim.slide_up);
 
-        //Load animation
-        slide_down = AnimationUtils.loadAnimation(context,
-                R.anim.slide_down);
-        slide_up = AnimationUtils.loadAnimation(context,
-                R.anim.slide_up);
+            Intent intent = getIntent();
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                restaurantPosition = bundle.getInt("position");
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            restaurantPosition = bundle.getInt("position");
-
-        }
-        isFavourite = getIntent().getBooleanExtra("is_fav", false);
-
-        if (shops.getOfferPercent() == null) {
-            offer.setVisibility(View.GONE);
-        } else {
-            offer.setVisibility(View.VISIBLE);
-            offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
-        }
-
-        if (shops.getRatings() != null&&shops.getRatings().equals("")) {
-            Double ratingvalue = new BigDecimal(shops.getRatings().getRating()).setScale(1, RoundingMode.HALF_UP).doubleValue();
-            rating.setText(String.valueOf(ratingvalue));
-        } else
-            rating.setText("No Rating");
-
-        deliveryTime.setText(shops.getEstimatedDeliveryTime().toString() + "Mins");
-
-        itemText = (TextView) findViewById(R.id.item_text);
-        viewCartShopName = (TextView) findViewById(R.id.view_cart_shop_name);
-        viewCart = (TextView) findViewById(R.id.view_cart);
-        viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
-
-        viewCartLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HotelViewActivity.this, ViewCartActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
             }
-        });
+            isFavourite = getIntent().getBooleanExtra("is_fav", false);
 
-        Glide.with(context).load(shops.getAvatar())
-                .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.ic_restaurant_place_holder)
-                .error((R.drawable.ic_restaurant_place_holder))
-                .into(restaurantImage);
+            if (shops.getOfferPercent() == null) {
+                offer.setVisibility(View.GONE);
+            } else {
+                offer.setVisibility(View.VISIBLE);
+                offer.setText("Flat " + shops.getOfferPercent().toString() + "% offer on all Orders");
+            }
+
+            if (shops.getRatings() != null&&shops.getRatings().equals("")) {
+                Double ratingvalue = new BigDecimal(shops.getRatings().getRating()).setScale(1, RoundingMode.HALF_UP).doubleValue();
+                rating.setText(String.valueOf(ratingvalue));
+            } else
+                rating.setText("No Rating");
+
+            deliveryTime.setText(shops.getEstimatedDeliveryTime().toString() + "Mins");
+
+            itemText = (TextView) findViewById(R.id.item_text);
+            viewCartShopName = (TextView) findViewById(R.id.view_cart_shop_name);
+            viewCart = (TextView) findViewById(R.id.view_cart);
+            viewCartLayout = (RelativeLayout) findViewById(R.id.view_cart_layout);
+
+            viewCartLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(HotelViewActivity.this, ViewCartActivity.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.anim_nothing);
+                }
+            });
+
+            Glide.with(context).load(shops.getAvatar())
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.ic_restaurant_place_holder)
+                    .error((R.drawable.ic_restaurant_place_holder))
+                    .into(restaurantImage);
 
 //        Glide.with(context).load(shops.getAvatar()).placeholder(R.drawable.ic_restaurant_place_holder).dontAnimate()
 //                .error(R.drawable.ic_restaurant_place_holder).into(restaurantImage);
 
-        //Set Palette color
-        Picasso.with(HotelViewActivity.this)
-                .load(shops.getAvatar())
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        assert restaurantImage != null;
-                        restaurantImage.setImageBitmap(bitmap);
-                        Palette.from(bitmap)
-                                .generate(new Palette.PaletteAsyncListener() {
-                                    @Override
-                                    public void onGenerated(Palette palette) {
-                                        Palette.Swatch textSwatch = palette.getDarkMutedSwatch();
-                                        if (textSwatch == null) {
-                                            textSwatch = palette.getMutedSwatch();
-                                            if (textSwatch != null) {
+            //Set Palette color
+            Picasso.with(HotelViewActivity.this)
+                    .load(shops.getAvatar())
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            assert restaurantImage != null;
+                            restaurantImage.setImageBitmap(bitmap);
+                            Palette.from(bitmap)
+                                    .generate(new Palette.PaletteAsyncListener() {
+                                        @Override
+                                        public void onGenerated(Palette palette) {
+                                            Palette.Swatch textSwatch = palette.getDarkMutedSwatch();
+                                            if (textSwatch == null) {
+                                                textSwatch = palette.getMutedSwatch();
+                                                if (textSwatch != null) {
+                                                    collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
+                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                        Window window = getWindow();
+                                                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                                                        window.setStatusBarColor(textSwatch.getRgb());
+                                                    }
+                                                    headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
+                                                    headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
+                                                }
+                                            } else {
                                                 collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                                     Window window = getWindow();
@@ -231,44 +241,34 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
                                                 headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
                                                 headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
                                             }
-                                        } else {
-                                            collapsingToolbar.setContentScrimColor(textSwatch.getRgb());
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                Window window = getWindow();
-                                                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                                                window.setStatusBarColor(textSwatch.getRgb());
-                                            }
-                                            headerViewTitle.setTextColor(textSwatch.getTitleTextColor());
-                                            headerViewSubTitle.setTextColor(textSwatch.getBodyTextColor());
+
                                         }
+                                    });
 
-                                    }
-                                });
+                        }
 
-                    }
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
 
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
+                        }
 
-                    }
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
 
-                    }
-                });
+            //Set title
+            collapsingToolbar.setTitle(" ");
+            toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
+            floatHeaderView.bindTo(shops.getName(), shops.getDescription());
 
-        //Set title
-        collapsingToolbar.setTitle(" ");
-        toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
-        floatHeaderView.bindTo(shops.getName(), shops.getDescription());
-
-        categoryList = new ArrayList<>();
-        //Set Categoery shopList adapter
-        catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, categoryList);
-        accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
-        accompanimentDishesRv.setAdapter(catagoeryAdapter);
+            categoryList = new ArrayList<>();
+            //Set Categoery shopList adapter
+            catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, categoryList);
+            accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
+            accompanimentDishesRv.setAdapter(catagoeryAdapter);
 
 //        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
 //            @Override
@@ -297,52 +297,58 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
 //            }
 //        });
 
-        //Heart Animation Button
-        if (heartBtn != null)
-            heartBtn.init(this);
-        if (shops.getFavorite() != null || isFavourite) {
-            heartBtn.setChecked(true);
-            heartBtn.setTag(1);
-        } else
-            heartBtn.setTag(0);
-        heartBtn.setShineDistanceMultiple(1.8f);
-        heartBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (heartBtn.getTag().equals(0)) {
-                    heartBtn.setTag(1);
-                    heartBtn.setShapeResource(R.raw.heart);
-                } else {
-                    heartBtn.setTag(0);
-                    heartBtn.setShapeResource(R.raw.icc_heart);
-                }
+            //Heart Animation Button
+            if (heartBtn != null)
+                heartBtn.init(this);
+            if (shops.getFavorite() != null || isFavourite) {
+                heartBtn.setChecked(true);
+                heartBtn.setTag(1);
+            } else
+                heartBtn.setTag(0);
+            heartBtn.setShineDistanceMultiple(1.8f);
+            heartBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (heartBtn.getTag().equals(0)) {
+                        heartBtn.setTag(1);
+                        heartBtn.setShapeResource(R.raw.heart);
+                    } else {
+                        heartBtn.setTag(0);
+                        heartBtn.setShapeResource(R.raw.icc_heart);
+                    }
 
-            }
-        });
-        heartBtn.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(View view, boolean checked) {
-                Log.e("HeartButton", "click " + checked);
-                if (connectionHelper.isConnectingToInternet()) {
-                    if (checked) {
-                        if (GlobalData.profileModel != null)
-                            doFavorite(shops.getId());
-                        else {
-                            startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
-                            finish();
+                }
+            });
+            heartBtn.setOnCheckStateChangeListener(new ShineButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(View view, boolean checked) {
+                    Log.e("HeartButton", "click " + checked);
+                    if (connectionHelper.isConnectingToInternet()) {
+                        if (checked) {
+                            if (GlobalData.profileModel != null)
+                                doFavorite(shops.getId());
+                            else {
+                                startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                                overridePendingTransition(R.anim.slide_in_left, R.anim.anim_nothing);
+                                finish();
+                            }
+                        } else {
+                            deleteFavorite(shops.getId());
                         }
                     } else {
-                        deleteFavorite(shops.getId());
+                        Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                     }
-                } else {
-                    Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
                 }
-            }
-        });
-        skeleton = Skeleton.bind(rootLayout)
-                .load(R.layout.skeleton_hotel_view)
-                .show();
+            });
+            skeleton = Skeleton.bind(rootLayout)
+                    .load(R.layout.skeleton_hotel_view)
+                    .show();
+
+        }else {
+            startActivity( new Intent(context,SplashActivity.class));
+            finish();
+        }
+
 
     }
 

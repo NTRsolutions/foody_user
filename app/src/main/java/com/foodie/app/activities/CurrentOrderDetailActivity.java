@@ -523,8 +523,10 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                         builder.include(sourceMarker.getPosition());
                         builder.include(destinationMarker.getPosition());
                         LatLngBounds bounds = builder.build();
-                        int padding = 150; // offset from edges of the map in pixels
-                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                        final int width = getResources().getDisplayMetrics().widthPixels;
+                        final int height = getResources().getDisplayMetrics().heightPixels;
+                        final int padding = (int) (width * 0.40); // offset from edges of the map in pixels
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
                         mMap.moveCamera(cu);
                         // Adding all the points in the route to LineOptions
                         lineOptions.addAll(points);
