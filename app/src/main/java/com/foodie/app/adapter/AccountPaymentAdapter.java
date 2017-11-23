@@ -135,7 +135,7 @@ public class AccountPaymentAdapter extends BaseAdapter {
 
         holder.paymentLabel.setText("XXXX-XXXX-XXXX" + obj.getLastFour());
 //        setIcon(holder.icon, obj.icon_id);
-        holder.icon.setImageResource(R.drawable.bt_ic_vaulted_visa);
+        holder.icon.setImageResource(R.drawable.ic_credit_card);
         return convertView;
     }
 

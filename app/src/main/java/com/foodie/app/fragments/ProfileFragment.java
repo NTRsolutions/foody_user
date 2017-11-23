@@ -154,10 +154,10 @@ public class ProfileFragment extends Fragment {
             case 4:
                 startActivity(new Intent(context, PromotionActivity.class));
                 break;
+//            case 5:
+//                changeLanguage();
+//                break;
             case 5:
-                changeLanguage();
-                break;
-            case 6:
                 startActivity(new Intent(context, ChangePasswordActivity.class));
                 break;
 //            case 4:
@@ -211,7 +211,7 @@ public class ProfileFragment extends Fragment {
             listIcons.add(R.drawable.payment);
             listIcons.add(R.drawable.ic_myorders);
             listIcons.add(R.drawable.ic_promotion_details);
-            listIcons.add(R.drawable.ic_translate);
+//            listIcons.add(R.drawable.ic_translate);
             listIcons.add(R.drawable.padlock);
             ProfileSettingsAdapter adbPerson = new ProfileSettingsAdapter(context, list, listIcons);
             profileSettingLv.setAdapter(adbPerson);

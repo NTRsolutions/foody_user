@@ -347,8 +347,10 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
                 } else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if (jObjError.has("phone"))
-                            Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                        if (jObjError.has("phone")){
+                            if(jObjError.optJSONArray("phone")!=null)
+                            Toast.makeText(context, jObjError.optJSONArray("phone").get(0).toString(), Toast.LENGTH_LONG).show();
+                        }
                         else if (jObjError.has("email"))
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
                         else
@@ -361,6 +363,7 @@ public class MobileNumberActivity extends AppCompatActivity implements GoogleApi
 
             @Override
             public void onFailure(@NonNull Call<Otp> call, @NonNull Throwable t) {
+                customDialog.dismiss();
 
             }
         });

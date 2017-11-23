@@ -213,6 +213,7 @@
     <string name="no_restaurant_found">No restaurant found</string>
     <string name="no_restaurant_found_in_your_location">No results found based on filter/location</string>
 
+
     <plurals name="item">
         <item quantity="one">%d Item</item>
         <item quantity="other">%d Items</item>

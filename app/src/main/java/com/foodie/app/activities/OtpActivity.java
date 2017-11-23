@@ -244,7 +244,7 @@ public class OtpActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<Otp> call, @NonNull Throwable t) {
-
+                customDialog.dismiss();
             }
         });
 

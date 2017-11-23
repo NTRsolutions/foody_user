@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.foodie.app.R;
 import com.foodie.app.activities.OtherHelpActivity;
+import com.foodie.app.activities.SplashActivity;
 import com.foodie.app.adapter.DisputeMessageAdapter;
 import com.foodie.app.build.api.ApiClient;
 import com.foodie.app.build.api.ApiInterface;
@@ -95,16 +96,24 @@ public class OrderHelpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order_help, container, false);
         unbinder = ButterKnife.bind(this, view);
         customDialog = new CustomDialog(context);
-        helpRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        helpRv.setItemAnimator(new DefaultItemAnimator());
-        helpRv.setHasFixedSize(true);
-        disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context, getActivity());
-        helpRv.setAdapter(disputeMessageAdapter);
-        if (disputeMessageList.size() > 0) {
-            otherHelpLayout.setVisibility(View.GONE);
-        } else {
-            otherHelpLayout.setVisibility(View.VISIBLE);
+
+        if(disputeMessageList!=null){
+            helpRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            helpRv.setItemAnimator(new DefaultItemAnimator());
+            helpRv.setHasFixedSize(true);
+            disputeMessageAdapter = new DisputeMessageAdapter(disputeMessageList, context, getActivity());
+            helpRv.setAdapter(disputeMessageAdapter);
+            if (disputeMessageList.size() > 0) {
+                otherHelpLayout.setVisibility(View.GONE);
+            } else {
+                otherHelpLayout.setVisibility(View.VISIBLE);
+            }
+        }else {
+            startActivity(new Intent(context, SplashActivity.class));
+            getActivity().finish();
         }
+
+
 
         return view;
     }

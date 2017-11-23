@@ -56,15 +56,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -107,15 +107,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -166,74 +166,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:547463009938:android:b0bdbfc76c7767d1",
-        "android_client_info": {
-          "package_name": "com.cakesquare.apps"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "547463009938-nm69ie6ejubgku7o1b17v7l2pv154gkk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cakesquare.apps",
-            "certificate_hash": "fec9fc6f4e080bfc78d9abed577273a4c9d48f18"
-          }
-        },
-        {
-          "client_id": "547463009938-shc308uqrt1ucmet1dhe41pb82j59uua.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cakesquare.apps",
-            "certificate_hash": "c1af8fe6224d4ec2448c56ee1d8d93b3095cb438"
-          }
-        },
-        {
-          "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCJ_oE0jidKQCBc5G798KCD7f189NsHUbc"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
+            },
             {
               "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.foodieexpress.app"
-              }
             }
           ]
         },
@@ -284,15 +225,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -343,15 +284,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -402,15 +343,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -461,15 +402,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -520,15 +461,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -579,15 +520,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -638,15 +579,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -697,15 +638,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -756,15 +697,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -815,15 +756,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -874,15 +815,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -933,15 +874,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
@@ -992,15 +933,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
               "client_id": "547463009938-jhvh55oeia0b4vivkl28h6ct21o1ehq9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.foodieexpress.app"
               }
+            },
+            {
+              "client_id": "547463009938-fh4on6rs3eqta37svhgid50n4o68ukuh.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         },
