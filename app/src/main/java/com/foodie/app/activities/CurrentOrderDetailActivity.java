@@ -525,7 +525,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
                         LatLngBounds bounds = builder.build();
                         final int width = getResources().getDisplayMetrics().widthPixels;
                         final int height = getResources().getDisplayMetrics().heightPixels;
-                        final int padding = (int) (width * 0.40); // offset from edges of the map in pixels
+                        final int padding = (int) (width * 0.20); // offset from edges of the map in pixels
                         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
                         mMap.moveCamera(cu);
                         // Adding all the points in the route to LineOptions

@@ -115,7 +115,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:padding="8dp"
-                        android:src="@drawable/ic_restaurant_place_holder" />
+                        android:src="@drawable/no_restaurant_found" />
 
                     <TextView
                         fontPath="fonts/Nunito-Bold.ttf"

@@ -183,23 +183,6 @@ public class CartFragment extends Fragment {
 
         HomeActivity.updateNotificationCount(context, 0);
         customDialog = new CustomDialog(context);
-//        if (GlobalData.getInstance().profileModel == null) {
-//            dataLayout.setVisibility(View.GONE);
-//            errorLayout.setVisibility(View.VISIBLE);
-//            errorLayoutDescription.setText(getResources().getString(R.string.please_login_and_order_dishes));
-//        } else {
-//            skeleton = Skeleton.bind(dataLayout)
-//                    .load(R.layout.skeleton_fragment_cart)
-//                    .show();
-//            dataLayout.setVisibility(View.VISIBLE);
-//            errorLayout.setVisibility(View.GONE);
-//            errorLayoutDescription.setText(getResources().getString(R.string.cart_error_description));
-//            if (connectionHelper.isConnectingToInternet()) {
-//                getViewCart();
-//            } else {
-//                Utils.displayMessage(activity, context, getString(R.string.oops_connect_your_internet));
-//            }
-//        }
 
         skeleton = Skeleton.bind(dataLayout)
                 .load(R.layout.skeleton_fragment_cart)
@@ -298,7 +281,7 @@ public class CartFragment extends Fragment {
                         }
                         discountAmount.setText("- " + currency + "" + discount);
                         int topPayAmount = priceAmount - discount;
-                        int tax = (int) (topPayAmount * (response.body().getTaxPercentage() * 0.01));
+                        int tax = (int) Math.round(topPayAmount * (response.body().getTaxPercentage() * 0.01));
                         serviceTax.setText(currency +String.valueOf(tax));
                         topPayAmount = topPayAmount + response.body().getDeliveryCharges() + tax;
                         payAmount.setText(currency + "" + topPayAmount);

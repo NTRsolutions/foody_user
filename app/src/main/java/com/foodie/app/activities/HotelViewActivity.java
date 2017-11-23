@@ -150,7 +150,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             }
         });
         appBarLayout.addOnOffsetChangedListener(this);
-
+        categoryList = new ArrayList<>();
         shops = GlobalData.selectedShop;
         if(shops!=null){
             //Load animation
@@ -263,7 +263,6 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             toolbarHeaderView.bindTo(shops.getName(), shops.getDescription());
             floatHeaderView.bindTo(shops.getName(), shops.getDescription());
 
-            categoryList = new ArrayList<>();
             //Set Categoery shopList adapter
             catagoeryAdapter = new HotelCatagoeryAdapter(this, activity, categoryList);
             accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -447,6 +446,7 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(@NonNull Call<ShopDetail> call, @NonNull Response<ShopDetail> response) {
                 skeleton.hide();
+                categoryList = new ArrayList<>();
                 categoryList.clear();
                 Category category = new Category();
                 featureProductList = new ArrayList<>();

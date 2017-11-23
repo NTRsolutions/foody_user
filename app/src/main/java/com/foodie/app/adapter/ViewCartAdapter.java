@@ -394,7 +394,7 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         CartFragment.itemTotalAmount.setText(currency + "" + priceAmount);
                         CartFragment.discountAmount.setText("- " + currency + "" + discount);
                         int topPayAmount = priceAmount - discount;
-                        int tax = (int) (topPayAmount * (response.body().getTaxPercentage() * 0.01));
+                        int tax = (int) Math.round(topPayAmount * (response.body().getTaxPercentage() * 0.01));
                         topPayAmount = topPayAmount + tax;
                         topPayAmount = topPayAmount + response.body().getDeliveryCharges();
                         CartFragment.serviceTax.setText(response.body().getProductList().get(0).getProduct().getPrices().getCurrency() + "" + String.valueOf(tax));

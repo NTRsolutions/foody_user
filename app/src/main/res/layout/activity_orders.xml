@@ -68,9 +68,9 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:contentDescription="@string/order_list_empty"
+                        android:contentDescription="@string/looks_empty"
                         android:padding="8dp"
-                        android:src="@drawable/ic_no_orders" />
+                        android:src="@drawable/order_is_empty" />
 
                     <TextView
                         fontPath="fonts/Nunito-Bold.ttf"
@@ -79,7 +79,7 @@
                         android:layout_marginTop="20dp"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:text="@string/order_list_empty"
+                        android:text="@string/looks_empty"
                         android:textAllCaps="true"
                         android:textColor="@color/colorPrimaryText"
                         android:textSize="22sp"

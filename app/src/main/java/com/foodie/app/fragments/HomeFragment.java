@@ -464,6 +464,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onResume() {
         super.onResume();
+        errorLayout.setVisibility(View.GONE);
         HomeActivity.updateNotificationCount(context, GlobalData.notificationCount);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("location"));

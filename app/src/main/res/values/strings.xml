@@ -97,11 +97,11 @@
     <string name="order_cancelled">Order Cancelled</string>
 
     <!--Order Flow Description-->
-    <string name="description_1">We have received your order</string>
-    <string name="description_2">Your order has been confirmed</string>
-    <string name="description_3">We are preparing your order</string>
-    <string name="description_4">Your order picked up</string>
-    <string name="description_5">Your order has been delivered</string>
+    <string name="description_1">We have received your order.</string>
+    <string name="description_2">Your order has been confirmed.</string>
+    <string name="description_3">Your food is getting cooked.</string>
+    <string name="description_4">Your food is on its way.</string>
+    <string name="description_5">Enjoy your meal.</string>
 
     <!--Past Order Page-->
     <string name="order_delivered_successfully">Order Delivered Successfully</string>
@@ -190,8 +190,8 @@
     <string name="add_new_address">Add New Address</string>
     <string name="back">back</string>
     <string name="notifications">Notifications</string>
-    <string name="order_list_empty">Order list empty</string>
-    <string name="order_list_empty_description">Once you order a restaurant, it will appear here.</string>
+    <string name="looks_empty">LOOKS EMPTY!</string>
+    <string name="order_list_empty_description">There are a lot of yummy stuff out there. Pick some.</string>
     <string name="past_orders">Past Orders</string>
     <string name="reason">Reason</string>
     <string name="dispute_reason_description">Are you facing any issue which we can assist with? Please reach out to us we will be happy to help !</string>
@@ -210,8 +210,8 @@
     <string name="reorder">Reorder</string>
     <string name="please_login">Please login</string>
 
-    <string name="no_restaurant_found">No restaurant found</string>
-    <string name="no_restaurant_found_in_your_location">No results found based on filter/location</string>
+    <string name="no_restaurant_found">No Restaurants!</string>
+    <string name="no_restaurant_found_in_your_location">See if any other filter works.</string>
 
 
     <plurals name="item">
