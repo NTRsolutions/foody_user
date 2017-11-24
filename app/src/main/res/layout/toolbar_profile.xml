@@ -67,6 +67,7 @@
         </LinearLayout>
 
         <Button
+            android:paddingEnd="@dimen/_10sdp"
             android:id="@+id/edit"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="match_parent"

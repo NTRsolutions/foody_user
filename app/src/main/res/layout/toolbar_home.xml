@@ -43,10 +43,10 @@
                 android:drawableEnd="@drawable/ic_down"
                 android:drawablePadding="8dp"
                 android:maxLines="1"
-                android:paddingEnd="2dp"
-                android:paddingStart="2dp"
                 android:text="Home"
                 android:textAllCaps="true"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_small" />
 
@@ -73,9 +73,10 @@
             android:visibility="gone" />
 
         <Button
+            android:paddingEnd="@dimen/activity_vertical_margin_half"
             android:id="@+id/filter"
             fontPath="fonts/Nunito-Bold.ttf"
-            android:layout_width="@dimen/_60sdp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_filter"

@@ -407,7 +407,6 @@ public class ViewCartAdapter extends RecyclerView.Adapter<ViewCartAdapter.MyView
                         Toast.makeText(context, "Cart is empty", Toast.LENGTH_SHORT).show();
                     }
 
-
                 }
             }
 
