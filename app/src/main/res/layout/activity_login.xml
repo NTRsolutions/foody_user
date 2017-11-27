@@ -146,6 +146,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:textSize="@dimen/text_small"
                         android:id="@+id/donnot_have_account"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -160,7 +161,7 @@
                         android:layout_alignParentEnd="true"
                         android:text="@string/forgot_password"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="@dimen/text_medium" />
+                        android:textSize="@dimen/text_small" />
 
                 </RelativeLayout>
 
