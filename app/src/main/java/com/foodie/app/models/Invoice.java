@@ -36,6 +36,12 @@ public class Invoice {
     @SerializedName("total_pay")
     @Expose
     private Object totalPay;
+    @SerializedName("wallet_amount")
+    @Expose
+    private Double walletAmount;
+    @SerializedName("payable")
+    @Expose
+    private Double payable;
     @SerializedName("tender_pay")
     @Expose
     private Object tenderPay;
@@ -129,6 +135,21 @@ public class Invoice {
         this.totalPay = totalPay;
     }
 
+    public Double getWalletAmount() {
+        return walletAmount;
+    }
+
+    public void setWalletAmount(Double walletAmount) {
+        this.walletAmount = walletAmount;
+    }
+
+    public Double getPayable() {
+        return payable;
+    }
+
+    public void setPayable(Double payable) {
+        this.payable = payable;
+    }
     public Object getTenderPay() {
         return tenderPay;
     }
