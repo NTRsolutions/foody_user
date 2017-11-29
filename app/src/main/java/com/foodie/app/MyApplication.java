@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
+import com.foodie.app.utils.LocaleUtils;
+
 import io.fabric.sdk.android.Fabric;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -44,7 +46,8 @@ public class MyApplication extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
+        //super.attachBaseContext(base);
+        super.attachBaseContext(LocaleUtils.onAttach(base, "en"));
         MultiDex.install(this);
     }
 }

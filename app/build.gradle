@@ -17,14 +17,6 @@ repositories {
 }
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'foodie_android_user'
-            keyPassword 'foodie_android_user'
-            storeFile file('D:/Foodie/foodie_android_user/jks/foodie_android_user.jks')
-            storePassword 'foodie_android_user'
-        }
-    }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
