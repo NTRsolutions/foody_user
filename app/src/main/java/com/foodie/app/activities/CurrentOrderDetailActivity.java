@@ -245,7 +245,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
             Order order = GlobalData.isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
-            priceAmount = order.getInvoice().getNet();
+            priceAmount = order.getInvoice().getPayable();
             currency = order.getItems().get(0).getProduct().getPrices().getCurrency();
             if (itemQuantity == 1)
                 orderItemTxt.setText(String.valueOf(itemQuantity) + " Item, " + currency + String.valueOf(priceAmount));
