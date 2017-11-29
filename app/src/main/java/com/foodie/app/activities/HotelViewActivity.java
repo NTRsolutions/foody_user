@@ -446,28 +446,29 @@ public class HotelViewActivity extends AppCompatActivity implements AppBarLayout
             @Override
             public void onResponse(@NonNull Call<ShopDetail> call, @NonNull Response<ShopDetail> response) {
                 skeleton.hide();
-                categoryList = new ArrayList<>();
-                categoryList.clear();
-                Category category = new Category();
-                featureProductList = new ArrayList<>();
-                featureProductList = response.body().getFeaturedProducts();
-                category.setName(getResources().getString(R.string.featured_products));
-                category.setProducts(featureProductList);
-                categoryList.add(category);
-                categoryList.addAll(response.body().getCategories());
-                GlobalData.categoryList = categoryList;
-                GlobalData.selectedShop.setCategories(categoryList);
-                catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
-                accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
-                accompanimentDishesRv.setAdapter(catagoeryAdapter);
-                if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0) {
-                    setViewcartBottomLayout(GlobalData.addCart);
+                if(response.isSuccessful()) {
+                    categoryList = new ArrayList<>();
+                    categoryList.clear();
+                    Category category = new Category();
+                    featureProductList = new ArrayList<>();
+                    featureProductList = response.body().getFeaturedProducts();
+                    category.setName(getResources().getString(R.string.featured_products));
+                    category.setProducts(featureProductList);
+                    categoryList.add(category);
+                    categoryList.addAll(response.body().getCategories());
+                    GlobalData.categoryList = categoryList;
+                    GlobalData.selectedShop.setCategories(categoryList);
+                    catagoeryAdapter = new HotelCatagoeryAdapter(context, activity, categoryList);
+                    accompanimentDishesRv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                    accompanimentDishesRv.setItemAnimator(new DefaultItemAnimator());
+                    accompanimentDishesRv.setAdapter(catagoeryAdapter);
+                    if (GlobalData.addCart != null && GlobalData.addCart.getProductList().size() != 0) {
+                        setViewcartBottomLayout(GlobalData.addCart);
+                    } else {
+                        viewCartLayout.setVisibility(View.GONE);
+                    }
+                    catagoeryAdapter.notifyDataSetChanged();
                 }
-                else {
-                    viewCartLayout.setVisibility(View.GONE);
-                }
-                catagoeryAdapter.notifyDataSetChanged();
             }
 
             @Override
