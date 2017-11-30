@@ -91,27 +91,22 @@
 
         <activity
             android:name=".activities.LoginActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.AddCardActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.OtpActivity"
-            android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MobileNumberActivity"
-            android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SignUpActivity"
-            android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -122,7 +117,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.HotelViewActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -171,23 +165,19 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.PastOrderDetailActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.OtherHelpActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.PromotionActivity"
-            android:label=" "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -229,7 +219,6 @@
             android:name=".activities.ProductDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"
-            android:label="@null"
             android:parentActivityName=".activities.HotelViewActivity"/>
     </application>
 

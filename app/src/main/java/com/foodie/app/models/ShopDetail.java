@@ -16,7 +16,7 @@ public class ShopDetail {
     private List<Category> categories = null;
     @SerializedName("featured_products")
     @Expose
-    private List<Product> featuredProducts =  = new ArrayList<>();
+    private List<Product> featuredProducts = new ArrayList<>();
 
     public List<Category> getCategories() {
         return categories;
