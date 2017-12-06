@@ -52,6 +52,8 @@ public class OrderDetailFragment extends Fragment {
     String currency = "";
     @BindView(R.id.discount_amount)
     TextView discountAmount;
+    @BindView(R.id.wallet_amount_detection)
+    TextView walletAmountDetection;
 
 
     public OrderDetailFragment() {
@@ -85,7 +87,8 @@ public class OrderDetailFragment extends Fragment {
             serviceTax.setText(currency + order.getInvoice().getTax().toString());
             deliveryCharges.setText(currency + order.getInvoice().getDeliveryCharge().toString());
             discountAmount.setText("-"+currency + order.getInvoice().getDiscount().toString());
-            totalAmount.setText(currency + String.valueOf(order.getInvoice().getNet()));
+            walletAmountDetection.setText(currency + order.getInvoice().getWalletAmount().toString());
+            totalAmount.setText(currency + String.valueOf(order.getInvoice().getPayable()));
         }
 
 

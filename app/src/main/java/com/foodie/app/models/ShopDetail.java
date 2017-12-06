@@ -4,6 +4,7 @@ package com.foodie.app.models;
  * Created by Tamil on 11/15/2017.
  */
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -15,7 +16,7 @@ public class ShopDetail {
     private List<Category> categories = null;
     @SerializedName("featured_products")
     @Expose
-    private List<Product> featuredProducts = null;
+    private List<Product> featuredProducts = new ArrayList<>();
 
     public List<Category> getCategories() {
         return categories;

@@ -96,7 +96,7 @@ public class PastOrderDetailActivity extends AppCompatActivity {
             Order order = GlobalData.isSelectedOrder;
             orderIdTxt.setText("ORDER #000" + order.getId().toString());
             itemQuantity = order.getInvoice().getQuantity();
-            priceAmount = order.getInvoice().getNet();
+            priceAmount = order.getInvoice().getPayable();
             if (order.getStatus().equalsIgnoreCase("CANCELLED")) {
                 orderStatusTxt.setText(getResources().getString(R.string.order_cancelled));
                 orderSucceessImage.setImageResource(R.drawable.order_cancelled_img);
