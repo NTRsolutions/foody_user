@@ -61,6 +61,7 @@ public class WalletHistoryAdapter extends RecyclerView.Adapter<WalletHistoryAdap
     }
 
     private String getFormatTime(String time) {
+
         System.out.println("Time : " + time);
         String value = "";
         try {
