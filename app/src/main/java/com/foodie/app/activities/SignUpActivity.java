@@ -65,6 +65,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -306,6 +307,8 @@ public class SignUpActivity extends AppCompatActivity {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         if (jObjError.optString("email") != null)
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
+                        else if (jObjError.optString("password") != null)
+                            Toast.makeText(context, jObjError.optString("password"), Toast.LENGTH_LONG).show();
                         else if (jObjError.optString("error") != null)
                             Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                         else
@@ -396,7 +399,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, getResources().getString(R.string.please_enter_your_email), Toast.LENGTH_SHORT).show();
         } else if (!TextUtils.isValidEmail(email)) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_valid_email), Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(etMobileNumber.getText().toString()) && !GlobalData.loginBy.equals("manual")) {
+        } else if (!isValidMobile(etMobileNumber.getText().toString()) && !GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_your_mobile_number), Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(password) && GlobalData.loginBy.equals("manual")) {
             Toast.makeText(this, getResources().getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
@@ -519,4 +522,18 @@ public class SignUpActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_nothing, R.anim.slide_out_right);
     }
 
+    private boolean isValidMobile(String phone) {
+        boolean check=false;
+        if(!Pattern.matches("[a-zA-Z]+", phone)) {
+            if(phone.length() < 6 || phone.length() > 13) {
+                // if(phone.length() != 10) {
+                check = false;
+            } else {
+                check = true;
+            }
+        } else {
+            check=false;
+        }
+        return check;
+    }
 }
