@@ -305,14 +305,14 @@ public class SignUpActivity extends AppCompatActivity {
                     customDialog.dismiss();
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        if (jObjError.optString("email") != null)
+                        if (jObjError.has("email"))
                             Toast.makeText(context, jObjError.optString("email"), Toast.LENGTH_LONG).show();
-                        else if (jObjError.optString("password") != null)
+                        else if (jObjError.has("password"))
                             Toast.makeText(context, jObjError.optString("password"), Toast.LENGTH_LONG).show();
-                        else if (jObjError.optString("error") != null)
+                        else if (jObjError.has("error"))
                             Toast.makeText(context, jObjError.optString("error"), Toast.LENGTH_LONG).show();
                         else
-                            Toast.makeText(context, jObjError.optString("phone"), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Invalid", Toast.LENGTH_LONG).show();
                     } catch (Exception e) {
                         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
