@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Uncomment this to see how it works-->
-   <!--line         &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-              <!--start                            end-->
-
-
-    <!--Trimmed path travels like this-->
-                <!--&#45;&#45;-->
-                   <!--&#45;&#45;&#45;&#45;-->
-                        <!--&#45;&#45;&#45;&#45;&#45;&#45;-->
-                            <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-                                    <!-- -&#45;&#45;&#45;&#45;&#45;&#45;-->
-                                           <!--&#45;&#45;&#45;&#45;-->
-                                                 <!--&#45;&#45;-->
-
-<!--trimPathOffset is used to make path translate from 0 to 1-->
-<!--trimPathStart means cut the line from start-->
-<!--trimPathEnd means cut the line from end-->
-
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:drawable="@drawable/vd_line">
@@ -26,7 +7,6 @@
             <set android:ordering="sequentially">
 
                 <set>
-                    <!--Used to make line segment traverse from start to end-->
                     <objectAnimator
                         android:duration="1600"
                         android:interpolator="@android:interpolator/fast_out_slow_in"
@@ -35,8 +15,6 @@
                         android:valueFrom="0"
                         android:valueTo="0.8" />
 
-                    <!--Represents one cycle of 800ms long-->
-                    <!--Make longer in half the time, make shorter again in half-->
                     <set android:ordering="sequentially">
                         <objectAnimator
                             android:duration="800"
@@ -55,8 +33,6 @@
                             android:valueTo="0.19" />
                     </set>
                 </set>
-
-                <!--Repeat cycle for coming back-->
 
                 <set>
                     <objectAnimator
