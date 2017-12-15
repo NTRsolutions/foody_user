@@ -132,8 +132,8 @@ public class PastOrderDetailActivity extends AppCompatActivity {
         System.out.println("Time : " + time);
         String value = "";
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm aa", Locale.getDefault());
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm aa", Locale.getDefault());
 
             if (time != null) {
                 Date date = df.parse(time);

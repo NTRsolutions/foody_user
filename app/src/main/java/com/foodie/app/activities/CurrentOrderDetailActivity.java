@@ -792,7 +792,7 @@ public class CurrentOrderDetailActivity extends AppCompatActivity implements OnM
         System.out.println("Time : " + time);
         String value = "";
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
 
             if (time != null) {
