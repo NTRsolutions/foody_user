@@ -1,6 +1,7 @@
 
 package com.foodie.app.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +19,7 @@ public class AddCart {
     private Integer taxPercentage;
     @SerializedName("carts")
     @Expose
-    private List<Cart> products = null;
+    private List<Cart> products = new ArrayList<>();
 
     public Integer getDeliveryCharges() {
         return deliveryCharges;
