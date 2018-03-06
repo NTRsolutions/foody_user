@@ -1,6 +1,7 @@
 
 package com.foodie.app.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,10 +10,10 @@ public class RestaurantsData {
 
     @SerializedName("shops")
     @Expose
-    private List<Shop> shops = null;
+    private List<Shop> shops = new ArrayList<>();
     @SerializedName("banners")
     @Expose
-    private List<Banner> banners = null;
+    private List<Banner> banners = new ArrayList<>();
 
     public List<Shop> getShops() {
         return shops;

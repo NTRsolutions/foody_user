@@ -597,7 +597,9 @@ public class SaveDeliveryLocationActivity extends FragmentActivity implements On
                         }
                     } else {
                         APIError error = ErrorUtils.parseError(response);
-                        Toast.makeText(SaveDeliveryLocationActivity.this, error.getType().get(0), Toast.LENGTH_SHORT).show();
+                        if(error.getType()!= null && error.getType().size()> 0){
+                            Toast.makeText(SaveDeliveryLocationActivity.this, error.getType().get(0), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 

@@ -1,6 +1,7 @@
 
 package com.foodie.app.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -75,7 +76,7 @@ public class Shop {
     private Ratings ratings;
     @SerializedName("favorite")
     @Expose
-    private Favorite favorite;
+    private List<Favorite> favorite = new ArrayList<>();
 
     @SerializedName("categories")
     @Expose
@@ -265,11 +266,11 @@ public class Shop {
         this.categories = categories;
     }
 
-    public Favorite getFavorite() {
+    public List<Favorite> getFavorite() {
         return favorite;
     }
 
-    public void setFavorite(Favorite favorite) {
+    public void setFavorite(List<Favorite> favorite) {
         this.favorite = favorite;
     }
 

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -352,21 +353,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         Call<RestaurantsData> call = apiInterface.getshops(map);
         call.enqueue(new Callback<RestaurantsData>() {
             @Override
-            public void onResponse(Call<RestaurantsData> call, Response<RestaurantsData> response) {
+            public void onResponse(@NonNull Call<RestaurantsData> call, @NonNull Response<RestaurantsData> response) {
                 skeletonScreen.hide();
                 skeletonScreen2.hide();
                 skeletonText1.hide();
                 skeletonText2.hide();
                 skeletonSpinner.hide();
-                if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                    try {
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else if (response.isSuccessful()) {
-                    //Check Restaurant list
+
+                if(response.isSuccessful()){
                     if (response.body().getShops().size() == 0) {
                         title.setVisibility(View.GONE);
                         errorLayout.setVisibility(View.VISIBLE);
@@ -389,11 +383,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     adapterRestaurant.notifyDataSetChanged();
                     bannerAdapter.notifyDataSetChanged();
 
+                }else {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(context, jObjError.optString("message"), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<RestaurantsData> call, Throwable t) {
+            public void onFailure(@NonNull Call<RestaurantsData> call, @NonNull Throwable t) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
 
             }
