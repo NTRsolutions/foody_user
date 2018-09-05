@@ -9,7 +9,7 @@
         android:fillColor="#000000"
         android:pathData="M 0,4 L 200,4"
         android:fillAlpha="0"
-        android:strokeColor="@color/theme"
+        android:strokeColor="@color/colorAccent"
         android:strokeWidth="24"
         android:trimPathEnd="0.2" />
 </vector>

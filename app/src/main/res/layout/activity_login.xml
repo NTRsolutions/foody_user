@@ -110,8 +110,8 @@
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:paddingStart="@dimen/_8sdp"
                         android:paddingEnd="@dimen/_8sdp"
+                        android:paddingStart="@dimen/_8sdp"
                         android:textSize="@dimen/text_normal"
                         app:theme="@style/MyEditTextTheme" />
 
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:background="@color/theme"
+                    android:background="@drawable/button_rounded_accent"
                     android:text="@string/signin"
                     android:textColor="@color/colorWhite" />
 
@@ -146,13 +146,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:textSize="@dimen/text_small"
                         android:id="@+id/donnot_have_account"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:text="@string/register_this_account"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/text_small" />
 
                     <TextView
                         android:id="@+id/forgot_password"

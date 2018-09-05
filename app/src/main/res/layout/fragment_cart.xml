@@ -401,6 +401,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@drawable/button_corner_bg_green"
                     android:text="@string/continue_txt"
+                    android:layout_margin="@dimen/_5sdp"
                     android:textColor="@color/colorTextWhite" />
 
             </LinearLayout>

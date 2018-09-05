@@ -138,7 +138,7 @@
                     android:id="@+id/update"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
+                    android:background="@drawable/button_rounded_accent"
                     android:text="@string/save"
                     android:textColor="@color/colorWhite"
                     app:layout_constraintBottom_toBottomOf="parent"

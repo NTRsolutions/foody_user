@@ -1,6 +1,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
-        <bitmap android:src="@drawable/ic_work" android:tint="@color/theme" />
+        <bitmap android:src="@drawable/ic_work" android:tint="@color/colorAccent" />
     </item>
     <item android:drawable="@drawable/ic_work" android:state_checked="false" />
 

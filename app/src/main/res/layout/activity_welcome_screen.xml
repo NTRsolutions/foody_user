@@ -64,7 +64,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="1dp"
             android:layout_weight="1"
-            android:background="@color/theme"
+            android:background="@drawable/button_rounded_accent"
             android:text="@string/sign_in"
             android:textColor="@color/colorTextWhite" />
 

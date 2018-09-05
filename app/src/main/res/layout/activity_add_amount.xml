@@ -108,7 +108,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/_15sdp"
         android:text="@string/pay"
-        android:background="@drawable/button_corner_bg_theme"
+        android:background="@drawable/button_rounded_accent"
         android:textAllCaps="true"
         android:textSize="@dimen/text_medium"
         android:textColor="@color/colorTextWhite"

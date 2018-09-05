@@ -11,6 +11,7 @@
         android:id="@+id/otp_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:contentDescription="@string/verification_code_txt"
@@ -88,7 +89,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="@dimen/_60sdp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/button_rounded_accent"
         android:text="@string/continue_txt"
         android:textColor="@color/colorWhite" />
 
